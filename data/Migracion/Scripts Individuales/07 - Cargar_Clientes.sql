@@ -1,4 +1,4 @@
-CREATE TABLE Clientes (
+CREATE TABLE FOUR_SIZONS.Clientes (
       Cliente_Nacionalidad nvarchar(50),
 	  Cliente_Tipo_Ident nvarchar(5),
 	  Cliente_Nro_Ident numeric(18),
@@ -13,11 +13,11 @@ CREATE TABLE Clientes (
 	  PRIMARY KEY (Cliente_Nacionalidad, Cliente_Tipo_Ident, Cliente_Nro_Ident, Cliente_Mail)
 )
 
-INSERT INTO Clientes (Cliente_Nacionalidad, Cliente_Tipo_Ident, Cliente_Nro_Ident, Cliente_Mail, Cliente_Apellido, Cliente_Nombre, Cliente_Fecha_Nac,
+INSERT INTO FOUR_SIZONS.Clientes (Cliente_Nacionalidad, Cliente_Tipo_Ident, Cliente_Nro_Ident, Cliente_Mail, Cliente_Apellido, Cliente_Nombre, Cliente_Fecha_Nac,
 Cliente_Dom_Calle, Cliente_Nro_Calle, Cliente_Piso, Cliente_Depto) 
 SELECT DISTINCT Cliente_Nacionalidad, 'PASSP', Cliente_Pasaporte_Nro, Cliente_Mail, Cliente_Apellido, Cliente_Nombre, Cliente_Fecha_Nac,
 Cliente_Dom_Calle, Cliente_Nro_Calle, Cliente_Piso, Cliente_Depto
 FROM GD1C2018.gd_esquema.Maestra
 ORDER BY Cliente_Pasaporte_Nro
 
-SELECT * FROM Clientes
+SELECT * FROM FOUR_SIZONS.Clientes

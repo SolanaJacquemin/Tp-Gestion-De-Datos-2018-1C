@@ -1,4 +1,4 @@
-CREATE TABLE Hoteles (
+CREATE TABLE FOUR_SIZONS.Hoteles (
 	Hotel_Codigo int IDENTITY(1,1) PRIMARY KEY,
 	Hotel_Nombre nvarchar(255),
 	Hotel_Ciudad nvarchar(255),
@@ -11,8 +11,8 @@ CREATE TABLE Hoteles (
 	Hotel_Recarga_Estrella numeric(18)
 )
 
-INSERT INTO Hoteles (Hotel_Ciudad, Hotel_Calle, Hotel_Nro_Calle, Hotel_CantEstrella, Hotel_Recarga_Estrella) 
+INSERT INTO FOUR_SIZONS.Hoteles (Hotel_Ciudad, Hotel_Calle, Hotel_Nro_Calle, Hotel_CantEstrella, Hotel_Recarga_Estrella) 
 SELECT DISTINCT Hotel_Ciudad, Hotel_Calle, Hotel_Nro_Calle, Hotel_CantEstrella, Hotel_Recarga_Estrella
 FROM GD1C2018.gd_esquema.Maestra
 
-SELECT * FROM Hoteles
+SELECT * FROM FOUR_SIZONS.Hoteles
