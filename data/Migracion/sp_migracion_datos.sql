@@ -88,7 +88,7 @@ BEGIN
 			Hotel_Codigo numeric(18) IDENTITY(1,1),
 			Hotel_Nombre nvarchar(50),
 			Hotel_Mail nvarchar(50),
-			Hotel_Telefono nchar(8),
+			Hotel_Telefono nvarchar(18),
 			Hotel_Calle nvarchar(255),
 			Hotel_Nro_Calle numeric(18),
 			Hotel_CantEstrella numeric(18),
@@ -194,7 +194,7 @@ BEGIN
 
 	IF NOT EXISTS (SELECT * FROM sys.tables WHERE name = 'Cliente')
 		CREATE TABLE FOUR_SIZONS.Cliente (
-			Cliente_Codigo numeric(18) IDENTITY,
+			Cliente_Codigo numeric(18) IDENTITY (1,1),
 			Cliente_Nombre nvarchar(255),
 			Cliente_Apellido nvarchar(255),
 			Cliente_TipoDoc nvarchar(255),
@@ -371,53 +371,81 @@ BEGIN
 
 	-- Migración de datos de la tabla maestra
 	-- Tipos de Habitaciones
-	/**INSERT INTO FOUR_SIZONS.Habitaciones_Tipo (Habitacion_Tipo_Codigo, Habitacion_Tipo_Descripcion, Habitacion_Tipo_Porcentual) 
+	INSERT INTO FOUR_SIZONS.Habitacion_Tipo (Habitacion_Tipo_Codigo, Habitacion_Tipo_Descripcion, Habitacion_Tipo_Porcentual) 
 	SELECT DISTINCT Habitacion_Tipo_Codigo, Habitacion_Tipo_Descripcion, Habitacion_Tipo_Porcentual
 	FROM GD1C2018.gd_esquema.Maestra
 	ORDER BY Habitacion_Tipo_Codigo
 
 	-- Regímenes
-	INSERT INTO FOUR_SIZONS.Regimenes (Regimen_Descripcion, Regimen_Precio) 
-	SELECT DISTINCT Regimen_Descripcion, Regimen_Precio
+	INSERT INTO FOUR_SIZONS.Regimen (Regimen_Descripcion, Regimen_Precio, Regimen_Estado)
+	SELECT DISTINCT Regimen_Descripcion, Regimen_Precio, 'A'
 	FROM GD1C2018.gd_esquema.Maestra
 
 	-- Consumibles
-	INSERT INTO FOUR_SIZONS.Consumibles (Consumible_Codigo, Consumible_Descripcion, Consumible_Precio) 
+	INSERT INTO FOUR_SIZONS.Consumible(Consumible_Codigo, Consumible_Descripcion, Consumible_Precio) 
 	SELECT DISTINCT Consumible_Codigo, Consumible_Descripcion, Consumible_Precio
 	FROM GD1C2018.gd_esquema.Maestra
 	WHERE Consumible_Codigo IS NOT NULL
 	ORDER BY Consumible_Codigo
 
 	-- Hoteles
-	INSERT INTO FOUR_SIZONS.Hoteles (Hotel_Ciudad, Hotel_Calle, Hotel_Nro_Calle, Hotel_CantEstrella, Hotel_Recarga_Estrella) 
-	SELECT DISTINCT Hotel_Ciudad, Hotel_Calle, Hotel_Nro_Calle, Hotel_CantEstrella, Hotel_Recarga_Estrella
+	INSERT INTO FOUR_SIZONS.Hotel (Hotel_Nombre, Hotel_Mail, Hotel_Telefono, Hotel_Calle, Hotel_Nro_Calle, Hotel_CantEstrella, 
+	Hotel_Recarga_Estrella, Hotel_Ciudad, Hotel_Pais, Hotel_FechaCreacion, Hotel_Estado) 
+	SELECT DISTINCT '', '', '', Hotel_Calle, Hotel_Nro_Calle, Hotel_CantEstrella, Hotel_Recarga_Estrella, Hotel_Ciudad, '',
+	GETDATE(), 0
 	FROM GD1C2018.gd_esquema.Maestra
 
 	-- Habitaciones
-	INSERT INTO FOUR_SIZONS.Habitaciones (Habitacion_Numero, Habitacion_Piso, Habitacion_Hotel, Habitacion_Frente, Habitacion_Tipo) 
-	SELECT DISTINCT H.Hotel_Codigo, M.Habitacion_Numero, M.Habitacion_Piso, M.Habitacion_Frente, M.Habitacion_Tipo_Codigo
+	INSERT INTO FOUR_SIZONS.Habitacion (Habitacion_Numero, Hotel_Codigo, Habitacion_Piso, Habitacion_Frente, Habitacion_Tipo_Codigo,
+	Habitacion_Estado) 
+	SELECT DISTINCT M.Habitacion_Numero, H.Hotel_Codigo, M.Habitacion_Piso, M.Habitacion_Frente, M.Habitacion_Tipo_Codigo, 0
 	FROM GD1C2018.gd_esquema.Maestra AS M
-	JOIN FOUR_SIZONS.Hoteles AS H ON H.Hotel_Ciudad = M.Hotel_Ciudad and H.Hotel_Nro_Calle = M.Hotel_Nro_Calle
-	ORDER BY H.Hotel_Codigo
+	JOIN FOUR_SIZONS.Hotel AS H ON H.Hotel_Ciudad = M.Hotel_Ciudad and H.Hotel_Nro_Calle = M.Hotel_Nro_Calle
+	ORDER BY M.Habitacion_Numero, H.Hotel_Codigo
 
-	-- Clientes
-	INSERT INTO FOUR_SIZONS.Clientes (Cliente_Nacionalidad, Cliente_Tipo_Ident, Cliente_Nro_Ident, Cliente_Mail, Cliente_Apellido, Cliente_Nombre, Cliente_Fecha_Nac,
-	Cliente_Dom_Calle, Cliente_Nro_Calle, Cliente_Piso, Cliente_Depto) 
-	SELECT DISTINCT Cliente_Nacionalidad, 'PASSP', Cliente_Pasaporte_Nro, Cliente_Mail, Cliente_Apellido, Cliente_Nombre, Cliente_Fecha_Nac,
-	Cliente_Dom_Calle, Cliente_Nro_Calle, Cliente_Piso, Cliente_Depto
+	--Clientes
+	INSERT INTO FOUR_SIZONS.Cliente (Cliente_Nombre, Cliente_Apellido, Cliente_TipoDoc, Cliente_NumDoc, Cliente_Dom_Calle,
+	Cliente_Nro_Calle, Cliente_Piso, Cliente_Depto, Cliente_Mail, Cliente_Nacionalidad, Cliente_Fecha_Nac, Cliente_Puntos, Cliente_Estado)
+	SELECT DISTINCT Cliente_Nombre, Cliente_Apellido, 'PASSP', Cliente_Pasaporte_Nro, Cliente_Dom_Calle, Cliente_Nro_Calle, Cliente_Piso, 
+	Cliente_Depto, Cliente_Mail, Cliente_Nacionalidad, Cliente_Fecha_Nac, 0, 0
 	FROM GD1C2018.gd_esquema.Maestra
 	ORDER BY Cliente_Pasaporte_Nro
 
-	-- Reservas
-	INSERT INTO FOUR_SIZONS.Reservas (Reserva_Codigo, Reserva_Hotel_Codigo, Reserva_Fecha, Reserva_Cant_Noches, 
-	Reserva_Fecha_Desde, Reserva_Fecha_Hasta, Reserva_Tipo_Habitacion, Reserva_Tipo_Regimen,
-	Reserva_Cli_Nac, Reserva_Cli_Tipo_Ident, Reserva_Cli_Nro_Ident)
-	SELECT DISTINCT M.Reserva_Codigo, H.Hotel_Codigo, GETDATE(), M.Reserva_Cant_Noches, 
-	M.Reserva_Fecha_Inicio, M.Reserva_Fecha_Inicio, M.Habitacion_Tipo_Codigo, R.Regimen_Codigo, 
-	M.Cliente_Nacionalidad, 'PASSP', M.Cliente_Pasaporte_Nro
-	FROM GD1C2018.gd_esquema.Maestra AS M
-	JOIN FOUR_SIZONS.Hoteles AS H ON H.Hotel_Ciudad = M.Hotel_Ciudad and H.Hotel_Nro_Calle = M.Hotel_Nro_Calle
-	JOIN FOUR_SIZONS.Regimenes AS R ON R.Regimen_Descripcion = M.Regimen_Descripcion
-	ORDER BY H.Hotel_Codigo**/
+	/**Toma los clientes con igual número de pasaporte y actualiza su estado a 1. Se deja el nro de pasaporte en negativo para uno de 
+	los clientes generados **/
+	DECLARE @updateDupli TABLE(
+		clienteD numeric(18)
+	)
 
+	INSERT INTO @updateDupli (clienteD)
+	SELECT C1.Cliente_Codigo
+	FROM FOUR_SIZONS.Cliente as C1
+	JOIN FOUR_SIZONS.Cliente as C2 on c1.Cliente_NumDoc = c2.Cliente_NumDoc and c1.Cliente_Codigo > c2.Cliente_Codigo
+	
+	UPDATE FOUR_SIZONS.Cliente
+	SET Cliente_NumDoc = (Cliente_NumDoc)*(-1),
+	Cliente_Estado = 1
+	WHERE Cliente_Codigo IN (select clienteD from @updateDupli)
+
+	--Usuario
+	--Inserta usuario administrador
+	INSERT INTO FOUR_SIZONS.Usuario
+	VALUES ('SYSADM', 'SYSADM', 'Administrador', '', '', 0, '', '', GETDATE(), '',0,0)
+
+	-- Reservas
+	INSERT INTO FOUR_SIZONS.Reserva (Reserva_Codigo, Reserva_FechaCreacion, Reserva_Fecha_Inicio, Reserva_Fecha_Fin,
+	Reserva_Cant_Noches, Reserva_Precio, Usuario_ID, Hotel_Codigo, Cliente_Codigo)
+	SELECT DISTINCT M.Reserva_Codigo, M.Reserva_Fecha_Inicio, M.Reserva_Fecha_Inicio, M.Reserva_Fecha_Inicio, 
+	M.Reserva_Cant_Noches, 0, 'SYSADM', H.Hotel_Codigo, C.Cliente_Codigo
+	FROM GD1C2018.gd_esquema.Maestra AS M
+	JOIN FOUR_SIZONS.Hotel AS H ON H.Hotel_Ciudad = M.Hotel_Ciudad and H.Hotel_Nro_Calle = M.Hotel_Nro_Calle
+	JOIN FOUR_SIZONS.Regimen AS R ON R.Regimen_Descripcion = M.Regimen_Descripcion
+	JOIN FOUR_SIZONS.Cliente AS C ON C.Cliente_NumDoc = M.Cliente_Pasaporte_Nro
+	ORDER BY H.Hotel_Codigo
+
+	--Item_Factura
+
+	--Estadia
+
+	--Factura
 END
