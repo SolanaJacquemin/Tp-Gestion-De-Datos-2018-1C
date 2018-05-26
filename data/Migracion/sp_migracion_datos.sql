@@ -276,7 +276,7 @@ BEGIN
 	IF NOT EXISTS (SELECT * FROM sys.tables WHERE name = 'Estadia')
 	BEGIN
 		CREATE TABLE FOUR_SIZONS.Estadia (
-			Estadia_Codigo numeric(18),
+			Estadia_Codigo numeric(18) IDENTITY(1,1),
 			Reserva_Codigo numeric(18), 
 			Estadia_FechaInicio datetime,
 			Estadia_FechaFin datetime,
@@ -284,6 +284,7 @@ BEGIN
 			Usuario_ID nvarchar(15),
 			Habitacion_Numero numeric(18),
 			Hotel_Codigo numeric(18),
+			Estadia_Estado bit
 
 			CONSTRAINT FK_Estadia_1 FOREIGN KEY (Reserva_Codigo) REFERENCES FOUR_SIZONS.Reserva(Reserva_Codigo),
 			CONSTRAINT FK_Estadia_2 FOREIGN KEY (Usuario_ID) REFERENCES FOUR_SIZONS.Usuario(Usuario_ID),
@@ -343,7 +344,7 @@ BEGIN
 	BEGIN
 		CREATE TABLE FOUR_SIZONS.Item_Factura (
 			Factura_Nro numeric(18),
-			Item_Factura_NroItem numeric(18),
+			Item_Factura_NroItem numeric(18) IDENTITY(1,1),
 			Item_Factura_Cant numeric(18),
 			Item_Factura_Monto decimal(18,2),
 
@@ -395,6 +396,14 @@ BEGIN
 	GETDATE(), 0
 	FROM GD1C2018.gd_esquema.Maestra
 
+	-- RegXHotel
+	INSERT INTO FOUR_SIZONS.RegXHotel(Hotel_Codigo, Regimen_Codigo, RegXHotel_Estado)
+	SELECT DISTINCT H.Hotel_Codigo, R.Regimen_Codigo, 1
+	FROM gd_esquema.Maestra AS M
+	JOIN FOUR_SIZONS.Hotel AS H ON H.Hotel_Nro_Calle = M.Cliente_Nro_Calle
+	JOIN FOUR_SIZONS.Regimen AS R ON R.Regimen_Descripcion = M.Regimen_Descripcion
+	ORDER BY H.Hotel_Codigo, R.Regimen_Codigo
+
 	-- Habitaciones
 	INSERT INTO FOUR_SIZONS.Habitacion (Habitacion_Numero, Hotel_Codigo, Habitacion_Piso, Habitacion_Frente, Habitacion_Tipo_Codigo,
 	Habitacion_Estado) 
@@ -403,7 +412,7 @@ BEGIN
 	JOIN FOUR_SIZONS.Hotel AS H ON H.Hotel_Ciudad = M.Hotel_Ciudad and H.Hotel_Nro_Calle = M.Hotel_Nro_Calle
 	ORDER BY M.Habitacion_Numero, H.Hotel_Codigo
 
-	--Clientes
+	-- Clientes
 	INSERT INTO FOUR_SIZONS.Cliente (Cliente_Nombre, Cliente_Apellido, Cliente_TipoDoc, Cliente_NumDoc, Cliente_Dom_Calle,
 	Cliente_Nro_Calle, Cliente_Piso, Cliente_Depto, Cliente_Mail, Cliente_Nacionalidad, Cliente_Fecha_Nac, Cliente_Puntos, Cliente_Estado)
 	SELECT DISTINCT Cliente_Nombre, Cliente_Apellido, 'PASSP', Cliente_Pasaporte_Nro, Cliente_Dom_Calle, Cliente_Nro_Calle, Cliente_Piso, 
@@ -427,8 +436,8 @@ BEGIN
 	Cliente_Estado = 1
 	WHERE Cliente_Codigo IN (select clienteD from @updateDupli)
 
-	--Usuario
-	--Inserta usuario administrador
+	-- Usuario
+	-- Inserta usuario administrador
 	INSERT INTO FOUR_SIZONS.Usuario
 	VALUES ('SYSADM', 'SYSADM', 'Administrador', '', '', 0, '', '', GETDATE(), '',0,0)
 
@@ -443,9 +452,55 @@ BEGIN
 	JOIN FOUR_SIZONS.Cliente AS C ON C.Cliente_NumDoc = M.Cliente_Pasaporte_Nro
 	ORDER BY H.Hotel_Codigo
 
-	--Item_Factura
+	-- Habitacion_TipoXReserva
+	INSERT INTO FOUR_SIZONS.Habitacion_TipoXReser(Reserva_Codigo, Habitacion_Tipo_Codigo)
+	SELECT DISTINCT Reserva_Codigo, Habitacion_Tipo_Codigo
+	FROM gd_esquema.Maestra
+	ORDER BY Reserva_Codigo
 
-	--Estadia
+	-- Estadia
+	INSERT INTO FOUR_SIZONS.Estadia (Reserva_Codigo, Estadia_FechaInicio, Estadia_FechaFin, Estadia_CantNoches, Usuario_ID,
+	Habitacion_Numero, Hotel_Codigo, Estadia_Estado)
+	SELECT DISTINCT M.Reserva_Codigo, M.Estadia_Fecha_Inicio, NULL, M.Estadia_Cant_Noches, 'SYSADM', M.Habitacion_Numero, H.Hotel_Codigo, 1
+	FROM GD1C2018.gd_esquema.Maestra AS M
+	JOIN FOUR_SIZONS.Hotel AS H ON H.Hotel_Nro_Calle = M.Hotel_Nro_Calle
+	JOIN FOUR_SIZONS.Cliente AS C ON C.Cliente_NumDoc = M.Cliente_Pasaporte_Nro
+	WHERE M.Estadia_Fecha_Inicio IS NOT NULL AND M.Estadia_Cant_Noches IS NOT NULL
+	ORDER BY M.Reserva_Codigo
+
+	--EstadiaXCliente
+	INSERT INTO FOUR_SIZONS.EstadiaXCliente(Cliente_Codigo, Estadia_Codigo)
+	SELECT DISTINCT C.Cliente_Codigo, E.Estadia_Codigo 
+	FROM GD1C2018.gd_esquema.Maestra AS M
+	JOIN FOUR_SIZONS.Cliente AS C ON C.Cliente_NumDoc = M.Cliente_Pasaporte_Nro
+	JOIN FOUR_SIZONS.Estadia AS E ON E.Reserva_Codigo = M.Reserva_Codigo
+	ORDER BY C.Cliente_Codigo
+
+	--EstadiaXConsumible
+	INSERT INTO FOUR_SIZONS.EstadiaXConsumible(Estadia_Codigo, Consumible_Codigo)
+	SELECT DISTINCT E.Estadia_Codigo, M.Consumible_Codigo
+	FROM GD1C2018.gd_esquema.Maestra AS M
+	JOIN FOUR_SIZONS.Cliente AS C ON C.Cliente_NumDoc = M.Cliente_Pasaporte_Nro
+	JOIN FOUR_SIZONS.Estadia AS E ON E.Reserva_Codigo = M.Reserva_Codigo
+	WHERE M.Consumible_Codigo IS NOT NULL
+	ORDER BY E.Estadia_Codigo
 
 	--Factura
+	INSERT INTO FOUR_SIZONS.Factura (Factura_Nro, Factura_Fecha, Factura_Total, Factura_FormaPago, Usuario_ID, Estadia_Codigo, Cliente_Codigo)
+	SELECT DISTINCT M.Factura_Nro, M.Factura_Fecha, M.Factura_Total, NULL, 'SYSADM', EC.Estadia_Codigo, C.Cliente_Codigo
+	FROM GD1C2018.gd_esquema.Maestra AS M
+	JOIN FOUR_SIZONS.Cliente AS C ON C.Cliente_NumDoc = M.Cliente_Pasaporte_Nro
+	JOIN FOUR_SIZONS.Reserva AS R ON R.Reserva_Codigo = M.Reserva_Codigo
+	JOIN FOUR_SIZONS.EstadiaXCliente AS EC ON EC.Cliente_Codigo = C.Cliente_Codigo
+	JOIN FOUR_SIZONS.Estadia AS E ON E.Estadia_Codigo = EC.Estadia_Codigo AND E.Reserva_Codigo = R.Reserva_Codigo
+	WHERE Factura_Nro IS NOT NULL
+	ORDER BY M.Factura_Nro
+
+	--Item_Factura
+	INSERT INTO FOUR_SIZONS.Item_Factura (Factura_Nro, Item_Factura_Cant, Item_Factura_Monto)
+	SELECT DISTINCT M.Factura_Nro,Item_Factura_Cantidad, Item_Factura_Monto
+	FROM gd_esquema.Maestra AS M
+	WHERE Factura_Nro IS NOT NULL
+	ORDER BY M.Factura_Nro
+
 END
