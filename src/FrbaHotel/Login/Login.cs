@@ -22,18 +22,32 @@ namespace FrbaHotel
 
         private void button1_Click(object sender, EventArgs e)
         {
-            /*InitializeComponent();
-            Conexion con = new Conexion();
-            con.query = "SELECT Cliente_Nombre, Cliente_Apellido, Cliente_NumDoc FROM FOUR_SIZONS.Cliente WHERE Cliente_Codigo = 1";
+
+            con.cerrarConexion();
+            con.query = "SELECT Usuario_Password, Usuario_Estado FROM FOUR_SIZONS.Usuario WHERE Usuario_ID='" + textBox1.Text + "'";
+
             con.ejecutarQuery();
-            con.leerReader();
-            textBox1.Text = con.lector.GetString(0);
-            textBox2.Text = con.lector.GetString(1);
-            con.cerrarConexion();*/
-            this.Hide(); 
-            FrbaHotel.PantallaPrincipal.PantallaPrincipal01 pantallaPrincipal = new PantallaPrincipal01();           
-            pantallaPrincipal.ShowDialog();
-            this.Close(); 
+
+            if (con.leerReader())
+            {
+                if (textBox2.Text == con.lector.GetString(0))
+                {
+                    con.cerrarConexion();
+                    this.Hide();
+                    FrbaHotel.PantallaPrincipal.PantallaPrincipal01 pantallaPrincipal = new PantallaPrincipal01();
+                    pantallaPrincipal.ShowDialog();
+                    this.Close();
+                }
+                else
+                {
+                    MessageBox.Show("La contraseña es incorrecta", "FOUR SIZONS - FRBA Hoteles", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                }
+            }else{
+                con.cerrarConexion();
+                MessageBox.Show("El usuario no existe", "FOUR SIZONS - FRBA Hoteles", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                return; 
+            }
+
         }
 
         private void label1_Click(object sender, EventArgs e)

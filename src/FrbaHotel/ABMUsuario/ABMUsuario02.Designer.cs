@@ -55,11 +55,10 @@
             // 
             // labelTitulo
             // 
-            this.labelTitulo.AutoSize = true;
             this.labelTitulo.Font = new System.Drawing.Font("Calibri", 20F);
-            this.labelTitulo.Location = new System.Drawing.Point(188, 28);
+            this.labelTitulo.Location = new System.Drawing.Point(113, 27);
             this.labelTitulo.Name = "labelTitulo";
-            this.labelTitulo.Size = new System.Drawing.Size(204, 33);
+            this.labelTitulo.Size = new System.Drawing.Size(350, 33);
             this.labelTitulo.TabIndex = 0;
             this.labelTitulo.Text = "Título de pantalla";
             this.labelTitulo.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
