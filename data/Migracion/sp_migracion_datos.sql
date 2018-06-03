@@ -160,9 +160,9 @@ BEGIN
 	IF NOT EXISTS (SELECT * FROM sys.tables WHERE name = 'Funcionalidad')
 	BEGIN
 		CREATE TABLE FOUR_SIZONS.Funcionalidad (
-			Func_Codigo numeric(18,0),
-			Func_Descripcion nvarchar(255),
+			Func_Codigo numeric(18,0) IDENTITY,
 			Func_Nombre varchar(50),
+			Func_Descripcion nvarchar(255),
 			Func_Estado bit,
 			CONSTRAINT PK_Funcionalidad PRIMARY KEY(Func_Codigo)
 		)
@@ -530,34 +530,34 @@ BEGIN
 	INSERT INTO FOUR_SIZONS.Rol VALUES ('Administrador', 1)
 	INSERT INTO FOUR_SIZONS.Rol VALUES ('Recepcionista', 1)
 	INSERT INTO FOUR_SIZONS.Rol VALUES ('Guest', 1)
-	
+	DELETE FROM FOUR_SIZONS.Funcionalidad
 	--Funcionalidades
-	insert into FOUR_SIZONS.Funcionalidad (Func_Nombre)
-		values  ('ABM Rol'),
-				('ABM Usuario'),
-				('ABM Cliente'),
-				('ABM Hotel'),
-				('ABM Habitacion'),
-				('ABM Regimen'),
-				('Generar/Modificar Reserva'),
-				('Cancelar Reserva'),
-				('Registrar Estadia'),
-				('Registrar Consumibles'),
-				('Listado Estadistico');
+	INSERT INTO FOUR_SIZONS.Funcionalidad (Func_Nombre, Func_Estado) VALUES  
+				('ABM Rol', 1),
+				('ABM Usuario', 1),
+				('ABM Cliente', 1),
+				('ABM Hotel', 1),
+				('ABM Habitacion', 1),
+				('ABM Regimen', 1),
+				('Generar/Modificar Reserva', 1),
+				('Cancelar Reserva', 1),
+				('Registrar Estadia', 1),
+				('Registrar Consumibles', 1),
+				('Listado Estadistico', 1);
 	
 	--ROLXFUNC
-	insert into FOUR_SIZONS.RolXFunc(Rol_Codigo,Func_Codigo)
-		select distinct R.Rol_Codigo, F.Func_Codigo from FOUR_SIZONS.Rol R,FOUR_SIZONS.Funcionalidad F
+	insert into FOUR_SIZONS.RolXFunc (Rol_Codigo,Func_Codigo, RolXFunc_Estado)
+		select distinct R.Rol_Codigo, F.Func_Codigo, 1 from FOUR_SIZONS.Rol R,FOUR_SIZONS.Funcionalidad F
 		where R.Rol_Nombre =  'Administrador' and
 				F.Func_Nombre in ('ABM Hotel','ABM Habitacion','ABM Regimen','ABM Usuario');
 
-	insert into FOUR_SIZONS.RolXFunc(Rol_Codigo,Func_Codigo)
-		select distinct R.Rol_Codigo, F.Func_Codigo from FOUR_SIZONS.Rol R,FOUR_SIZONS.Funcionalidad F
+	insert into FOUR_SIZONS.RolXFunc(Rol_Codigo,Func_Codigo, RolXFunc_Estado)
+		select distinct R.Rol_Codigo, F.Func_Codigo, 1 from FOUR_SIZONS.Rol R,FOUR_SIZONS.Funcionalidad F
 		where R.Rol_Nombre = 'Recepcionista' and
 				F.Func_Nombre in ('ABM Cliente','Generar/Modificar Reserva','Cancelar Reserva','Registrar Estadia','Registrar Consumibles');
 			
-	insert into FOUR_SIZONS.RolXFunc(Rol_Codigo,Func_Codigo)
-		select distinct R.Rol_Codigo, F.Func_Codigo from FOUR_SIZONS.Rol R,FOUR_SIZONS.Funcionalidad F
+	insert into FOUR_SIZONS.RolXFunc(Rol_Codigo,Func_Codigo, RolXFunc_Estado)
+		select distinct R.Rol_Codigo, F.Func_Codigo, 1 from FOUR_SIZONS.Rol R,FOUR_SIZONS.Funcionalidad F
 		where R.Rol_Nombre = 'Guest' and
 				F.Func_Nombre in ('Generar/Modificar Reserva','Cancelar Reserva');
 	
