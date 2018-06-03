@@ -6,11 +6,10 @@ using System.Text;
 using System.Windows.Forms;
 
 
-namespace lectorConfig
+namespace readConfig
 {
     class Config
     {
-        /*AAAA-DD-MM*/
         static public string fechaSystem()
         {
             StreamReader config = new StreamReader("../../../config.txt");
@@ -30,7 +29,7 @@ namespace lectorConfig
 
         }
 
-        static public string cadenaConexion()
+        static public string strConection()
         {
             string user = "";
             string pass = "";

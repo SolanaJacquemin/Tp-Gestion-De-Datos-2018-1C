@@ -10,52 +10,48 @@ namespace FrbaHotel
 {
     class Conexion
     {
-        public string cadenaconexion;
-        public string query = "";
+        public string strConection;
+        public string strQuery = "";
         public SqlCommand command;
-        public SqlConnection cnx;
+        public SqlConnection conector;
         public SqlDataReader lector;
 
-        public Conexion()
+        public Conexion() // Levanta la conexión
         {
-            //"Data Source=localhost\\SQLSERVER20012;Initial Catalog=GD1C2018;User ID=gdHotel2018;Password=gd2018";
-            this.cadenaconexion = lectorConfig.Config.cadenaConexion();
-            this.cnx = new SqlConnection(this.cadenaconexion);
+            this.strConection = readConfig.Config.strConection();
+            this.conector = new SqlConnection(this.strConection);
         }
 
-        public void comandear()
+        public void execute() // Ejecuta la consulta
         {
-            command = new SqlCommand(query, cnx);
+            command = new SqlCommand(strQuery, conector);
         }
 
-        public void abrirConexion()
+        public void openConection() // Abre la conexión
         {
-            cnx.Open();
+            conector.Open();
         }
-        public void cerrarConexion()
+        public void closeConection() // Cierra la conexión
         {
-            cnx.Close();
+            conector.Close();
         }
-        /*Ejecuta un query que no devuleve datos(UPDATE, INSERT, DELETE, etc)*/
-        public void ejecutarNoQuery()
+        
+        public void executeNoReturnQuery() // Ejecuta consulta que no devuelve datos (INS/UPD/DEL)
         {
-            this.abrirConexion();
-            comandear();
+            this.openConection();
+            execute();
             command.ExecuteNonQuery();
-            this.cerrarConexion();
+            this.closeConection();
         }
 
-        /*Ejecuta un query que devuelva datos(SELECT)*/
-        /*Despues de ejecutar este metodo y terminar de usar el Reader*/
-        /*SIEMPRE utilizar cerrarConexion */
-        public void ejecutarQuery()
+        public void executeQuery() // Ejecuta la consulta
         {
-            this.abrirConexion();
-            comandear();
+            this.openConection();
+            execute();
             lector = command.ExecuteReader();
         }
 
-        public bool leerReader()
+        public bool reader() // Lee los datos devueltos
         {
             return lector.Read();
         }

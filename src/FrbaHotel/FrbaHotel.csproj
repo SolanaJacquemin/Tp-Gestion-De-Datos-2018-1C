@@ -44,11 +44,11 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="ABMCliente\Form1.cs">
+    <Compile Include="ABMCliente\ABMCliente01.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="ABMCliente\Form1.Designer.cs">
-      <DependentUpon>Form1.cs</DependentUpon>
+    <Compile Include="ABMCliente\ABMCliente01.Designer.cs">
+      <DependentUpon>ABMCliente01.cs</DependentUpon>
     </Compile>
     <Compile Include="ABMHabitacion\Form1.cs">
       <SubType>Form</SubType>
@@ -79,6 +79,12 @@
     </Compile>
     <Compile Include="ABMUsuario\ABMUsuario01.Designer.cs">
       <DependentUpon>ABMUsuario01.cs</DependentUpon>
+    </Compile>
+    <Compile Include="ABMUsuario\ABMUsuarioPrompt.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="ABMUsuario\ABMUsuarioPrompt.Designer.cs">
+      <DependentUpon>ABMUsuarioPrompt.cs</DependentUpon>
     </Compile>
     <Compile Include="CancelarReserva\Form1.cs">
       <SubType>Form</SubType>
@@ -126,11 +132,17 @@
     <Compile Include="RegistrarEstadia\Form1.Designer.cs">
       <DependentUpon>Form1.cs</DependentUpon>
     </Compile>
+    <EmbeddedResource Include="ABMCliente\ABMCliente01.resx">
+      <DependentUpon>ABMCliente01.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="ABMUsuario\ABMUsuario01.resx">
       <DependentUpon>ABMUsuario01.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="ABMUsuario\ABMUsuario02.resx">
       <DependentUpon>ABMUsuario02.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="ABMUsuario\ABMUsuarioPrompt.resx">
+      <DependentUpon>ABMUsuarioPrompt.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Login\Login.resx">
       <DependentUpon>Login.cs</DependentUpon>

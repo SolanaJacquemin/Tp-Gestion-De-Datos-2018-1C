@@ -1,6 +1,12 @@
 USE GD1C2018
 GO
 
+IF (OBJECT_ID('dbo.migracion_datos', 'P') IS NOT NULL)
+BEGIN
+    DROP PROCEDURE dbo.migracion_datos
+END;
+GO
+
 CREATE PROCEDURE migracion_datos
 AS
 BEGIN
@@ -13,7 +19,144 @@ BEGIN
 		EXEC (@cmd)
 	END
 
+	--Eliminar tablas anteriormente creadas
+	IF (OBJECT_ID('FOUR_SIZONS.Parametros', 'U') IS NOT NULL)
+	BEGIN
+		DROP TABLE FOUR_SIZONS.Parametros
+	END
+
+	IF (OBJECT_ID('FOUR_SIZONS.EstadiaXCliente', 'U') IS NOT NULL)
+	BEGIN
+		DROP TABLE FOUR_SIZONS.EstadiaXCliente
+	END
+
+	IF (OBJECT_ID('FOUR_SIZONS.EstadiaXConsumible', 'U') IS NOT NULL)
+	BEGIN
+		DROP TABLE FOUR_SIZONS.EstadiaXConsumible
+	END
+
+	IF (OBJECT_ID('FOUR_SIZONS.Habitacion_TipoXReser', 'U') IS NOT NULL)
+	BEGIN
+		DROP TABLE FOUR_SIZONS.Habitacion_TipoXReser
+	END
+
+	IF (OBJECT_ID('FOUR_SIZONS.RegXHotel', 'U') IS NOT NULL)
+	BEGIN
+		DROP TABLE FOUR_SIZONS.RegXHotel
+	END
+
+	IF (OBJECT_ID('FOUR_SIZONS.UsuarioXRol', 'U') IS NOT NULL)
+	BEGIN
+		DROP TABLE FOUR_SIZONS.UsuarioXRol
+	END
+
+	IF (OBJECT_ID('FOUR_SIZONS.UsuarioXHotel', 'U') IS NOT NULL)
+	BEGIN
+		DROP TABLE FOUR_SIZONS.UsuarioXHotel
+	END
+
+	IF (OBJECT_ID('FOUR_SIZONS.Disponibilidad', 'U') IS NOT NULL)
+	BEGIN
+		DROP TABLE FOUR_SIZONS.Disponibilidad
+	END
+
+	IF (OBJECT_ID('FOUR_SIZONS.Consumible', 'U') IS NOT NULL)
+	BEGIN
+		DROP TABLE FOUR_SIZONS.Consumible
+	END
+
+	IF (OBJECT_ID('FOUR_SIZONS.Hotel_Cerrado', 'U') IS NOT NULL)
+	BEGIN
+		DROP TABLE FOUR_SIZONS.Hotel_Cerrado
+	END
+
+	IF (OBJECT_ID('FOUR_SIZONS.Item_Factura', 'U') IS NOT NULL)
+	BEGIN
+		DROP TABLE FOUR_SIZONS.Item_Factura
+	END
+
+	IF (OBJECT_ID('FOUR_SIZONS.RolXFunc', 'U') IS NOT NULL)
+	BEGIN
+		DROP TABLE FOUR_SIZONS.RolXFunc
+	END
+
+	IF (OBJECT_ID('FOUR_SIZONS.Tarjeta', 'U') IS NOT NULL)
+	BEGIN
+		DROP TABLE FOUR_SIZONS.Tarjeta
+	END
+
+	IF (OBJECT_ID('FOUR_SIZONS.Regimen', 'U') IS NOT NULL)
+	BEGIN
+		DROP TABLE FOUR_SIZONS.Regimen
+	END
+
+	IF (OBJECT_ID('FOUR_SIZONS.Funcionalidad', 'U') IS NOT NULL)
+	BEGIN
+		DROP TABLE FOUR_SIZONS.Funcionalidad
+	END
+
+	IF (OBJECT_ID('FOUR_SIZONS.ReservaMod', 'U') IS NOT NULL)
+	BEGIN
+		DROP TABLE FOUR_SIZONS.ReservaMod
+	END
+
+	IF (OBJECT_ID('FOUR_SIZONS.Rol', 'U') IS NOT NULL)
+	BEGIN
+		DROP TABLE FOUR_SIZONS.Rol
+	END
+
+	IF (OBJECT_ID('FOUR_SIZONS.Factura', 'U') IS NOT NULL)
+	BEGIN
+		DROP TABLE FOUR_SIZONS.Factura
+	END
+
+	IF (OBJECT_ID('FOUR_SIZONS.Estadia', 'U') IS NOT NULL)
+	BEGIN
+		DROP TABLE FOUR_SIZONS.Estadia
+	END
+
+	IF (OBJECT_ID('FOUR_SIZONS.Habitacion', 'U') IS NOT NULL)
+	BEGIN
+		DROP TABLE FOUR_SIZONS.Habitacion
+	END
+
+	IF (OBJECT_ID('FOUR_SIZONS.Habitacion_Tipo', 'U') IS NOT NULL)
+	BEGIN
+		DROP TABLE FOUR_SIZONS.Habitacion_Tipo
+	END
+
+	IF (OBJECT_ID('FOUR_SIZONS.Reserva', 'U') IS NOT NULL)
+	BEGIN
+		DROP TABLE FOUR_SIZONS.Reserva
+	END
+
+	IF (OBJECT_ID('FOUR_SIZONS.Usuario', 'U') IS NOT NULL)
+	BEGIN
+		DROP TABLE FOUR_SIZONS.Usuario
+	END
+
+	IF (OBJECT_ID('FOUR_SIZONS.Cliente', 'U') IS NOT NULL)
+	BEGIN
+		DROP TABLE FOUR_SIZONS.Cliente
+	END
+
+	IF (OBJECT_ID('FOUR_SIZONS.Hotel', 'U') IS NOT NULL)
+	BEGIN
+		DROP TABLE FOUR_SIZONS.Hotel
+	END
+
 	-- Creación de tablas
+	IF NOT EXISTS (SELECT * FROM sys.tables WHERE name = 'Parametros')
+	BEGIN
+		CREATE TABLE FOUR_SIZONS.Parametros(
+			Parametro_Codigo nvarchar(10),
+			Paramentro_NroItem numeric(18) IDENTITY,
+			Parametro_Descripcion nvarchar(255)
+
+			CONSTRAINT PK_Parametros PRIMARY KEY (Parametro_Codigo, Paramentro_NroItem)
+		)
+	END
+
 	IF NOT EXISTS (SELECT * FROM sys.tables WHERE name = 'Funcionalidad')
 	BEGIN
 		CREATE TABLE FOUR_SIZONS.Funcionalidad (
@@ -28,7 +171,7 @@ BEGIN
 	IF NOT EXISTS (SELECT * FROM sys.tables WHERE name = 'Rol')
 	BEGIN
 		CREATE TABLE FOUR_SIZONS.Rol (
-			Rol_Codigo numeric(18,0),
+			Rol_Codigo numeric(18,0) IDENTITY,
 			Rol_Nombre nvarchar(50),
 			Rol_Estado bit,
 			CONSTRAINT PK_Rol PRIMARY KEY(Rol_Codigo)
@@ -375,6 +518,19 @@ BEGIN
 	END
 
 	-- Migración de datos de la tabla maestra
+	-- Parámetros
+	INSERT INTO FOUR_SIZONS.Parametros VALUES ('DOCUMENTO', 'DNI')
+	INSERT INTO FOUR_SIZONS.Parametros VALUES ('DOCUMENTO', 'CUIL')
+	INSERT INTO FOUR_SIZONS.Parametros VALUES ('DOCUMENTO', 'CUIT')
+	INSERT INTO FOUR_SIZONS.Parametros VALUES ('DOCUMENTO', 'LE')
+	INSERT INTO FOUR_SIZONS.Parametros VALUES ('DOCUMENTO', 'LC')
+	INSERT INTO FOUR_SIZONS.Parametros VALUES ('DOCUMENTO', 'PASS')
+
+	-- Roles
+	INSERT INTO FOUR_SIZONS.Rol VALUES ('Administrador', 1)
+	INSERT INTO FOUR_SIZONS.Rol VALUES ('Recepcionista', 1)
+	INSERT INTO FOUR_SIZONS.Rol VALUES ('Guest', 1)
+
 	-- Tipos de Habitaciones
 	INSERT INTO FOUR_SIZONS.Habitacion_Tipo (Habitacion_Tipo_Codigo, Habitacion_Tipo_Descripcion, Habitacion_Tipo_Porcentual) 
 	SELECT DISTINCT Habitacion_Tipo_Codigo, Habitacion_Tipo_Descripcion, Habitacion_Tipo_Porcentual

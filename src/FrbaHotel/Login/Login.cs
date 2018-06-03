@@ -23,16 +23,16 @@ namespace FrbaHotel
         private void button1_Click(object sender, EventArgs e)
         {
 
-            con.cerrarConexion();
-            con.query = "SELECT Usuario_Password, Usuario_Estado FROM FOUR_SIZONS.Usuario WHERE Usuario_ID='" + textBox1.Text + "'";
+            con.closeConection();
+            con.strQuery = "SELECT Usuario_Password, Usuario_Estado FROM FOUR_SIZONS.Usuario WHERE Usuario_ID='" + textBox1.Text + "'";
 
-            con.ejecutarQuery();
+            con.executeQuery();
 
-            if (con.leerReader())
+            if (con.reader())
             {
                 if (textBox2.Text == con.lector.GetString(0))
                 {
-                    con.cerrarConexion();
+                    con.closeConection();
                     this.Hide();
                     FrbaHotel.PantallaPrincipal.PantallaPrincipal01 pantallaPrincipal = new PantallaPrincipal01();
                     pantallaPrincipal.ShowDialog();
@@ -43,7 +43,7 @@ namespace FrbaHotel
                     MessageBox.Show("La contraseña es incorrecta", "FOUR SIZONS - FRBA Hoteles", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 }
             }else{
-                con.cerrarConexion();
+                con.closeConection();
                 MessageBox.Show("El usuario no existe", "FOUR SIZONS - FRBA Hoteles", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 return; 
             }
