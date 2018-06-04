@@ -24,11 +24,23 @@ namespace FrbaHotel.ABMUsuario
                     break;
                 case "DLT":
                     labelTitulo.Text = "Baja de Usuario";
+                    txt_apellido.ReadOnly = true;
+                    txt_direccion.ReadOnly = true;
+                    txt_nombre.ReadOnly = true;
+                    txt_nro_documento.ReadOnly = true;
+                    txt_password.ReadOnly = true;
+                    txt_telefono.ReadOnly = true;
+                    txt_usuario.ReadOnly = true;
+                    cb_tipo_documento.Enabled = false;
+                    dt_fecha_nac.Enabled = false;
                     break;
                 case "UPD":
                     labelTitulo.Text = "Modificación de Usuario";
                     break;
             }
+            dt_fecha_nac.Format = DateTimePickerFormat.Custom;
+            dt_fecha_nac.CustomFormat = "dd/MM/yyyy";
+            
         }
 
         private void label1_Click(object sender, EventArgs e)
@@ -48,7 +60,24 @@ namespace FrbaHotel.ABMUsuario
 
         private void ABMUsuario_Load(object sender, EventArgs e)
         {
+            Conexion con = new Conexion();
+            con.strQuery = "SELECT Parametro_Descripcion FROM FOUR_SIZONS.Parametros WHERE Parametro_Codigo = 'DOCUMENTO'";
+            con.executeQuery();
+            while (con.reader())
+            {
+                cb_tipo_documento.Items.Add(con.lector.GetString(0));
+            }
+            con.closeConection();
+        }
 
+        private void boton_aceptar_Click(object sender, EventArgs e)
+        {
+            MessageBox.Show("Está seguro que desea borrar el usuario?", "FOUR SIZONS - FRBA Hoteles", MessageBoxButtons.YesNo, MessageBoxIcon.Question);
+        }
+
+        private void boton_cancelar_Click(object sender, EventArgs e)
+        {
+            this.Close();
         }
     }
 }

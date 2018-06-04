@@ -29,11 +29,11 @@
         private void InitializeComponent()
         {
             this.labelTitulo = new System.Windows.Forms.Label();
-            this.texto_nombre = new System.Windows.Forms.TextBox();
-            this.text_apellido = new System.Windows.Forms.TextBox();
+            this.txt_nombre = new System.Windows.Forms.TextBox();
+            this.txt_apellido = new System.Windows.Forms.TextBox();
             this.groupBox1 = new System.Windows.Forms.GroupBox();
-            this.datetime_fecha_nac = new System.Windows.Forms.DateTimePicker();
-            this.combo_tipo_documento = new System.Windows.Forms.ComboBox();
+            this.dt_fecha_nac = new System.Windows.Forms.DateTimePicker();
+            this.cb_tipo_documento = new System.Windows.Forms.ComboBox();
             this.label8 = new System.Windows.Forms.Label();
             this.label7 = new System.Windows.Forms.Label();
             this.label6 = new System.Windows.Forms.Label();
@@ -41,22 +41,24 @@
             this.label4 = new System.Windows.Forms.Label();
             this.label3 = new System.Windows.Forms.Label();
             this.label2 = new System.Windows.Forms.Label();
-            this.text_direccion = new System.Windows.Forms.TextBox();
-            this.text_telefono = new System.Windows.Forms.TextBox();
-            this.text_nro_documento = new System.Windows.Forms.TextBox();
+            this.txt_direccion = new System.Windows.Forms.TextBox();
+            this.txt_telefono = new System.Windows.Forms.TextBox();
+            this.txt_nro_documento = new System.Windows.Forms.TextBox();
             this.label9 = new System.Windows.Forms.Label();
             this.label10 = new System.Windows.Forms.Label();
-            this.text_user = new System.Windows.Forms.TextBox();
-            this.text_password = new System.Windows.Forms.TextBox();
+            this.txt_usuario = new System.Windows.Forms.TextBox();
+            this.txt_password = new System.Windows.Forms.TextBox();
             this.boton_aceptar = new System.Windows.Forms.Button();
             this.boton_cancelar = new System.Windows.Forms.Button();
+            this.label1 = new System.Windows.Forms.Label();
+            this.label11 = new System.Windows.Forms.Label();
             this.groupBox1.SuspendLayout();
             this.SuspendLayout();
             // 
             // labelTitulo
             // 
             this.labelTitulo.Font = new System.Drawing.Font("Calibri", 20F);
-            this.labelTitulo.Location = new System.Drawing.Point(113, 27);
+            this.labelTitulo.Location = new System.Drawing.Point(70, 16);
             this.labelTitulo.Name = "labelTitulo";
             this.labelTitulo.Size = new System.Drawing.Size(350, 33);
             this.labelTitulo.TabIndex = 0;
@@ -64,24 +66,24 @@
             this.labelTitulo.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
             this.labelTitulo.Click += new System.EventHandler(this.label1_Click);
             // 
-            // texto_nombre
+            // txt_nombre
             // 
-            this.texto_nombre.Location = new System.Drawing.Point(140, 30);
-            this.texto_nombre.Name = "texto_nombre";
-            this.texto_nombre.Size = new System.Drawing.Size(200, 20);
-            this.texto_nombre.TabIndex = 1;
+            this.txt_nombre.Location = new System.Drawing.Point(140, 30);
+            this.txt_nombre.Name = "txt_nombre";
+            this.txt_nombre.Size = new System.Drawing.Size(200, 20);
+            this.txt_nombre.TabIndex = 2;
             // 
-            // text_apellido
+            // txt_apellido
             // 
-            this.text_apellido.Location = new System.Drawing.Point(140, 60);
-            this.text_apellido.Name = "text_apellido";
-            this.text_apellido.Size = new System.Drawing.Size(200, 20);
-            this.text_apellido.TabIndex = 2;
+            this.txt_apellido.Location = new System.Drawing.Point(140, 60);
+            this.txt_apellido.Name = "txt_apellido";
+            this.txt_apellido.Size = new System.Drawing.Size(200, 20);
+            this.txt_apellido.TabIndex = 3;
             // 
             // groupBox1
             // 
-            this.groupBox1.Controls.Add(this.datetime_fecha_nac);
-            this.groupBox1.Controls.Add(this.combo_tipo_documento);
+            this.groupBox1.Controls.Add(this.dt_fecha_nac);
+            this.groupBox1.Controls.Add(this.cb_tipo_documento);
             this.groupBox1.Controls.Add(this.label8);
             this.groupBox1.Controls.Add(this.label7);
             this.groupBox1.Controls.Add(this.label6);
@@ -89,12 +91,12 @@
             this.groupBox1.Controls.Add(this.label4);
             this.groupBox1.Controls.Add(this.label3);
             this.groupBox1.Controls.Add(this.label2);
-            this.groupBox1.Controls.Add(this.text_direccion);
-            this.groupBox1.Controls.Add(this.text_telefono);
-            this.groupBox1.Controls.Add(this.text_apellido);
-            this.groupBox1.Controls.Add(this.text_nro_documento);
-            this.groupBox1.Controls.Add(this.texto_nombre);
-            this.groupBox1.Location = new System.Drawing.Point(55, 180);
+            this.groupBox1.Controls.Add(this.txt_direccion);
+            this.groupBox1.Controls.Add(this.txt_telefono);
+            this.groupBox1.Controls.Add(this.txt_apellido);
+            this.groupBox1.Controls.Add(this.txt_nro_documento);
+            this.groupBox1.Controls.Add(this.txt_nombre);
+            this.groupBox1.Location = new System.Drawing.Point(12, 146);
             this.groupBox1.Name = "groupBox1";
             this.groupBox1.Size = new System.Drawing.Size(443, 242);
             this.groupBox1.TabIndex = 3;
@@ -102,20 +104,21 @@
             this.groupBox1.Text = "Datos de la Persona";
             this.groupBox1.Enter += new System.EventHandler(this.groupBox1_Enter);
             // 
-            // datetime_fecha_nac
+            // dt_fecha_nac
             // 
-            this.datetime_fecha_nac.Location = new System.Drawing.Point(140, 210);
-            this.datetime_fecha_nac.Name = "datetime_fecha_nac";
-            this.datetime_fecha_nac.Size = new System.Drawing.Size(200, 20);
-            this.datetime_fecha_nac.TabIndex = 5;
+            this.dt_fecha_nac.Location = new System.Drawing.Point(140, 210);
+            this.dt_fecha_nac.Name = "dt_fecha_nac";
+            this.dt_fecha_nac.Size = new System.Drawing.Size(113, 20);
+            this.dt_fecha_nac.TabIndex = 8;
+            this.dt_fecha_nac.Value = new System.DateTime(2018, 6, 3, 0, 0, 0, 0);
             // 
-            // combo_tipo_documento
+            // cb_tipo_documento
             // 
-            this.combo_tipo_documento.FormattingEnabled = true;
-            this.combo_tipo_documento.Location = new System.Drawing.Point(140, 90);
-            this.combo_tipo_documento.Name = "combo_tipo_documento";
-            this.combo_tipo_documento.Size = new System.Drawing.Size(200, 21);
-            this.combo_tipo_documento.TabIndex = 4;
+            this.cb_tipo_documento.FormattingEnabled = true;
+            this.cb_tipo_documento.Location = new System.Drawing.Point(140, 90);
+            this.cb_tipo_documento.Name = "cb_tipo_documento";
+            this.cb_tipo_documento.Size = new System.Drawing.Size(70, 21);
+            this.cb_tipo_documento.TabIndex = 4;
             // 
             // label8
             // 
@@ -180,32 +183,32 @@
             this.label2.TabIndex = 3;
             this.label2.Text = "Nombre";
             // 
-            // text_direccion
+            // txt_direccion
             // 
-            this.text_direccion.Location = new System.Drawing.Point(140, 180);
-            this.text_direccion.Name = "text_direccion";
-            this.text_direccion.Size = new System.Drawing.Size(200, 20);
-            this.text_direccion.TabIndex = 2;
+            this.txt_direccion.Location = new System.Drawing.Point(140, 180);
+            this.txt_direccion.Name = "txt_direccion";
+            this.txt_direccion.Size = new System.Drawing.Size(200, 20);
+            this.txt_direccion.TabIndex = 7;
             // 
-            // text_telefono
+            // txt_telefono
             // 
-            this.text_telefono.Location = new System.Drawing.Point(140, 150);
-            this.text_telefono.Name = "text_telefono";
-            this.text_telefono.Size = new System.Drawing.Size(200, 20);
-            this.text_telefono.TabIndex = 2;
+            this.txt_telefono.Location = new System.Drawing.Point(140, 150);
+            this.txt_telefono.Name = "txt_telefono";
+            this.txt_telefono.Size = new System.Drawing.Size(200, 20);
+            this.txt_telefono.TabIndex = 6;
             // 
-            // text_nro_documento
+            // txt_nro_documento
             // 
-            this.text_nro_documento.Location = new System.Drawing.Point(140, 120);
-            this.text_nro_documento.Name = "text_nro_documento";
-            this.text_nro_documento.Size = new System.Drawing.Size(200, 20);
-            this.text_nro_documento.TabIndex = 1;
-            this.text_nro_documento.TextChanged += new System.EventHandler(this.textBox3_TextChanged);
+            this.txt_nro_documento.Location = new System.Drawing.Point(140, 120);
+            this.txt_nro_documento.Name = "txt_nro_documento";
+            this.txt_nro_documento.Size = new System.Drawing.Size(113, 20);
+            this.txt_nro_documento.TabIndex = 5;
+            this.txt_nro_documento.TextChanged += new System.EventHandler(this.textBox3_TextChanged);
             // 
             // label9
             // 
             this.label9.AutoSize = true;
-            this.label9.Location = new System.Drawing.Point(128, 114);
+            this.label9.Location = new System.Drawing.Point(85, 80);
             this.label9.Name = "label9";
             this.label9.Size = new System.Drawing.Size(43, 13);
             this.label9.TabIndex = 3;
@@ -214,57 +217,81 @@
             // label10
             // 
             this.label10.AutoSize = true;
-            this.label10.Location = new System.Drawing.Point(112, 144);
+            this.label10.Location = new System.Drawing.Point(69, 110);
             this.label10.Name = "label10";
             this.label10.Size = new System.Drawing.Size(61, 13);
             this.label10.TabIndex = 3;
             this.label10.Text = "Contraseña";
             // 
-            // text_user
+            // txt_usuario
             // 
-            this.text_user.Location = new System.Drawing.Point(194, 111);
-            this.text_user.Name = "text_user";
-            this.text_user.Size = new System.Drawing.Size(200, 20);
-            this.text_user.TabIndex = 1;
+            this.txt_usuario.Location = new System.Drawing.Point(151, 77);
+            this.txt_usuario.Name = "txt_usuario";
+            this.txt_usuario.Size = new System.Drawing.Size(200, 20);
+            this.txt_usuario.TabIndex = 0;
             // 
-            // text_password
+            // txt_password
             // 
-            this.text_password.Location = new System.Drawing.Point(194, 141);
-            this.text_password.Name = "text_password";
-            this.text_password.Size = new System.Drawing.Size(200, 20);
-            this.text_password.TabIndex = 1;
+            this.txt_password.Location = new System.Drawing.Point(151, 107);
+            this.txt_password.Name = "txt_password";
+            this.txt_password.Size = new System.Drawing.Size(200, 20);
+            this.txt_password.TabIndex = 1;
             // 
             // boton_aceptar
             // 
-            this.boton_aceptar.Location = new System.Drawing.Point(342, 439);
+            this.boton_aceptar.Location = new System.Drawing.Point(299, 397);
             this.boton_aceptar.Name = "boton_aceptar";
             this.boton_aceptar.Size = new System.Drawing.Size(75, 23);
             this.boton_aceptar.TabIndex = 4;
             this.boton_aceptar.Text = "Aceptar";
             this.boton_aceptar.UseVisualStyleBackColor = true;
+            this.boton_aceptar.Click += new System.EventHandler(this.boton_aceptar_Click);
             // 
             // boton_cancelar
             // 
-            this.boton_cancelar.Location = new System.Drawing.Point(423, 439);
+            this.boton_cancelar.Location = new System.Drawing.Point(380, 397);
             this.boton_cancelar.Name = "boton_cancelar";
             this.boton_cancelar.Size = new System.Drawing.Size(75, 23);
             this.boton_cancelar.TabIndex = 4;
             this.boton_cancelar.Text = "Cancelar";
             this.boton_cancelar.UseVisualStyleBackColor = true;
+            this.boton_cancelar.Click += new System.EventHandler(this.boton_cancelar_Click);
+            // 
+            // label1
+            // 
+            this.label1.AutoSize = true;
+            this.label1.Font = new System.Drawing.Font("Calibri", 8F);
+            this.label1.Location = new System.Drawing.Point(22, 32);
+            this.label1.Name = "label1";
+            this.label1.Size = new System.Drawing.Size(69, 13);
+            this.label1.TabIndex = 6;
+            this.label1.Text = "FRBA Hoteles";
+            // 
+            // label11
+            // 
+            this.label11.AutoSize = true;
+            this.label11.Font = new System.Drawing.Font("Calibri", 12F);
+            this.label11.Location = new System.Drawing.Point(12, 13);
+            this.label11.Name = "label11";
+            this.label11.Size = new System.Drawing.Size(97, 19);
+            this.label11.TabIndex = 7;
+            this.label11.Text = "FOUR SIZONS";
             // 
             // ABMUsuario02
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(553, 474);
+            this.ClientSize = new System.Drawing.Size(474, 428);
+            this.Controls.Add(this.label1);
+            this.Controls.Add(this.label11);
             this.Controls.Add(this.boton_cancelar);
             this.Controls.Add(this.boton_aceptar);
             this.Controls.Add(this.groupBox1);
             this.Controls.Add(this.labelTitulo);
             this.Controls.Add(this.label10);
             this.Controls.Add(this.label9);
-            this.Controls.Add(this.text_password);
-            this.Controls.Add(this.text_user);
+            this.Controls.Add(this.txt_password);
+            this.Controls.Add(this.txt_usuario);
             this.Name = "ABMUsuario02";
             this.Text = "ABMUsuarios";
             this.Load += new System.EventHandler(this.ABMUsuario_Load);
@@ -278,26 +305,28 @@
         #endregion
 
         private System.Windows.Forms.Label labelTitulo;
-        private System.Windows.Forms.TextBox texto_nombre;
-        private System.Windows.Forms.TextBox text_apellido;
+        private System.Windows.Forms.TextBox txt_nombre;
+        private System.Windows.Forms.TextBox txt_apellido;
         private System.Windows.Forms.GroupBox groupBox1;
         private System.Windows.Forms.Label label5;
         private System.Windows.Forms.Label label4;
         private System.Windows.Forms.Label label3;
         private System.Windows.Forms.Label label2;
-        private System.Windows.Forms.TextBox text_telefono;
-        private System.Windows.Forms.TextBox text_nro_documento;
-        private System.Windows.Forms.DateTimePicker datetime_fecha_nac;
-        private System.Windows.Forms.ComboBox combo_tipo_documento;
+        private System.Windows.Forms.TextBox txt_telefono;
+        private System.Windows.Forms.TextBox txt_nro_documento;
+        private System.Windows.Forms.DateTimePicker dt_fecha_nac;
+        private System.Windows.Forms.ComboBox cb_tipo_documento;
         private System.Windows.Forms.Label label8;
         private System.Windows.Forms.Label label7;
         private System.Windows.Forms.Label label6;
-        private System.Windows.Forms.TextBox text_direccion;
+        private System.Windows.Forms.TextBox txt_direccion;
         private System.Windows.Forms.Label label9;
         private System.Windows.Forms.Label label10;
-        private System.Windows.Forms.TextBox text_user;
-        private System.Windows.Forms.TextBox text_password;
+        private System.Windows.Forms.TextBox txt_usuario;
+        private System.Windows.Forms.TextBox txt_password;
         private System.Windows.Forms.Button boton_aceptar;
         private System.Windows.Forms.Button boton_cancelar;
+        private System.Windows.Forms.Label label1;
+        private System.Windows.Forms.Label label11;
     }
 }

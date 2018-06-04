@@ -35,6 +35,7 @@
             this.dgvUsuariosPrompt = new System.Windows.Forms.DataGridView();
             this.Usuario_ID = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.Usuario_Apellido = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.txt_aux_userid = new System.Windows.Forms.TextBox();
             this.groupBox1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dgvUsuariosPrompt)).BeginInit();
             this.SuspendLayout();
@@ -102,13 +103,21 @@
             this.Usuario_Apellido.Name = "Usuario_Apellido";
             this.Usuario_Apellido.ReadOnly = true;
             // 
+            // txt_aux_userid
+            // 
+            this.txt_aux_userid.Location = new System.Drawing.Point(82, 275);
+            this.txt_aux_userid.Name = "txt_aux_userid";
+            this.txt_aux_userid.Size = new System.Drawing.Size(100, 20);
+            this.txt_aux_userid.TabIndex = 0;
+            // 
             // ABMUsuarioPrompt
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(289, 281);
+            this.ClientSize = new System.Drawing.Size(289, 301);
             this.Controls.Add(this.dgvUsuariosPrompt);
             this.Controls.Add(this.groupBox1);
+            this.Controls.Add(this.txt_aux_userid);
             this.Name = "ABMUsuarioPrompt";
             this.Text = "ABMUsuarioPrompt";
             this.Load += new System.EventHandler(this.ABMUsuarioPrompt_Load);
@@ -116,6 +125,7 @@
             this.groupBox1.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dgvUsuariosPrompt)).EndInit();
             this.ResumeLayout(false);
+            this.PerformLayout();
 
         }
 
@@ -128,5 +138,6 @@
         private System.Windows.Forms.DataGridView dgvUsuariosPrompt;
         private System.Windows.Forms.DataGridViewTextBoxColumn Usuario_ID;
         private System.Windows.Forms.DataGridViewTextBoxColumn Usuario_Apellido;
+        private System.Windows.Forms.TextBox txt_aux_userid;
     }
 }

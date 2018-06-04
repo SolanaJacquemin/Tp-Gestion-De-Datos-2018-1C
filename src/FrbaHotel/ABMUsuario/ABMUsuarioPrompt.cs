@@ -16,6 +16,7 @@ namespace FrbaHotel.ABMUsuario
         {
             InitializeComponent();
             this.StartPosition = FormStartPosition.CenterScreen;
+            txt_aux_userid.Visible = false;
 
             dgvUsuariosPrompt.Rows.Clear();
 
@@ -28,7 +29,7 @@ namespace FrbaHotel.ABMUsuario
                 MessageBox.Show("La busqueda no produjo resultados");
                 con.strQuery = "";
                 con.closeConection();
-                return;
+                //return;
             }
 
             dgvUsuariosPrompt.Rows.Add(new Object[] { con.lector.GetString(0), con.lector.GetString(1) });
@@ -75,20 +76,32 @@ namespace FrbaHotel.ABMUsuario
 
         }
 
-        /*private void dgvUsuariosPrompt_CellContentClick(object sender, DataGridViewCellEventArgs e)
-        {
-       
-
-        }*/
-
-        private void dgvUsuariosPrompt_CellContentClick(object sender, DataGridViewCellEventArgs e)
+        public void dgvUsuariosPrompt_CellContentClick(object sender, DataGridViewCellEventArgs e)
         {
             int index = e.RowIndex;
             DataGridViewRow selectedRow = dgvUsuariosPrompt.Rows[index];
             string dgv_usuario_ID = selectedRow.Cells[0].Value.ToString();
-            string dgv_usuario_apellido = selectedRow.Cells[1].Value.ToString();
+            
+            
+            txt_aux_userid.Text = dgv_usuario_ID;
 
-            //MessageBox.Show(selectedRow.Cells[0].Value.ToString()); 
+            this.Hide();
         }
+
+        /*public string dgv_usuario_ID
+        {
+            get
+            {
+                return dgv_usuario_ID;
+            }
+        }*/
+
+        public TextBox TextBox1 {
+            get 
+            {
+                return txt_aux_userid;
+            }
+        }
+
     }
 }

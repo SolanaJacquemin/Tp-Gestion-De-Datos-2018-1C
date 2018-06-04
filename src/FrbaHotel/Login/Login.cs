@@ -18,19 +18,21 @@ namespace FrbaHotel
         {
             InitializeComponent();
             this.StartPosition = FormStartPosition.CenterScreen;
+            txt_usuario.CharacterCasing = CharacterCasing.Upper;
+            txt_password.CharacterCasing = CharacterCasing.Upper;
         }
 
         private void button1_Click(object sender, EventArgs e)
         {
 
             con.closeConection();
-            con.strQuery = "SELECT Usuario_Password, Usuario_Estado FROM FOUR_SIZONS.Usuario WHERE Usuario_ID='" + textBox1.Text + "'";
+            con.strQuery = "SELECT Usuario_Password, Usuario_Estado FROM FOUR_SIZONS.Usuario WHERE Usuario_ID='" + txt_usuario.Text + "'";
 
             con.executeQuery();
 
             if (con.reader())
             {
-                if (textBox2.Text == con.lector.GetString(0))
+                if (txt_password.Text == con.lector.GetString(0))
                 {
                     con.closeConection();
                     this.Hide();
@@ -59,5 +61,7 @@ namespace FrbaHotel
         {
             
         }
+
+
     }
 }

@@ -16,7 +16,9 @@ namespace FrbaHotel.ABMUsuario
         {
             InitializeComponent();
             this.StartPosition = FormStartPosition.CenterScreen;
+            
 
+            txt_Id.ReadOnly = true;
             dgv_Usuarios.Rows.Clear();
 
             Conexion con = new Conexion();
@@ -27,7 +29,7 @@ namespace FrbaHotel.ABMUsuario
             con.executeQuery();
             if (!con.reader())
             {
-                MessageBox.Show("La busqueda no produjo resultados");
+                MessageBox.Show("No se han encontrado usuarios. Revise los criterios de búsqueda", "FOUR SIZONS - FRBA Hoteles", MessageBoxButtons.OK, MessageBoxIcon.Information);
                 con.strQuery = "";
                 con.closeConection();
                 return;
@@ -156,12 +158,15 @@ namespace FrbaHotel.ABMUsuario
             this.Close();
         }
 
-
-
         private void btn_promptUsu_Click(object sender, EventArgs e)
         {
-            ABMUsuarioPrompt formABMUsuarioPrompt = new ABMUsuarioPrompt();
-            formABMUsuarioPrompt.ShowDialog();
+
+
+            using (ABMUsuarioPrompt prompt = new ABMUsuarioPrompt()){
+                prompt.ShowDialog();
+                txt_Id.Text = prompt.TextBox1.Text;
+                prompt.Close();
+            }
             this.Show();
         }
         
