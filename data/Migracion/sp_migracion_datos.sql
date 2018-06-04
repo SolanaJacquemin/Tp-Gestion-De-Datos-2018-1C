@@ -694,3 +694,83 @@ BEGIN
 	ORDER BY M.Factura_Nro
 
 END
+go
+
+create procedure FOUR_SIZONS.AltaCliente 
+	@username nvarchar(15),
+	@password nvarchar(15),
+	@rolNombre nvarchar(50),
+	@nombre nvarchar(50),
+	@apellido nvarchar(50),
+	@tipoDoc nvarchar(50),
+	@numDoc numeric (18),
+	@mail nvarchar(50),
+	@telefono nvarchar(18),
+	@direccion nvarchar(255),
+	@fechaNac datetime,
+	@hotelNombre nvarchar(50)
+
+	AS
+	BEGIN 
+	
+	declare @hotelId numeric(18)
+	declare @rolId numeric(18)
+	
+	set @rolId= (select Rol_codigo from FOUR_SIZONS.rol where @rolNombre = rol_nombre)
+	set @hotelId = (select hotel_codigo from FOUR_SIZONS.hotel where @hotelNombre = hotel_nombre)
+	 
+
+	--me falta verificar que el username y el mail sean unicos 
+	insert into FOUR_SIZONS.usuario(Usuario_ID,Usuario_Password,Usuario_Nombre,Usuario_Apellido,Usuario_TipoDoc, Usuario_NroDoc ,Usuario_Direccion,Usuario_Fec_Nac,Usuario_Mail, Usuario_Estado , Usuario_FallaLog)
+							values(@username,@password,@nombre,@apellido,@tipoDoc,@numDoc,@direccion,@fechaNac,@mail,1,0)
+
+	insert into FOUR_SIZONS.UsuarioXHotel(Hotel_Codigo,Usuario_ID,UsuarioXHotel_Estado) values (@hotelId,@username,1)
+	insert into FOUR_SIZONS.UsuarioXRol(Rol_Codigo,Usuario_ID,UsuarioXRol_Estado) values (@rolId, @username,1)
+	end
+	
+go
+
+
+
+create procedure FOUR_SIZONS.ModificacionUsuario
+	@username nvarchar(15),
+	@password nvarchar(15),
+	@rolNombre nvarchar(50),
+	@nombre nvarchar(50),
+	@apellido nvarchar(50),
+	@tipoDoc nvarchar(50),
+	@numDoc numeric (18),
+	@mail nvarchar(50),
+	@telefono nvarchar(18),
+	@direccion nvarchar(255),
+	@fechaNac datetime,
+	@hotelNombre nvarchar(50),
+	@estado bit
+
+	as begin
+
+	declare @hotelId numeric(18)
+	declare @rolId numeric(18)
+
+	set @rolId= (select Rol_codigo from FOUR_SIZONS.rol where @rolNombre = rol_nombre)
+	set @hotelId = (select hotel_codigo from FOUR_SIZONS.hotel where @hotelNombre = hotel_nombre)
+	
+	update FOUR_SIZONS.usuario
+				set Usuario_Password = @username,Usuario_Nombre =@nombre,Usuario_Apellido = @apellido ,
+				Usuario_TipoDoc =@tipoDoc,Usuario_NroDoc =@numDoc,Usuario_Telefono =@telefono,
+				Usuario_Direccion= @direccion,Usuario_Fec_Nac = @fechaNac,Usuario_Mail =@mail,Usuario_Estado=@estado
+
+				where Usuario_ID=@username
+
+	update FOUR_SIZONS.UsuarioXRol 
+				set Rol_Codigo = @rolId    
+				where Usuario_ID=@username   
+	
+	-- me faltaria hacer la modificacion de hotel, pero ahi deberia poder agregarle un hotel o cambiarselo (ya que los users pueden estar en muchos hoteles)
+	-- creo que deberia ser en un proc aparte
+
+	end
+
+go
+
+-- la baja de un usuario no la hago, ya que en la modificacion se puede hacer directamente cambiandole el estado a 0
