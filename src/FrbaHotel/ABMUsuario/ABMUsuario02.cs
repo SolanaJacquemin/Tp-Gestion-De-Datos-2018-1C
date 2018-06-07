@@ -72,7 +72,10 @@ namespace FrbaHotel.ABMUsuario
 
         private void boton_aceptar_Click(object sender, EventArgs e)
         {
-            MessageBox.Show("Está seguro que desea borrar el usuario?", "FOUR SIZONS - FRBA Hoteles", MessageBoxButtons.YesNo, MessageBoxIcon.Question);
+            //MessageBox.Show("Está seguro que desea borrar el usuario?", "FOUR SIZONS - FRBA Hoteles", MessageBoxButtons.YesNo, MessageBoxIcon.Question);
+            //Conexion con = new Conexion();
+            //con.strQuery = "EXEC ";
+            //con.executeQuery();
         }
 
         private void boton_cancelar_Click(object sender, EventArgs e)
