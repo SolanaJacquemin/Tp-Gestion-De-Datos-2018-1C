@@ -693,10 +693,11 @@ BEGIN
 	WHERE Factura_Nro IS NOT NULL
 	ORDER BY M.Factura_Nro
 
+
 END
 go
 
-create procedure FOUR_SIZONS.AltaCliente 
+alter procedure FOUR_SIZONS.AltaUsuario
 	@username nvarchar(15),
 	@password nvarchar(15),
 	@rolNombre nvarchar(50),
@@ -719,8 +720,6 @@ create procedure FOUR_SIZONS.AltaCliente
 	set @rolId= (select Rol_codigo from FOUR_SIZONS.rol where @rolNombre = rol_nombre)
 	set @hotelId = (select hotel_codigo from FOUR_SIZONS.hotel where @hotelNombre = hotel_nombre)
 	 
-
-	--me falta verificar que el username y el mail sean unicos 
 	insert into FOUR_SIZONS.usuario(Usuario_ID,Usuario_Password,Usuario_Nombre,Usuario_Apellido,Usuario_TipoDoc, Usuario_NroDoc ,Usuario_Direccion,Usuario_Fec_Nac,Usuario_Mail, Usuario_Estado , Usuario_FallaLog)
 							values(@username,@password,@nombre,@apellido,@tipoDoc,@numDoc,@direccion,@fechaNac,@mail,1,0)
 
@@ -732,7 +731,7 @@ go
 
 
 
-create procedure FOUR_SIZONS.ModificacionUsuario
+alter procedure FOUR_SIZONS.ModificacionUsuario
 	@username nvarchar(15),
 	@password nvarchar(15),
 	@rolNombre nvarchar(50),
@@ -770,7 +769,114 @@ create procedure FOUR_SIZONS.ModificacionUsuario
 	-- creo que deberia ser en un proc aparte
 
 	end
+go
+-- la baja de un usuario no la hago, ya que en la modificacion se puede hacer directamente cambiandole el estado a 0
 
+alter procedure four_sizons.AltaCliente
+@nombre nvarchar(50),
+@apellido nvarchar(50),
+@numDoc numeric (18),
+@tipoDoc nvarchar(50),
+@mail nvarchar(50),
+@telefono nvarchar(18),
+@calle nvarchar(255),
+@numCalle numeric(18),
+@piso numeric(18),
+@depto numeric(18),
+--@localidad nvarchar(50),
+@nacionalidad nvarchar(50),
+@fechaNac datetime
+
+as begin
+
+if(not exists (select cliente_codigo from cliente where @mail = Cliente_Mail))
+insert into four_sizons.Cliente(Cliente_Nombre ,cliente_Apellido,cliente_TipoDoc, Cliente_NumDoc,Cliente_Dom_Calle,Cliente_Nro_Calle
+								,Cliente_Piso,Cliente_Depto /*,cliente_localidad*/,Cliente_Mail,Cliente_Nacionalidad,Cliente_Fecha_Nac,Cliente_Puntos,Cliente_Estado,Cliente_Consistente)
+								values (@nombre,@apellido,@tipoDoc,@numDoc,@calle,@numCalle,@piso,@depto,/*@localidad,*/ @mail,@nacionalidad,@fechaNac,0,1,1)
+-- faltaria que informe del error de mail repetido,
+-- queria agregarle un UNIQUE a la tabla para que me informe directamente, pero ya hay mails repetidos y me tira error
+end
 go
 
--- la baja de un usuario no la hago, ya que en la modificacion se puede hacer directamente cambiandole el estado a 0
+create procedure four_sizons.modificacionCliente
+@nombre nvarchar(50),
+@apellido nvarchar(50),
+@numDoc numeric (18),
+@tipoDoc nvarchar(50),
+@mail nvarchar(50),
+@telefono nvarchar(18),
+@calle nvarchar(255),
+@numCalle numeric(18),
+@piso numeric(18),
+@depto numeric(18),
+--@localidad nvarchar(50),
+@nacionalidad nvarchar(50),
+@fechaNac datetime,
+@puntos numeric(18),
+@estado bit,
+@codigo nvarchar(50)
+
+
+as begin
+
+if (not exists (select Cliente_codigo from cliente where Cliente_Codigo!=@codigo and Cliente_Mail= @mail))
+update FOUR_SIZONS.Cliente
+set Cliente_Nombre=@nombre ,cliente_Apellido=@apellido,cliente_TipoDoc=@tipoDoc, Cliente_NumDoc = @numDoc,
+		Cliente_Dom_Calle=@calle,Cliente_Nro_Calle=@numCalle,Cliente_Piso=@piso,Cliente_Depto=@depto
+		 /*,cliente_localidad=@localidad*/,Cliente_Mail=@mail,Cliente_Nacionalidad=@nacionalidad,Cliente_Fecha_Nac=@fechaNac,
+		 Cliente_Puntos=@puntos,Cliente_Estado=@estado
+
+	where Cliente_Codigo = @codigo
+-- falta lo mismo que en el otro, informar el error
+end
+go
+-- la localidad deberiamos agregarla, xq se carga en el momento de hacer el alta de cliente
+
+create procedure four_sizons.AltaHotel
+@nombre nvarchar(50),
+@mail nvarchar(50),
+@telefono nvarchar(50),
+@calle nvarchar(50),
+@numCalle numeric(18),
+@cantEstrellas numeric(18),
+@ciudad nvarchar(50),
+@pais nvarchar(50),
+@fechaCreacion datetime
+
+as begin 
+
+insert into FOUR_SIZONS.Hotel(Hotel_Nombre,Hotel_Mail,Hotel_Telefono,Hotel_Calle,Hotel_Nro_Calle,
+					Hotel_CantEstrella,Hotel_Ciudad,Hotel_Pais,Hotel_FechaCreacion,Hotel_Estado)
+					values (@nombre,@mail,@telefono,@calle,@numCalle,@cantEstrellas,@ciudad,@pais,@fechaCreacion,1)
+--faltaria cargar los regimenes, pero al ser uno o muchos deberia hacer un proc a parte para regXhot?
+end
+go
+
+create procedure four_sizons.modificarHotel
+@nombre nvarchar(50),
+@mail nvarchar(50),
+@telefono nvarchar(50),
+@calle nvarchar(50),
+@numCalle numeric(18),
+@cantEstrellas numeric(18),
+@ciudad nvarchar(50),
+@pais nvarchar(50),
+@fechaCreacion datetime,
+@estado bit,
+@codigo nvarchar(50)
+
+as begin 
+update FOUR_SIZONS.Hotel
+set Hotel_Nombre= @nombre,Hotel_Mail= @mail,Hotel_Telefono=@telefono,Hotel_Calle=@calle ,
+	Hotel_Nro_Calle=@numCalle,Hotel_CantEstrella=@cantEstrellas,Hotel_Ciudad=@ciudad,
+	Hotel_Pais=@pais,Hotel_FechaCreacion=@fechaCreacion,Hotel_Estado=@estado
+
+	where Hotel_Codigo=@codigo
+
+end 
+go
+
+
+
+
+
