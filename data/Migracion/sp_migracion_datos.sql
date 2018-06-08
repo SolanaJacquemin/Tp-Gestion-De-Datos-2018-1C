@@ -345,7 +345,7 @@ BEGIN
 			Cliente_Dom_Calle nvarchar(255),
 			Cliente_Nro_Calle numeric(18),
 			Cliente_Piso numeric(18),
-			Cliente_Depto nvarchar(50),
+			Cliente_Depto nvarchar(50) ,
 			Cliente_Mail nvarchar(255) NOT NULL,
 			Cliente_Nacionalidad nvarchar(50),
 			Cliente_Fecha_Nac datetime,
@@ -353,6 +353,7 @@ BEGIN
 			Cliente_Estado bit,
 			Cliente_Consistente bit
 			CONSTRAINT PK_Cliente PRIMARY KEY (Cliente_Codigo)
+
 		)
 
 	IF NOT EXISTS (SELECT * FROM sys.tables WHERE name = 'Tarjeta')
@@ -693,11 +694,11 @@ BEGIN
 	WHERE Factura_Nro IS NOT NULL
 	ORDER BY M.Factura_Nro
 
-
+	
 END
 go
 
-alter procedure FOUR_SIZONS.AltaUsuario
+create procedure FOUR_SIZONS.AltaUsuario
 	@username nvarchar(15),
 	@password nvarchar(15),
 	@rolNombre nvarchar(50),
@@ -712,7 +713,8 @@ alter procedure FOUR_SIZONS.AltaUsuario
 	@hotelNombre nvarchar(50)
 
 	AS
-	BEGIN 
+	BEGIN try
+	begin tran
 	
 	declare @hotelId numeric(18)
 	declare @rolId numeric(18)
@@ -725,13 +727,18 @@ alter procedure FOUR_SIZONS.AltaUsuario
 
 	insert into FOUR_SIZONS.UsuarioXHotel(Hotel_Codigo,Usuario_ID,UsuarioXHotel_Estado) values (@hotelId,@username,1)
 	insert into FOUR_SIZONS.UsuarioXRol(Rol_Codigo,Usuario_ID,UsuarioXRol_Estado) values (@rolId, @username,1)
-	end
+	commit tran 
+end try
+begin catch
+ select ERROR_MESSAGE () as mensaje_de_error;
+rollback tran 
+end catch
 	
 go
 
 
 
-alter procedure FOUR_SIZONS.ModificacionUsuario
+create procedure FOUR_SIZONS.ModificacionUsuario
 	@username nvarchar(15),
 	@password nvarchar(15),
 	@rolNombre nvarchar(50),
@@ -746,7 +753,8 @@ alter procedure FOUR_SIZONS.ModificacionUsuario
 	@hotelNombre nvarchar(50),
 	@estado bit
 
-	as begin
+	as begin tran
+	begin try
 
 	declare @hotelId numeric(18)
 	declare @rolId numeric(18)
@@ -767,12 +775,16 @@ alter procedure FOUR_SIZONS.ModificacionUsuario
 	
 	-- me faltaria hacer la modificacion de hotel, pero ahi deberia poder agregarle un hotel o cambiarselo (ya que los users pueden estar en muchos hoteles)
 	-- creo que deberia ser en un proc aparte
-
-	end
+	commit tran 
+end try
+begin catch
+ select ERROR_MESSAGE () as mensaje_de_error;
+rollback tran 
+end catch
 go
 -- la baja de un usuario no la hago, ya que en la modificacion se puede hacer directamente cambiandole el estado a 0
 
-alter procedure four_sizons.AltaCliente
+create procedure four_sizons.AltaCliente
 @nombre nvarchar(50),
 @apellido nvarchar(50),
 @numDoc numeric (18),
@@ -782,20 +794,26 @@ alter procedure four_sizons.AltaCliente
 @calle nvarchar(255),
 @numCalle numeric(18),
 @piso numeric(18),
-@depto numeric(18),
+@depto nvarchar(18),
 --@localidad nvarchar(50),
 @nacionalidad nvarchar(50),
 @fechaNac datetime
 
-as begin
+as begin try
+begin tran
 
 if(not exists (select cliente_codigo from cliente where @mail = Cliente_Mail))
 insert into four_sizons.Cliente(Cliente_Nombre ,cliente_Apellido,cliente_TipoDoc, Cliente_NumDoc,Cliente_Dom_Calle,Cliente_Nro_Calle
 								,Cliente_Piso,Cliente_Depto /*,cliente_localidad*/,Cliente_Mail,Cliente_Nacionalidad,Cliente_Fecha_Nac,Cliente_Puntos,Cliente_Estado,Cliente_Consistente)
 								values (@nombre,@apellido,@tipoDoc,@numDoc,@calle,@numCalle,@piso,@depto,/*@localidad,*/ @mail,@nacionalidad,@fechaNac,0,1,1)
--- faltaria que informe del error de mail repetido,
--- queria agregarle un UNIQUE a la tabla para que me informe directamente, pero ya hay mails repetidos y me tira error
-end
+else 
+PRINT N'el mail ingresado ya figura en el sistema, ingrese otro por favor';
+commit tran 
+end try
+begin catch
+ select ERROR_MESSAGE () as mensaje_de_error;
+rollback tran 
+end catch
 go
 
 create procedure four_sizons.modificacionCliente
@@ -808,27 +826,33 @@ create procedure four_sizons.modificacionCliente
 @calle nvarchar(255),
 @numCalle numeric(18),
 @piso numeric(18),
-@depto numeric(18),
+@depto nvarchar(18),
 --@localidad nvarchar(50),
 @nacionalidad nvarchar(50),
 @fechaNac datetime,
-@puntos numeric(18),
 @estado bit,
 @codigo nvarchar(50)
 
 
-as begin
+as begin tran
+begin try
 
 if (not exists (select Cliente_codigo from cliente where Cliente_Codigo!=@codigo and Cliente_Mail= @mail))
 update FOUR_SIZONS.Cliente
 set Cliente_Nombre=@nombre ,cliente_Apellido=@apellido,cliente_TipoDoc=@tipoDoc, Cliente_NumDoc = @numDoc,
 		Cliente_Dom_Calle=@calle,Cliente_Nro_Calle=@numCalle,Cliente_Piso=@piso,Cliente_Depto=@depto
-		 /*,cliente_localidad=@localidad*/,Cliente_Mail=@mail,Cliente_Nacionalidad=@nacionalidad,Cliente_Fecha_Nac=@fechaNac,
-		 Cliente_Puntos=@puntos,Cliente_Estado=@estado
+		 /*,cliente_localidad=@localidad*/,Cliente_Mail=@mail,Cliente_Nacionalidad=@nacionalidad,
+		 Cliente_Fecha_Nac=@fechaNac,Cliente_Estado=@estado
 
 	where Cliente_Codigo = @codigo
--- falta lo mismo que en el otro, informar el error
-end
+else print N'el mail ingresado ya figura en el sistema, ingrese otro por favor'
+
+commit tran 
+end try
+begin catch
+ select ERROR_MESSAGE () as mensaje_de_error;
+rollback tran 
+end catch
 go
 -- la localidad deberiamos agregarla, xq se carga en el momento de hacer el alta de cliente
 
@@ -843,13 +867,19 @@ create procedure four_sizons.AltaHotel
 @pais nvarchar(50),
 @fechaCreacion datetime
 
-as begin 
+as begin try
+begin tran 
 
 insert into FOUR_SIZONS.Hotel(Hotel_Nombre,Hotel_Mail,Hotel_Telefono,Hotel_Calle,Hotel_Nro_Calle,
 					Hotel_CantEstrella,Hotel_Ciudad,Hotel_Pais,Hotel_FechaCreacion,Hotel_Estado)
 					values (@nombre,@mail,@telefono,@calle,@numCalle,@cantEstrellas,@ciudad,@pais,@fechaCreacion,1)
 --faltaria cargar los regimenes, pero al ser uno o muchos deberia hacer un proc a parte para regXhot?
-end
+commit tran 
+end try
+begin catch
+ select ERROR_MESSAGE () as mensaje_de_error;
+rollback tran 
+end catch
 go
 
 create procedure four_sizons.modificarHotel
@@ -865,15 +895,21 @@ create procedure four_sizons.modificarHotel
 @estado bit,
 @codigo nvarchar(50)
 
-as begin 
+as 
+begin tran 
+begin try
 update FOUR_SIZONS.Hotel
 set Hotel_Nombre= @nombre,Hotel_Mail= @mail,Hotel_Telefono=@telefono,Hotel_Calle=@calle ,
 	Hotel_Nro_Calle=@numCalle,Hotel_CantEstrella=@cantEstrellas,Hotel_Ciudad=@ciudad,
 	Hotel_Pais=@pais,Hotel_FechaCreacion=@fechaCreacion,Hotel_Estado=@estado
 
 	where Hotel_Codigo=@codigo
-
-end 
+commit tran 
+end try
+begin catch
+ select ERROR_MESSAGE () as mensaje_de_error;
+rollback tran 
+end catch
 go
 
 
