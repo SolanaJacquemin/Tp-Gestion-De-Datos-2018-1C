@@ -162,7 +162,6 @@ BEGIN
 		CREATE TABLE FOUR_SIZONS.Funcionalidad (
 			Func_Codigo numeric(18,0) IDENTITY,
 			Func_Nombre varchar(50),
-			Func_Descripcion nvarchar(255),
 			Func_Estado bit,
 			CONSTRAINT PK_Funcionalidad PRIMARY KEY(Func_Codigo)
 		)
@@ -172,7 +171,7 @@ BEGIN
 	BEGIN
 		CREATE TABLE FOUR_SIZONS.Rol (
 			Rol_Codigo numeric(18,0) IDENTITY,
-			Rol_Nombre nvarchar(50),
+			Rol_Nombre nvarchar(50) UNIQUE,
 			Rol_Estado bit,
 			CONSTRAINT PK_Rol PRIMARY KEY(Rol_Codigo)
 		)
@@ -302,6 +301,7 @@ BEGIN
 	BEGIN
 		CREATE TABLE FOUR_SIZONS.Habitacion_Tipo (
 			   Habitacion_Tipo_Codigo numeric(18),
+			   --Habitacion_Tipo_Nombre nvarchar(50),
 			   Habitacion_Tipo_Descripcion nvarchar(255),
 			   Habitacion_Tipo_Porcentual numeric(18,2),
 			   CONSTRAINT PK_Habitacion_Tipo PRIMARY KEY (Habitacion_Tipo_Codigo)
@@ -324,6 +324,8 @@ BEGIN
 			Habitacion_Numero numeric(18),
 			Hotel_Codigo numeric(18),
 			Habitacion_Piso numeric(18),
+			--Habitacion_Descripcion(255),
+			--Habitacion_Codigo numeric(18),
 			Habitacion_Frente nvarchar(50),
 			Habitacion_Tipo_Codigo numeric(18),  
 			Habitacion_Estado bit,
@@ -697,7 +699,8 @@ BEGIN
 	
 END
 go
-
+-------------------------------------------------------Comienzo de procedures--------------------------------------------------------------
+--------------------------------------------------------ABM USUARIO------------------------------
 create procedure FOUR_SIZONS.AltaUsuario
 	@username nvarchar(15),
 	@password nvarchar(15),
@@ -783,7 +786,7 @@ rollback tran
 end catch
 go
 -- la baja de un usuario no la hago, ya que en la modificacion se puede hacer directamente cambiandole el estado a 0
-
+------------------------------------------------ABM CLIENTE------------------------------------------------------------
 create procedure four_sizons.AltaCliente
 @nombre nvarchar(50),
 @apellido nvarchar(50),
@@ -856,6 +859,7 @@ end catch
 go
 -- la localidad deberiamos agregarla, xq se carga en el momento de hacer el alta de cliente
 
+-------------------------------------------------ABM HOTEL------------------------------------------------------------------------
 create procedure four_sizons.AltaHotel
 @nombre nvarchar(50),
 @mail nvarchar(50),
@@ -912,7 +916,158 @@ rollback tran
 end catch
 go
 
+------------------------------------------------ABM ROL---------------------------------------------------------------------------
+/*Go
+create proc FOUR_SIZONS.InsertarRol
+		
+		@funcNombre nvarchar(50),
+		@usuarioNombre  nvarchar(50),
+		@rolname nvarchar(50),
+		@estado bit
+		
+		as
+		BEGIN TRY
+		BEGIN TRANSACTION
+		
+		declare @FuncId numeric(18)
+		declare @UsuarioId numeric(18)
+	
+		set @FuncId= (select Func_Codigo from FOUR_SIZONS.Funcionalidad where @funcNombre = Func_nombre)
+		set @UsuarioId = (select Usuario_ID from FOUR_SIZONS.Usuario where @usuarioNombre = Usuario_Nombre)
+		
+		insert into FOUR_SIZONS.Rol (rol_nombre,rol_estado) values(@rolname,@estado);
+		insert into FOUR_SIZONS.RolXFunc(Rol_Codigo,Func_Codigo,RolXFunc_Estado) values (@rolname,@FuncId,1)
+		insert into FOUR_SIZONS.UsuarioXRol(Rol_Codigo,Usuario_ID,UsuarioXRol_Estado) values (@rolname, @UsuarioId,1)
+		-- no estoy muy segura de las tablas intermedias
+		COMMIT TRANSACTION
+		END TRY
+		BEGIN CATCH
+		SELECT ERROR_MESSAGE() as mensaje_error;
+		ROLLBACK TRANSACTION
+		END CATCH
+	GO
+
+	create procedure FOUR_SIZONS.ModificacionRol
+	@funcNombre nvarchar(50),
+	@usuarioNombre  nvarchar(50),
+	@rolname nvarchar(50),
+	@codigo nvarchar(50),
+	@estado bit
+
+	as begin tran
+	begin try
+
+	declare @FuncId numeric(18)
+	declare @UsuarioId numeric(18)
+	
+	set @FuncId= (select Func_Codigo from FOUR_SIZONS.Funcionalidad where @funcNombre = Func_nombre)
+	set @UsuarioId = (select Usuario_ID from FOUR_SIZONS.Usuario where @usuarioNombre = Usuario_Nombre)
+	
+	update FOUR_SIZONS.Rol
+				set Rol_Nombre= @rolname,Rol_Estado= @estado
+			where Rol_Codigo=@codigo
+
+	update FOUR_SIZONS.UsuarioXRol 
+				set Usuario_ID = @UsuarioId    
+				where Rol_Codigo=@codigo   
+	
+	-- Pasa lo mismo que con usurio y hotel, pueden tener muchas funciones. Falta RolxFunc
+	commit tran 
+	end try
+	begin catch
+	select ERROR_MESSAGE () as mensaje_de_error;
+	rollback tran 
+	end catch
+go
+--------------------------------------------------ABM HABITACION-------------------------------------------------------------
+create procedure four_sizons.AltaHabitacion
+@numero numeric(18),
+@piso numeric(18),
+@ubicacion nvarchar(50),
+@hotelName nvarchar(50),
+@TipoHab nvarchar(255)
+--@descripcion nvarchar(100)
+--Tipo hab deberia tener un atributo de nombre
+as begin try
+begin tran 
+declare @HotelId numeric(18)
+declare @TipoHabID numeric(18)
+	
+		set @HotelId= (select Hotel_Codigo from FOUR_SIZONS.Hotel where @hotelName = Hotel_Nombre)
+		set @TipoHabID = (select Habitacion_Tipo_Codigo from FOUR_SIZONS.Habitacion_Tipo where @TipoHab = Habitacion_Tipo_Descripcion)
+
+insert into FOUR_SIZONS.Habitacion(Habitacion_Numero,Habitacion_Piso,Habitacion_Frente,Habitacion_Estado,Habitacion_Tipo_Codigo,
+					Hotel_Codigo--,Habitacion_descripcion--
+					)
+					values (@numero,@piso,@ubicacion,1,@TipoHabID,@HotelId--,@descripcion
+					)
+--deberia validad que el numero es unico por hotel, razon por la cual no se puede solucionar con el unique
+commit tran 
+end try
+begin catch
+ select ERROR_MESSAGE () as mensaje_de_error;
+rollback tran 
+end catch
+go
+
+create procedure four_sizons.modificarHabitacion
+@numero numeric(18),
+@piso numeric(18),
+@ubicacion nvarchar(50),
+@estado bit
+--@descripcion nvarchar(100)
+--FALTARIA EL CODIGO DE LA HAB
+as 
+begin tran 
+begin try
+
+update FOUR_SIZONS.Habitacion
+
+set Habitacion_Numero= @numero,Habitacion_Piso= @piso,Habitacion_Frente=@ubicacion,Habitacion_Estado=@estado--,Habitacion_descripcion=@descripcion
+	
+	where Habitacion_Numero=@numero
+commit tran 
+end try
+begin catch
+ select ERROR_MESSAGE () as mensaje_de_error;
+rollback tran 
+end catch
+go
+--------------------------------------------------ABM REGIMEN DE ESTADIA---------------------------------------------------
+create proc FOUR_SIZONS.AltaRegimen
+		
+		@descripcion  nvarchar(255),
+		@precio numeric(18,2),
+		@HotelName nvarchar(50)
+		
+		as
+		BEGIN TRY
+		BEGIN TRANSACTION
+		
+		declare @HotelId numeric(18)
+	
+		set @HotelId= (select Hotel_Codigo from FOUR_SIZONS.Hotel where @HotelName = Hotel_Nombre)
+		
+		insert into FOUR_SIZONS.Regimen(Regimen_Descripcion,Regimen_Estado,Regimen_Precio) values(@descripcion,1,@precio);
+		insert into FOUR_SIZONS.RegXHotel(Regimen_Codigo,Hotel_Codigo,RegXHotel_Estado) values(@descripcion,@HotelId,1)
+		-- no estoy muy segura de las tablas intermedias, la parte de name cuando deberia ser cod
+		COMMIT TRANSACTION
+		END TRY
+		BEGIN CATCH
+		SELECT ERROR_MESSAGE() as mensaje_error;
+		ROLLBACK TRANSACTION
+		END CATCH
+	GO
 
 
 
 
+
+
+
+
+--------------------------------------------------DICE QUE NO HAY QUE DESARROLLARLO----------------------------------
+
+
+
+*/
