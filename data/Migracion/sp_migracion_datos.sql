@@ -712,8 +712,8 @@ create procedure FOUR_SIZONS.AltaUsuario
 	@mail nvarchar(50),
 	@telefono nvarchar(18),
 	@direccion nvarchar(255),
-	@fechaNac datetime,
-	@hotelNombre nvarchar(50)
+	@fechaNac datetime
+	--@hotelNombre nvarchar(50) hice un proc a parte para hotel
 
 	AS
 	BEGIN try
@@ -723,12 +723,12 @@ create procedure FOUR_SIZONS.AltaUsuario
 	declare @rolId numeric(18)
 	
 	set @rolId= (select Rol_codigo from FOUR_SIZONS.rol where @rolNombre = rol_nombre)
-	set @hotelId = (select hotel_codigo from FOUR_SIZONS.hotel where @hotelNombre = hotel_nombre)
+	--set @hotelId = (select hotel_codigo from FOUR_SIZONS.hotel where @hotelNombre = hotel_nombre)
 	 
 	insert into FOUR_SIZONS.usuario(Usuario_ID,Usuario_Password,Usuario_Nombre,Usuario_Apellido,Usuario_TipoDoc, Usuario_NroDoc ,Usuario_Direccion,Usuario_Fec_Nac,Usuario_Mail, Usuario_Estado , Usuario_FallaLog)
 							values(@username,@password,@nombre,@apellido,@tipoDoc,@numDoc,@direccion,@fechaNac,@mail,1,0)
 
-	insert into FOUR_SIZONS.UsuarioXHotel(Hotel_Codigo,Usuario_ID,UsuarioXHotel_Estado) values (@hotelId,@username,1)
+	--insert into FOUR_SIZONS.UsuarioXHotel(Hotel_Codigo,Usuario_ID,UsuarioXHotel_Estado) values (@hotelId,@username,1)
 	insert into FOUR_SIZONS.UsuarioXRol(Rol_Codigo,Usuario_ID,UsuarioXRol_Estado) values (@rolId, @username,1)
 	commit tran 
 end try
@@ -737,6 +737,33 @@ begin catch
 rollback tran 
 end catch
 	
+go
+
+create procedure four_sizons.altaUserXHot
+	@hotel nvarchar (50),
+	@usuario nvarchar (50),
+	@estado bit
+
+	as begin tran 
+	begin try
+	declare @hotID numeric (18)
+
+	set @hotId = (select hotel_codigo from FOUR_SIZONS.hotel where @hotel = hotel_nombre)
+
+	if(exists (select Usuario_ID  from FOUR_SIZONS.UsuarioXHotel where @usuario = Usuario_ID and @hotID = Hotel_Codigo))
+	update FOUR_SIZONS.UsuarioXHotel 
+			set UsuarioXHotel_Estado = @estado
+			where Usuario_ID = @usuario and Hotel_Codigo = @hotID
+
+	else
+	insert into FOUR_SIZONS.UsuarioXHotel(Hotel_Codigo,Usuario_ID,UsuarioXHotel_Estado) values (@hotId,@usuario,1)
+	commit tran
+	end try
+	begin catch 
+	select ERROR_MESSAGE()
+	rollback tran
+	end catch
+
 go
 
 
@@ -753,7 +780,7 @@ create procedure FOUR_SIZONS.ModificacionUsuario
 	@telefono nvarchar(18),
 	@direccion nvarchar(255),
 	@fechaNac datetime,
-	@hotelNombre nvarchar(50),
+	--@hotelNombre nvarchar(50), lo saco porque hice un proc a parte para dar de alta al usuario en los distintos hoteles
 	@estado bit
 
 	as begin tran
@@ -763,7 +790,7 @@ create procedure FOUR_SIZONS.ModificacionUsuario
 	declare @rolId numeric(18)
 
 	set @rolId= (select Rol_codigo from FOUR_SIZONS.rol where @rolNombre = rol_nombre)
-	set @hotelId = (select hotel_codigo from FOUR_SIZONS.hotel where @hotelNombre = hotel_nombre)
+	--set @hotelId = (select hotel_codigo from FOUR_SIZONS.hotel where @hotelNombre = hotel_nombre)
 	
 	update FOUR_SIZONS.usuario
 				set Usuario_Password = @username,Usuario_Nombre =@nombre,Usuario_Apellido = @apellido ,
@@ -877,7 +904,7 @@ begin tran
 insert into FOUR_SIZONS.Hotel(Hotel_Nombre,Hotel_Mail,Hotel_Telefono,Hotel_Calle,Hotel_Nro_Calle,
 					Hotel_CantEstrella,Hotel_Ciudad,Hotel_Pais,Hotel_FechaCreacion,Hotel_Estado)
 					values (@nombre,@mail,@telefono,@calle,@numCalle,@cantEstrellas,@ciudad,@pais,@fechaCreacion,1)
---faltaria cargar los regimenes, pero al ser uno o muchos deberia hacer un proc a parte para regXhot?
+
 commit tran 
 end try
 begin catch
@@ -885,6 +912,33 @@ begin catch
 rollback tran 
 end catch
 go
+
+
+create procedure four_sizons.altaRegXHotel
+@regimen nvarchar(50),
+@hotel nvarchar(50)
+
+as begin tran 
+begin try 
+
+declare @regID nvarchar(50)
+declare @hotID nvarchar(50)
+
+set @regID = (select Regimen_Codigo  from four_sizons.regimen where Regimen_Descripcion = @regimen)
+set @hotID = (select Hotel_Codigo from FOUR_SIZONS.Hotel where Hotel_Nombre = @hotel)
+
+insert into FOUR_SIZONS.RegXHotel(Hotel_Codigo,Regimen_Codigo,RegXHotel_Estado) 
+							values (@hotID,@regID,1)
+
+commit tran 
+end try
+
+begin catch
+select error_message()
+rollback tran 
+end catch 
+go
+
 
 create procedure four_sizons.modificarHotel
 @nombre nvarchar(50),
