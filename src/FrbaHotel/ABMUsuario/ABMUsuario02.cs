@@ -7,17 +7,30 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using FrbaHotel.ABMUsuario;
 
 namespace FrbaHotel.ABMUsuario
 {
+
     public partial class ABMUsuario02 : Form
     {
-        public ABMUsuario02(string modo)
+        public static string modoABM;
+        public string nombreSP;
+        public string usuario;
+
+        public ABMUsuario02(string modo, string user)
         {
             InitializeComponent();
             this.StartPosition = FormStartPosition.CenterScreen;
             labelTitulo.AutoSize = false;
-            switch (modo)
+
+            usuario = user;
+            modoABM = modo;
+
+            //MessageBox.Show(usuario);
+            //MessageBox.Show(modoABM);
+
+            switch (modoABM)
             {
                 case "INS":
                     labelTitulo.Text = "Alta de Usuario";
@@ -36,6 +49,7 @@ namespace FrbaHotel.ABMUsuario
                     break;
                 case "UPD":
                     labelTitulo.Text = "Modificación de Usuario";
+                    txt_usuario.Text = usuario;
                     break;
             }
             dt_fecha_nac.Format = DateTimePickerFormat.Custom;
@@ -68,14 +82,85 @@ namespace FrbaHotel.ABMUsuario
                 cb_tipo_documento.Items.Add(con.lector.GetString(0));
             }
             con.closeConection();
+
+            con.strQuery = "SELECT Rol_Nombre FROM FOUR_SIZONS.Rol";
+            con.executeQuery();
+            while (con.reader())
+            {
+                cb_rol.Items.Add(con.lector.GetString(0));
+            }
+            con.closeConection();
         }
 
-        private void boton_aceptar_Click(object sender, EventArgs e)
+        public void ejecutarABMUsuario(string nombreStored)
         {
-            //MessageBox.Show("Está seguro que desea borrar el usuario?", "FOUR SIZONS - FRBA Hoteles", MessageBoxButtons.YesNo, MessageBoxIcon.Question);
-            //Conexion con = new Conexion();
-            //con.strQuery = "EXEC ";
-            //con.executeQuery();
+            if (MessageBox.Show("Está seguro que desea continuar con la operación?", "FOUR SIZONS - FRBA Hoteles", MessageBoxButtons.YesNo, MessageBoxIcon.Question) == DialogResult.Yes)
+                    {
+
+                        try
+                        {
+                            Conexion con = new Conexion();
+                            con.strQuery = nombreStored;
+                            con.execute();
+                            con.command.CommandType = CommandType.StoredProcedure;
+                            
+                            con.command.Parameters.Add("@username", SqlDbType.NVarChar).Value = txt_usuario.Text;
+                            con.command.Parameters.Add("@password", SqlDbType.NVarChar).Value = txt_password.Text;
+                            con.command.Parameters.Add("@rolNombre", SqlDbType.NVarChar).Value = cb_rol.Text;
+                            con.command.Parameters.Add("@nombre", SqlDbType.NVarChar).Value = txt_nombre.Text;
+                            con.command.Parameters.Add("@apellido", SqlDbType.NVarChar).Value = txt_apellido.Text;
+                            con.command.Parameters.Add("@tipoDoc", SqlDbType.NVarChar).Value = cb_rol.Text;
+                            con.command.Parameters.Add("@numDoc", SqlDbType.Int).Value = txt_nro_documento.Text;
+                            con.command.Parameters.Add("@mail", SqlDbType.NVarChar).Value = txt_mail.Text;
+                            con.command.Parameters.Add("@telefono", SqlDbType.NVarChar).Value = txt_telefono.Text;
+                            con.command.Parameters.Add("@direccion", SqlDbType.NVarChar).Value = txt_direccion.Text;
+                            con.command.Parameters.Add("@fechanac", SqlDbType.DateTime).Value = dt_fecha_nac.Value.ToString();
+                            con.command.Parameters.Add("@hotelNombre", SqlDbType.NVarChar).Value = txt_hotel.Text;
+                            /*if (modoABM == "DLT")
+                            {
+                                con.command.Parameters.Add("@estado", SqlDbType.Bit).Value = 0;
+                            }else if (modoABM == "UPD")
+                            {
+                                con.command.Parameters.Add("@estado", SqlDbType.Bit).Value = 1;
+                            }*/
+
+                            con.openConection();
+                            con.command.ExecuteNonQuery();
+
+                            MessageBox.Show("Operación exitosa", "FOUR SIZONS - FRBA Hoteles", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                        }
+                        catch (Exception ex)
+                        {
+                            MessageBox.Show("Error. Corrija los datos y vuelva a intentar", "FOUR SIZONS - FRBA Hoteles", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                        }
+
+
+                    }
+                    else
+                    {
+                        MessageBox.Show("No se ha completado la operación", "FOUR SIZONS - FRBA Hoteles", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                    }
+        }
+
+        public void boton_aceptar_Click(object sender, EventArgs e)
+        {
+            //MessageBox.Show(modoABM);
+            switch (modoABM)
+            {
+                case "INS":
+                    nombreSP = "FOUR_SIZONS.AltaUsuario";
+                    break;
+
+                case "UPD":
+                    nombreSP = "FOUR_SIZONS.ModificacionUsuario";
+                    break;
+
+                case "DLT":
+                    // Baja lógica - Se pone estado en 0
+                    nombreSP = "FOUR_SIZONS.ModificacionUsuario";
+                    break;
+            }
+            ejecutarABMUsuario(nombreSP);
         }
 
         private void boton_cancelar_Click(object sender, EventArgs e)

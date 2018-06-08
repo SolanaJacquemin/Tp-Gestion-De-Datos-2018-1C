@@ -280,7 +280,7 @@
             this.dgv_Usuarios.Name = "dgv_Usuarios";
             this.dgv_Usuarios.Size = new System.Drawing.Size(519, 244);
             this.dgv_Usuarios.TabIndex = 2;
-            this.dgv_Usuarios.CellContentClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dgv_Usuarios_CellContentClick);
+
             // 
             // Usuario_ID
             // 

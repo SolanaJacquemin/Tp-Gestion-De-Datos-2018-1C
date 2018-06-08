@@ -10,8 +10,12 @@ using System.Windows.Forms;
 
 namespace FrbaHotel.ABMUsuario
 {
+    
     public partial class ABMUsuario01 : Form
     {
+        public string dgv_usuario_ID;
+        public int index;
+
         public ABMUsuario01()
         {
             InitializeComponent();
@@ -63,7 +67,7 @@ namespace FrbaHotel.ABMUsuario
         {
             string modo = "INS";
             this.Hide();
-            ABMUsuario02 formABMUsuario02 = new ABMUsuario02(modo);
+            ABMUsuario02 formABMUsuario02 = new ABMUsuario02(modo, txt_Id.Text);
             formABMUsuario02.ShowDialog();
             this.Show();
         }
@@ -75,9 +79,10 @@ namespace FrbaHotel.ABMUsuario
 
         private void boton_baja_Click(object sender, EventArgs e)
         {
+            //MessageBox.Show(dgv_usuario_ID);
             string modo = "DLT";
             this.Hide();
-            ABMUsuario02 formABMUsuario02 = new ABMUsuario02(modo);
+            ABMUsuario02 formABMUsuario02 = new ABMUsuario02(modo, dgv_usuario_ID);
             formABMUsuario02.ShowDialog();
             this.Show();
         }
@@ -86,14 +91,14 @@ namespace FrbaHotel.ABMUsuario
         {
             string modo = "UPD";
             this.Hide();
-            ABMUsuario02 formABMUsuario02 = new ABMUsuario02(modo);
+            ABMUsuario02 formABMUsuario02 = new ABMUsuario02(modo, dgv_usuario_ID);
             formABMUsuario02.ShowDialog();
             this.Show();
         }
 
-        private void dgv_Usuarios_CellContentClick(object sender, DataGridViewCellEventArgs e)
+        private void dgv_Usuarios_CellContentClick(object sender, DataGridViewCellMouseEventArgs e) 
         {
-
+            MessageBox.Show("dsd");
         }
 
         private void btn_limpiar_Click(object sender, EventArgs e)
