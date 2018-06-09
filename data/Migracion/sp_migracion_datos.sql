@@ -195,7 +195,7 @@ BEGIN
 		BEGIN
 			CREATE TABLE FOUR_SIZONS.Usuario (
 				Usuario_ID nvarchar(15),
-				Usuario_Password nvarchar(15) NOT NULL,
+				Usuario_Password nvarchar(100) NOT NULL,
 				Usuario_Nombre nvarchar(50) NOT NULL,
 				Usuario_Apellido nvarchar(50) NOT NULL,
 				Usuario_TipoDoc nvarchar(50) NOT NULL,
@@ -632,7 +632,7 @@ BEGIN
 	-- Usuario
 	-- Inserta usuario administrador
 	INSERT INTO FOUR_SIZONS.Usuario
-	VALUES ('SYSADM', 'SYSADM', 'Administrador', '', '', 0, '', '', GETDATE(), '',1,0)
+	VALUES ('SYSADM', '3GGQyLOZ4EO537rLsNN/KiZF4z+ZOEkdJLJOApjZzRc=', 'Administrador', '', '', 0, '', '', GETDATE(), '',1,0)
 
 	-- Reservas
 	INSERT INTO FOUR_SIZONS.Reserva (Reserva_Codigo, Reserva_FechaCreacion, Reserva_Fecha_Inicio, Reserva_Fecha_Fin,
@@ -751,42 +751,51 @@ GO
 
 create procedure FOUR_SIZONS.ValidarUsuario
 @usuario nvarchar(15), 
-@password nvarchar(15),
+@password nvarchar(100),
 @loginok decimal(1) output,
 @errorMsg nvarchar(100) output
 as
 begin try
 	declare @fallalog decimal(1)
-	declare @passret nvarchar(15)
+	declare @passret nvarchar(100)
+	declare @estado bit
 	if exists (select * from FOUR_SIZONS.Usuario where Usuario_ID = @usuario)
 	begin
-		select @fallalog = Usuario_FallaLog, @passret = Usuario_Password from FOUR_SIZONS.Usuario where Usuario_ID = @usuario
-		if @fallalog <> 3
+		select @fallalog = Usuario_FallaLog, @passret = Usuario_Password, @estado = Usuario_Estado from FOUR_SIZONS.Usuario where Usuario_ID = @usuario
+		if @estado = 1
 		begin
-			if @passret = @password
+			if @fallalog <> 3
 			begin
-				set @loginok = 1
-				if @fallalog <> 0
-					update FOUR_SIZONS.Usuario set Usuario_FallaLog = 0
+				if @passret = @password
+				begin
+					set @loginok = 1
+					if @fallalog <> 0
+						update FOUR_SIZONS.Usuario set Usuario_FallaLog = 0
+				end
+				else
+				begin
+					if @fallalog = 2
+					begin
+						update FOUR_SIZONS.Usuario set Usuario_FallaLog = Usuario_FallaLog + 1, Usuario_Estado = 0
+						set @loginok = 0
+						set @errorMsg = 'Contraseña incorrecta. El usuario está deshabilitado'
+					end
+					if @fallalog < 2
+					begin
+						update FOUR_SIZONS.Usuario set Usuario_FallaLog = Usuario_FallaLog + 1
+						set @loginok = 0
+						set @errorMsg = 'Contraseña incorrecta.'
+						if @fallalog = 1
+						begin
+							set @errorMsg = 'Contraseña incorrecta. El usuario se deshabilitará ante el próximo inicio de sesión inválido'
+						end
+					end
+				end
 			end
 			else
 			begin
-				if @fallalog = 2
-				begin
-					update FOUR_SIZONS.Usuario set Usuario_FallaLog = Usuario_FallaLog + 1, Usuario_Estado = 0
-					set @loginok = 0
-					set @errorMsg = 'Contraseña incorrecta. El usuario está deshabilitado'
-				end
-				if @fallalog < 2
-				begin
-					update FOUR_SIZONS.Usuario set Usuario_FallaLog = Usuario_FallaLog + 1
-					set @loginok = 0
-					set @errorMsg = 'Contraseña incorrecta.'
-					if @fallalog = 1
-					begin
-						set @errorMsg = 'Contraseña incorrecta. El usuario se deshabilitará ante el próximo inicio de sesión inválido'
-					end
-				end
+				set @loginok = 0
+				set @errorMsg = 'El usuario está deshabilitado'
 			end
 		end
 		else
@@ -802,13 +811,17 @@ begin try
 	end
 end try
 begin catch
-	select ERROR_MESSAGE () as mensaje_de_error;
+	--select ERROR_MESSAGE () as mensaje_de_error;
+	declare @mensaje_de_error nvarchar(255)
+	set @mensaje_de_error = ERROR_MESSAGE()
+	RAISERROR(@mensaje_de_error,11,1)
+	rollback tran 
 end catch
 go
 
 create procedure FOUR_SIZONS.AltaUsuario
 	@username nvarchar(15),
-	@password nvarchar(15),
+	@password nvarchar(100),
 	@rolNombre nvarchar(50),
 	@nombre nvarchar(50),
 	@apellido nvarchar(50),
@@ -838,8 +851,11 @@ create procedure FOUR_SIZONS.AltaUsuario
 	commit tran 
 end try
 begin catch
- select ERROR_MESSAGE () as mensaje_de_error;
-rollback tran 
+	--select ERROR_MESSAGE () as mensaje_de_error;
+	declare @mensaje_de_error nvarchar(255)
+	set @mensaje_de_error = ERROR_MESSAGE()
+	RAISERROR(@mensaje_de_error,11,1)
+	rollback tran 
 end catch
 	
 go
@@ -875,7 +891,7 @@ go
 
 create procedure FOUR_SIZONS.ModificacionUsuario
 	@username nvarchar(15),
-	@password nvarchar(15),
+	@password nvarchar(100),
 	@rolNombre nvarchar(50),
 	@nombre nvarchar(50),
 	@apellido nvarchar(50),
@@ -927,8 +943,11 @@ create procedure FOUR_SIZONS.ModificacionUsuario
 	commit tran 
 end try
 begin catch
- select ERROR_MESSAGE () as mensaje_de_error;
-rollback tran 
+	--select ERROR_MESSAGE () as mensaje_de_error;
+	declare @mensaje_de_error nvarchar(255)
+	set @mensaje_de_error = ERROR_MESSAGE()
+	RAISERROR(@mensaje_de_error,11,1)
+	rollback tran 
 end catch
 go
 -- la baja de un usuario no la hago, ya que en la modificacion se puede hacer directamente cambiandole el estado a 0
@@ -960,8 +979,11 @@ PRINT N'el mail ingresado ya figura en el sistema, ingrese otro por favor';
 commit tran 
 end try
 begin catch
- select ERROR_MESSAGE () as mensaje_de_error;
-rollback tran 
+	--select ERROR_MESSAGE () as mensaje_de_error;
+	declare @mensaje_de_error nvarchar(255)
+	set @mensaje_de_error = ERROR_MESSAGE()
+	RAISERROR(@mensaje_de_error,11,1)
+	rollback tran 
 end catch
 go
 
@@ -999,8 +1021,11 @@ else print N'el mail ingresado ya figura en el sistema, ingrese otro por favor'
 commit tran 
 end try
 begin catch
- select ERROR_MESSAGE () as mensaje_de_error;
-rollback tran 
+	--select ERROR_MESSAGE () as mensaje_de_error;
+	declare @mensaje_de_error nvarchar(255)
+	set @mensaje_de_error = ERROR_MESSAGE()
+	RAISERROR(@mensaje_de_error,11,1)
+	rollback tran 
 end catch
 go
 -- la localidad deberiamos agregarla, xq se carga en el momento de hacer el alta de cliente
@@ -1027,8 +1052,11 @@ insert into FOUR_SIZONS.Hotel(Hotel_Nombre,Hotel_Mail,Hotel_Telefono,Hotel_Calle
 commit tran 
 end try
 begin catch
- select ERROR_MESSAGE () as mensaje_de_error;
-rollback tran 
+	--select ERROR_MESSAGE () as mensaje_de_error;
+	declare @mensaje_de_error nvarchar(255)
+	set @mensaje_de_error = ERROR_MESSAGE()
+	RAISERROR(@mensaje_de_error,11,1)
+	rollback tran 
 end catch
 go
 
@@ -1084,8 +1112,11 @@ set Hotel_Nombre= @nombre,Hotel_Mail= @mail,Hotel_Telefono=@telefono,Hotel_Calle
 commit tran 
 end try
 begin catch
- select ERROR_MESSAGE () as mensaje_de_error;
-rollback tran 
+	--select ERROR_MESSAGE () as mensaje_de_error;
+	declare @mensaje_de_error nvarchar(255)
+	set @mensaje_de_error = ERROR_MESSAGE()
+	RAISERROR(@mensaje_de_error,11,1)
+	rollback tran 
 end catch
 go
 
