@@ -80,6 +80,7 @@
             // 
             // dgvUsuariosPrompt
             // 
+            this.dgvUsuariosPrompt.AllowUserToAddRows = false;
             this.dgvUsuariosPrompt.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             this.dgvUsuariosPrompt.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
             this.Usuario_ID,
@@ -89,7 +90,7 @@
             this.dgvUsuariosPrompt.RowHeadersWidthSizeMode = System.Windows.Forms.DataGridViewRowHeadersWidthSizeMode.AutoSizeToAllHeaders;
             this.dgvUsuariosPrompt.Size = new System.Drawing.Size(245, 209);
             this.dgvUsuariosPrompt.TabIndex = 1;
-            this.dgvUsuariosPrompt.CellContentClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dgvUsuariosPrompt_CellContentClick);
+            this.dgvUsuariosPrompt.CellClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dgvUsuariosPrompt_CellClick);
             // 
             // Usuario_ID
             // 

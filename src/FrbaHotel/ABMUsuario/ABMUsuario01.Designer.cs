@@ -101,7 +101,6 @@
             this.groupBox1.TabIndex = 1;
             this.groupBox1.TabStop = false;
             this.groupBox1.Text = "Filtros de Búsqueda";
-            //this.groupBox1.Enter += new System.EventHandler(this.groupBox1_Enter);
             // 
             // btn_promptUsu
             // 
@@ -262,6 +261,7 @@
             // 
             // dgv_Usuarios
             // 
+            this.dgv_Usuarios.AllowUserToAddRows = false;
             this.dgv_Usuarios.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             this.dgv_Usuarios.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
             this.Usuario_ID,
@@ -280,7 +280,7 @@
             this.dgv_Usuarios.Name = "dgv_Usuarios";
             this.dgv_Usuarios.Size = new System.Drawing.Size(519, 244);
             this.dgv_Usuarios.TabIndex = 2;
-
+            this.dgv_Usuarios.CellClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dgv_Usuarios_CellClick);
             // 
             // Usuario_ID
             // 

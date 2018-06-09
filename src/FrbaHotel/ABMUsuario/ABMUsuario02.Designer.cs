@@ -35,12 +35,16 @@
             this.dt_fecha_nac = new System.Windows.Forms.DateTimePicker();
             this.cb_tipo_documento = new System.Windows.Forms.ComboBox();
             this.label8 = new System.Windows.Forms.Label();
+            this.label14 = new System.Windows.Forms.Label();
+            this.label13 = new System.Windows.Forms.Label();
             this.label7 = new System.Windows.Forms.Label();
             this.label6 = new System.Windows.Forms.Label();
             this.label5 = new System.Windows.Forms.Label();
             this.label4 = new System.Windows.Forms.Label();
             this.label3 = new System.Windows.Forms.Label();
             this.label2 = new System.Windows.Forms.Label();
+            this.txt_hotel = new System.Windows.Forms.TextBox();
+            this.txt_mail = new System.Windows.Forms.TextBox();
             this.txt_direccion = new System.Windows.Forms.TextBox();
             this.txt_telefono = new System.Windows.Forms.TextBox();
             this.txt_nro_documento = new System.Windows.Forms.TextBox();
@@ -49,22 +53,22 @@
             this.txt_usuario = new System.Windows.Forms.TextBox();
             this.txt_password = new System.Windows.Forms.TextBox();
             this.boton_aceptar = new System.Windows.Forms.Button();
-            this.boton_cancelar = new System.Windows.Forms.Button();
+            this.boton_volver = new System.Windows.Forms.Button();
             this.label1 = new System.Windows.Forms.Label();
             this.label11 = new System.Windows.Forms.Label();
             this.label12 = new System.Windows.Forms.Label();
             this.cb_rol = new System.Windows.Forms.ComboBox();
-            this.txt_mail = new System.Windows.Forms.TextBox();
-            this.label13 = new System.Windows.Forms.Label();
-            this.txt_hotel = new System.Windows.Forms.TextBox();
-            this.label14 = new System.Windows.Forms.Label();
+            this.txt_intentoslog = new System.Windows.Forms.TextBox();
+            this.txt_estado = new System.Windows.Forms.TextBox();
+            this.l_estado = new System.Windows.Forms.Label();
+            this.l_log = new System.Windows.Forms.Label();
             this.groupBox1.SuspendLayout();
             this.SuspendLayout();
             // 
             // labelTitulo
             // 
             this.labelTitulo.Font = new System.Drawing.Font("Calibri", 20F);
-            this.labelTitulo.Location = new System.Drawing.Point(70, 16);
+            this.labelTitulo.Location = new System.Drawing.Point(70, 12);
             this.labelTitulo.Name = "labelTitulo";
             this.labelTitulo.Size = new System.Drawing.Size(350, 33);
             this.labelTitulo.TabIndex = 0;
@@ -106,9 +110,9 @@
             this.groupBox1.Controls.Add(this.txt_apellido);
             this.groupBox1.Controls.Add(this.txt_nro_documento);
             this.groupBox1.Controls.Add(this.txt_nombre);
-            this.groupBox1.Location = new System.Drawing.Point(16, 164);
+            this.groupBox1.Location = new System.Drawing.Point(25, 145);
             this.groupBox1.Name = "groupBox1";
-            this.groupBox1.Size = new System.Drawing.Size(443, 305);
+            this.groupBox1.Size = new System.Drawing.Size(395, 305);
             this.groupBox1.TabIndex = 3;
             this.groupBox1.TabStop = false;
             this.groupBox1.Text = "Datos de la Persona";
@@ -138,6 +142,24 @@
             this.label8.Size = new System.Drawing.Size(93, 13);
             this.label8.TabIndex = 3;
             this.label8.Text = "Fecha Nacimiento";
+            // 
+            // label14
+            // 
+            this.label14.AutoSize = true;
+            this.label14.Location = new System.Drawing.Point(84, 262);
+            this.label14.Name = "label14";
+            this.label14.Size = new System.Drawing.Size(32, 13);
+            this.label14.TabIndex = 3;
+            this.label14.Text = "Hotel";
+            // 
+            // label13
+            // 
+            this.label13.AutoSize = true;
+            this.label13.Location = new System.Drawing.Point(84, 236);
+            this.label13.Name = "label13";
+            this.label13.Size = new System.Drawing.Size(26, 13);
+            this.label13.TabIndex = 3;
+            this.label13.Text = "Mail";
             // 
             // label7
             // 
@@ -193,6 +215,20 @@
             this.label2.TabIndex = 3;
             this.label2.Text = "Nombre";
             // 
+            // txt_hotel
+            // 
+            this.txt_hotel.Location = new System.Drawing.Point(140, 262);
+            this.txt_hotel.Name = "txt_hotel";
+            this.txt_hotel.Size = new System.Drawing.Size(200, 20);
+            this.txt_hotel.TabIndex = 7;
+            // 
+            // txt_mail
+            // 
+            this.txt_mail.Location = new System.Drawing.Point(140, 236);
+            this.txt_mail.Name = "txt_mail";
+            this.txt_mail.Size = new System.Drawing.Size(200, 20);
+            this.txt_mail.TabIndex = 7;
+            // 
             // txt_direccion
             // 
             this.txt_direccion.Location = new System.Drawing.Point(140, 180);
@@ -218,7 +254,7 @@
             // label9
             // 
             this.label9.AutoSize = true;
-            this.label9.Location = new System.Drawing.Point(85, 62);
+            this.label9.Location = new System.Drawing.Point(55, 66);
             this.label9.Name = "label9";
             this.label9.Size = new System.Drawing.Size(43, 13);
             this.label9.TabIndex = 3;
@@ -227,7 +263,7 @@
             // label10
             // 
             this.label10.AutoSize = true;
-            this.label10.Location = new System.Drawing.Point(70, 95);
+            this.label10.Location = new System.Drawing.Point(37, 96);
             this.label10.Name = "label10";
             this.label10.Size = new System.Drawing.Size(61, 13);
             this.label10.TabIndex = 3;
@@ -235,21 +271,21 @@
             // 
             // txt_usuario
             // 
-            this.txt_usuario.Location = new System.Drawing.Point(151, 60);
+            this.txt_usuario.Location = new System.Drawing.Point(108, 63);
             this.txt_usuario.Name = "txt_usuario";
-            this.txt_usuario.Size = new System.Drawing.Size(200, 20);
+            this.txt_usuario.Size = new System.Drawing.Size(112, 20);
             this.txt_usuario.TabIndex = 0;
             // 
             // txt_password
             // 
-            this.txt_password.Location = new System.Drawing.Point(151, 90);
+            this.txt_password.Location = new System.Drawing.Point(108, 93);
             this.txt_password.Name = "txt_password";
-            this.txt_password.Size = new System.Drawing.Size(200, 20);
+            this.txt_password.Size = new System.Drawing.Size(112, 20);
             this.txt_password.TabIndex = 1;
             // 
             // boton_aceptar
             // 
-            this.boton_aceptar.Location = new System.Drawing.Point(303, 489);
+            this.boton_aceptar.Location = new System.Drawing.Point(264, 477);
             this.boton_aceptar.Name = "boton_aceptar";
             this.boton_aceptar.Size = new System.Drawing.Size(75, 23);
             this.boton_aceptar.TabIndex = 4;
@@ -257,15 +293,15 @@
             this.boton_aceptar.UseVisualStyleBackColor = true;
             this.boton_aceptar.Click += new System.EventHandler(this.boton_aceptar_Click);
             // 
-            // boton_cancelar
+            // boton_volver
             // 
-            this.boton_cancelar.Location = new System.Drawing.Point(384, 489);
-            this.boton_cancelar.Name = "boton_cancelar";
-            this.boton_cancelar.Size = new System.Drawing.Size(75, 23);
-            this.boton_cancelar.TabIndex = 4;
-            this.boton_cancelar.Text = "Cancelar";
-            this.boton_cancelar.UseVisualStyleBackColor = true;
-            this.boton_cancelar.Click += new System.EventHandler(this.boton_cancelar_Click);
+            this.boton_volver.Location = new System.Drawing.Point(345, 477);
+            this.boton_volver.Name = "boton_volver";
+            this.boton_volver.Size = new System.Drawing.Size(75, 23);
+            this.boton_volver.TabIndex = 4;
+            this.boton_volver.Text = "Volver";
+            this.boton_volver.UseVisualStyleBackColor = true;
+            this.boton_volver.Click += new System.EventHandler(this.boton_cancelar_Click);
             // 
             // label1
             // 
@@ -290,7 +326,7 @@
             // label12
             // 
             this.label12.AutoSize = true;
-            this.label12.Location = new System.Drawing.Point(103, 128);
+            this.label12.Location = new System.Drawing.Point(261, 63);
             this.label12.Name = "label12";
             this.label12.Size = new System.Drawing.Size(23, 13);
             this.label12.TabIndex = 3;
@@ -299,58 +335,62 @@
             // cb_rol
             // 
             this.cb_rol.FormattingEnabled = true;
-            this.cb_rol.Location = new System.Drawing.Point(151, 120);
+            this.cb_rol.Location = new System.Drawing.Point(290, 60);
             this.cb_rol.Name = "cb_rol";
             this.cb_rol.Size = new System.Drawing.Size(121, 21);
             this.cb_rol.TabIndex = 8;
             // 
-            // txt_mail
+            // txt_intentoslog
             // 
-            this.txt_mail.Location = new System.Drawing.Point(140, 236);
-            this.txt_mail.Name = "txt_mail";
-            this.txt_mail.Size = new System.Drawing.Size(200, 20);
-            this.txt_mail.TabIndex = 7;
+            this.txt_intentoslog.Location = new System.Drawing.Point(108, 119);
+            this.txt_intentoslog.Name = "txt_intentoslog";
+            this.txt_intentoslog.Size = new System.Drawing.Size(47, 20);
+            this.txt_intentoslog.TabIndex = 1;
             // 
-            // label13
+            // txt_estado
             // 
-            this.label13.AutoSize = true;
-            this.label13.Location = new System.Drawing.Point(84, 236);
-            this.label13.Name = "label13";
-            this.label13.Size = new System.Drawing.Size(26, 13);
-            this.label13.TabIndex = 3;
-            this.label13.Text = "Mail";
+            this.txt_estado.Location = new System.Drawing.Point(290, 93);
+            this.txt_estado.Name = "txt_estado";
+            this.txt_estado.Size = new System.Drawing.Size(121, 20);
+            this.txt_estado.TabIndex = 1;
             // 
-            // txt_hotel
+            // l_estado
             // 
-            this.txt_hotel.Location = new System.Drawing.Point(140, 262);
-            this.txt_hotel.Name = "txt_hotel";
-            this.txt_hotel.Size = new System.Drawing.Size(200, 20);
-            this.txt_hotel.TabIndex = 7;
+            this.l_estado.AutoSize = true;
+            this.l_estado.Location = new System.Drawing.Point(244, 96);
+            this.l_estado.Name = "l_estado";
+            this.l_estado.Size = new System.Drawing.Size(40, 13);
+            this.l_estado.TabIndex = 3;
+            this.l_estado.Text = "Estado";
             // 
-            // label14
+            // l_log
             // 
-            this.label14.AutoSize = true;
-            this.label14.Location = new System.Drawing.Point(84, 262);
-            this.label14.Name = "label14";
-            this.label14.Size = new System.Drawing.Size(32, 13);
-            this.label14.TabIndex = 3;
-            this.label14.Text = "Hotel";
+            this.l_log.AutoSize = true;
+            this.l_log.Location = new System.Drawing.Point(21, 122);
+            this.l_log.Name = "l_log";
+            this.l_log.Size = new System.Drawing.Size(77, 13);
+            this.l_log.TabIndex = 3;
+            this.l_log.Text = "Intentos de log";
             // 
             // ABMUsuario02
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(474, 524);
+            this.ClientSize = new System.Drawing.Size(441, 508);
             this.Controls.Add(this.cb_rol);
             this.Controls.Add(this.label1);
             this.Controls.Add(this.label11);
-            this.Controls.Add(this.boton_cancelar);
+            this.Controls.Add(this.boton_volver);
             this.Controls.Add(this.boton_aceptar);
             this.Controls.Add(this.groupBox1);
             this.Controls.Add(this.labelTitulo);
+            this.Controls.Add(this.l_log);
+            this.Controls.Add(this.l_estado);
             this.Controls.Add(this.label12);
             this.Controls.Add(this.label10);
             this.Controls.Add(this.label9);
+            this.Controls.Add(this.txt_estado);
+            this.Controls.Add(this.txt_intentoslog);
             this.Controls.Add(this.txt_password);
             this.Controls.Add(this.txt_usuario);
             this.Name = "ABMUsuario02";
@@ -386,7 +426,7 @@
         private System.Windows.Forms.TextBox txt_usuario;
         private System.Windows.Forms.TextBox txt_password;
         private System.Windows.Forms.Button boton_aceptar;
-        private System.Windows.Forms.Button boton_cancelar;
+        private System.Windows.Forms.Button boton_volver;
         private System.Windows.Forms.Label label1;
         private System.Windows.Forms.Label label11;
         private System.Windows.Forms.Label label12;
@@ -395,5 +435,9 @@
         private System.Windows.Forms.Label label13;
         private System.Windows.Forms.TextBox txt_hotel;
         private System.Windows.Forms.TextBox txt_mail;
+        private System.Windows.Forms.TextBox txt_intentoslog;
+        private System.Windows.Forms.TextBox txt_estado;
+        private System.Windows.Forms.Label l_estado;
+        private System.Windows.Forms.Label l_log;
     }
 }

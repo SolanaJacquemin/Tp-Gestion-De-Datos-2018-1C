@@ -17,6 +17,7 @@ namespace FrbaHotel.ABMUsuario
             InitializeComponent();
             this.StartPosition = FormStartPosition.CenterScreen;
             txt_aux_userid.Visible = false;
+            dgvUsuariosPrompt.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
 
             dgvUsuariosPrompt.Rows.Clear();
 
@@ -76,8 +77,23 @@ namespace FrbaHotel.ABMUsuario
 
         }
 
-        public void dgvUsuariosPrompt_CellContentClick(object sender, DataGridViewCellEventArgs e)
+        public void dgvUsuariosPrompt_CellClick(object sender, DataGridViewCellEventArgs e)
         {
+            /*Int32 selectedRowCount = dgvUsuariosPrompt.Rows.GetRowCount(DataGridViewElementStates.Selected);
+            if (selectedRowCount > 0)
+            {
+                System.Text.StringBuilder sb = new System.Text.StringBuilder();
+
+                for (int i = 0; i < selectedRowCount; i++)
+                {
+                    sb.Append("Row: ");
+                    sb.Append(dgvUsuariosPrompt.SelectedRows[i].Index.ToString());
+                    sb.Append(Environment.NewLine);
+                }
+
+                sb.Append("Total: " + selectedRowCount.ToString());
+                MessageBox.Show(sb.ToString(), "Selected Rows");
+            }*/
             int index = e.RowIndex;
             DataGridViewRow selectedRow = dgvUsuariosPrompt.Rows[index];
             string dgv_usuario_ID = selectedRow.Cells[0].Value.ToString();

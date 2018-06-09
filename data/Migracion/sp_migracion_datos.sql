@@ -701,6 +701,49 @@ END
 go
 -------------------------------------------------------Comienzo de procedures--------------------------------------------------------------
 --------------------------------------------------------ABM USUARIO------------------------------
+
+-- Borrado de procedures en la base
+IF (OBJECT_ID('FOUR_SIZONS.AltaUsuario', 'P') IS NOT NULL)
+BEGIN
+    DROP PROCEDURE FOUR_SIZONS.AltaUsuario
+END;
+
+IF (OBJECT_ID('FOUR_SIZONS.altaUserXHot', 'P') IS NOT NULL)
+BEGIN
+    DROP PROCEDURE FOUR_SIZONS.altaUserXHot
+END;
+
+IF (OBJECT_ID('FOUR_SIZONS.ModificacionUsuario', 'P') IS NOT NULL)
+BEGIN
+    DROP PROCEDURE FOUR_SIZONS.ModificacionUsuario
+END;
+
+IF (OBJECT_ID('FOUR_SIZONS.AltaCliente', 'P') IS NOT NULL)
+BEGIN
+    DROP PROCEDURE FOUR_SIZONS.AltaCliente
+END;
+
+IF (OBJECT_ID('FOUR_SIZONS.modificacionCliente', 'P') IS NOT NULL)
+BEGIN
+    DROP PROCEDURE FOUR_SIZONS.modificacionCliente
+END;
+
+IF (OBJECT_ID('FOUR_SIZONS.AltaHotel', 'P') IS NOT NULL)
+BEGIN
+    DROP PROCEDURE FOUR_SIZONS.AltaHotel
+END;
+
+IF (OBJECT_ID('FOUR_SIZONS.altaRegXHotel', 'P') IS NOT NULL)
+BEGIN
+    DROP PROCEDURE FOUR_SIZONS.altaRegXHotel
+END;
+
+IF (OBJECT_ID('FOUR_SIZONS.modificarHotel', 'P') IS NOT NULL)
+BEGIN
+    DROP PROCEDURE FOUR_SIZONS.modificarHotel
+END;
+GO
+
 create procedure FOUR_SIZONS.AltaUsuario
 	@username nvarchar(15),
 	@password nvarchar(15),
@@ -725,8 +768,8 @@ create procedure FOUR_SIZONS.AltaUsuario
 	set @rolId= (select Rol_codigo from FOUR_SIZONS.rol where @rolNombre = rol_nombre)
 	--set @hotelId = (select hotel_codigo from FOUR_SIZONS.hotel where @hotelNombre = hotel_nombre)
 	 
-	insert into FOUR_SIZONS.usuario(Usuario_ID,Usuario_Password,Usuario_Nombre,Usuario_Apellido,Usuario_TipoDoc, Usuario_NroDoc ,Usuario_Direccion,Usuario_Fec_Nac,Usuario_Mail, Usuario_Estado , Usuario_FallaLog)
-							values(@username,@password,@nombre,@apellido,@tipoDoc,@numDoc,@direccion,@fechaNac,@mail,1,0)
+	insert into FOUR_SIZONS.usuario(Usuario_ID,Usuario_Password,Usuario_Nombre,Usuario_Apellido,Usuario_TipoDoc, Usuario_NroDoc,Usuario_Telefono,Usuario_Direccion,Usuario_Fec_Nac,Usuario_Mail, Usuario_Estado , Usuario_FallaLog)
+							values(@username,@password,@nombre,@apellido,@tipoDoc,@numDoc,@telefono,@direccion,@fechaNac,@mail,1,0)
 
 	--insert into FOUR_SIZONS.UsuarioXHotel(Hotel_Codigo,Usuario_ID,UsuarioXHotel_Estado) values (@hotelId,@username,1)
 	insert into FOUR_SIZONS.UsuarioXRol(Rol_Codigo,Usuario_ID,UsuarioXRol_Estado) values (@rolId, @username,1)
@@ -791,13 +834,27 @@ create procedure FOUR_SIZONS.ModificacionUsuario
 
 	set @rolId= (select Rol_codigo from FOUR_SIZONS.rol where @rolNombre = rol_nombre)
 	--set @hotelId = (select hotel_codigo from FOUR_SIZONS.hotel where @hotelNombre = hotel_nombre)
-	
-	update FOUR_SIZONS.usuario
+
+	--si estado se modifica a activo se resetea el campo falla_log
+	if(@estado = 1)
+	begin
+		update FOUR_SIZONS.usuario
+				set Usuario_Password = @username,Usuario_Nombre =@nombre,Usuario_Apellido = @apellido ,
+				Usuario_TipoDoc =@tipoDoc,Usuario_NroDoc =@numDoc,Usuario_Telefono =@telefono,
+				Usuario_Direccion= @direccion,Usuario_Fec_Nac = @fechaNac,Usuario_Mail =@mail,Usuario_Estado=@estado,
+				Usuario_FallaLog = 0
+
+				where Usuario_ID=@username
+	end
+	else
+	begin
+			update FOUR_SIZONS.usuario
 				set Usuario_Password = @username,Usuario_Nombre =@nombre,Usuario_Apellido = @apellido ,
 				Usuario_TipoDoc =@tipoDoc,Usuario_NroDoc =@numDoc,Usuario_Telefono =@telefono,
 				Usuario_Direccion= @direccion,Usuario_Fec_Nac = @fechaNac,Usuario_Mail =@mail,Usuario_Estado=@estado
 
 				where Usuario_ID=@username
+	end
 
 	update FOUR_SIZONS.UsuarioXRol 
 				set Rol_Codigo = @rolId    
