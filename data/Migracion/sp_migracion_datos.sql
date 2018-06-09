@@ -703,6 +703,11 @@ go
 --------------------------------------------------------ABM USUARIO------------------------------
 
 -- Borrado de procedures en la base
+IF (OBJECT_ID('FOUR_SIZONS.ValidarUsuario', 'P') IS NOT NULL)
+BEGIN
+    DROP PROCEDURE FOUR_SIZONS.ValidarUsuario
+END;
+
 IF (OBJECT_ID('FOUR_SIZONS.AltaUsuario', 'P') IS NOT NULL)
 BEGIN
     DROP PROCEDURE FOUR_SIZONS.AltaUsuario
@@ -743,6 +748,63 @@ BEGIN
     DROP PROCEDURE FOUR_SIZONS.modificarHotel
 END;
 GO
+
+create procedure FOUR_SIZONS.ValidarUsuario
+@usuario nvarchar(15), 
+@password nvarchar(15),
+@loginok decimal(1) output,
+@errorMsg nvarchar(100) output
+as
+begin try
+	declare @fallalog decimal(1)
+	declare @passret nvarchar(15)
+	if exists (select * from FOUR_SIZONS.Usuario where Usuario_ID = @usuario)
+	begin
+		select @fallalog = Usuario_FallaLog, @passret = Usuario_Password from FOUR_SIZONS.Usuario where Usuario_ID = @usuario
+		if @fallalog <> 3
+		begin
+			if @passret = @password
+			begin
+				set @loginok = 1
+				if @fallalog <> 0
+					update FOUR_SIZONS.Usuario set Usuario_FallaLog = 0
+			end
+			else
+			begin
+				if @fallalog = 2
+				begin
+					update FOUR_SIZONS.Usuario set Usuario_FallaLog = Usuario_FallaLog + 1, Usuario_Estado = 0
+					set @loginok = 0
+					set @errorMsg = 'Contraseña incorrecta. El usuario está deshabilitado'
+				end
+				if @fallalog < 2
+				begin
+					update FOUR_SIZONS.Usuario set Usuario_FallaLog = Usuario_FallaLog + 1
+					set @loginok = 0
+					set @errorMsg = 'Contraseña incorrecta.'
+					if @fallalog = 1
+					begin
+						set @errorMsg = 'Contraseña incorrecta. El usuario se deshabilitará ante el próximo inicio de sesión inválido'
+					end
+				end
+			end
+		end
+		else
+		begin
+			set @loginok = 0
+			set @errorMsg = 'El usuario está deshabilitado'
+		end
+	end
+	else
+	begin
+		set @loginok = 0
+		set @errorMsg = 'El usuario no existe'
+	end
+end try
+begin catch
+	select ERROR_MESSAGE () as mensaje_de_error;
+end catch
+go
 
 create procedure FOUR_SIZONS.AltaUsuario
 	@username nvarchar(15),
