@@ -8,6 +8,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using FrbaHotel.PantallaPrincipal;
+using System.Data.SqlClient;
 
 namespace FrbaHotel
 {
@@ -19,60 +20,62 @@ namespace FrbaHotel
             InitializeComponent();
             this.StartPosition = FormStartPosition.CenterScreen;
             txt_usuario.CharacterCasing = CharacterCasing.Upper;
-            txt_password.CharacterCasing = CharacterCasing.Upper;
+            //txt_password.CharacterCasing = CharacterCasing.Upper;
+
+            txt_password.PasswordChar = '●';
         }
 
-        private void button1_Click(object sender, EventArgs e)
+        private void btn_login_Click(object sender, EventArgs e)
         {
-
-            con.closeConection();
-            con.strQuery = "SELECT Usuario_Password, Usuario_FallaLog FROM FOUR_SIZONS.Usuario WHERE Usuario_ID='" + txt_usuario.Text + "'";
-
-            con.executeQuery();
-
-            if (con.reader())
+            int errLogin = 0;
+            if (txt_usuario.Text == "") 
             {
-                string passwordRet = con.lector.GetString(0);
-                decimal falla_logRet = con.lector.GetDecimal(1);
-                if (falla_logRet < 3)
-                {
-                    if (txt_password.Text == passwordRet)
-                    {
-                        con.closeConection();
-                        this.Hide();
-                        FrbaHotel.PantallaPrincipal.PantallaPrincipal01 pantallaPrincipal = new PantallaPrincipal01();
-                        pantallaPrincipal.ShowDialog();
-                        this.Close();
-                    }
-                    else
-                    {
-                        con.closeConection();
-                        MessageBox.Show("La contraseña es incorrecta", "FOUR SIZONS - FRBA Hoteles", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                        if (falla_logRet < 2)
-                        {
-                            con.strQuery = "UPDATE FOUR_SIZONS.Usuario SET Usuario_FallaLog = Usuario_FallaLog + 1 WHERE Usuario_ID='" + txt_usuario.Text + "'";
-                            con.executeNoReturnQuery();
-                            con.closeConection();
-                        }else{
-                            con.strQuery = "UPDATE FOUR_SIZONS.Usuario SET Usuario_FallaLog = Usuario_FallaLog + 1, Usuario_Estado = 0 WHERE Usuario_ID='" + txt_usuario.Text + "'";
-                            con.executeNoReturnQuery();
-                            MessageBox.Show("El usuario está deshabilitado", "FOUR SIZONS - FRBA Hoteles", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                            con.closeConection();
-                        }
+                MessageBox.Show("Ingrese el usuario", "FOUR SIZONS - FRBA Hoteles", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                errLogin = 1;
+            }
 
-                    }
+            if (txt_password.Text == "")
+            {
+                MessageBox.Show("Ingrese la contraseña", "FOUR SIZONS - FRBA Hoteles", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                errLogin = 1;
+            }
+
+            if (errLogin == 0) 
+            {
+                Conexion con = new Conexion();
+                Encriptor encriptor = new Encriptor();
+                con.strQuery = "FOUR_SIZONS.ValidarUsuario";
+                con.execute();
+                con.command.CommandType = CommandType.StoredProcedure;
+
+                con.command.Parameters.Add("@usuario", SqlDbType.NVarChar).Value = txt_usuario.Text;
+                con.command.Parameters.Add("@password", SqlDbType.NVarChar).Value = encriptor.Encrypt(txt_password.Text);
+                con.command.Parameters.Add("@loginok", SqlDbType.Decimal).Direction = ParameterDirection.Output;
+
+                var errMsg = new SqlParameter();
+
+                errMsg.ParameterName = "@errorMsg";
+                errMsg.SqlDbType = System.Data.SqlDbType.NVarChar;
+                errMsg.Direction = ParameterDirection.Output;
+                errMsg.Size = 100;
+                con.command.Parameters.Add(errMsg);
+
+                con.openConection();
+                con.command.ExecuteNonQuery();
+                con.closeConection();
+                if ((Convert.ToDecimal(con.command.Parameters["@loginok"].Value) == 0))
+                {
+                    MessageBox.Show(Convert.ToString(con.command.Parameters["@errorMsg"].Value), "FOUR SIZONS - FRBA Hoteles", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 }
                 else
                 {
-                    con.closeConection();
-                    MessageBox.Show("El usuario está deshabilitado", "FOUR SIZONS - FRBA Hoteles", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    this.Hide();
+                    FrbaHotel.PantallaPrincipal.PantallaPrincipal01 pantallaPrincipal = new PantallaPrincipal01();
+                    pantallaPrincipal.ShowDialog();
+                    this.Close();
                 }
-
-            }else{
-                con.closeConection();
-                MessageBox.Show("El usuario no existe", "FOUR SIZONS - FRBA Hoteles", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                return; 
             }
+            
 
         }
 
@@ -85,7 +88,6 @@ namespace FrbaHotel
         {
             
         }
-
 
     }
 }

@@ -62,6 +62,7 @@
             this.txt_estado = new System.Windows.Forms.TextBox();
             this.l_estado = new System.Windows.Forms.Label();
             this.l_log = new System.Windows.Forms.Label();
+            this.btn_aceptar_nuevo = new System.Windows.Forms.Button();
             this.groupBox1.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -81,14 +82,14 @@
             this.txt_nombre.Location = new System.Drawing.Point(140, 30);
             this.txt_nombre.Name = "txt_nombre";
             this.txt_nombre.Size = new System.Drawing.Size(200, 20);
-            this.txt_nombre.TabIndex = 2;
+            this.txt_nombre.TabIndex = 5;
             // 
             // txt_apellido
             // 
             this.txt_apellido.Location = new System.Drawing.Point(140, 60);
             this.txt_apellido.Name = "txt_apellido";
             this.txt_apellido.Size = new System.Drawing.Size(200, 20);
-            this.txt_apellido.TabIndex = 3;
+            this.txt_apellido.TabIndex = 6;
             // 
             // groupBox1
             // 
@@ -123,7 +124,7 @@
             this.dt_fecha_nac.Location = new System.Drawing.Point(140, 210);
             this.dt_fecha_nac.Name = "dt_fecha_nac";
             this.dt_fecha_nac.Size = new System.Drawing.Size(113, 20);
-            this.dt_fecha_nac.TabIndex = 8;
+            this.dt_fecha_nac.TabIndex = 11;
             this.dt_fecha_nac.Value = new System.DateTime(2018, 6, 3, 0, 0, 0, 0);
             // 
             // cb_tipo_documento
@@ -132,7 +133,7 @@
             this.cb_tipo_documento.Location = new System.Drawing.Point(140, 90);
             this.cb_tipo_documento.Name = "cb_tipo_documento";
             this.cb_tipo_documento.Size = new System.Drawing.Size(70, 21);
-            this.cb_tipo_documento.TabIndex = 4;
+            this.cb_tipo_documento.TabIndex = 7;
             // 
             // label8
             // 
@@ -220,35 +221,35 @@
             this.txt_hotel.Location = new System.Drawing.Point(140, 262);
             this.txt_hotel.Name = "txt_hotel";
             this.txt_hotel.Size = new System.Drawing.Size(200, 20);
-            this.txt_hotel.TabIndex = 7;
+            this.txt_hotel.TabIndex = 13;
             // 
             // txt_mail
             // 
             this.txt_mail.Location = new System.Drawing.Point(140, 236);
             this.txt_mail.Name = "txt_mail";
             this.txt_mail.Size = new System.Drawing.Size(200, 20);
-            this.txt_mail.TabIndex = 7;
+            this.txt_mail.TabIndex = 12;
             // 
             // txt_direccion
             // 
             this.txt_direccion.Location = new System.Drawing.Point(140, 180);
             this.txt_direccion.Name = "txt_direccion";
             this.txt_direccion.Size = new System.Drawing.Size(200, 20);
-            this.txt_direccion.TabIndex = 7;
+            this.txt_direccion.TabIndex = 10;
             // 
             // txt_telefono
             // 
             this.txt_telefono.Location = new System.Drawing.Point(140, 150);
             this.txt_telefono.Name = "txt_telefono";
             this.txt_telefono.Size = new System.Drawing.Size(200, 20);
-            this.txt_telefono.TabIndex = 6;
+            this.txt_telefono.TabIndex = 9;
             // 
             // txt_nro_documento
             // 
             this.txt_nro_documento.Location = new System.Drawing.Point(140, 120);
             this.txt_nro_documento.Name = "txt_nro_documento";
             this.txt_nro_documento.Size = new System.Drawing.Size(113, 20);
-            this.txt_nro_documento.TabIndex = 5;
+            this.txt_nro_documento.TabIndex = 8;
             this.txt_nro_documento.TextChanged += new System.EventHandler(this.textBox3_TextChanged);
             // 
             // label9
@@ -285,7 +286,7 @@
             // 
             // boton_aceptar
             // 
-            this.boton_aceptar.Location = new System.Drawing.Point(264, 477);
+            this.boton_aceptar.Location = new System.Drawing.Point(24, 477);
             this.boton_aceptar.Name = "boton_aceptar";
             this.boton_aceptar.Size = new System.Drawing.Size(75, 23);
             this.boton_aceptar.TabIndex = 4;
@@ -301,7 +302,7 @@
             this.boton_volver.TabIndex = 4;
             this.boton_volver.Text = "Volver";
             this.boton_volver.UseVisualStyleBackColor = true;
-            this.boton_volver.Click += new System.EventHandler(this.boton_cancelar_Click);
+            this.boton_volver.Click += new System.EventHandler(this.boton_volver_Click);
             // 
             // label1
             // 
@@ -338,21 +339,21 @@
             this.cb_rol.Location = new System.Drawing.Point(290, 60);
             this.cb_rol.Name = "cb_rol";
             this.cb_rol.Size = new System.Drawing.Size(121, 21);
-            this.cb_rol.TabIndex = 8;
+            this.cb_rol.TabIndex = 2;
             // 
             // txt_intentoslog
             // 
             this.txt_intentoslog.Location = new System.Drawing.Point(108, 119);
             this.txt_intentoslog.Name = "txt_intentoslog";
             this.txt_intentoslog.Size = new System.Drawing.Size(47, 20);
-            this.txt_intentoslog.TabIndex = 1;
+            this.txt_intentoslog.TabIndex = 4;
             // 
             // txt_estado
             // 
             this.txt_estado.Location = new System.Drawing.Point(290, 93);
             this.txt_estado.Name = "txt_estado";
             this.txt_estado.Size = new System.Drawing.Size(121, 20);
-            this.txt_estado.TabIndex = 1;
+            this.txt_estado.TabIndex = 3;
             // 
             // l_estado
             // 
@@ -372,15 +373,26 @@
             this.l_log.TabIndex = 3;
             this.l_log.Text = "Intentos de log";
             // 
+            // btn_aceptar_nuevo
+            // 
+            this.btn_aceptar_nuevo.Location = new System.Drawing.Point(112, 477);
+            this.btn_aceptar_nuevo.Name = "btn_aceptar_nuevo";
+            this.btn_aceptar_nuevo.Size = new System.Drawing.Size(108, 23);
+            this.btn_aceptar_nuevo.TabIndex = 4;
+            this.btn_aceptar_nuevo.Text = "Aceptar y Nuevo";
+            this.btn_aceptar_nuevo.UseVisualStyleBackColor = true;
+            this.btn_aceptar_nuevo.Click += new System.EventHandler(this.boton_aceptar_nuevo_Click);
+            // 
             // ABMUsuario02
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(441, 508);
+            this.ClientSize = new System.Drawing.Size(449, 508);
             this.Controls.Add(this.cb_rol);
             this.Controls.Add(this.label1);
             this.Controls.Add(this.label11);
             this.Controls.Add(this.boton_volver);
+            this.Controls.Add(this.btn_aceptar_nuevo);
             this.Controls.Add(this.boton_aceptar);
             this.Controls.Add(this.groupBox1);
             this.Controls.Add(this.labelTitulo);
@@ -439,5 +451,6 @@
         private System.Windows.Forms.TextBox txt_estado;
         private System.Windows.Forms.Label l_estado;
         private System.Windows.Forms.Label l_log;
+        private System.Windows.Forms.Button btn_aceptar_nuevo;
     }
 }

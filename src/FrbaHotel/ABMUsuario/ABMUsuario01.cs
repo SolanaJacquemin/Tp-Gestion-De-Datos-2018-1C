@@ -10,7 +10,7 @@ using System.Windows.Forms;
 
 namespace FrbaHotel.ABMUsuario
 {
-    
+
     public partial class ABMUsuario01 : Form
     {
         public string dgv_usuario_ID;
@@ -26,7 +26,7 @@ namespace FrbaHotel.ABMUsuario
             dgv_Usuarios.Rows.Clear();
 
             Conexion con = new Conexion();
-            con.strQuery = "SELECT Usuario_ID, Usuario_Password, Usuario_Nombre, Usuario_Apellido, " +
+            con.strQuery = "SELECT Usuario_ID, Usuario_Nombre, Usuario_Apellido, " +
                             "Usuario_TipoDoc, Usuario_NroDoc, Usuario_Telefono, Usuario_Direccion, " +
                             "Usuario_Fec_Nac, Usuario_Mail, Usuario_Estado, Usuario_FallaLog " +
                             "FROM FOUR_SIZONS.Usuario ORDER BY Usuario_ID";
@@ -39,17 +39,17 @@ namespace FrbaHotel.ABMUsuario
                 return;
             }
 
-            dgv_Usuarios.Rows.Add(new Object[] { con.lector.GetString(0), con.lector.GetString(1), con.lector.GetString(2),
-            con.lector.GetString(3), con.lector.GetString(4), con.lector.GetDecimal(5), con.lector.GetString(6),
-            con.lector.GetString(7), con.lector.GetDateTime(8), con.lector.GetString(9), con.lector.GetBoolean(10),
-            con.lector.GetDecimal(11)});
+            dgv_Usuarios.Rows.Add(new Object[] { con.lector.GetString(0), con.lector.GetString(1),
+            con.lector.GetString(2), con.lector.GetString(3), con.lector.GetDecimal(4), con.lector.GetString(5),
+            con.lector.GetString(6), con.lector.GetDateTime(7), con.lector.GetString(8), con.lector.GetBoolean(9),
+            con.lector.GetDecimal(10)});
 
             while (con.reader())
             {
-                dgv_Usuarios.Rows.Add(new Object[] { con.lector.GetString(0), con.lector.GetString(1), con.lector.GetString(2),
-                con.lector.GetString(3), con.lector.GetString(4), con.lector.GetDecimal(5), con.lector.GetString(6),
-                con.lector.GetString(7), con.lector.GetDateTime(8), con.lector.GetString(9), con.lector.GetBoolean(10),
-                con.lector.GetDecimal(11)});
+                dgv_Usuarios.Rows.Add(new Object[] { con.lector.GetString(0), con.lector.GetString(1),
+                con.lector.GetString(2), con.lector.GetString(3), con.lector.GetDecimal(4), con.lector.GetString(5),
+                con.lector.GetString(6), con.lector.GetDateTime(7), con.lector.GetString(8), con.lector.GetBoolean(9),
+                con.lector.GetDecimal(10)});
             }
             con.closeConection();
 
@@ -69,11 +69,13 @@ namespace FrbaHotel.ABMUsuario
             ABMUsuario02 formABMUsuario02 = new ABMUsuario02(modo, txt_Id.Text);
             formABMUsuario02.ShowDialog();
             this.Show();
+            this.buscar();
+            this.refrescarGrid();
         }
 
         private void boton_baja_Click(object sender, EventArgs e)
         {
-            if(dgv_Usuarios.SelectedRows.Count > 0)
+            if (dgv_Usuarios.SelectedRows.Count > 0)
             {
                 string modo = "DLT";
                 this.Hide();
@@ -82,7 +84,9 @@ namespace FrbaHotel.ABMUsuario
                 this.Show();
                 this.buscar();
                 this.refrescarGrid();
-            }else{
+            }
+            else
+            {
                 MessageBox.Show("Debe seleccionar un usuario de la grilla", "FOUR SIZONS - FRBA Hoteles", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
 
@@ -99,7 +103,9 @@ namespace FrbaHotel.ABMUsuario
                 this.Show();
                 this.buscar();
                 this.refrescarGrid();
-            }else{
+            }
+            else
+            {
                 MessageBox.Show("Debe seleccionar un usuario de la grilla", "FOUR SIZONS - FRBA Hoteles", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
@@ -114,11 +120,12 @@ namespace FrbaHotel.ABMUsuario
             txt_mail.Text = "";
         }
 
-        private void buscar() {
+        private void buscar()
+        {
             dgv_Usuarios.Rows.Clear();
 
             Conexion con = new Conexion();
-            con.strQuery = "SELECT Usuario_ID, Usuario_Password, Usuario_Nombre, Usuario_Apellido, " +
+            con.strQuery = "SELECT Usuario_ID, Usuario_Nombre, Usuario_Apellido, " +
                             "Usuario_TipoDoc, Usuario_NroDoc, Usuario_Telefono, Usuario_Direccion, " +
                             "Usuario_Fec_Nac, Usuario_Mail, Usuario_Estado, Usuario_FallaLog " +
                             "FROM FOUR_SIZONS.Usuario " +
@@ -145,66 +152,24 @@ namespace FrbaHotel.ABMUsuario
                 return;
             }
 
-            dgv_Usuarios.Rows.Add(new Object[] { con.lector.GetString(0), con.lector.GetString(1), con.lector.GetString(2),
-            con.lector.GetString(3), con.lector.GetString(4), con.lector.GetDecimal(5), con.lector.GetString(6),
-            con.lector.GetString(7), con.lector.GetDateTime(8), con.lector.GetString(9), con.lector.GetBoolean(10),
-            con.lector.GetDecimal(11)});
+            dgv_Usuarios.Rows.Add(new Object[] { con.lector.GetString(0), con.lector.GetString(1),
+            con.lector.GetString(2), con.lector.GetString(3), con.lector.GetDecimal(4), con.lector.GetString(5),
+            con.lector.GetString(6), con.lector.GetDateTime(7), con.lector.GetString(8), con.lector.GetBoolean(9),
+            con.lector.GetDecimal(10)});
 
             while (con.reader())
             {
-                dgv_Usuarios.Rows.Add(new Object[] { con.lector.GetString(0), con.lector.GetString(1), con.lector.GetString(2),
-                con.lector.GetString(3), con.lector.GetString(4), con.lector.GetDecimal(5), con.lector.GetString(6),
-                con.lector.GetString(7), con.lector.GetDateTime(8), con.lector.GetString(9), con.lector.GetBoolean(10),
-                con.lector.GetDecimal(11)});
+                dgv_Usuarios.Rows.Add(new Object[] { con.lector.GetString(0), con.lector.GetString(1),
+                con.lector.GetString(2), con.lector.GetString(3), con.lector.GetDecimal(4), con.lector.GetString(5),
+                con.lector.GetString(6), con.lector.GetDateTime(7), con.lector.GetString(8), con.lector.GetBoolean(9),
+                con.lector.GetDecimal(10)});
             }
             con.closeConection();
         }
 
         private void btn_buscar_Click(object sender, EventArgs e)
         {
-            /*dgv_Usuarios.Rows.Clear();
-
-            Conexion con = new Conexion();
-            con.strQuery = "SELECT Usuario_ID, Usuario_Password, Usuario_Nombre, Usuario_Apellido, " +
-                            "Usuario_TipoDoc, Usuario_NroDoc, Usuario_Telefono, Usuario_Direccion, " +
-                            "Usuario_Fec_Nac, Usuario_Mail, Usuario_Estado, Usuario_FallaLog " +
-                            "FROM FOUR_SIZONS.Usuario " +
-                            " WHERE 1=1";
-                            if (txt_Id.Text != "")
-                                con.strQuery = con.strQuery + "AND Usuario_ID like '%" + txt_Id.Text + "%' ";
-                            if (txt_nombre.Text != "")
-                                con.strQuery = con.strQuery + "AND Usuario_Nombre like '%" + txt_nombre.Text + "%' ";
-                            if (txt_apellido.Text != "")
-                                con.strQuery = con.strQuery + "AND Usuario_Apellido like '%" + txt_apellido.Text + "%' ";
-                            if (cb_tipodoc.Text != "")
-                                con.strQuery = con.strQuery + "AND Usuario_TipoDoc like '%" + cb_tipodoc.Text + "%' ";
-                            if (txt_nrodoc.Text != "")
-                                con.strQuery = con.strQuery + "AND Usuario_NroDoc like '%" + txt_nrodoc.Text + "%' ";
-                            if (txt_mail.Text != "")
-                                con.strQuery = con.strQuery + "AND Usuario_Mail like '%" + txt_mail.Text + "%' ";
-                            con.strQuery = con.strQuery + "ORDER BY Usuario_ID";
-            con.executeQuery();
-            if (!con.reader())
-            {
-                MessageBox.Show("No se han encontrado usuarios. Revise los criterios de búsqueda", "FOUR SIZONS - FRBA Hoteles", MessageBoxButtons.OK, MessageBoxIcon.Information);
-                con.strQuery = "";
-                con.closeConection();
-                return;
-            }
-
-            dgv_Usuarios.Rows.Add(new Object[] { con.lector.GetString(0), con.lector.GetString(1), con.lector.GetString(2),
-            con.lector.GetString(3), con.lector.GetString(4), con.lector.GetDecimal(5), con.lector.GetString(6),
-            con.lector.GetString(7), con.lector.GetDateTime(8), con.lector.GetString(9), con.lector.GetBoolean(10),
-            con.lector.GetDecimal(11)});
-
-            while (con.reader())
-            {
-                dgv_Usuarios.Rows.Add(new Object[] { con.lector.GetString(0), con.lector.GetString(1), con.lector.GetString(2),
-                con.lector.GetString(3), con.lector.GetString(4), con.lector.GetDecimal(5), con.lector.GetString(6),
-                con.lector.GetString(7), con.lector.GetDateTime(8), con.lector.GetString(9), con.lector.GetBoolean(10),
-                con.lector.GetDecimal(11)});
-            }
-            con.closeConection();*/
+            buscar();
         }
 
         private void btn_volver_Click(object sender, EventArgs e)
@@ -216,7 +181,8 @@ namespace FrbaHotel.ABMUsuario
         {
 
 
-            using (ABMUsuarioPrompt prompt = new ABMUsuarioPrompt()){
+            using (ABMUsuarioPrompt prompt = new ABMUsuarioPrompt())
+            {
                 prompt.ShowDialog();
                 txt_Id.Text = prompt.TextBox1.Text;
                 prompt.Close();
@@ -235,7 +201,7 @@ namespace FrbaHotel.ABMUsuario
         {
             dgv_Usuarios.ClearSelection();
             foreach (DataGridViewRow row in dgv_Usuarios.Rows)
-                if (Convert.ToBoolean(row.Cells[10].Value) == false)
+                if (Convert.ToBoolean(row.Cells[9].Value) == false)
                 {
                     row.DefaultCellStyle.BackColor = Color.Red;
                 }
@@ -246,6 +212,6 @@ namespace FrbaHotel.ABMUsuario
             refrescarGrid();
         }
 
-        
+
     }
 }

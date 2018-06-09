@@ -9,6 +9,7 @@ using System.Threading.Tasks;
 using System.Windows.Forms;
 using FrbaHotel.ABMUsuario;
 
+
 namespace FrbaHotel.ABMUsuario
 {
 
@@ -17,6 +18,7 @@ namespace FrbaHotel.ABMUsuario
         public static string modoABM;
         public string nombreSP;
         public string usuario;
+        public int error;
 
         public ABMUsuario02(string modo, string user)
         {
@@ -26,6 +28,8 @@ namespace FrbaHotel.ABMUsuario
 
             usuario = user;
             modoABM = modo;
+
+            txt_password.PasswordChar = '●';
 
             switch (modoABM)
             {
@@ -52,25 +56,20 @@ namespace FrbaHotel.ABMUsuario
                     txt_intentoslog.ReadOnly = true;
                     txt_mail.ReadOnly = true;
                     txt_hotel.ReadOnly = true;
+                    btn_aceptar_nuevo.Visible = false;
                     break;
                 case "UPD":
                     labelTitulo.Text = "Modificación de Usuario";
                     txt_usuario.Text = usuario;
                     txt_usuario.ReadOnly = true;
                     txt_estado.ReadOnly = true;
+                    btn_aceptar_nuevo.Visible = false;
                     break;
             }
             dt_fecha_nac.Format = DateTimePickerFormat.Custom;
             dt_fecha_nac.CustomFormat = "dd/MM/yyyy";
 
-            Conexion con = new Conexion();
-            con.strQuery = "SELECT Rol_Nombre FROM FOUR_SIZONS.Rol";
-            con.executeQuery();
-            while (con.reader())
-            {
-                cb_rol.Items.Add(con.lector.GetString(0));
-            }
-            con.closeConection();
+            //levantarCombos();
             
         }
 
@@ -93,14 +92,7 @@ namespace FrbaHotel.ABMUsuario
         {
             if (modoABM == "INS")
             {
-                Conexion con = new Conexion();
-                con.strQuery = "SELECT Parametro_Descripcion FROM FOUR_SIZONS.Parametros WHERE Parametro_Codigo = 'DOCUMENTO'";
-                con.executeQuery();
-                while (con.reader())
-                {
-                    cb_tipo_documento.Items.Add(con.lector.GetString(0));
-                }
-                con.closeConection();
+                levantarCombos();
             }
             else
             {
@@ -160,12 +152,13 @@ namespace FrbaHotel.ABMUsuario
                         try
                         {
                             Conexion con = new Conexion();
+                            Encriptor encriptor = new Encriptor();
                             con.strQuery = nombreStored;
                             con.execute();
                             con.command.CommandType = CommandType.StoredProcedure;
                             
                             con.command.Parameters.Add("@username", SqlDbType.NVarChar).Value = txt_usuario.Text;
-                            con.command.Parameters.Add("@password", SqlDbType.NVarChar).Value = txt_password.Text;
+                            con.command.Parameters.Add("@password", SqlDbType.NVarChar).Value = encriptor.Encrypt(txt_password.Text);
                             con.command.Parameters.Add("@rolNombre", SqlDbType.NVarChar).Value = cb_rol.Text;
                             con.command.Parameters.Add("@nombre", SqlDbType.NVarChar).Value = txt_nombre.Text;
                             con.command.Parameters.Add("@apellido", SqlDbType.NVarChar).Value = txt_apellido.Text;
@@ -191,6 +184,7 @@ namespace FrbaHotel.ABMUsuario
                         }
                         catch (Exception ex)
                         {
+                            error = 1;
                             MessageBox.Show("Error al completar la operación. " + ex.Message, "FOUR SIZONS - FRBA Hoteles", MessageBoxButtons.OK, MessageBoxIcon.Error);
                         }
 
@@ -198,12 +192,56 @@ namespace FrbaHotel.ABMUsuario
                     }
                     else
                     {
+                        error = 1;
                         MessageBox.Show("No se ha completado la operación", "FOUR SIZONS - FRBA Hoteles", MessageBoxButtons.OK, MessageBoxIcon.Information);
                     }
         }
 
+        public void boton_aceptar_nuevo_Click(object sender, EventArgs e) 
+        {
+            error = 0;
+            nombreSP = "FOUR_SIZONS.AltaUsuario";
+            ejecutarABMUsuario(nombreSP);
+            txt_usuario.Text = "";
+            txt_password.Text = "";
+            cb_rol.Text = "";
+            cb_tipo_documento.Text = "";
+            txt_nro_documento.Text = "";
+            txt_direccion.Text = "";
+            txt_telefono.Text = "";
+            txt_mail.Text = "";
+            txt_nombre.Text = "";
+            txt_apellido.Text = "";
+            txt_hotel.Text = "";
+            cb_rol.Items.Clear();
+            cb_tipo_documento.Items.Clear();
+            levantarCombos();
+        }
+
+        private void levantarCombos() 
+        {
+            Conexion con = new Conexion();
+            con.strQuery = "SELECT Rol_Nombre FROM FOUR_SIZONS.Rol";
+            con.executeQuery();
+            while (con.reader())
+            {
+                cb_rol.Items.Add(con.lector.GetString(0));
+            }
+            con.closeConection();
+
+            
+            con.strQuery = "SELECT Parametro_Descripcion FROM FOUR_SIZONS.Parametros WHERE Parametro_Codigo = 'DOCUMENTO'";
+            con.executeQuery();
+            while (con.reader())
+            {
+                cb_tipo_documento.Items.Add(con.lector.GetString(0));
+            }
+            con.closeConection();
+        }
+
         public void boton_aceptar_Click(object sender, EventArgs e)
         {
+            error = 0;
             switch (modoABM)
             {
                 case "INS":
@@ -220,11 +258,16 @@ namespace FrbaHotel.ABMUsuario
                     break;
             }
             ejecutarABMUsuario(nombreSP);
+            if (error == 0) 
+            {
+                this.Close();
+            }
         }
 
-        private void boton_cancelar_Click(object sender, EventArgs e)
+        private void boton_volver_Click(object sender, EventArgs e)
         {
             this.Close();
         }
+
     }
 }

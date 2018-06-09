@@ -49,8 +49,10 @@
             this.boton_baja = new System.Windows.Forms.Button();
             this.boton_modificacion = new System.Windows.Forms.Button();
             this.dgv_Usuarios = new System.Windows.Forms.DataGridView();
+            this.label8 = new System.Windows.Forms.Label();
+            this.label9 = new System.Windows.Forms.Label();
+            this.btn_volver = new System.Windows.Forms.Button();
             this.Usuario_ID = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.Usuario_Password = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.Usuario_Nombre = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.Apellido = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.Tipo_Doc = new System.Windows.Forms.DataGridViewTextBoxColumn();
@@ -61,9 +63,6 @@
             this.Usuario_Mail = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.Estado = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.Falla_Log = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.label8 = new System.Windows.Forms.Label();
-            this.label9 = new System.Windows.Forms.Label();
-            this.btn_volver = new System.Windows.Forms.Button();
             this.groupBox1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dgv_Usuarios)).BeginInit();
             this.SuspendLayout();
@@ -265,7 +264,6 @@
             this.dgv_Usuarios.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             this.dgv_Usuarios.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
             this.Usuario_ID,
-            this.Usuario_Password,
             this.Usuario_Nombre,
             this.Apellido,
             this.Tipo_Doc,
@@ -281,18 +279,43 @@
             this.dgv_Usuarios.Size = new System.Drawing.Size(519, 244);
             this.dgv_Usuarios.TabIndex = 2;
             this.dgv_Usuarios.CellClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dgv_Usuarios_CellClick);
+
+            // 
+            // label8
+            // 
+            this.label8.AutoSize = true;
+            this.label8.Font = new System.Drawing.Font("Calibri", 8F);
+            this.label8.Location = new System.Drawing.Point(22, 28);
+            this.label8.Name = "label8";
+            this.label8.Size = new System.Drawing.Size(69, 13);
+            this.label8.TabIndex = 4;
+            this.label8.Text = "FRBA Hoteles";
+            // 
+            // label9
+            // 
+            this.label9.AutoSize = true;
+            this.label9.Font = new System.Drawing.Font("Calibri", 12F);
+            this.label9.Location = new System.Drawing.Point(12, 9);
+            this.label9.Name = "label9";
+            this.label9.Size = new System.Drawing.Size(97, 19);
+            this.label9.TabIndex = 5;
+            this.label9.Text = "FOUR SIZONS";
+            // 
+            // btn_volver
+            // 
+            this.btn_volver.Location = new System.Drawing.Point(569, 404);
+            this.btn_volver.Name = "btn_volver";
+            this.btn_volver.Size = new System.Drawing.Size(89, 23);
+            this.btn_volver.TabIndex = 11;
+            this.btn_volver.Text = "Volver";
+            this.btn_volver.UseVisualStyleBackColor = true;
+            this.btn_volver.Click += new System.EventHandler(this.btn_volver_Click);
             // 
             // Usuario_ID
             // 
             this.Usuario_ID.HeaderText = "Usuario_ID";
             this.Usuario_ID.Name = "Usuario_ID";
             this.Usuario_ID.ReadOnly = true;
-            // 
-            // Usuario_Password
-            // 
-            this.Usuario_Password.HeaderText = "Password";
-            this.Usuario_Password.Name = "Usuario_Password";
-            this.Usuario_Password.ReadOnly = true;
             // 
             // Usuario_Nombre
             // 
@@ -354,36 +377,6 @@
             this.Falla_Log.Name = "Falla_Log";
             this.Falla_Log.ReadOnly = true;
             // 
-            // label8
-            // 
-            this.label8.AutoSize = true;
-            this.label8.Font = new System.Drawing.Font("Calibri", 8F);
-            this.label8.Location = new System.Drawing.Point(22, 28);
-            this.label8.Name = "label8";
-            this.label8.Size = new System.Drawing.Size(69, 13);
-            this.label8.TabIndex = 4;
-            this.label8.Text = "FRBA Hoteles";
-            // 
-            // label9
-            // 
-            this.label9.AutoSize = true;
-            this.label9.Font = new System.Drawing.Font("Calibri", 12F);
-            this.label9.Location = new System.Drawing.Point(12, 9);
-            this.label9.Name = "label9";
-            this.label9.Size = new System.Drawing.Size(97, 19);
-            this.label9.TabIndex = 5;
-            this.label9.Text = "FOUR SIZONS";
-            // 
-            // btn_volver
-            // 
-            this.btn_volver.Location = new System.Drawing.Point(569, 404);
-            this.btn_volver.Name = "btn_volver";
-            this.btn_volver.Size = new System.Drawing.Size(89, 23);
-            this.btn_volver.TabIndex = 11;
-            this.btn_volver.Text = "Volver";
-            this.btn_volver.UseVisualStyleBackColor = true;
-            this.btn_volver.Click += new System.EventHandler(this.btn_volver_Click);
-            // 
             // ABMUsuario01
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -422,18 +415,6 @@
         private System.Windows.Forms.Button boton_baja;
         private System.Windows.Forms.Button boton_modificacion;
         private System.Windows.Forms.DataGridView dgv_Usuarios;
-        private System.Windows.Forms.DataGridViewTextBoxColumn Usuario_ID;
-        private System.Windows.Forms.DataGridViewTextBoxColumn Usuario_Password;
-        private System.Windows.Forms.DataGridViewTextBoxColumn Usuario_Nombre;
-        private System.Windows.Forms.DataGridViewTextBoxColumn Apellido;
-        private System.Windows.Forms.DataGridViewTextBoxColumn Tipo_Doc;
-        private System.Windows.Forms.DataGridViewTextBoxColumn Nro_Doc;
-        private System.Windows.Forms.DataGridViewTextBoxColumn Telefono;
-        private System.Windows.Forms.DataGridViewTextBoxColumn Direccion;
-        private System.Windows.Forms.DataGridViewTextBoxColumn Fec_Nac;
-        private System.Windows.Forms.DataGridViewTextBoxColumn Usuario_Mail;
-        private System.Windows.Forms.DataGridViewTextBoxColumn Estado;
-        private System.Windows.Forms.DataGridViewTextBoxColumn Falla_Log;
         private System.Windows.Forms.Label label2;
         private System.Windows.Forms.Label label3;
         private System.Windows.Forms.Label label4;
@@ -447,5 +428,16 @@
         private System.Windows.Forms.Button btn_volver;
         private System.Windows.Forms.ComboBox cb_tipodoc;
         private System.Windows.Forms.Button btn_promptUsu;
+        private System.Windows.Forms.DataGridViewTextBoxColumn Usuario_ID;
+        private System.Windows.Forms.DataGridViewTextBoxColumn Usuario_Nombre;
+        private System.Windows.Forms.DataGridViewTextBoxColumn Apellido;
+        private System.Windows.Forms.DataGridViewTextBoxColumn Tipo_Doc;
+        private System.Windows.Forms.DataGridViewTextBoxColumn Nro_Doc;
+        private System.Windows.Forms.DataGridViewTextBoxColumn Telefono;
+        private System.Windows.Forms.DataGridViewTextBoxColumn Direccion;
+        private System.Windows.Forms.DataGridViewTextBoxColumn Fec_Nac;
+        private System.Windows.Forms.DataGridViewTextBoxColumn Usuario_Mail;
+        private System.Windows.Forms.DataGridViewTextBoxColumn Estado;
+        private System.Windows.Forms.DataGridViewTextBoxColumn Falla_Log;
     }
 }
