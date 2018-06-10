@@ -49,9 +49,6 @@
             this.boton_baja = new System.Windows.Forms.Button();
             this.boton_modificacion = new System.Windows.Forms.Button();
             this.dgv_Usuarios = new System.Windows.Forms.DataGridView();
-            this.label8 = new System.Windows.Forms.Label();
-            this.label9 = new System.Windows.Forms.Label();
-            this.btn_volver = new System.Windows.Forms.Button();
             this.Usuario_ID = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.Usuario_Nombre = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.Apellido = new System.Windows.Forms.DataGridViewTextBoxColumn();
@@ -63,6 +60,9 @@
             this.Usuario_Mail = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.Estado = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.Falla_Log = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.label8 = new System.Windows.Forms.Label();
+            this.label9 = new System.Windows.Forms.Label();
+            this.btn_volver = new System.Windows.Forms.Button();
             this.groupBox1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dgv_Usuarios)).BeginInit();
             this.SuspendLayout();
@@ -100,6 +100,7 @@
             this.groupBox1.TabIndex = 1;
             this.groupBox1.TabStop = false;
             this.groupBox1.Text = "Filtros de Búsqueda";
+            this.groupBox1.Enter += new System.EventHandler(this.groupBox1_Enter);
             // 
             // btn_promptUsu
             // 
@@ -175,9 +176,9 @@
             // 
             // btn_limpiar
             // 
-            this.btn_limpiar.Location = new System.Drawing.Point(558, 51);
+            this.btn_limpiar.Location = new System.Drawing.Point(544, 61);
             this.btn_limpiar.Name = "btn_limpiar";
-            this.btn_limpiar.Size = new System.Drawing.Size(75, 23);
+            this.btn_limpiar.Size = new System.Drawing.Size(89, 23);
             this.btn_limpiar.TabIndex = 7;
             this.btn_limpiar.Text = "Limpiar";
             this.btn_limpiar.UseVisualStyleBackColor = true;
@@ -185,9 +186,9 @@
             // 
             // btn_buscar
             // 
-            this.btn_buscar.Location = new System.Drawing.Point(558, 22);
+            this.btn_buscar.Location = new System.Drawing.Point(544, 32);
             this.btn_buscar.Name = "btn_buscar";
-            this.btn_buscar.Size = new System.Drawing.Size(75, 23);
+            this.btn_buscar.Size = new System.Drawing.Size(89, 23);
             this.btn_buscar.TabIndex = 6;
             this.btn_buscar.Text = "Buscar";
             this.btn_buscar.UseVisualStyleBackColor = true;
@@ -279,37 +280,6 @@
             this.dgv_Usuarios.Size = new System.Drawing.Size(519, 244);
             this.dgv_Usuarios.TabIndex = 2;
             this.dgv_Usuarios.CellClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dgv_Usuarios_CellClick);
-
-            // 
-            // label8
-            // 
-            this.label8.AutoSize = true;
-            this.label8.Font = new System.Drawing.Font("Calibri", 8F);
-            this.label8.Location = new System.Drawing.Point(22, 28);
-            this.label8.Name = "label8";
-            this.label8.Size = new System.Drawing.Size(69, 13);
-            this.label8.TabIndex = 4;
-            this.label8.Text = "FRBA Hoteles";
-            // 
-            // label9
-            // 
-            this.label9.AutoSize = true;
-            this.label9.Font = new System.Drawing.Font("Calibri", 12F);
-            this.label9.Location = new System.Drawing.Point(12, 9);
-            this.label9.Name = "label9";
-            this.label9.Size = new System.Drawing.Size(97, 19);
-            this.label9.TabIndex = 5;
-            this.label9.Text = "FOUR SIZONS";
-            // 
-            // btn_volver
-            // 
-            this.btn_volver.Location = new System.Drawing.Point(569, 404);
-            this.btn_volver.Name = "btn_volver";
-            this.btn_volver.Size = new System.Drawing.Size(89, 23);
-            this.btn_volver.TabIndex = 11;
-            this.btn_volver.Text = "Volver";
-            this.btn_volver.UseVisualStyleBackColor = true;
-            this.btn_volver.Click += new System.EventHandler(this.btn_volver_Click);
             // 
             // Usuario_ID
             // 
@@ -376,6 +346,36 @@
             this.Falla_Log.HeaderText = "Intentos de Acceso Erroneos";
             this.Falla_Log.Name = "Falla_Log";
             this.Falla_Log.ReadOnly = true;
+            // 
+            // label8
+            // 
+            this.label8.AutoSize = true;
+            this.label8.Font = new System.Drawing.Font("Calibri", 8F);
+            this.label8.Location = new System.Drawing.Point(22, 28);
+            this.label8.Name = "label8";
+            this.label8.Size = new System.Drawing.Size(69, 13);
+            this.label8.TabIndex = 4;
+            this.label8.Text = "FRBA Hoteles";
+            // 
+            // label9
+            // 
+            this.label9.AutoSize = true;
+            this.label9.Font = new System.Drawing.Font("Calibri", 12F);
+            this.label9.Location = new System.Drawing.Point(12, 9);
+            this.label9.Name = "label9";
+            this.label9.Size = new System.Drawing.Size(97, 19);
+            this.label9.TabIndex = 5;
+            this.label9.Text = "FOUR SIZONS";
+            // 
+            // btn_volver
+            // 
+            this.btn_volver.Location = new System.Drawing.Point(569, 404);
+            this.btn_volver.Name = "btn_volver";
+            this.btn_volver.Size = new System.Drawing.Size(89, 23);
+            this.btn_volver.TabIndex = 11;
+            this.btn_volver.Text = "Volver";
+            this.btn_volver.UseVisualStyleBackColor = true;
+            this.btn_volver.Click += new System.EventHandler(this.btn_volver_Click);
             // 
             // ABMUsuario01
             // 

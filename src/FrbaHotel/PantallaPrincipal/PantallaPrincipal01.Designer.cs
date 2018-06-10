@@ -137,6 +137,7 @@
             this.btn_hoteles.TabIndex = 0;
             this.btn_hoteles.Text = "ABM de Hoteles";
             this.btn_hoteles.UseVisualStyleBackColor = true;
+            this.btn_hoteles.Click += new System.EventHandler(this.btn_hoteles_Click);
             // 
             // btn_clientes
             // 
@@ -165,6 +166,7 @@
             this.btn_roles.TabIndex = 0;
             this.btn_roles.Text = "ABM de Roles";
             this.btn_roles.UseVisualStyleBackColor = true;
+            this.btn_roles.Click += new System.EventHandler(this.btn_roles_Click);
             // 
             // label5
             // 

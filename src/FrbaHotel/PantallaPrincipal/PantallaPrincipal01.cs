@@ -8,6 +8,8 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using FrbaHotel.ABMUsuario;
+using FrbaHotel.ABMRol;
+using FrbaHotel.ABMHotel;
 
 namespace FrbaHotel.PantallaPrincipal
 {
@@ -29,6 +31,22 @@ namespace FrbaHotel.PantallaPrincipal
             this.Hide();
             ABMUsuario01 formABMUsuario01 = new ABMUsuario01();
             formABMUsuario01.ShowDialog();
+            this.Show();
+        }
+
+        private void btn_roles_Click(object sender, EventArgs e)
+        {
+            this.Hide();
+            ABMRol01 formABMRol01 = new ABMRol01();
+            formABMRol01.ShowDialog();
+            this.Show();
+        }
+
+        private void btn_hoteles_Click(object sender, EventArgs e)
+        {
+            this.Hide();
+            ABMHotel01 formABMHotel01 = new ABMHotel01();
+            formABMHotel01.ShowDialog();
             this.Show();
         }
     }

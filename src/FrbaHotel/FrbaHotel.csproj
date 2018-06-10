@@ -56,17 +56,35 @@
     <Compile Include="ABMHabitacion\Form1.Designer.cs">
       <DependentUpon>Form1.cs</DependentUpon>
     </Compile>
+    <Compile Include="ABMHotel\ABMHotel01.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="ABMHotel\ABMHotel01.Designer.cs">
+      <DependentUpon>ABMHotel01.cs</DependentUpon>
+    </Compile>
+    <Compile Include="ABMHotel\ABMHotel02.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="ABMHotel\ABMHotel02.Designer.cs">
+      <DependentUpon>ABMHotel02.cs</DependentUpon>
+    </Compile>
     <Compile Include="ABMRegimen\Form1.cs">
       <SubType>Form</SubType>
     </Compile>
     <Compile Include="ABMRegimen\Form1.Designer.cs">
       <DependentUpon>Form1.cs</DependentUpon>
     </Compile>
-    <Compile Include="ABMRol\Form1.cs">
+    <Compile Include="ABMRol\ABMRol01.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="ABMRol\Form1.Designer.cs">
-      <DependentUpon>Form1.cs</DependentUpon>
+    <Compile Include="ABMRol\ABMRol01.Designer.cs">
+      <DependentUpon>ABMRol01.cs</DependentUpon>
+    </Compile>
+    <Compile Include="ABMRol\ABMRol02.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="ABMRol\ABMRol02.Designer.cs">
+      <DependentUpon>ABMRol02.cs</DependentUpon>
     </Compile>
     <Compile Include="ABMUsuario\ABMUsuario02.cs">
       <SubType>Form</SubType>
@@ -135,6 +153,18 @@
     </Compile>
     <EmbeddedResource Include="ABMCliente\ABMCliente01.resx">
       <DependentUpon>ABMCliente01.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="ABMHotel\ABMHotel01.resx">
+      <DependentUpon>ABMHotel01.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="ABMHotel\ABMHotel02.resx">
+      <DependentUpon>ABMHotel02.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="ABMRol\ABMRol01.resx">
+      <DependentUpon>ABMRol01.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="ABMRol\ABMRol02.resx">
+      <DependentUpon>ABMRol02.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="ABMUsuario\ABMUsuario01.resx">
       <DependentUpon>ABMUsuario01.cs</DependentUpon>
