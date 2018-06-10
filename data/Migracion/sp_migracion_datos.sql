@@ -385,11 +385,13 @@ BEGIN
 			Usuario_ID nvarchar(15),
 			Hotel_Codigo numeric(18),
 			Cliente_Codigo numeric(18),
-			Reserva_Estado bit,
+			Regimen_Codigo numeric(18),
+			Reserva_Estado decimal(1),
 
 			CONSTRAINT FK_Reserva_1 FOREIGN KEY (Usuario_ID) REFERENCES FOUR_SIZONS.Usuario(Usuario_ID),
 			CONSTRAINT FK_Reserva_2 FOREIGN KEY (Hotel_Codigo) REFERENCES FOUR_SIZONS.Hotel(Hotel_Codigo),
 			CONSTRAINT FK_Reserva_3 FOREIGN KEY (Cliente_Codigo) REFERENCES FOUR_SIZONS.Cliente(Cliente_Codigo),
+			CONSTRAINT FK_Reserva_4 FOREIGN KEY (Regimen_Codigo) REFERENCES FOUR_SIZONS.Regimen(Regimen_Codigo),
 
 			CONSTRAINT PK_Reserva PRIMARY KEY (Reserva_Codigo)
 		)		
@@ -1038,16 +1040,17 @@ create procedure four_sizons.AltaHotel
 @calle nvarchar(50),
 @numCalle numeric(18),
 @cantEstrellas numeric(18),
+@recarga_estrella numeric(5),
 @ciudad nvarchar(50),
 @pais nvarchar(50),
 @fechaCreacion datetime
 
 as begin try
-begin tran 
+begin tran
 
 insert into FOUR_SIZONS.Hotel(Hotel_Nombre,Hotel_Mail,Hotel_Telefono,Hotel_Calle,Hotel_Nro_Calle,
-					Hotel_CantEstrella,Hotel_Ciudad,Hotel_Pais,Hotel_FechaCreacion,Hotel_Estado)
-					values (@nombre,@mail,@telefono,@calle,@numCalle,@cantEstrellas,@ciudad,@pais,@fechaCreacion,1)
+					Hotel_CantEstrella,Hotel_Recarga_Estrella, Hotel_Ciudad,Hotel_Pais,Hotel_FechaCreacion,Hotel_Estado)
+					values (@nombre,@mail,@telefono,@calle,@numCalle,@cantEstrellas,@recarga_estrella,@ciudad,@pais,@fechaCreacion,1)
 
 commit tran 
 end try
@@ -1086,27 +1089,27 @@ rollback tran
 end catch 
 go
 
-
 create procedure four_sizons.modificarHotel
+@codigo nvarchar(50),
 @nombre nvarchar(50),
 @mail nvarchar(50),
 @telefono nvarchar(50),
 @calle nvarchar(50),
 @numCalle numeric(18),
 @cantEstrellas numeric(18),
+@recarga_estrella numeric(5),
 @ciudad nvarchar(50),
 @pais nvarchar(50),
 @fechaCreacion datetime,
-@estado bit,
-@codigo nvarchar(50)
+@estado bit
 
 as 
 begin tran 
 begin try
 update FOUR_SIZONS.Hotel
 set Hotel_Nombre= @nombre,Hotel_Mail= @mail,Hotel_Telefono=@telefono,Hotel_Calle=@calle ,
-	Hotel_Nro_Calle=@numCalle,Hotel_CantEstrella=@cantEstrellas,Hotel_Ciudad=@ciudad,
-	Hotel_Pais=@pais,Hotel_FechaCreacion=@fechaCreacion,Hotel_Estado=@estado
+	Hotel_Nro_Calle=@numCalle,Hotel_CantEstrella=@cantEstrellas,Hotel_Recarga_Estrella=@recarga_estrella,
+	Hotel_Ciudad=@ciudad,Hotel_Pais=@pais,Hotel_FechaCreacion=@fechaCreacion,Hotel_Estado=@estado
 
 	where Hotel_Codigo=@codigo
 commit tran 
