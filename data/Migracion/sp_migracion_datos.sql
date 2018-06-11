@@ -85,10 +85,7 @@ BEGIN
 		DROP TABLE FOUR_SIZONS.Tarjeta
 	END
 
-	IF (OBJECT_ID('FOUR_SIZONS.Regimen', 'U') IS NOT NULL)
-	BEGIN
-		DROP TABLE FOUR_SIZONS.Regimen
-	END
+	
 
 	IF (OBJECT_ID('FOUR_SIZONS.Funcionalidad', 'U') IS NOT NULL)
 	BEGIN
@@ -129,7 +126,10 @@ BEGIN
 	BEGIN
 		DROP TABLE FOUR_SIZONS.Reserva
 	END
-
+IF (OBJECT_ID('FOUR_SIZONS.Regimen', 'U') IS NOT NULL)
+	BEGIN
+		DROP TABLE FOUR_SIZONS.Regimen
+	END
 	IF (OBJECT_ID('FOUR_SIZONS.Usuario', 'U') IS NOT NULL)
 	BEGIN
 		DROP TABLE FOUR_SIZONS.Usuario
@@ -323,7 +323,7 @@ BEGIN
 			Habitacion_Numero numeric(18),
 			Hotel_Codigo numeric(18),
 			Habitacion_Piso numeric(18),
-			Habitacion_Descripcion nvarchar(255),
+			--Habitacion_Descripcion nvarchar(255),
 			Habitacion_Frente nvarchar(50),
 			Habitacion_Tipo_Codigo numeric(18),  
 			Habitacion_Estado bit,
@@ -599,8 +599,8 @@ BEGIN
 
 	-- Habitaciones
 	INSERT INTO FOUR_SIZONS.Habitacion (Habitacion_Numero, Hotel_Codigo, Habitacion_Piso, Habitacion_Frente, Habitacion_Tipo_Codigo,
-	Habitacion_Estado, Habitacion_Descripcion) 
-	SELECT DISTINCT M.Habitacion_Numero, H.Hotel_Codigo, M.Habitacion_Piso, M.Habitacion_Frente, M.Habitacion_Tipo_Codigo, 1, ''
+	Habitacion_Estado)--, Habitacion_Descripcion) 
+	SELECT DISTINCT M.Habitacion_Numero, H.Hotel_Codigo, M.Habitacion_Piso, M.Habitacion_Frente, M.Habitacion_Tipo_Codigo, 1
 	FROM GD1C2018.gd_esquema.Maestra AS M
 	JOIN FOUR_SIZONS.Hotel AS H ON H.Hotel_Ciudad = M.Hotel_Ciudad and H.Hotel_Nro_Calle = M.Hotel_Nro_Calle
 	ORDER BY M.Habitacion_Numero, H.Hotel_Codigo
@@ -696,7 +696,15 @@ BEGIN
 	WHERE Factura_Nro IS NOT NULL
 	ORDER BY M.Factura_Nro
 
-	
+	alter table four_sizons.habitacion
+	add habitacion_descripcion nvarchar(255)
+
+	alter table four_sizons.cliente
+	add cliente_localidad nvarchar(50)
+
+	alter table four_sizons.Habitacion_tipoXreser
+	add habTipoXRes_cantHab numeric(18)
+
 END
 go
 -------------------------------------------------------Comienzo de procedures--------------------------------------------------------------
@@ -772,7 +780,24 @@ IF (OBJECT_ID('FOUR_SIZONS.modificarHabitacion', 'P') IS NOT NULL)
 BEGIN
     DROP PROCEDURE FOUR_SIZONS.modificarHabitacion
 END;
+
+IF (OBJECT_ID('FOUR_SIZONS.GenerarReserva', 'P') IS NOT NULL)
+BEGIN
+    DROP PROCEDURE FOUR_SIZONS.GenerarReserva
+END;
+
+IF (OBJECT_ID('FOUR_SIZONS.modificarReserva', 'P') IS NOT NULL)
+BEGIN
+    DROP PROCEDURE FOUR_SIZONS.modificarReserva
+END;
+
+IF (OBJECT_ID('FOUR_SIZONS.altaTipoHabXRes', 'P') IS NOT NULL)
+BEGIN
+    DROP PROCEDURE FOUR_SIZONS.altaTipoHabXRes
+END;
 GO
+
+
 --------------------------------------------------------ABM USUARIO------------------------------
 create procedure FOUR_SIZONS.ValidarUsuario
 @usuario nvarchar(15), 
@@ -836,7 +861,6 @@ begin try
 	end
 end try
 begin catch
-	--select ERROR_MESSAGE () as mensaje_de_error;
 	declare @mensaje_de_error nvarchar(255)
 	set @mensaje_de_error = ERROR_MESSAGE()
 	RAISERROR(@mensaje_de_error,11,1)
@@ -856,7 +880,6 @@ create procedure FOUR_SIZONS.AltaUsuario
 	@telefono nvarchar(18),
 	@direccion nvarchar(255),
 	@fechaNac datetime
-	--@hotelNombre nvarchar(50) hice un proc a parte para hotel
 
 	AS
 	BEGIN try
@@ -866,17 +889,14 @@ create procedure FOUR_SIZONS.AltaUsuario
 	declare @rolId numeric(18)
 	
 	set @rolId= (select Rol_codigo from FOUR_SIZONS.rol where @rolNombre = rol_nombre)
-	--set @hotelId = (select hotel_codigo from FOUR_SIZONS.hotel where @hotelNombre = hotel_nombre)
 	 
 	insert into FOUR_SIZONS.usuario(Usuario_ID,Usuario_Password,Usuario_Nombre,Usuario_Apellido,Usuario_TipoDoc, Usuario_NroDoc,Usuario_Telefono,Usuario_Direccion,Usuario_Fec_Nac,Usuario_Mail, Usuario_Estado , Usuario_FallaLog)
 							values(@username,@password,@nombre,@apellido,@tipoDoc,@numDoc,@telefono,@direccion,@fechaNac,@mail,1,0)
 
-	--insert into FOUR_SIZONS.UsuarioXHotel(Hotel_Codigo,Usuario_ID,UsuarioXHotel_Estado) values (@hotelId,@username,1)
 	insert into FOUR_SIZONS.UsuarioXRol(Rol_Codigo,Usuario_ID,UsuarioXRol_Estado) values (@rolId, @username,1)
 	commit tran 
 end try
 begin catch
-	--select ERROR_MESSAGE () as mensaje_de_error;
 	declare @mensaje_de_error nvarchar(255)
 	set @mensaje_de_error = ERROR_MESSAGE()
 	RAISERROR(@mensaje_de_error,11,1)
@@ -928,7 +948,6 @@ create procedure FOUR_SIZONS.ModificacionUsuario
 	@telefono nvarchar(18),
 	@direccion nvarchar(255),
 	@fechaNac datetime,
-	--@hotelNombre nvarchar(50), lo saco porque hice un proc a parte para dar de alta al usuario en los distintos hoteles
 	@estado bit
 
 	as begin tran
@@ -970,14 +989,13 @@ create procedure FOUR_SIZONS.ModificacionUsuario
 	commit tran 
 end try
 begin catch
-	--select ERROR_MESSAGE () as mensaje_de_error;
 	declare @mensaje_de_error nvarchar(255)
 	set @mensaje_de_error = ERROR_MESSAGE()
 	RAISERROR(@mensaje_de_error,11,1)
 	rollback tran 
 end catch
 go
--- la baja de un usuario no la hago, ya que en la modificacion se puede hacer directamente cambiandole el estado a 0
+
 ------------------------------------------------ABM CLIENTE------------------------------------------------------------
 create procedure four_sizons.AltaCliente
 @nombre nvarchar(50),
@@ -990,7 +1008,7 @@ create procedure four_sizons.AltaCliente
 @numCalle numeric(18),
 @piso numeric(18),
 @depto nvarchar(18),
---@localidad nvarchar(50),
+@localidad nvarchar(50),
 @nacionalidad nvarchar(50),
 @fechaNac datetime
 
@@ -999,14 +1017,14 @@ begin tran
 
 if(not exists (select cliente_codigo from cliente where @mail = Cliente_Mail))
 insert into four_sizons.Cliente(Cliente_Nombre ,cliente_Apellido,cliente_TipoDoc, Cliente_NumDoc,Cliente_Dom_Calle,Cliente_Nro_Calle
-								,Cliente_Piso,Cliente_Depto /*,cliente_localidad*/,Cliente_Mail,Cliente_Nacionalidad,Cliente_Fecha_Nac,Cliente_Puntos,Cliente_Estado,Cliente_Consistente)
-								values (@nombre,@apellido,@tipoDoc,@numDoc,@calle,@numCalle,@piso,@depto,/*@localidad,*/ @mail,@nacionalidad,@fechaNac,0,1,1)
+								,Cliente_Piso,Cliente_Depto,cliente_localidad,Cliente_Mail,Cliente_Nacionalidad,Cliente_Fecha_Nac,Cliente_Puntos,Cliente_Estado,Cliente_Consistente)
+								values (@nombre,@apellido,@tipoDoc,@numDoc,@calle,@numCalle,@piso,@depto,@localidad, @mail,@nacionalidad,@fechaNac,0,1,1)
 else 
 PRINT N'el mail ingresado ya figura en el sistema, ingrese otro por favor';
 commit tran 
 end try
 begin catch
-	--select ERROR_MESSAGE () as mensaje_de_error;
+	
 	declare @mensaje_de_error nvarchar(255)
 	set @mensaje_de_error = ERROR_MESSAGE()
 	RAISERROR(@mensaje_de_error,11,1)
@@ -1025,7 +1043,7 @@ create procedure four_sizons.modificacionCliente
 @numCalle numeric(18),
 @piso numeric(18),
 @depto nvarchar(18),
---@localidad nvarchar(50),
+@localidad nvarchar(50),
 @nacionalidad nvarchar(50),
 @fechaNac datetime,
 @estado bit,
@@ -1039,7 +1057,7 @@ if (not exists (select Cliente_codigo from cliente where Cliente_Codigo!=@codigo
 update FOUR_SIZONS.Cliente
 set Cliente_Nombre=@nombre ,cliente_Apellido=@apellido,cliente_TipoDoc=@tipoDoc, Cliente_NumDoc = @numDoc,
 		Cliente_Dom_Calle=@calle,Cliente_Nro_Calle=@numCalle,Cliente_Piso=@piso,Cliente_Depto=@depto
-		 /*,cliente_localidad=@localidad*/,Cliente_Mail=@mail,Cliente_Nacionalidad=@nacionalidad,
+		 ,cliente_localidad=@localidad,Cliente_Mail=@mail,Cliente_Nacionalidad=@nacionalidad,
 		 Cliente_Fecha_Nac=@fechaNac,Cliente_Estado=@estado
 
 	where Cliente_Codigo = @codigo
@@ -1048,14 +1066,13 @@ else print N'el mail ingresado ya figura en el sistema, ingrese otro por favor'
 commit tran 
 end try
 begin catch
-	--select ERROR_MESSAGE () as mensaje_de_error;
 	declare @mensaje_de_error nvarchar(255)
 	set @mensaje_de_error = ERROR_MESSAGE()
 	RAISERROR(@mensaje_de_error,11,1)
 	rollback tran 
 end catch
 go
--- la localidad deberiamos agregarla, xq se carga en el momento de hacer el alta de cliente
+
 
 -------------------------------------------------ABM HOTEL------------------------------------------------------------------------
 create procedure four_sizons.AltaHotel
@@ -1080,7 +1097,7 @@ insert into FOUR_SIZONS.Hotel(Hotel_Nombre,Hotel_Mail,Hotel_Telefono,Hotel_Calle
 commit tran 
 end try
 begin catch
-	--select ERROR_MESSAGE () as mensaje_de_error;
+	
 	declare @mensaje_de_error nvarchar(255)
 	set @mensaje_de_error = ERROR_MESSAGE()
 	RAISERROR(@mensaje_de_error,11,1)
@@ -1116,6 +1133,8 @@ declare @mensaje_de_error nvarchar(255)
 end catch 
 go
 
+-- faltaria poder modificar el regXhotel, para poder darle de baja (seria igual al de userXhotel)
+
 create procedure four_sizons.modificarHotel
 @codigo nvarchar(50),
 @nombre nvarchar(50),
@@ -1142,7 +1161,6 @@ set Hotel_Nombre= @nombre,Hotel_Mail= @mail,Hotel_Telefono=@telefono,Hotel_Calle
 commit tran 
 end try
 begin catch
-	--select ERROR_MESSAGE () as mensaje_de_error;
 	declare @mensaje_de_error nvarchar(255)
 	set @mensaje_de_error = ERROR_MESSAGE()
 	RAISERROR(@mensaje_de_error,11,1)
@@ -1151,7 +1169,7 @@ end catch
 go
 
 ------------------------------------------------ABM ROL---------------------------------------------------------------------------
-Go
+
 create proc FOUR_SIZONS.InsertarRol
 		
 		@rolname nvarchar(50),
@@ -1263,20 +1281,25 @@ go
 
 create procedure four_sizons.modificarHabitacion
 @numero numeric(18),
-@piso numeric(18),
-@ubicacion nvarchar(50),
+/*@piso numeric(18),
+@ubicacion nvarchar(50),*/ -- ¿para que vas a cambiar el piso y la ubicacion de la habitacion en el hotel?
 @estado bit,
-@descripcion nvarchar(255)
+@descripcion nvarchar(255),
+@hotel nvarchar(50)
 
 as 
 begin tran 
 begin try
 
+declare @hotId numeric(18) = (select Hotel_Codigo from FOUR_SIZONS.Hotel where Hotel_Nombre = @hotel )
+
 update FOUR_SIZONS.Habitacion
 
-set Habitacion_Piso= @piso,Habitacion_Frente=@ubicacion,Habitacion_Estado=@estado,Habitacion_Descripcion=@descripcion
+set /*Habitacion_Piso= @piso,Habitacion_Frente=@ubicacion,*/Habitacion_Estado=@estado,Habitacion_Descripcion=@descripcion
 	
-	where Habitacion_Numero=@numero
+	where Habitacion_Numero=@numero and Hotel_Codigo= @hotId
+
+
 commit tran 
 end try
 begin catch
@@ -1289,3 +1312,107 @@ go
 --------------------------------------------------ABM REGIMEN DE ESTADIA---------------------------------------------------
 
 --------------------------------------------------DICE QUE NO HAY QUE DESARROLLARLO----------------------------------
+
+create procedure four_sizons.GenerarReserva
+@fechaReserva datetime,
+@fechaInicio datetime,
+@fechaFin datetime,
+@regimen nvarchar(50),
+@hotel nvarchar(50),
+@clienteCodigo numeric(18)
+
+as begin tran
+begin try
+
+declare @regId numeric(18)
+declare @hotId numeric(18)
+
+set @regId = (select Regimen_Codigo from FOUR_SIZONS.Regimen where Regimen_Descripcion= @regimen)
+set @hotId = (select Hotel_Codigo from FOUR_SIZONS.Hotel where Hotel_Nombre= @hotel)
+
+insert into FOUR_SIZONS.Reserva(Reserva_FechaCreacion , Reserva_Fecha_Inicio, Reserva_Fecha_Fin,Regimen_Codigo,Reserva_Codigo,Hotel_Codigo,Cliente_Codigo)
+						values(@fechaReserva, @fechaInicio , @fechaFin , @regId,1,@hotId,@clienteCodigo)
+
+commit tran 
+end try
+
+begin catch
+declare @mensaje_de_error nvarchar(255)
+	set @mensaje_de_error = ERROR_MESSAGE()
+	RAISERROR(@mensaje_de_error,11,1)
+rollback tran
+end catch
+
+
+go
+
+
+create procedure four_sizons.ModificarReserva
+@fechaCambio datetime,
+@fechaInicio datetime,
+@fechaFin datetime,
+@regimen nvarchar(50),
+@codigoReserva numeric(18),
+@estado numeric(1),
+@hotel nvarchar (50),
+@detalle nvarchar (255),
+@username nvarchar(15)
+
+as begin tran
+begin try 
+
+declare @regId numeric(18)
+declare @hotId numeric(18)
+
+set @regId = (select Regimen_Codigo from FOUR_SIZONS.Regimen where Regimen_Descripcion= @regimen)
+set @hotId = (select Hotel_Codigo from FOUR_SIZONS.Hotel where Hotel_Nombre= @hotel)
+
+update FOUR_SIZONS.Reserva
+	set Reserva_Fecha_Inicio= @fechaInicio,
+	Reserva_Fecha_Fin = @fechaFin,
+	Regimen_Codigo = @regId,
+	Reserva_Estado = @estado,
+	Hotel_Codigo = @hotId
+
+	where Reserva_Codigo = @codigoReserva
+
+insert into FOUR_SIZONS.ReservaMod (Reserva_Codigo,Usuario_ID, ResMod_Detalle,ResMod_Fecha)
+			               values (@codigoReserva,@username,@detalle,@fechaCambio)
+
+commit tran
+end try
+begin catch
+	declare @mensaje_de_error nvarchar(255)
+	set @mensaje_de_error = ERROR_MESSAGE()
+	RAISERROR(@mensaje_de_error,11,1)
+	rollback tran 
+end catch
+go
+-- la cancelacion la hago aca tambien
+
+
+create procedure four_sizons.altaTipoHabXRes
+@tipoHab nvarchar(50),
+@cantHab numeric(18),
+@reservaCodigo numeric(18)
+
+as begin tran 
+begin try
+
+declare @tipoHabCodigo numeric(18)
+
+set @tipoHabCodigo = (select Habitacion_Tipo_Codigo from FOUR_SIZONS.Habitacion_Tipo where Habitacion_Tipo_Descripcion=@tipoHab)
+insert into FOUR_SIZONS.Habitacion_TipoXReser (Habitacion_Tipo_Codigo,habTipoXRes_cantHab,Reserva_Codigo)
+										values(@tipoHabCodigo, @cantHab , @reservaCodigo)
+
+commit tran
+end try
+begin catch
+	declare @mensaje_de_error nvarchar(255)
+	set @mensaje_de_error = ERROR_MESSAGE()
+	RAISERROR(@mensaje_de_error,11,1)
+	rollback tran 
+end catch
+go
+
+-- esta incompleto, hay que ver lo del precio y otras cosas, como una funcion para buscar clientes
