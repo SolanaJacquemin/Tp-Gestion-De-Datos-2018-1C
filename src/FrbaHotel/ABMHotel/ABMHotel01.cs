@@ -63,12 +63,12 @@ namespace FrbaHotel.ABMHotel
 
         private void refrescarGrid()
         {
-            /*dgv_Hoteles.ClearSelection();
+            dgv_Hoteles.ClearSelection();
             foreach (DataGridViewRow row in dgv_Hoteles.Rows)
-                if (Convert.ToBoolean(row.Cells[9].Value) == false)
+                if (Convert.ToBoolean(row.Cells[11].Value) == false)
                 {
                     row.DefaultCellStyle.BackColor = Color.Red;
-                }*/
+                }
         }
 
         private void buscar()

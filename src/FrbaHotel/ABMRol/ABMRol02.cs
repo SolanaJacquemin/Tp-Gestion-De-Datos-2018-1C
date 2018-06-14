@@ -16,6 +16,8 @@ namespace FrbaHotel.ABMRol
         public string nombreSP;
         public string rol;
         public int error;
+        public string func_nombre;
+        public decimal func_codigo;
 
         public ABMRol02(string modo, string rolId)
         {
@@ -30,15 +32,21 @@ namespace FrbaHotel.ABMRol
             {
                 case "INS":
                     labelTitulo.Text = "Alta de Rol";
-
                     break;
                 case "DLT":
                     labelTitulo.Text = "Baja de Rol";
-
+                    txt_nombreRol.ReadOnly = true;
+                    lb_func.Enabled = false;
+                    lb_func_usralta.Enabled = false;
+                    btn_agregar.Enabled = false;
+                    btn_agregarTodo.Enabled = false;
+                    btn_eliminar.Enabled = false;
+                    btn_eliminarTodo.Enabled = false;
+                    btn_aceptar_nuevo.Visible = false;
                     break;
                 case "UPD":
                     labelTitulo.Text = "Modificación de Rol";
-
+                    btn_aceptar_nuevo.Visible = false;
                     break;
             }
         }
@@ -58,26 +66,210 @@ namespace FrbaHotel.ABMRol
                 return;
             }
 
-            
-            string func_nombre = con.lector.GetString(1);
-            //MessageBox.Show(func_nombre);
+            // Se cargan las funcionalidades a una lista de selección
+            func_nombre = con.lector.GetString(1);
             lb_func.Items.Add(func_nombre);
-
-            //lb_func.Items.Add(new Object[] { con.lector.GetDecimal(0), con.lector.GetString(1),
-            //con.lector.GetBoolean(2)});
-            //dgv_Roles.Rows.Add(new Object[] { con.lector.GetDecimal(0), con.lector.GetString(1),
-            //con.lector.GetBoolean(2)});
-
-           
 
             while (con.reader())
             {
-                
-
-              //  lb_func.Items.Add(new Object[] { con.lector.GetDecimal(0), con.lector.GetString(1),
-            //con.lector.GetBoolean(2)});
+                func_nombre = con.lector.GetString(1);
+                lb_func.Items.Add(func_nombre);
             }
             con.closeConection();
+
+
+            if (modoABM != "INS")
+            {
+                
+                con.strQuery = "SELECT * FROM FOUR_SIZONS.Rol WHERE Rol_Codigo = '" + rol + "'";
+                con.executeQuery();
+
+                while (con.reader())
+                {
+                    txt_nombreRol.Text = con.lector.GetString(1);
+                    if (con.lector.GetBoolean(2))
+                    {
+                        txt_estado.Text = "ACTIVO";
+                        txt_estado.BackColor = Color.WhiteSmoke;
+                        txt_estado.ForeColor = Color.Green;
+
+                    }
+                    else
+                    {
+                        txt_estado.Text = "INACTIVO";
+                        txt_estado.BackColor = Color.WhiteSmoke;
+                        txt_estado.ForeColor = Color.Red;
+                    }
+                }
+
+                con.closeConection();
+
+                con.strQuery = "SELECT * FROM FOUR_SIZONS.RolXFunc WHERE Rol_Codigo = '" + rol + "'";
+                con.executeQuery();
+
+                while (con.reader())
+                {
+                    func_codigo = con.lector.GetDecimal(1);
+
+                    Conexion con2 = new Conexion();
+                    con2.strQuery = "SELECT * FROM FOUR_SIZONS.Funcionalidad WHERE Func_Codigo = " + func_codigo;
+
+                    con2.executeQuery();
+                    while (con2.reader())
+                    {
+                        lb_func_usralta.Items.Add(con2.lector.GetString(1));
+                    }
+                    con2.closeConection(); 
+                }
+                con.closeConection();
+            }
+        }
+
+
+        private void btn_agregar_Click(object sender, EventArgs e)
+        {
+            if (lb_func.SelectedItem != null)
+            {
+                lb_func_usralta.Items.Add(lb_func.SelectedItem);
+            }
+            else
+            {
+                MessageBox.Show("No hay ítem seleccionado");
+            }
+        }
+
+
+        private void btn_eliminar_Click(object sender, EventArgs e)
+        {
+
+            if (lb_func.SelectedItem != null)
+            {
+                lb_func_usralta.Items.Remove(lb_func_usralta.SelectedItem);
+            }
+            else
+            {
+                MessageBox.Show("No hay ítem seleccionado");
+            }
+        }
+
+        private void btn_agregarTodo_Click(object sender, EventArgs e)
+        {
+            for (int i = 0; i < lb_func.Items.Count; i++)
+            {
+                lb_func_usralta.Items.Add(lb_func.Items[i].ToString());
+            }
+        }
+
+        private void btn_eliminarTodo_Click(object sender, EventArgs e)
+        {
+            lb_func_usralta.Items.Clear();
+        }
+
+        private void boton_volver_Click(object sender, EventArgs e)
+        {
+            this.Close();
+        }
+
+        private void boton_aceptar_Click(object sender, EventArgs e)
+        {
+            error = 0;
+            switch (modoABM)
+            {
+                case "INS":
+                    nombreSP = "FOUR_SIZONS.InsertarRol";
+                    break;
+            
+                case "UPD":
+                    nombreSP = "FOUR_SIZONS.ModificacionRol";
+                    break;
+
+                case "DLT":
+                    // Baja lógica - Se pone estado en 0
+                    nombreSP = "FOUR_SIZONS.ModificacionRol";
+                    break;
+            }
+            ejecutarABMRol(nombreSP);
+            if (error == 0)
+            {
+                this.Close();
+            }
+        }
+
+        public void ejecutarABMRol(string nombreStored)
+        {
+            if (MessageBox.Show("Está seguro que desea continuar con la operación?", "FOUR SIZONS - FRBA Hoteles", MessageBoxButtons.YesNo, MessageBoxIcon.Question) == DialogResult.Yes)
+            {
+
+                try
+                {
+                    Conexion con = new Conexion();
+                    Encriptor encriptor = new Encriptor();
+                    con.strQuery = nombreStored;
+                    con.execute();
+                    con.command.CommandType = CommandType.StoredProcedure;
+
+                    if (modoABM == "INS")
+                    {
+                        con.command.Parameters.Add("@rolname", SqlDbType.NVarChar).Value = txt_nombreRol.Text;
+                        con.command.Parameters.Add("@estado", SqlDbType.Bit).Value = 1;
+
+                        con.openConection();
+                        con.command.ExecuteNonQuery();
+                        con.closeConection();
+
+                        con.strQuery = "FOUR_SIZONS.altaRolxFunc";
+
+                        for (int i = 0; i < lb_func_usralta.Items.Count; i++)
+                        {
+                            con.execute();
+                            con.command.CommandType = CommandType.StoredProcedure;
+
+                            con.command.Parameters.Add("@rolname", SqlDbType.NVarChar).Value = txt_nombreRol.Text;
+                            con.command.Parameters.Add("@func", SqlDbType.NVarChar).Value = lb_func_usralta.Items[i].ToString();
+
+                            con.openConection();
+                            con.command.ExecuteNonQuery();
+                            con.closeConection();
+                        }
+                    }else{
+                        con.command.Parameters.Add("@rolname", SqlDbType.NVarChar).Value = txt_nombreRol.Text;
+                        con.command.Parameters.Add("@codigo", SqlDbType.NVarChar).Value = rol;
+                        if (modoABM == "UPD")
+                        {
+                            con.command.Parameters.Add("@estado", SqlDbType.Bit).Value = 1;
+                        }else{
+                            con.command.Parameters.Add("@estado", SqlDbType.Bit).Value = 0;
+                        }
+
+                        con.openConection();
+                        con.command.ExecuteNonQuery();
+                        con.closeConection();
+                    }
+
+
+                    MessageBox.Show("Operación exitosa", "FOUR SIZONS - FRBA Hoteles", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                }
+                catch (Exception ex)
+                {
+                    error = 1;
+                    MessageBox.Show("Error al completar la operación. " + ex.Message, "FOUR SIZONS - FRBA Hoteles", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                }
+
+
+            }
+            else
+            {
+                error = 1;
+                MessageBox.Show("No se ha completado la operación", "FOUR SIZONS - FRBA Hoteles", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            }
+        }
+
+        private void button1_Click(object sender, EventArgs e)
+        {
+            for (int i = 0; i < lb_func_usralta.Items.Count; i++)
+            {
+                MessageBox.Show(lb_func_usralta.Items[i].ToString());
+            }
         }
     }
 }

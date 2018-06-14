@@ -46,7 +46,6 @@ namespace FrbaHotel.ABMRol
             con.lector.GetBoolean(2)});
             }
             con.closeConection();
-
         }
 
         private void buscar()
@@ -60,13 +59,6 @@ namespace FrbaHotel.ABMRol
                 con.strQuery = con.strQuery + "AND Rol_Codigo like '%" + txt_codigo.Text + "%' ";
             if (txt_nombre.Text != "")
                 con.strQuery = con.strQuery + "AND Rol_Nombre like '%" + txt_nombre.Text + "%' ";
-            if (cb_estado.Text != "")
-                estado = 1;
-                if (cb_estado.Text == "INACTIVO")
-                {
-                    estado = 0;
-                }
-                con.strQuery = con.strQuery + "AND Rol_Estado = " + estado.ToString() + " ";
             con.strQuery = con.strQuery + "ORDER BY Rol_Codigo";
             con.executeQuery();
             if (!con.reader())
@@ -88,7 +80,7 @@ namespace FrbaHotel.ABMRol
             con.closeConection();
         }
 
-        public void dgv_Usuarios_CellClick(object sender, DataGridViewCellEventArgs e)
+        public void dgv_Roles_CellClick(object sender, DataGridViewCellEventArgs e)
         {
             int index = e.RowIndex;
             DataGridViewRow selectedRow = dgv_Roles.Rows[index];
@@ -99,7 +91,7 @@ namespace FrbaHotel.ABMRol
         {
             dgv_Roles.ClearSelection();
             foreach (DataGridViewRow row in dgv_Roles.Rows)
-                if (Convert.ToBoolean(row.Cells[9].Value) == false)
+                if (Convert.ToBoolean(row.Cells[2].Value) == false)
                 {
                     row.DefaultCellStyle.BackColor = Color.Red;
                 }
@@ -107,8 +99,6 @@ namespace FrbaHotel.ABMRol
 
         private void ABMRol01_Load(object sender, EventArgs e)
         {
-            cb_estado.Items.Add("ACTIVO");
-            cb_estado.Items.Add("INACTIVO");
             refrescarGrid();
         }
 
@@ -126,12 +116,35 @@ namespace FrbaHotel.ABMRol
         {
             string modo = "INS";
             this.Hide();
-            ABMRol02 formABMUsuario02 = new ABMRol02(modo, dgv_Roles_Id);
-            formABMUsuario02.ShowDialog();
+            ABMRol02 formABMRol02 = new ABMRol02(modo, txt_codigo.Text);
+            formABMRol02.ShowDialog();
             this.Show();
-            //this.buscar();
-            //this.refrescarGrid();
+            this.buscar();
+            this.refrescarGrid();
         }
+
+        private void boton_baja_Click(object sender, EventArgs e)
+        {
+            string modo = "DLT";
+            this.Hide();
+            ABMRol02 formABMRol02 = new ABMRol02(modo, dgv_Roles_Id);
+            formABMRol02.ShowDialog();
+            this.Show();
+            this.buscar();
+            this.refrescarGrid();
+        }
+
+        private void boton_modificacion_Click(object sender, EventArgs e)
+        {
+            string modo = "UPD";
+            this.Hide();
+            ABMRol02 formABMRol02 = new ABMRol02(modo, dgv_Roles_Id);
+            formABMRol02.ShowDialog();
+            this.Show();
+            this.buscar();
+            this.refrescarGrid();
+        }
+
 
 
     }

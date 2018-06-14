@@ -48,6 +48,7 @@ namespace FrbaHotel.ABMHotel
                     txt_recargaEstrella.ReadOnly = true;
                     dt_fecha_cre.Enabled = false;
                     cb_estrellas.Enabled = false;
+                    btn_aceptar_nuevo.Visible = false;
                     break;
                 case "UPD":
                     labelTitulo.Text = "Modificación de Hotel";
@@ -63,9 +64,8 @@ namespace FrbaHotel.ABMHotel
                     dt_fecha_cre.Enabled = true;
                     cb_estrellas.Enabled = true;
                     txt_estado.Enabled = false;
+                    btn_aceptar_nuevo.Visible = false;
                     break;
-
-
             }
 
             cb_estrellas.Items.Add("");
@@ -220,7 +220,7 @@ namespace FrbaHotel.ABMHotel
 
                 case "DLT":
                     // Baja lógica - Se pone estado en 0
-                    nombreSP = "FOUR_SIZONS.ModificacionHotel";
+                    nombreSP = "FOUR_SIZONS.ModificarHotel";
                     break;
             }
             ejecutarABMHotel(nombreSP);

@@ -29,12 +29,13 @@
         private void InitializeComponent()
         {
             this.dgv_Roles = new System.Windows.Forms.DataGridView();
+            this.Rol_Codigo = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.Rol_Nombre = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.Rol_Estado = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.label8 = new System.Windows.Forms.Label();
             this.label9 = new System.Windows.Forms.Label();
             this.label1 = new System.Windows.Forms.Label();
             this.groupBox1 = new System.Windows.Forms.GroupBox();
-            this.cb_estado = new System.Windows.Forms.ComboBox();
-            this.label3 = new System.Windows.Forms.Label();
             this.label7 = new System.Windows.Forms.Label();
             this.label2 = new System.Windows.Forms.Label();
             this.btn_limpiar = new System.Windows.Forms.Button();
@@ -45,9 +46,6 @@
             this.boton_modificacion = new System.Windows.Forms.Button();
             this.boton_baja = new System.Windows.Forms.Button();
             this.boton_alta = new System.Windows.Forms.Button();
-            this.Rol_Codigo = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.Rol_Nombre = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.Rol_Estado = new System.Windows.Forms.DataGridViewTextBoxColumn();
             ((System.ComponentModel.ISupportInitialize)(this.dgv_Roles)).BeginInit();
             this.groupBox1.SuspendLayout();
             this.SuspendLayout();
@@ -64,6 +62,24 @@
             this.dgv_Roles.Name = "dgv_Roles";
             this.dgv_Roles.Size = new System.Drawing.Size(345, 148);
             this.dgv_Roles.TabIndex = 3;
+            this.dgv_Roles.CellClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dgv_Roles_CellClick);
+            // 
+            // Rol_Codigo
+            // 
+            this.Rol_Codigo.HeaderText = "Codigo";
+            this.Rol_Codigo.Name = "Rol_Codigo";
+            this.Rol_Codigo.ReadOnly = true;
+            // 
+            // Rol_Nombre
+            // 
+            this.Rol_Nombre.HeaderText = "Nombre";
+            this.Rol_Nombre.Name = "Rol_Nombre";
+            this.Rol_Nombre.ReadOnly = true;
+            // 
+            // Rol_Estado
+            // 
+            this.Rol_Estado.HeaderText = "Estado";
+            this.Rol_Estado.Name = "Rol_Estado";
             // 
             // label8
             // 
@@ -97,8 +113,6 @@
             // 
             // groupBox1
             // 
-            this.groupBox1.Controls.Add(this.cb_estado);
-            this.groupBox1.Controls.Add(this.label3);
             this.groupBox1.Controls.Add(this.label7);
             this.groupBox1.Controls.Add(this.label2);
             this.groupBox1.Controls.Add(this.btn_limpiar);
@@ -112,27 +126,10 @@
             this.groupBox1.TabStop = false;
             this.groupBox1.Text = "Filtros de Búsqueda";
             // 
-            // cb_estado
-            // 
-            this.cb_estado.FormattingEnabled = true;
-            this.cb_estado.Location = new System.Drawing.Point(252, 14);
-            this.cb_estado.Name = "cb_estado";
-            this.cb_estado.Size = new System.Drawing.Size(78, 21);
-            this.cb_estado.TabIndex = 3;
-            // 
-            // label3
-            // 
-            this.label3.AutoSize = true;
-            this.label3.Location = new System.Drawing.Point(206, 19);
-            this.label3.Name = "label3";
-            this.label3.Size = new System.Drawing.Size(40, 13);
-            this.label3.TabIndex = 2;
-            this.label3.Text = "Estado";
-            // 
             // label7
             // 
             this.label7.AutoSize = true;
-            this.label7.Location = new System.Drawing.Point(14, 22);
+            this.label7.Location = new System.Drawing.Point(23, 36);
             this.label7.Name = "label7";
             this.label7.Size = new System.Drawing.Size(40, 13);
             this.label7.TabIndex = 2;
@@ -141,7 +138,7 @@
             // label2
             // 
             this.label2.AutoSize = true;
-            this.label2.Location = new System.Drawing.Point(10, 50);
+            this.label2.Location = new System.Drawing.Point(188, 36);
             this.label2.Name = "label2";
             this.label2.Size = new System.Drawing.Size(44, 13);
             this.label2.TabIndex = 2;
@@ -168,14 +165,14 @@
             // 
             // txt_codigo
             // 
-            this.txt_codigo.Location = new System.Drawing.Point(79, 19);
+            this.txt_codigo.Location = new System.Drawing.Point(69, 36);
             this.txt_codigo.Name = "txt_codigo";
             this.txt_codigo.Size = new System.Drawing.Size(107, 20);
             this.txt_codigo.TabIndex = 0;
             // 
             // txt_nombre
             // 
-            this.txt_nombre.Location = new System.Drawing.Point(79, 50);
+            this.txt_nombre.Location = new System.Drawing.Point(238, 36);
             this.txt_nombre.Name = "txt_nombre";
             this.txt_nombre.Size = new System.Drawing.Size(107, 20);
             this.txt_nombre.TabIndex = 1;
@@ -198,6 +195,7 @@
             this.boton_modificacion.TabIndex = 14;
             this.boton_modificacion.Text = "Modificación";
             this.boton_modificacion.UseVisualStyleBackColor = true;
+            this.boton_modificacion.Click += new System.EventHandler(this.boton_modificacion_Click);
             // 
             // boton_baja
             // 
@@ -207,6 +205,7 @@
             this.boton_baja.TabIndex = 13;
             this.boton_baja.Text = "Baja";
             this.boton_baja.UseVisualStyleBackColor = true;
+            this.boton_baja.Click += new System.EventHandler(this.boton_baja_Click);
             // 
             // boton_alta
             // 
@@ -217,23 +216,6 @@
             this.boton_alta.Text = "Alta";
             this.boton_alta.UseVisualStyleBackColor = true;
             this.boton_alta.Click += new System.EventHandler(this.boton_alta_Click);
-            // 
-            // Rol_Codigo
-            // 
-            this.Rol_Codigo.HeaderText = "Codigo";
-            this.Rol_Codigo.Name = "Rol_Codigo";
-            this.Rol_Codigo.ReadOnly = true;
-            // 
-            // Rol_Nombre
-            // 
-            this.Rol_Nombre.HeaderText = "Nombre";
-            this.Rol_Nombre.Name = "Rol_Nombre";
-            this.Rol_Nombre.ReadOnly = true;
-            // 
-            // Rol_Estado
-            // 
-            this.Rol_Estado.HeaderText = "Estado";
-            this.Rol_Estado.Name = "Rol_Estado";
             // 
             // ABMRol01
             // 
@@ -267,8 +249,6 @@
         private System.Windows.Forms.Label label9;
         private System.Windows.Forms.Label label1;
         private System.Windows.Forms.GroupBox groupBox1;
-        private System.Windows.Forms.ComboBox cb_estado;
-        private System.Windows.Forms.Label label3;
         private System.Windows.Forms.Label label7;
         private System.Windows.Forms.Label label2;
         private System.Windows.Forms.Button btn_limpiar;

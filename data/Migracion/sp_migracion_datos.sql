@@ -1169,7 +1169,13 @@ end catch
 go
 
 ------------------------------------------------ABM ROL---------------------------------------------------------------------------
-
+exec FOUR_SIZONS.InsertarRol 'admintuvieja', 1
+exec FOUR_SIZONS.altaRolxFunc 'admintuvieja', 'Registrar Estadia'
+select * from FOUR_SIZONS.Rol
+select * from FOUR_SIZONS.Funcionalidad
+SELECT * FROM FOUR_SIZONS.Funcionalidad
+select * from FOUR_SIZONS.RolXFunc Where Rol_Codigo = 3
+SELECT * FROM FOUR_SIZONS.Funcionalidad WHERE Func_Codigo = 1 ORDER BY Func_Codigo
 create proc FOUR_SIZONS.InsertarRol
 		
 		@rolname nvarchar(50),
@@ -1191,7 +1197,7 @@ create proc FOUR_SIZONS.InsertarRol
 		END CATCH
 	GO
 
-	create procedure FOUR_SIZONS.ModificacionRol
+create procedure FOUR_SIZONS.ModificacionRol
 	@rolname nvarchar(50),
 	@codigo nvarchar(50),
 	@estado bit
@@ -1216,7 +1222,7 @@ create proc FOUR_SIZONS.InsertarRol
 go
 
 create procedure four_sizons.altaRolxFunc
-@rol nvarchar(50),
+@rolname nvarchar(50),
 @func nvarchar(50)
 
 	as begin tran 
@@ -1225,7 +1231,7 @@ create procedure four_sizons.altaRolxFunc
 	declare @rolID nvarchar(50)
 	declare @funcID nvarchar(50)
 
-	set @rolID = (select Rol_Codigo  from four_sizons.Rol where Rol_Nombre = @rol)
+	set @rolID = (select Rol_Codigo  from four_sizons.Rol where Rol_Nombre = @rolname)
 	set @funcID = (select Func_Codigo from FOUR_SIZONS.Funcionalidad where Func_Nombre = @func)
 
 	insert into FOUR_SIZONS.RolXFunc(Rol_Codigo,Func_Codigo,RolXFunc_Estado) 

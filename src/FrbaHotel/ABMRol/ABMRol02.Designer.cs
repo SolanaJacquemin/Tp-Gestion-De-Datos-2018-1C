@@ -32,9 +32,18 @@
             this.label11 = new System.Windows.Forms.Label();
             this.labelTitulo = new System.Windows.Forms.Label();
             this.label9 = new System.Windows.Forms.Label();
-            this.txt_usuario = new System.Windows.Forms.TextBox();
+            this.txt_nombreRol = new System.Windows.Forms.TextBox();
             this.lb_func = new System.Windows.Forms.ListBox();
-            this.listBox2 = new System.Windows.Forms.ListBox();
+            this.lb_func_usralta = new System.Windows.Forms.ListBox();
+            this.btn_agregar = new System.Windows.Forms.Button();
+            this.btn_eliminar = new System.Windows.Forms.Button();
+            this.boton_volver = new System.Windows.Forms.Button();
+            this.btn_aceptar_nuevo = new System.Windows.Forms.Button();
+            this.boton_aceptar = new System.Windows.Forms.Button();
+            this.btn_agregarTodo = new System.Windows.Forms.Button();
+            this.btn_eliminarTodo = new System.Windows.Forms.Button();
+            this.txt_estado = new System.Windows.Forms.TextBox();
+            this.label2 = new System.Windows.Forms.Label();
             this.SuspendLayout();
             // 
             // label1
@@ -76,38 +85,132 @@
             this.label9.TabIndex = 14;
             this.label9.Text = "Nombre";
             // 
-            // txt_usuario
+            // txt_nombreRol
             // 
-            this.txt_usuario.Location = new System.Drawing.Point(85, 72);
-            this.txt_usuario.Name = "txt_usuario";
-            this.txt_usuario.Size = new System.Drawing.Size(112, 20);
-            this.txt_usuario.TabIndex = 11;
+            this.txt_nombreRol.Location = new System.Drawing.Point(85, 72);
+            this.txt_nombreRol.Name = "txt_nombreRol";
+            this.txt_nombreRol.Size = new System.Drawing.Size(132, 20);
+            this.txt_nombreRol.TabIndex = 11;
             // 
             // lb_func
             // 
             this.lb_func.FormattingEnabled = true;
             this.lb_func.Location = new System.Drawing.Point(35, 111);
             this.lb_func.Name = "lb_func";
-            this.lb_func.Size = new System.Drawing.Size(120, 95);
+            this.lb_func.Size = new System.Drawing.Size(189, 186);
             this.lb_func.TabIndex = 15;
             // 
-            // listBox2
+            // lb_func_usralta
             // 
-            this.listBox2.FormattingEnabled = true;
-            this.listBox2.Location = new System.Drawing.Point(302, 111);
-            this.listBox2.Name = "listBox2";
-            this.listBox2.Size = new System.Drawing.Size(120, 95);
-            this.listBox2.TabIndex = 16;
+            this.lb_func_usralta.FormattingEnabled = true;
+            this.lb_func_usralta.Location = new System.Drawing.Point(286, 111);
+            this.lb_func_usralta.Name = "lb_func_usralta";
+            this.lb_func_usralta.Size = new System.Drawing.Size(189, 186);
+            this.lb_func_usralta.TabIndex = 16;
+            // 
+            // btn_agregar
+            // 
+            this.btn_agregar.Location = new System.Drawing.Point(234, 111);
+            this.btn_agregar.Name = "btn_agregar";
+            this.btn_agregar.Size = new System.Drawing.Size(46, 23);
+            this.btn_agregar.TabIndex = 17;
+            this.btn_agregar.Text = ">";
+            this.btn_agregar.UseVisualStyleBackColor = true;
+            this.btn_agregar.Click += new System.EventHandler(this.btn_agregar_Click);
+            // 
+            // btn_eliminar
+            // 
+            this.btn_eliminar.Location = new System.Drawing.Point(234, 169);
+            this.btn_eliminar.Name = "btn_eliminar";
+            this.btn_eliminar.Size = new System.Drawing.Size(46, 23);
+            this.btn_eliminar.TabIndex = 17;
+            this.btn_eliminar.Text = "<";
+            this.btn_eliminar.UseVisualStyleBackColor = true;
+            this.btn_eliminar.Click += new System.EventHandler(this.btn_eliminar_Click);
+            // 
+            // boton_volver
+            // 
+            this.boton_volver.Location = new System.Drawing.Point(400, 326);
+            this.boton_volver.Name = "boton_volver";
+            this.boton_volver.Size = new System.Drawing.Size(75, 23);
+            this.boton_volver.TabIndex = 18;
+            this.boton_volver.Text = "Volver";
+            this.boton_volver.UseVisualStyleBackColor = true;
+            this.boton_volver.Click += new System.EventHandler(this.boton_volver_Click);
+            // 
+            // btn_aceptar_nuevo
+            // 
+            this.btn_aceptar_nuevo.Location = new System.Drawing.Point(116, 326);
+            this.btn_aceptar_nuevo.Name = "btn_aceptar_nuevo";
+            this.btn_aceptar_nuevo.Size = new System.Drawing.Size(108, 23);
+            this.btn_aceptar_nuevo.TabIndex = 19;
+            this.btn_aceptar_nuevo.Text = "Aceptar y Nuevo";
+            this.btn_aceptar_nuevo.UseVisualStyleBackColor = true;
+            // 
+            // boton_aceptar
+            // 
+            this.boton_aceptar.Location = new System.Drawing.Point(35, 326);
+            this.boton_aceptar.Name = "boton_aceptar";
+            this.boton_aceptar.Size = new System.Drawing.Size(75, 23);
+            this.boton_aceptar.TabIndex = 20;
+            this.boton_aceptar.Text = "Aceptar";
+            this.boton_aceptar.UseVisualStyleBackColor = true;
+            this.boton_aceptar.Click += new System.EventHandler(this.boton_aceptar_Click);
+            // 
+            // btn_agregarTodo
+            // 
+            this.btn_agregarTodo.Location = new System.Drawing.Point(234, 140);
+            this.btn_agregarTodo.Name = "btn_agregarTodo";
+            this.btn_agregarTodo.Size = new System.Drawing.Size(46, 23);
+            this.btn_agregarTodo.TabIndex = 17;
+            this.btn_agregarTodo.Text = ">>";
+            this.btn_agregarTodo.UseVisualStyleBackColor = true;
+            this.btn_agregarTodo.Click += new System.EventHandler(this.btn_agregarTodo_Click);
+            // 
+            // btn_eliminarTodo
+            // 
+            this.btn_eliminarTodo.Location = new System.Drawing.Point(234, 198);
+            this.btn_eliminarTodo.Name = "btn_eliminarTodo";
+            this.btn_eliminarTodo.Size = new System.Drawing.Size(46, 23);
+            this.btn_eliminarTodo.TabIndex = 17;
+            this.btn_eliminarTodo.Text = "<<";
+            this.btn_eliminarTodo.UseVisualStyleBackColor = true;
+            this.btn_eliminarTodo.Click += new System.EventHandler(this.btn_eliminarTodo_Click);
+            // 
+            // txt_estado
+            // 
+            this.txt_estado.Location = new System.Drawing.Point(343, 72);
+            this.txt_estado.Name = "txt_estado";
+            this.txt_estado.Size = new System.Drawing.Size(132, 20);
+            this.txt_estado.TabIndex = 11;
+            // 
+            // label2
+            // 
+            this.label2.AutoSize = true;
+            this.label2.Location = new System.Drawing.Point(283, 75);
+            this.label2.Name = "label2";
+            this.label2.Size = new System.Drawing.Size(40, 13);
+            this.label2.TabIndex = 14;
+            this.label2.Text = "Estado";
             // 
             // ABMRol02
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(554, 427);
-            this.Controls.Add(this.listBox2);
+            this.ClientSize = new System.Drawing.Size(501, 357);
+            this.Controls.Add(this.boton_volver);
+            this.Controls.Add(this.btn_aceptar_nuevo);
+            this.Controls.Add(this.boton_aceptar);
+            this.Controls.Add(this.btn_eliminarTodo);
+            this.Controls.Add(this.btn_agregarTodo);
+            this.Controls.Add(this.btn_eliminar);
+            this.Controls.Add(this.btn_agregar);
+            this.Controls.Add(this.lb_func_usralta);
             this.Controls.Add(this.lb_func);
+            this.Controls.Add(this.label2);
             this.Controls.Add(this.label9);
-            this.Controls.Add(this.txt_usuario);
+            this.Controls.Add(this.txt_estado);
+            this.Controls.Add(this.txt_nombreRol);
             this.Controls.Add(this.label1);
             this.Controls.Add(this.label11);
             this.Controls.Add(this.labelTitulo);
@@ -125,8 +228,17 @@
         private System.Windows.Forms.Label label11;
         private System.Windows.Forms.Label labelTitulo;
         private System.Windows.Forms.Label label9;
-        private System.Windows.Forms.TextBox txt_usuario;
+        private System.Windows.Forms.TextBox txt_nombreRol;
         private System.Windows.Forms.ListBox lb_func;
-        private System.Windows.Forms.ListBox listBox2;
+        private System.Windows.Forms.ListBox lb_func_usralta;
+        private System.Windows.Forms.Button btn_agregar;
+        private System.Windows.Forms.Button btn_eliminar;
+        private System.Windows.Forms.Button boton_volver;
+        private System.Windows.Forms.Button btn_aceptar_nuevo;
+        private System.Windows.Forms.Button boton_aceptar;
+        private System.Windows.Forms.Button btn_agregarTodo;
+        private System.Windows.Forms.Button btn_eliminarTodo;
+        private System.Windows.Forms.TextBox txt_estado;
+        private System.Windows.Forms.Label label2;
     }
 }
