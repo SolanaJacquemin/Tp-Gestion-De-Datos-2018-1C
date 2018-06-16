@@ -1235,31 +1235,32 @@ go
 
 
 --------------------------------------------------ABM HABITACION-------------------------------------------------------------
+select * from FOUR_SIZONS.Habitacion_Tipo
+exec FOUR_SIZONS.AltaHabitacion 123, 10, 'S', 1, 'Base Cuadruple', 'tuviejahabitacionencuatro'
+select * from FOUR_SIZONS.Habitacion where Hotel_Codigo = 1
 
-
-
-create procedure four_sizons.AltaHabitacion
+alter procedure four_sizons.AltaHabitacion
 @numero numeric(18),
 @piso numeric(18),
-@ubicacion nvarchar(50),
-@hotelName nvarchar(50),
+@frente nvarchar(50),
+@HotelId numeric(18),
 @TipoHab nvarchar(255),
 @descripcion nvarchar(255)
 
 as begin try
 begin tran 
-declare @HotelId numeric(18)
+--declare @HotelId numeric(18)
 declare @TipoHabID numeric(18)
 	
-		set @HotelId= (select Hotel_Codigo from FOUR_SIZONS.Hotel where @hotelName = Hotel_Nombre)
+		--set @HotelId= (select Hotel_Codigo from FOUR_SIZONS.Hotel where @hotelName = Hotel_Nombre)
 		set @TipoHabID = (select Habitacion_Tipo_Codigo from FOUR_SIZONS.Habitacion_Tipo where @TipoHab = Habitacion_Tipo_Descripcion)
 
 		--Valida que no haya dos hab con el mismo numero en el mismo hotel		
 
 		if (not exists (select Habitacion_Numero from Habitacion where Hotel_Codigo=@HotelId and Habitacion_Numero= @numero))
-			insert into FOUR_SIZONS.Habitacion(Habitacion_Numero,Habitacion_Piso,Habitacion_Frente,Habitacion_Estado,Habitacion_Tipo_Codigo,
-					Hotel_Codigo,Habitacion_Descripcion)
-					values (@numero,@piso,@ubicacion,1,@TipoHabID,@HotelId,@descripcion)
+			insert into FOUR_SIZONS.Habitacion(Habitacion_Numero,Hotel_Codigo,Habitacion_Piso,Habitacion_Frente,Habitacion_Tipo_Codigo,
+			Habitacion_Descripcion,Habitacion_Estado)
+					values (@numero,@HotelId,@piso,@frente,@TipoHabID,@descripcion,1)
 		else print N'el numero de habitacion ya figura en ese hotel, ingrese otro por favor'
 
 commit tran 
@@ -1274,12 +1275,11 @@ go
 
 create procedure four_sizons.modificarHabitacion
 @numero numeric(18),
+@hotel nvarchar(50),
 /*@piso numeric(18),
 @ubicacion nvarchar(50),*/ -- ¿para que vas a cambiar el piso y la ubicacion de la habitacion en el hotel?
-@estado bit,
 @descripcion nvarchar(255),
-@hotel nvarchar(50)
-
+@estado bit
 as 
 begin tran 
 begin try

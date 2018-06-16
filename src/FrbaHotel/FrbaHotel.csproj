@@ -50,11 +50,17 @@
     <Compile Include="ABMCliente\ABMCliente01.Designer.cs">
       <DependentUpon>ABMCliente01.cs</DependentUpon>
     </Compile>
-    <Compile Include="ABMHabitacion\Form1.cs">
+    <Compile Include="ABMHabitacion\ABMHabitacion01.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="ABMHabitacion\Form1.Designer.cs">
-      <DependentUpon>Form1.cs</DependentUpon>
+    <Compile Include="ABMHabitacion\ABMHabitacion01.Designer.cs">
+      <DependentUpon>ABMHabitacion01.cs</DependentUpon>
+    </Compile>
+    <Compile Include="ABMHabitacion\ABMHabitacion02.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="ABMHabitacion\ABMHabitacion02.Designer.cs">
+      <DependentUpon>ABMHabitacion02.cs</DependentUpon>
     </Compile>
     <Compile Include="ABMHotel\ABMHotel01.cs">
       <SubType>Form</SubType>
@@ -153,6 +159,12 @@
     </Compile>
     <EmbeddedResource Include="ABMCliente\ABMCliente01.resx">
       <DependentUpon>ABMCliente01.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="ABMHabitacion\ABMHabitacion01.resx">
+      <DependentUpon>ABMHabitacion01.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="ABMHabitacion\ABMHabitacion02.resx">
+      <DependentUpon>ABMHabitacion02.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="ABMHotel\ABMHotel01.resx">
       <DependentUpon>ABMHotel01.cs</DependentUpon>

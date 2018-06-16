@@ -128,6 +128,7 @@
             this.btn_habitaciones.TabIndex = 0;
             this.btn_habitaciones.Text = "ABM de Habitaciones";
             this.btn_habitaciones.UseVisualStyleBackColor = true;
+            this.btn_habitaciones.Click += new System.EventHandler(this.btn_habitaciones_Click);
             // 
             // btn_hoteles
             // 

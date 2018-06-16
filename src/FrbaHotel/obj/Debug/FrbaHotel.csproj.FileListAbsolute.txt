@@ -27,3 +27,5 @@ C:\Users\Nicolas\Desktop\Gestion de Datos\Tp-Gestion-De-Datos-2018-1C\src\FrbaHo
 C:\Users\Nicolas\Desktop\Gestion de Datos\Tp-Gestion-De-Datos-2018-1C\src\FrbaHotel\obj\Debug\FrbaHotel.exe
 C:\Users\Nicolas\Desktop\Gestion de Datos\Tp-Gestion-De-Datos-2018-1C\src\FrbaHotel\obj\Debug\FrbaHotel.pdb
 C:\Users\Nicolas\Desktop\Gestion de Datos\Tp-Gestion-De-Datos-2018-1C\src\FrbaHotel\obj\Debug\FrbaHotel.csprojResolveAssemblyReference.cache
+C:\Users\Nicolas\Desktop\Gestion de Datos\Tp-Gestion-De-Datos-2018-1C\src\FrbaHotel\obj\Debug\FrbaHotel.AbmHabitacion.ABMHabitacion01.resources
+C:\Users\Nicolas\Desktop\Gestion de Datos\Tp-Gestion-De-Datos-2018-1C\src\FrbaHotel\obj\Debug\FrbaHotel.ABMHabitacion.ABMHabitacion02.resources

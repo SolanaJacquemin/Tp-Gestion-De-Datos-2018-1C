@@ -10,6 +10,7 @@ using System.Windows.Forms;
 using FrbaHotel.ABMUsuario;
 using FrbaHotel.ABMRol;
 using FrbaHotel.ABMHotel;
+using FrbaHotel.ABMHabitacion;
 
 namespace FrbaHotel.PantallaPrincipal
 {
@@ -47,6 +48,14 @@ namespace FrbaHotel.PantallaPrincipal
             this.Hide();
             ABMHotel01 formABMHotel01 = new ABMHotel01();
             formABMHotel01.ShowDialog();
+            this.Show();
+        }
+
+        private void btn_habitaciones_Click(object sender, EventArgs e)
+        {
+            this.Hide();
+            ABMHabitacion01 formABMHabitacion01 = new ABMHabitacion01();
+            formABMHabitacion01.ShowDialog();
             this.Show();
         }
     }
