@@ -1235,11 +1235,7 @@ go
 
 
 --------------------------------------------------ABM HABITACION-------------------------------------------------------------
-select * from FOUR_SIZONS.Habitacion_Tipo
-exec FOUR_SIZONS.AltaHabitacion 123, 10, 'S', 1, 'Base Cuadruple', 'tuviejahabitacionencuatro'
-select * from FOUR_SIZONS.Habitacion where Hotel_Codigo = 1
-
-alter procedure four_sizons.AltaHabitacion
+create procedure four_sizons.AltaHabitacion
 @numero numeric(18),
 @piso numeric(18),
 @frente nvarchar(50),
@@ -1273,9 +1269,9 @@ begin catch
 end catch
 go
 
-create procedure four_sizons.modificarHabitacion
+alter procedure four_sizons.modificarHabitacion
 @numero numeric(18),
-@hotel nvarchar(50),
+@hotId numeric(18),
 /*@piso numeric(18),
 @ubicacion nvarchar(50),*/ -- ¿para que vas a cambiar el piso y la ubicacion de la habitacion en el hotel?
 @descripcion nvarchar(255),
@@ -1284,7 +1280,7 @@ as
 begin tran 
 begin try
 
-declare @hotId numeric(18) = (select Hotel_Codigo from FOUR_SIZONS.Hotel where Hotel_Nombre = @hotel )
+--declare @hotId numeric(18) = (select Hotel_Codigo from FOUR_SIZONS.Hotel where Hotel_Nombre = @hotel )
 
 update FOUR_SIZONS.Habitacion
 
