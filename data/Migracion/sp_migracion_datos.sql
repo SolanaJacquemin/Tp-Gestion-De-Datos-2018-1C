@@ -323,9 +323,9 @@ IF (OBJECT_ID('FOUR_SIZONS.Regimen', 'U') IS NOT NULL)
 			Habitacion_Numero numeric(18),
 			Hotel_Codigo numeric(18),
 			Habitacion_Piso numeric(18),
-			--Habitacion_Descripcion nvarchar(255),
 			Habitacion_Frente nvarchar(50),
 			Habitacion_Tipo_Codigo numeric(18),  
+			Habitacion_Descripcion nvarchar(255),
 			Habitacion_Estado bit,
 
 			CONSTRAINT FK_Habitacion_1 FOREIGN KEY (Hotel_Codigo) REFERENCES FOUR_SIZONS.Hotel(Hotel_Codigo),
@@ -342,6 +342,7 @@ IF (OBJECT_ID('FOUR_SIZONS.Regimen', 'U') IS NOT NULL)
 			Cliente_Apellido nvarchar(255),
 			Cliente_TipoDoc nvarchar(255),
 			Cliente_NumDoc numeric(18,0),
+			Cliente_Localidad nvarchar(255),
 			Cliente_Dom_Calle nvarchar(255),
 			Cliente_Nro_Calle numeric(18),
 			Cliente_Piso numeric(18),
@@ -414,7 +415,8 @@ IF (OBJECT_ID('FOUR_SIZONS.Regimen', 'U') IS NOT NULL)
 	BEGIN
 		CREATE TABLE FOUR_SIZONS.Habitacion_TipoXReser (
 			Reserva_Codigo numeric(18),
-			Habitacion_Tipo_Codigo numeric(18),			
+			Habitacion_Tipo_Codigo numeric(18),	
+			HabTipoXRes_CantHab numeric(18),		
 
 			CONSTRAINT FK_Habitacion_TipoXReser_1 FOREIGN KEY (Reserva_Codigo) REFERENCES FOUR_SIZONS.Reserva(Reserva_Codigo),
 			CONSTRAINT FK_Habitacion_TipoXReser_2 FOREIGN KEY (Habitacion_Tipo_Codigo) REFERENCES FOUR_SIZONS.Habitacion_Tipo(Habitacion_Tipo_Codigo),
@@ -695,16 +697,6 @@ IF (OBJECT_ID('FOUR_SIZONS.Regimen', 'U') IS NOT NULL)
 	FROM gd_esquema.Maestra AS M
 	WHERE Factura_Nro IS NOT NULL
 	ORDER BY M.Factura_Nro
-
-	alter table four_sizons.habitacion
-	add habitacion_descripcion nvarchar(255)
-
-	alter table four_sizons.cliente
-	add cliente_localidad nvarchar(50)
-
-	alter table four_sizons.Habitacion_tipoXreser
-	add habTipoXRes_cantHab numeric(18)
-
 END
 go
 -------------------------------------------------------Comienzo de procedures--------------------------------------------------------------
@@ -1017,7 +1009,7 @@ begin tran
 
 if(not exists (select cliente_codigo from cliente where @mail = Cliente_Mail))
 insert into four_sizons.Cliente(Cliente_Nombre ,cliente_Apellido,cliente_TipoDoc, Cliente_NumDoc,Cliente_Dom_Calle,Cliente_Nro_Calle
-								,Cliente_Piso,Cliente_Depto,cliente_localidad,Cliente_Mail,Cliente_Nacionalidad,Cliente_Fecha_Nac,Cliente_Puntos,Cliente_Estado,Cliente_Consistente)
+								,Cliente_Piso,Cliente_Depto,Cliente_Localidad,Cliente_Mail,Cliente_Nacionalidad,Cliente_Fecha_Nac,Cliente_Puntos,Cliente_Estado,Cliente_Consistente)
 								values (@nombre,@apellido,@tipoDoc,@numDoc,@calle,@numCalle,@piso,@depto,@localidad, @mail,@nacionalidad,@fechaNac,0,1,1)
 else 
 PRINT N'el mail ingresado ya figura en el sistema, ingrese otro por favor';
@@ -1169,13 +1161,6 @@ end catch
 go
 
 ------------------------------------------------ABM ROL---------------------------------------------------------------------------
-exec FOUR_SIZONS.InsertarRol 'admintuvieja', 1
-exec FOUR_SIZONS.altaRolxFunc 'admintuvieja', 'Registrar Estadia'
-select * from FOUR_SIZONS.Rol
-select * from FOUR_SIZONS.Funcionalidad
-SELECT * FROM FOUR_SIZONS.Funcionalidad
-select * from FOUR_SIZONS.RolXFunc Where Rol_Codigo = 3
-SELECT * FROM FOUR_SIZONS.Funcionalidad WHERE Func_Codigo = 1 ORDER BY Func_Codigo
 create proc FOUR_SIZONS.InsertarRol
 		
 		@rolname nvarchar(50),
@@ -1250,6 +1235,8 @@ go
 
 
 --------------------------------------------------ABM HABITACION-------------------------------------------------------------
+
+
 
 create procedure four_sizons.AltaHabitacion
 @numero numeric(18),
@@ -1408,7 +1395,7 @@ begin try
 declare @tipoHabCodigo numeric(18)
 
 set @tipoHabCodigo = (select Habitacion_Tipo_Codigo from FOUR_SIZONS.Habitacion_Tipo where Habitacion_Tipo_Descripcion=@tipoHab)
-insert into FOUR_SIZONS.Habitacion_TipoXReser (Habitacion_Tipo_Codigo,habTipoXRes_cantHab,Reserva_Codigo)
+insert into FOUR_SIZONS.Habitacion_TipoXReser (Habitacion_Tipo_Codigo,HabTipoXRes_CantHab,Reserva_Codigo)
 										values(@tipoHabCodigo, @cantHab , @reservaCodigo)
 
 commit tran
