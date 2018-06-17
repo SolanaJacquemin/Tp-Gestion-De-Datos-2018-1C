@@ -7,6 +7,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using FrbaHotel.Prompts;
 
 namespace FrbaHotel.ABMUsuario
 {
@@ -68,6 +69,16 @@ namespace FrbaHotel.ABMUsuario
             this.Hide();
             ABMUsuario02 formABMUsuario02 = new ABMUsuario02(modo, txt_Id.Text);
             formABMUsuario02.ShowDialog();
+            this.Show();
+            this.buscar();
+            this.refrescarGrid();
+        }
+
+        private void boton_hoteles_Click(object sender, EventArgs e)
+        {
+            this.Hide();
+            ABMUsuario03 formABMUsuario03 = new ABMUsuario03(dgv_usuario_ID);
+            formABMUsuario03.ShowDialog();
             this.Show();
             this.buscar();
             this.refrescarGrid();
@@ -179,9 +190,7 @@ namespace FrbaHotel.ABMUsuario
 
         private void btn_promptUsu_Click(object sender, EventArgs e)
         {
-
-
-            using (ABMUsuarioPrompt prompt = new ABMUsuarioPrompt())
+            using (PromptUsuarios prompt = new PromptUsuarios())
             {
                 prompt.ShowDialog();
                 txt_Id.Text = prompt.TextBox1.Text;

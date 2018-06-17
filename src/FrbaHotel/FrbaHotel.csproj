@@ -104,32 +104,32 @@
     <Compile Include="ABMUsuario\ABMUsuario01.Designer.cs">
       <DependentUpon>ABMUsuario01.cs</DependentUpon>
     </Compile>
-    <Compile Include="ABMUsuario\ABMUsuarioPrompt.cs">
+    <Compile Include="ABMUsuario\ABMUsuario03.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="ABMUsuario\ABMUsuarioPrompt.Designer.cs">
-      <DependentUpon>ABMUsuarioPrompt.cs</DependentUpon>
-    </Compile>
-    <Compile Include="CancelarReserva\Form1.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="CancelarReserva\Form1.Designer.cs">
-      <DependentUpon>Form1.cs</DependentUpon>
+    <Compile Include="ABMUsuario\ABMUsuario03.Designer.cs">
+      <DependentUpon>ABMUsuario03.cs</DependentUpon>
     </Compile>
     <Compile Include="Conexion.cs" />
     <Compile Include="Config.cs" />
     <Compile Include="Encriptor.cs" />
+    <Compile Include="GestionReservas\ABMReserva01.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="GestionReservas\ABMReserva01.Designer.cs">
+      <DependentUpon>ABMReserva01.cs</DependentUpon>
+    </Compile>
+    <Compile Include="GestionReservas\ABMReserva02.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="GestionReservas\ABMReserva02.Designer.cs">
+      <DependentUpon>ABMReserva02.cs</DependentUpon>
+    </Compile>
     <Compile Include="Login\Login.cs">
       <SubType>Form</SubType>
     </Compile>
     <Compile Include="Login\Login.Designer.cs">
       <DependentUpon>Login.cs</DependentUpon>
-    </Compile>
-    <Compile Include="GenerarModificacionReserva\Form1.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="GenerarModificacionReserva\Form1.Designer.cs">
-      <DependentUpon>Form1.cs</DependentUpon>
     </Compile>
     <Compile Include="ListadoEstadistico\Form1.cs">
       <SubType>Form</SubType>
@@ -144,6 +144,18 @@
       <DependentUpon>PantallaPrincipal01.cs</DependentUpon>
     </Compile>
     <Compile Include="Program.cs" />
+    <Compile Include="Prompts\PromptHoteles.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Prompts\PromptHoteles.Designer.cs">
+      <DependentUpon>PromptHoteles.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Prompts\PromptUsuarios.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Prompts\PromptUsuarios.Designer.cs">
+      <DependentUpon>PromptUsuarios.cs</DependentUpon>
+    </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="RegistrarConsumible\Form1.cs">
       <SubType>Form</SubType>
@@ -184,14 +196,26 @@
     <EmbeddedResource Include="ABMUsuario\ABMUsuario02.resx">
       <DependentUpon>ABMUsuario02.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="ABMUsuario\ABMUsuarioPrompt.resx">
-      <DependentUpon>ABMUsuarioPrompt.cs</DependentUpon>
+    <EmbeddedResource Include="ABMUsuario\ABMUsuario03.resx">
+      <DependentUpon>ABMUsuario03.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="GestionReservas\ABMReserva01.resx">
+      <DependentUpon>ABMReserva01.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="GestionReservas\ABMReserva02.resx">
+      <DependentUpon>ABMReserva02.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Login\Login.resx">
       <DependentUpon>Login.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="PantallaPrincipal\PantallaPrincipal01.resx">
       <DependentUpon>PantallaPrincipal01.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Prompts\PromptHoteles.resx">
+      <DependentUpon>PromptHoteles.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Prompts\PromptUsuarios.resx">
+      <DependentUpon>PromptUsuarios.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>

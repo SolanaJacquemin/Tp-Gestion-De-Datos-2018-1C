@@ -8,15 +8,15 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 
-namespace FrbaHotel.ABMUsuario
+namespace FrbaHotel.Prompts
 {
-    public partial class ABMUsuarioPrompt : Form
+    public partial class PromptUsuarios : Form
     {
-        public ABMUsuarioPrompt()
+        public PromptUsuarios()
         {
             InitializeComponent();
             this.StartPosition = FormStartPosition.CenterScreen;
-            txt_aux_userid.Visible = false;
+            txt_aux_hotelid.Visible = false;
             dgvUsuariosPrompt.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
 
             dgvUsuariosPrompt.Rows.Clear();
@@ -42,9 +42,33 @@ namespace FrbaHotel.ABMUsuario
             con.closeConection();
         }
 
-        private void btn_buscar_Click(object sender, EventArgs e)
+        private void PromptUsuarios_Load(object sender, EventArgs e)
         {
 
+        }
+
+        public TextBox TextBox1
+        {
+            get
+            {
+                return txt_aux_hotelid;
+            }
+        }
+
+        private void dgvUsuariosPrompt_CellClick(object sender, DataGridViewCellEventArgs e)
+        {
+            int index = e.RowIndex;
+            DataGridViewRow selectedRow = dgvUsuariosPrompt.Rows[index];
+            string dgv_usuario_ID = selectedRow.Cells[0].Value.ToString();
+
+
+            txt_aux_hotelid.Text = dgv_usuario_ID;
+
+            this.Hide();
+        }
+
+        private void btn_buscar_Click(object sender, EventArgs e)
+        {
             dgvUsuariosPrompt.Rows.Clear();
 
             Conexion con = new Conexion();
@@ -71,53 +95,5 @@ namespace FrbaHotel.ABMUsuario
 
             con.closeConection();
         }
-
-        private void ABMUsuarioPrompt_Load(object sender, EventArgs e)
-        {
-
-        }
-
-        public void dgvUsuariosPrompt_CellClick(object sender, DataGridViewCellEventArgs e)
-        {
-            /*Int32 selectedRowCount = dgvUsuariosPrompt.Rows.GetRowCount(DataGridViewElementStates.Selected);
-            if (selectedRowCount > 0)
-            {
-                System.Text.StringBuilder sb = new System.Text.StringBuilder();
-
-                for (int i = 0; i < selectedRowCount; i++)
-                {
-                    sb.Append("Row: ");
-                    sb.Append(dgvUsuariosPrompt.SelectedRows[i].Index.ToString());
-                    sb.Append(Environment.NewLine);
-                }
-
-                sb.Append("Total: " + selectedRowCount.ToString());
-                MessageBox.Show(sb.ToString(), "Selected Rows");
-            }*/
-            int index = e.RowIndex;
-            DataGridViewRow selectedRow = dgvUsuariosPrompt.Rows[index];
-            string dgv_usuario_ID = selectedRow.Cells[0].Value.ToString();
-            
-            
-            txt_aux_userid.Text = dgv_usuario_ID;
-
-            this.Hide();
-        }
-
-        /*public string dgv_usuario_ID
-        {
-            get
-            {
-                return dgv_usuario_ID;
-            }
-        }*/
-
-        public TextBox TextBox1 {
-            get 
-            {
-                return txt_aux_userid;
-            }
-        }
-
     }
 }

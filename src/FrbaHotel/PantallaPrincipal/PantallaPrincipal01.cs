@@ -11,6 +11,7 @@ using FrbaHotel.ABMUsuario;
 using FrbaHotel.ABMRol;
 using FrbaHotel.ABMHotel;
 using FrbaHotel.ABMHabitacion;
+using FrbaHotel.GestionReservas;
 
 namespace FrbaHotel.PantallaPrincipal
 {
@@ -56,6 +57,14 @@ namespace FrbaHotel.PantallaPrincipal
             this.Hide();
             ABMHabitacion01 formABMHabitacion01 = new ABMHabitacion01();
             formABMHabitacion01.ShowDialog();
+            this.Show();
+        }
+
+        private void btn_reservas_Click(object sender, EventArgs e)
+        {
+            this.Hide();
+            ABMReserva01 formABMReserva01 = new ABMReserva01();
+            formABMReserva01.ShowDialog();
             this.Show();
         }
     }

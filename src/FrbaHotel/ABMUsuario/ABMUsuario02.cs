@@ -8,7 +8,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using FrbaHotel.ABMUsuario;
-
+using FrbaHotel.Prompts;
 
 namespace FrbaHotel.ABMUsuario
 {
@@ -19,6 +19,7 @@ namespace FrbaHotel.ABMUsuario
         public string nombreSP;
         public string usuario;
         public int error;
+
 
         public ABMUsuario02(string modo, string user)
         {
@@ -55,7 +56,6 @@ namespace FrbaHotel.ABMUsuario
                     cb_rol.Enabled = false;
                     txt_intentoslog.ReadOnly = true;
                     txt_mail.ReadOnly = true;
-                    txt_hotel.ReadOnly = true;
                     btn_aceptar_nuevo.Visible = false;
                     break;
                 case "UPD":
@@ -168,7 +168,7 @@ namespace FrbaHotel.ABMUsuario
                             con.command.Parameters.Add("@telefono", SqlDbType.NVarChar).Value = txt_telefono.Text;
                             con.command.Parameters.Add("@direccion", SqlDbType.NVarChar).Value = txt_direccion.Text;
                             con.command.Parameters.Add("@fechanac", SqlDbType.DateTime).Value = dt_fecha_nac.Value.ToString();
-                            //con.command.Parameters.Add("@hotelNombre", SqlDbType.NVarChar).Value = txt_hotel.Text;
+
                             if (modoABM == "DLT")
                             {
                                 con.command.Parameters.Add("@estado", SqlDbType.Bit).Value = 0;
@@ -179,6 +179,7 @@ namespace FrbaHotel.ABMUsuario
 
                             con.openConection();
                             con.command.ExecuteNonQuery();
+                            con.closeConection();
 
                             MessageBox.Show("Operación exitosa", "FOUR SIZONS - FRBA Hoteles", MessageBoxButtons.OK, MessageBoxIcon.Information);
                         }
@@ -212,7 +213,7 @@ namespace FrbaHotel.ABMUsuario
             txt_mail.Text = "";
             txt_nombre.Text = "";
             txt_apellido.Text = "";
-            txt_hotel.Text = "";
+            //txt_hotel.Text = "";
             cb_rol.Items.Clear();
             cb_tipo_documento.Items.Clear();
             levantarCombos();
@@ -267,6 +268,20 @@ namespace FrbaHotel.ABMUsuario
         private void boton_volver_Click(object sender, EventArgs e)
         {
             this.Close();
+        }
+
+        private void btn_promptUsu_Click(object sender, EventArgs e)
+        {
+            /*using (PromptHoteles prompt = new PromptHoteles())
+            {
+                prompt.ShowDialog();
+
+                hotel_id = Convert.ToDecimal(prompt.TextBox1.Text);
+                txt_hotel.Text = prompt.TextBox2.Text;
+                
+                prompt.Close();
+            }
+            this.Show();*/
         }
 
     }

@@ -1,6 +1,6 @@
-﻿namespace FrbaHotel.ABMUsuario
+﻿namespace FrbaHotel.Prompts
 {
-    partial class ABMUsuarioPrompt
+    partial class PromptUsuarios
     {
         /// <summary>
         /// Required designer variable.
@@ -28,27 +28,53 @@
         /// </summary>
         private void InitializeComponent()
         {
+            this.dgvUsuariosPrompt = new System.Windows.Forms.DataGridView();
+            this.Usuario_ID = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.Usuario_Apellido = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.groupBox1 = new System.Windows.Forms.GroupBox();
             this.btn_buscar = new System.Windows.Forms.Button();
             this.label1 = new System.Windows.Forms.Label();
             this.txt_usuarioid = new System.Windows.Forms.TextBox();
-            this.dgvUsuariosPrompt = new System.Windows.Forms.DataGridView();
-            this.Usuario_ID = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.Usuario_Apellido = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.txt_aux_userid = new System.Windows.Forms.TextBox();
-            this.groupBox1.SuspendLayout();
+            this.txt_aux_hotelid = new System.Windows.Forms.TextBox();
             ((System.ComponentModel.ISupportInitialize)(this.dgvUsuariosPrompt)).BeginInit();
+            this.groupBox1.SuspendLayout();
             this.SuspendLayout();
+            // 
+            // dgvUsuariosPrompt
+            // 
+            this.dgvUsuariosPrompt.AllowUserToAddRows = false;
+            this.dgvUsuariosPrompt.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+            this.dgvUsuariosPrompt.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
+            this.Usuario_ID,
+            this.Usuario_Apellido});
+            this.dgvUsuariosPrompt.Location = new System.Drawing.Point(3, 55);
+            this.dgvUsuariosPrompt.Name = "dgvUsuariosPrompt";
+            this.dgvUsuariosPrompt.RowHeadersWidthSizeMode = System.Windows.Forms.DataGridViewRowHeadersWidthSizeMode.AutoSizeToAllHeaders;
+            this.dgvUsuariosPrompt.Size = new System.Drawing.Size(271, 209);
+            this.dgvUsuariosPrompt.TabIndex = 3;
+            this.dgvUsuariosPrompt.CellClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dgvUsuariosPrompt_CellClick);
+            // 
+            // Usuario_ID
+            // 
+            this.Usuario_ID.HeaderText = "ID Usuario";
+            this.Usuario_ID.Name = "Usuario_ID";
+            this.Usuario_ID.ReadOnly = true;
+            // 
+            // Usuario_Apellido
+            // 
+            this.Usuario_Apellido.HeaderText = "Apellido";
+            this.Usuario_Apellido.Name = "Usuario_Apellido";
+            this.Usuario_Apellido.ReadOnly = true;
             // 
             // groupBox1
             // 
             this.groupBox1.Controls.Add(this.btn_buscar);
             this.groupBox1.Controls.Add(this.label1);
             this.groupBox1.Controls.Add(this.txt_usuarioid);
-            this.groupBox1.Location = new System.Drawing.Point(12, 12);
+            this.groupBox1.Location = new System.Drawing.Point(3, 7);
             this.groupBox1.Name = "groupBox1";
             this.groupBox1.Size = new System.Drawing.Size(271, 42);
-            this.groupBox1.TabIndex = 0;
+            this.groupBox1.TabIndex = 2;
             this.groupBox1.TabStop = false;
             this.groupBox1.Text = "Filtros de Búsqueda";
             // 
@@ -78,53 +104,27 @@
             this.txt_usuarioid.Size = new System.Drawing.Size(100, 20);
             this.txt_usuarioid.TabIndex = 0;
             // 
-            // dgvUsuariosPrompt
+            // txt_aux_hotelid
             // 
-            this.dgvUsuariosPrompt.AllowUserToAddRows = false;
-            this.dgvUsuariosPrompt.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            this.dgvUsuariosPrompt.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
-            this.Usuario_ID,
-            this.Usuario_Apellido});
-            this.dgvUsuariosPrompt.Location = new System.Drawing.Point(21, 60);
-            this.dgvUsuariosPrompt.Name = "dgvUsuariosPrompt";
-            this.dgvUsuariosPrompt.RowHeadersWidthSizeMode = System.Windows.Forms.DataGridViewRowHeadersWidthSizeMode.AutoSizeToAllHeaders;
-            this.dgvUsuariosPrompt.Size = new System.Drawing.Size(245, 209);
-            this.dgvUsuariosPrompt.TabIndex = 1;
-            this.dgvUsuariosPrompt.CellClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dgvUsuariosPrompt_CellClick);
+            this.txt_aux_hotelid.Location = new System.Drawing.Point(73, 270);
+            this.txt_aux_hotelid.Name = "txt_aux_hotelid";
+            this.txt_aux_hotelid.Size = new System.Drawing.Size(100, 20);
+            this.txt_aux_hotelid.TabIndex = 4;
             // 
-            // Usuario_ID
-            // 
-            this.Usuario_ID.HeaderText = "ID Usuario";
-            this.Usuario_ID.Name = "Usuario_ID";
-            this.Usuario_ID.ReadOnly = true;
-            // 
-            // Usuario_Apellido
-            // 
-            this.Usuario_Apellido.HeaderText = "Apellido";
-            this.Usuario_Apellido.Name = "Usuario_Apellido";
-            this.Usuario_Apellido.ReadOnly = true;
-            // 
-            // txt_aux_userid
-            // 
-            this.txt_aux_userid.Location = new System.Drawing.Point(82, 275);
-            this.txt_aux_userid.Name = "txt_aux_userid";
-            this.txt_aux_userid.Size = new System.Drawing.Size(100, 20);
-            this.txt_aux_userid.TabIndex = 0;
-            // 
-            // ABMUsuarioPrompt
+            // PromptUsuarios
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(289, 301);
+            this.ClientSize = new System.Drawing.Size(277, 266);
+            this.Controls.Add(this.txt_aux_hotelid);
             this.Controls.Add(this.dgvUsuariosPrompt);
             this.Controls.Add(this.groupBox1);
-            this.Controls.Add(this.txt_aux_userid);
-            this.Name = "ABMUsuarioPrompt";
-            this.Text = "ABMUsuarioPrompt";
-            this.Load += new System.EventHandler(this.ABMUsuarioPrompt_Load);
+            this.Name = "PromptUsuarios";
+            this.Text = "PromptUsuarios";
+            this.Load += new System.EventHandler(this.PromptUsuarios_Load);
+            ((System.ComponentModel.ISupportInitialize)(this.dgvUsuariosPrompt)).EndInit();
             this.groupBox1.ResumeLayout(false);
             this.groupBox1.PerformLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.dgvUsuariosPrompt)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -132,13 +132,13 @@
 
         #endregion
 
+        private System.Windows.Forms.DataGridView dgvUsuariosPrompt;
+        private System.Windows.Forms.DataGridViewTextBoxColumn Usuario_ID;
+        private System.Windows.Forms.DataGridViewTextBoxColumn Usuario_Apellido;
         private System.Windows.Forms.GroupBox groupBox1;
         private System.Windows.Forms.Button btn_buscar;
         private System.Windows.Forms.Label label1;
         private System.Windows.Forms.TextBox txt_usuarioid;
-        private System.Windows.Forms.DataGridView dgvUsuariosPrompt;
-        private System.Windows.Forms.DataGridViewTextBoxColumn Usuario_ID;
-        private System.Windows.Forms.DataGridViewTextBoxColumn Usuario_Apellido;
-        private System.Windows.Forms.TextBox txt_aux_userid;
+        private System.Windows.Forms.TextBox txt_aux_hotelid;
     }
 }

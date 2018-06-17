@@ -63,6 +63,7 @@
             this.label8 = new System.Windows.Forms.Label();
             this.label9 = new System.Windows.Forms.Label();
             this.btn_volver = new System.Windows.Forms.Button();
+            this.txt_hoteles = new System.Windows.Forms.Button();
             this.groupBox1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dgv_Usuarios)).BeginInit();
             this.SuspendLayout();
@@ -104,7 +105,7 @@
             // 
             // btn_promptUsu
             // 
-            this.btn_promptUsu.Location = new System.Drawing.Point(173, 16);
+            this.btn_promptUsu.Location = new System.Drawing.Point(173, 17);
             this.btn_promptUsu.Name = "btn_promptUsu";
             this.btn_promptUsu.Size = new System.Drawing.Size(26, 23);
             this.btn_promptUsu.TabIndex = 0;
@@ -377,6 +378,16 @@
             this.btn_volver.UseVisualStyleBackColor = true;
             this.btn_volver.Click += new System.EventHandler(this.btn_volver_Click);
             // 
+            // txt_hoteles
+            // 
+            this.txt_hoteles.Location = new System.Drawing.Point(569, 323);
+            this.txt_hoteles.Name = "txt_hoteles";
+            this.txt_hoteles.Size = new System.Drawing.Size(89, 23);
+            this.txt_hoteles.TabIndex = 8;
+            this.txt_hoteles.Text = "Hoteles";
+            this.txt_hoteles.UseVisualStyleBackColor = true;
+            this.txt_hoteles.Click += new System.EventHandler(this.boton_hoteles_Click);
+            // 
             // ABMUsuario01
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -387,6 +398,7 @@
             this.Controls.Add(this.label9);
             this.Controls.Add(this.boton_modificacion);
             this.Controls.Add(this.boton_baja);
+            this.Controls.Add(this.txt_hoteles);
             this.Controls.Add(this.boton_alta);
             this.Controls.Add(this.dgv_Usuarios);
             this.Controls.Add(this.groupBox1);
@@ -439,5 +451,6 @@
         private System.Windows.Forms.DataGridViewTextBoxColumn Usuario_Mail;
         private System.Windows.Forms.DataGridViewTextBoxColumn Estado;
         private System.Windows.Forms.DataGridViewTextBoxColumn Falla_Log;
+        private System.Windows.Forms.Button txt_hoteles;
     }
 }

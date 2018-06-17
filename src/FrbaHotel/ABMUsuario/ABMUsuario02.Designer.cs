@@ -35,7 +35,6 @@
             this.dt_fecha_nac = new System.Windows.Forms.DateTimePicker();
             this.cb_tipo_documento = new System.Windows.Forms.ComboBox();
             this.label8 = new System.Windows.Forms.Label();
-            this.label14 = new System.Windows.Forms.Label();
             this.label13 = new System.Windows.Forms.Label();
             this.label7 = new System.Windows.Forms.Label();
             this.label6 = new System.Windows.Forms.Label();
@@ -43,7 +42,6 @@
             this.label4 = new System.Windows.Forms.Label();
             this.label3 = new System.Windows.Forms.Label();
             this.label2 = new System.Windows.Forms.Label();
-            this.txt_hotel = new System.Windows.Forms.TextBox();
             this.txt_mail = new System.Windows.Forms.TextBox();
             this.txt_direccion = new System.Windows.Forms.TextBox();
             this.txt_telefono = new System.Windows.Forms.TextBox();
@@ -96,7 +94,6 @@
             this.groupBox1.Controls.Add(this.dt_fecha_nac);
             this.groupBox1.Controls.Add(this.cb_tipo_documento);
             this.groupBox1.Controls.Add(this.label8);
-            this.groupBox1.Controls.Add(this.label14);
             this.groupBox1.Controls.Add(this.label13);
             this.groupBox1.Controls.Add(this.label7);
             this.groupBox1.Controls.Add(this.label6);
@@ -104,7 +101,6 @@
             this.groupBox1.Controls.Add(this.label4);
             this.groupBox1.Controls.Add(this.label3);
             this.groupBox1.Controls.Add(this.label2);
-            this.groupBox1.Controls.Add(this.txt_hotel);
             this.groupBox1.Controls.Add(this.txt_mail);
             this.groupBox1.Controls.Add(this.txt_direccion);
             this.groupBox1.Controls.Add(this.txt_telefono);
@@ -113,7 +109,7 @@
             this.groupBox1.Controls.Add(this.txt_nombre);
             this.groupBox1.Location = new System.Drawing.Point(25, 145);
             this.groupBox1.Name = "groupBox1";
-            this.groupBox1.Size = new System.Drawing.Size(395, 305);
+            this.groupBox1.Size = new System.Drawing.Size(395, 264);
             this.groupBox1.TabIndex = 3;
             this.groupBox1.TabStop = false;
             this.groupBox1.Text = "Datos de la Persona";
@@ -143,15 +139,6 @@
             this.label8.Size = new System.Drawing.Size(93, 13);
             this.label8.TabIndex = 3;
             this.label8.Text = "Fecha Nacimiento";
-            // 
-            // label14
-            // 
-            this.label14.AutoSize = true;
-            this.label14.Location = new System.Drawing.Point(84, 262);
-            this.label14.Name = "label14";
-            this.label14.Size = new System.Drawing.Size(32, 13);
-            this.label14.TabIndex = 3;
-            this.label14.Text = "Hotel";
             // 
             // label13
             // 
@@ -216,13 +203,6 @@
             this.label2.TabIndex = 3;
             this.label2.Text = "Nombre";
             // 
-            // txt_hotel
-            // 
-            this.txt_hotel.Location = new System.Drawing.Point(140, 262);
-            this.txt_hotel.Name = "txt_hotel";
-            this.txt_hotel.Size = new System.Drawing.Size(200, 20);
-            this.txt_hotel.TabIndex = 13;
-            // 
             // txt_mail
             // 
             this.txt_mail.Location = new System.Drawing.Point(140, 236);
@@ -286,7 +266,7 @@
             // 
             // boton_aceptar
             // 
-            this.boton_aceptar.Location = new System.Drawing.Point(24, 477);
+            this.boton_aceptar.Location = new System.Drawing.Point(25, 415);
             this.boton_aceptar.Name = "boton_aceptar";
             this.boton_aceptar.Size = new System.Drawing.Size(75, 23);
             this.boton_aceptar.TabIndex = 4;
@@ -296,7 +276,7 @@
             // 
             // boton_volver
             // 
-            this.boton_volver.Location = new System.Drawing.Point(345, 477);
+            this.boton_volver.Location = new System.Drawing.Point(345, 415);
             this.boton_volver.Name = "boton_volver";
             this.boton_volver.Size = new System.Drawing.Size(75, 23);
             this.boton_volver.TabIndex = 4;
@@ -375,7 +355,7 @@
             // 
             // btn_aceptar_nuevo
             // 
-            this.btn_aceptar_nuevo.Location = new System.Drawing.Point(112, 477);
+            this.btn_aceptar_nuevo.Location = new System.Drawing.Point(113, 415);
             this.btn_aceptar_nuevo.Name = "btn_aceptar_nuevo";
             this.btn_aceptar_nuevo.Size = new System.Drawing.Size(108, 23);
             this.btn_aceptar_nuevo.TabIndex = 4;
@@ -387,7 +367,7 @@
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(449, 508);
+            this.ClientSize = new System.Drawing.Size(437, 443);
             this.Controls.Add(this.cb_rol);
             this.Controls.Add(this.label1);
             this.Controls.Add(this.label11);
@@ -443,9 +423,7 @@
         private System.Windows.Forms.Label label11;
         private System.Windows.Forms.Label label12;
         private System.Windows.Forms.ComboBox cb_rol;
-        private System.Windows.Forms.Label label14;
         private System.Windows.Forms.Label label13;
-        private System.Windows.Forms.TextBox txt_hotel;
         private System.Windows.Forms.TextBox txt_mail;
         private System.Windows.Forms.TextBox txt_intentoslog;
         private System.Windows.Forms.TextBox txt_estado;

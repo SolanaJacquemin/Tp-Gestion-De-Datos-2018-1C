@@ -34,7 +34,6 @@
             this.btn_reservas = new System.Windows.Forms.Button();
             this.btn_listado = new System.Windows.Forms.Button();
             this.btn_estadias = new System.Windows.Forms.Button();
-            this.btn_regimenes = new System.Windows.Forms.Button();
             this.btn_habitaciones = new System.Windows.Forms.Button();
             this.btn_hoteles = new System.Windows.Forms.Button();
             this.btn_clientes = new System.Windows.Forms.Button();
@@ -71,7 +70,6 @@
             this.groupBox2.Controls.Add(this.btn_reservas);
             this.groupBox2.Controls.Add(this.btn_listado);
             this.groupBox2.Controls.Add(this.btn_estadias);
-            this.groupBox2.Controls.Add(this.btn_regimenes);
             this.groupBox2.Controls.Add(this.btn_habitaciones);
             this.groupBox2.Controls.Add(this.btn_hoteles);
             this.groupBox2.Controls.Add(this.btn_clientes);
@@ -79,23 +77,24 @@
             this.groupBox2.Controls.Add(this.btn_roles);
             this.groupBox2.Location = new System.Drawing.Point(38, 77);
             this.groupBox2.Name = "groupBox2";
-            this.groupBox2.Size = new System.Drawing.Size(543, 184);
+            this.groupBox2.Size = new System.Drawing.Size(543, 165);
             this.groupBox2.TabIndex = 1;
             this.groupBox2.TabStop = false;
             this.groupBox2.Text = "Menú de Opciones";
             // 
             // btn_reservas
             // 
-            this.btn_reservas.Location = new System.Drawing.Point(37, 143);
+            this.btn_reservas.Location = new System.Drawing.Point(269, 90);
             this.btn_reservas.Name = "btn_reservas";
             this.btn_reservas.Size = new System.Drawing.Size(123, 23);
             this.btn_reservas.TabIndex = 0;
             this.btn_reservas.Text = "Gestión de Reservas";
             this.btn_reservas.UseVisualStyleBackColor = true;
+            this.btn_reservas.Click += new System.EventHandler(this.btn_reservas_Click);
             // 
             // btn_listado
             // 
-            this.btn_listado.Location = new System.Drawing.Point(349, 143);
+            this.btn_listado.Location = new System.Drawing.Point(269, 119);
             this.btn_listado.Name = "btn_listado";
             this.btn_listado.Size = new System.Drawing.Size(123, 23);
             this.btn_listado.TabIndex = 0;
@@ -104,21 +103,12 @@
             // 
             // btn_estadias
             // 
-            this.btn_estadias.Location = new System.Drawing.Point(195, 143);
+            this.btn_estadias.Location = new System.Drawing.Point(122, 119);
             this.btn_estadias.Name = "btn_estadias";
             this.btn_estadias.Size = new System.Drawing.Size(123, 23);
             this.btn_estadias.TabIndex = 0;
             this.btn_estadias.Text = "Gestión de Estadías";
             this.btn_estadias.UseVisualStyleBackColor = true;
-            // 
-            // btn_regimenes
-            // 
-            this.btn_regimenes.Location = new System.Drawing.Point(269, 90);
-            this.btn_regimenes.Name = "btn_regimenes";
-            this.btn_regimenes.Size = new System.Drawing.Size(123, 23);
-            this.btn_regimenes.TabIndex = 0;
-            this.btn_regimenes.Text = "ABM de Regímenes";
-            this.btn_regimenes.UseVisualStyleBackColor = true;
             // 
             // btn_habitaciones
             // 
@@ -191,7 +181,7 @@
             // 
             // btn_salir
             // 
-            this.btn_salir.Location = new System.Drawing.Point(506, 276);
+            this.btn_salir.Location = new System.Drawing.Point(506, 248);
             this.btn_salir.Name = "btn_salir";
             this.btn_salir.Size = new System.Drawing.Size(75, 23);
             this.btn_salir.TabIndex = 2;
@@ -201,7 +191,7 @@
             // 
             // PantallaPrincipal01
             // 
-            this.ClientSize = new System.Drawing.Size(606, 332);
+            this.ClientSize = new System.Drawing.Size(606, 283);
             this.Controls.Add(this.btn_salir);
             this.Controls.Add(this.groupBox2);
             this.Controls.Add(this.label6);
@@ -225,7 +215,6 @@
         private System.Windows.Forms.Button btn_reservas;
         private System.Windows.Forms.Button btn_listado;
         private System.Windows.Forms.Button btn_estadias;
-        private System.Windows.Forms.Button btn_regimenes;
         private System.Windows.Forms.Button btn_habitaciones;
         private System.Windows.Forms.Button btn_hoteles;
         private System.Windows.Forms.Button btn_clientes;

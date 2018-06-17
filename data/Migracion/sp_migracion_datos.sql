@@ -898,15 +898,15 @@ end catch
 go
 
 create procedure four_sizons.altaUserXHot
-	@hotel nvarchar (50),
-	@usuario nvarchar (50),
+	@hotId numeric(18),
+	@usuario nvarchar(50),
 	@estado bit
 
 	as begin tran 
 	begin try
-	declare @hotID numeric (18)
+	--declare @hotID numeric (18)
 
-	set @hotId = (select hotel_codigo from FOUR_SIZONS.hotel where @hotel = hotel_nombre)
+	--set @hotId = (select hotel_codigo from FOUR_SIZONS.hotel where @hotel = hotel_nombre)
 
 	if(exists (select Usuario_ID  from FOUR_SIZONS.UsuarioXHotel where @usuario = Usuario_ID and @hotID = Hotel_Codigo))
 	update FOUR_SIZONS.UsuarioXHotel 
@@ -925,8 +925,6 @@ create procedure four_sizons.altaUserXHot
 	end catch
 
 go
-
-
 
 create procedure FOUR_SIZONS.ModificacionUsuario
 	@username nvarchar(15),

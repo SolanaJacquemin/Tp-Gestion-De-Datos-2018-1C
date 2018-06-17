@@ -27,8 +27,25 @@ namespace FrbaHotel
 
         private void btn_login_Click(object sender, EventArgs e)
         {
+            
+            
+
+        }
+
+        private void label1_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void Login_Load(object sender, EventArgs e)
+        {
+            pictureBox1.Image = Image.FromFile("../../FOUR_SIZONS.JPG");
+        }
+
+        private void btn_login_Click_1(object sender, EventArgs e)
+        {
             int errLogin = 0;
-            if (txt_usuario.Text == "") 
+            if (txt_usuario.Text == "")
             {
                 MessageBox.Show("Ingrese el usuario", "FOUR SIZONS - FRBA Hoteles", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 errLogin = 1;
@@ -40,7 +57,7 @@ namespace FrbaHotel
                 errLogin = 1;
             }
 
-            if (errLogin == 0) 
+            if (errLogin == 0)
             {
                 Conexion con = new Conexion();
                 Encriptor encriptor = new Encriptor();
@@ -75,18 +92,6 @@ namespace FrbaHotel
                     this.Close();
                 }
             }
-            
-
-        }
-
-        private void label1_Click(object sender, EventArgs e)
-        {
-
-        }
-
-        private void Login_Load(object sender, EventArgs e)
-        {
-            
         }
 
     }
