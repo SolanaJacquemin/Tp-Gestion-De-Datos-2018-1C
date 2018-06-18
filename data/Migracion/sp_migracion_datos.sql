@@ -764,6 +764,11 @@ BEGIN
     DROP PROCEDURE FOUR_SIZONS.altaRolxFunc
 END;
 
+IF (OBJECT_ID('FOUR_SIZONS.modificacionRolxFunc', 'P') IS NOT NULL)
+BEGIN
+    DROP PROCEDURE FOUR_SIZONS.modificacionRolxFunc
+END;
+
 IF (OBJECT_ID('FOUR_SIZONS.AltaHabitacion', 'P') IS NOT NULL)
 BEGIN
     DROP PROCEDURE FOUR_SIZONS.AltaHabitacion
@@ -810,9 +815,16 @@ BEGIN
     DROP PROCEDURE FOUR_SIZONS.cerrarHotel
 END;
 
+IF (OBJECT_ID('FOUR_SIZONS.generarFactura', 'P') IS NOT NULL)
+BEGIN
+    DROP PROCEDURE FOUR_SIZONS.generarFactura
+END;
+
+IF (OBJECT_ID('FOUR_SIZONS.ModificarFactura', 'P') IS NOT NULL)
+BEGIN
+    DROP PROCEDURE FOUR_SIZONS.ModificarFactura
+END;
 GO
-
-
 
 
 --------------------------------------------------------ABM USUARIO------------------------------
@@ -1235,9 +1247,9 @@ create procedure four_sizons.altaRolxFunc
 
 	as begin tran 
 	begin try 
-
-	declare @rolID nvarchar(50)
-	declare @funcID nvarchar(50)
+	
+	declare @rolID numeric(18)
+	declare @funcID numeric(18)
 
 	set @rolID = (select Rol_Codigo  from four_sizons.Rol where Rol_Nombre = @rolname)
 	set @funcID = (select Func_Codigo from FOUR_SIZONS.Funcionalidad where Func_Nombre = @func)
@@ -1256,6 +1268,34 @@ create procedure four_sizons.altaRolxFunc
 	end catch 
 go
 
+create procedure four_sizons.modificacionRolxFunc
+@rolname nvarchar(50),
+@func nvarchar(50),
+@estado bit
+
+	as begin tran 
+	begin try 
+
+	declare @rolID numeric(18)
+	declare @funcID numeric(18)
+
+	set @rolID = (select Rol_Codigo  from four_sizons.Rol where Rol_Nombre = @rolname)
+	set @funcID = (select Func_Codigo from FOUR_SIZONS.Funcionalidad where Func_Nombre = @func)
+
+	update FOUR_SIZONS.RolXFunc
+		set RolXFunc_Estado = @estado
+	where Rol_Codigo=@rolID and Func_Codigo=@funcID
+
+	commit tran 
+	end try
+
+	begin catch
+	declare @mensaje_de_error nvarchar(255)
+	set @mensaje_de_error = ERROR_MESSAGE()
+	RAISERROR(@mensaje_de_error,11,1)
+	rollback tran  
+	end catch 
+go
 
 --------------------------------------------------ABM HABITACION-------------------------------------------------------------
 create procedure four_sizons.AltaHabitacion
@@ -1268,10 +1308,8 @@ create procedure four_sizons.AltaHabitacion
 
 as begin try
 begin tran 
---declare @HotelId numeric(18)
 declare @TipoHabID numeric(18)
 	
-		--set @HotelId= (select Hotel_Codigo from FOUR_SIZONS.Hotel where @hotelName = Hotel_Nombre)
 		set @TipoHabID = (select Habitacion_Tipo_Codigo from FOUR_SIZONS.Habitacion_Tipo where @TipoHab = Habitacion_Tipo_Descripcion)
 
 		--Valida que no haya dos hab con el mismo numero en el mismo hotel		
@@ -1295,19 +1333,17 @@ go
 create procedure four_sizons.modificarHabitacion
 @numero numeric(18),
 @hotId numeric(18),
-/*@piso numeric(18),
-@ubicacion nvarchar(50),*/ -- ¿para que vas a cambiar el piso y la ubicacion de la habitacion en el hotel?
+@piso numeric(18),
+@ubicacion nvarchar(50), -- ¿para que vas a cambiar el piso y la ubicacion de la habitacion en el hotel? Lo pide el enunciado
 @descripcion nvarchar(255),
 @estado bit
 as 
 begin tran 
 begin try
 
---declare @hotId numeric(18) = (select Hotel_Codigo from FOUR_SIZONS.Hotel where Hotel_Nombre = @hotel )
-
 update FOUR_SIZONS.Habitacion
 
-set /*Habitacion_Piso= @piso,Habitacion_Frente=@ubicacion,*/Habitacion_Estado=@estado,Habitacion_Descripcion=@descripcion
+set Habitacion_Piso= @piso,Habitacion_Frente=@ubicacion,Habitacion_Estado=@estado,Habitacion_Descripcion=@descripcion
 	
 	where Habitacion_Numero=@numero and Hotel_Codigo= @hotId
 
@@ -1529,3 +1565,131 @@ create proc four_sizons.cerrarHotel
 	rollback tran 
 	end catch
 go
+-----------------------------------------------------------FUNCIONES---------------------------------------------------------------------
+create FUNCTION FOUR_SIZONS.calcPrecioConsumible ( @estadia numeric(18))
+
+	RETURNS numeric(18,2)
+
+AS
+
+BEGIN
+
+	DECLARE @total numeric(18,2)
+	set @total = (select CostosConsumibles.Costo 
+					from (select cxe.Estadia_Codigo Est, SUM(con.Consumible_Precio) Costo
+							from FOUR_SIZONS.EstadiaXConsumible cxe, FOUR_SIZONS.Consumible con
+							where cxe.Consumible_Codigo = con.Consumible_Codigo
+								group by cxe.Estadia_Codigo
+						 ) as CostosConsumibles
+				where CostosConsumibles.Est = @estadia
+				)
+	if(@total is null)
+	begin
+	set @total=0
+	end
+RETURN @total
+END	
+go
+
+create FUNCTION four_sizons.calcPrecioEstadia ( @estadia numeric(18))
+
+	RETURNS numeric(18,2)
+
+AS BEGIN
+
+	DECLARE @total numeric(18,2)
+	set @total = (select CostosEstadias.Costo 
+					from ( select es.Estadia_Codigo Est, SUM(re.Reserva_Precio) Costo
+							from FOUR_SIZONS.Estadia es, FOUR_SIZONS.Reserva re
+							where es.reserva_Codigo = re.Reserva_Codigo
+								group by es.Estadia_Codigo) as CostosEstadias
+				  where CostosEstadias.Est = @estadia
+				 )
+RETURN @total
+END	
+go
+
+---------------------------------------------------FACTURA------------------------------------------------------------------------------
+create procedure four_sizons.generarFactura 
+@estadia numeric(18),
+@formaPago numeric(18),
+@fechaI datetime --la fecha del sistema
+as begin
+
+declare @regimen numeric(18),
+		@reserva numeric(18),
+		@totalPago numeric(18,2),
+		@cliente numeric(18),
+		@descripcion nvarchar(255)
+begin tran ta
+begin try
+		set @reserva = ( select Reserva_Codigo from FOUR_SIZONS.Estadia where Estadia_Codigo = @estadia);
+		set @cliente = ( select Cliente_Codigo from FOUR_SIZONS.Reserva where Reserva_Codigo = @reserva);
+		set @regimen = ( select regimen_Codigo from FOUR_SIZONS.Reserva where Reserva_Codigo = @reserva);
+		set @descripcion=(select regimen_descripcion from FOUR_SIZONS.Regimen where Regimen_Codigo=@regimen);
+		if ( @descripcion != 'ALL INCLUSIVE') 
+		begin
+			set @totalPago = FOUR_SIZONS.calcPrecioEstadia(@estadia) + FOUR_SIZONS.calcPrecioConsumible(@estadia);
+			--Es necesario tener al usuario en factura?
+			insert into FOUR_SIZONS.Factura(Estadia_Codigo,Factura_FormaPago,Cliente_Codigo,Factura_Fecha,Factura_Total) values (@estadia,@formaPago,@cliente,@fechaI,@totalPago);
+		end
+		else
+			begin
+				set @totalPago = FOUR_SIZONS.calcPrecioEstadia(@estadia);
+				insert into FOUR_SIZONS.Factura(Estadia_Codigo,Factura_FormaPago,Cliente_Codigo,Factura_Fecha,Factura_Total) values (@estadia,@formaPago,@cliente,@fechaI,@totalPago);
+			end
+commit tran
+end try
+begin catch
+declare @mensaje_de_error nvarchar(255)
+set @mensaje_de_error = ERROR_MESSAGE()
+RAISERROR(@mensaje_de_error,11,1)
+rollback tran 
+end catch
+end
+GO
+--------------------------------------------------------------
+create procedure FOUR_SIZONS.ModificarFactura 
+@estadia numeric(18,0),
+@formaPago numeric(18,0),
+@fechaI datetime
+as
+begin
+
+declare @regimen numeric(18),
+		@reserva numeric(18),
+		@descripcion nvarchar(255),
+		@totalPago numeric(18,2),
+		@cliente numeric(18),
+		@facNro numeric(18)
+begin tran ta
+begin try
+		set @reserva = ( select Reserva_Codigo from FOUR_SIZONS.Estadia where Estadia_Codigo = @estadia);
+		set @cliente = ( select cliente_Codigo from FOUR_SIZONS.Reserva where Reserva_Codigo = @reserva);
+		set @regimen = ( select Regimen_Codigo from FOUR_SIZONS.Reserva where Reserva_Codigo = @reserva);
+		set @descripcion = ( select regimen_descripcion from FOUR_SIZONS.Regimen where Regimen_Codigo=@regimen);
+		set @facNro = (select Factura_Nro from FOUR_SIZONS.Factura where Estadia_Codigo = @estadia);
+		if ( @descripcion != 'ALL INCLUSIVE')
+		begin
+			set @totalPago = FOUR_SIZONS.calcPrecioEstadia(@estadia) + FOUR_SIZONS.calcPrecioConsumible(@estadia);
+			update FOUR_SIZONS.Factura
+			set Factura_FormaPago =@formaPago , Factura_Fecha = @fechaI, Factura_Total = @totalPago
+			where Factura_Nro = @facNro
+		end
+		else
+		begin
+			set @totalPago = FOUR_SIZONS.calcPrecioEstadia(@estadia);
+			update FOUR_SIZONS.Factura
+			set Factura_FormaPago =@formaPago , Factura_Fecha = @fechaI, Factura_Total = @totalPago
+			where Factura_Nro = @facNro
+		end
+commit tran
+end try
+begin catch
+declare @mensaje_de_error nvarchar(255)
+set @mensaje_de_error = ERROR_MESSAGE()
+RAISERROR(@mensaje_de_error,11,1)
+rollback tran 
+end catch
+end
+GO
