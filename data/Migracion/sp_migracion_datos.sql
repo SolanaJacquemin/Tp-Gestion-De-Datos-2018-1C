@@ -365,6 +365,7 @@ IF (OBJECT_ID('FOUR_SIZONS.Regimen', 'U') IS NOT NULL)
 			Tarjeta_Cod numeric(3),
 			Tarjeta_Titular nvarchar(50),
 			Tarjeta_Marca nvarchar(50),
+			tarjeta_estado bit,
 			Cliente_Codigo numeric(18)
 
 			CONSTRAINT FK_Tarjeta FOREIGN KEY (Cliente_Codigo) REFERENCES FOUR_SIZONS.Cliente(Cliente_Codigo),
@@ -788,6 +789,30 @@ BEGIN
     DROP PROCEDURE FOUR_SIZONS.altaTipoHabXRes
 END;
 GO
+
+IF (OBJECT_ID('FOUR_SIZONS.agregarTarjeta', 'P') IS NOT NULL)
+BEGIN
+    DROP PROCEDURE FOUR_SIZONS.AgregarTarjeta
+END;
+
+IF (OBJECT_ID('FOUR_SIZONS.cancelarTarjeta', 'P') IS NOT NULL)
+BEGIN
+    DROP PROCEDURE FOUR_SIZONS.cancelarTarjeta
+END;
+
+IF (OBJECT_ID('FOUR_SIZONS.bajarDisponibilidad', 'P') IS NOT NULL)
+BEGIN
+    DROP PROCEDURE FOUR_SIZONS.bajarDisponibilidad
+END;
+
+IF (OBJECT_ID('FOUR_SIZONS.cerrarHotel', 'P') IS NOT NULL)
+BEGIN
+    DROP PROCEDURE FOUR_SIZONS.cerrarHotel
+END;
+
+GO
+
+
 
 
 --------------------------------------------------------ABM USUARIO------------------------------
@@ -1267,7 +1292,7 @@ begin catch
 end catch
 go
 
-alter procedure four_sizons.modificarHabitacion
+create procedure four_sizons.modificarHabitacion
 @numero numeric(18),
 @hotId numeric(18),
 /*@piso numeric(18),
@@ -1305,17 +1330,17 @@ create procedure four_sizons.GenerarReserva
 @fechaInicio datetime,
 @fechaFin datetime,
 @regimen nvarchar(50),
-@hotel nvarchar(50),
+@hotid numeric(18),
 @clienteCodigo numeric(18)
 
 as begin tran
 begin try
 
 declare @regId numeric(18)
-declare @hotId numeric(18)
+
 
 set @regId = (select Regimen_Codigo from FOUR_SIZONS.Regimen where Regimen_Descripcion= @regimen)
-set @hotId = (select Hotel_Codigo from FOUR_SIZONS.Hotel where Hotel_Nombre= @hotel)
+
 
 insert into FOUR_SIZONS.Reserva(Reserva_FechaCreacion , Reserva_Fecha_Inicio, Reserva_Fecha_Fin,Regimen_Codigo,Reserva_Codigo,Hotel_Codigo,Cliente_Codigo)
 						values(@fechaReserva, @fechaInicio , @fechaFin , @regId,1,@hotId,@clienteCodigo)
@@ -1341,7 +1366,7 @@ create procedure four_sizons.ModificarReserva
 @regimen nvarchar(50),
 @codigoReserva numeric(18),
 @estado numeric(1),
-@hotel nvarchar (50),
+@hotid numeric (18),
 @detalle nvarchar (255),
 @username nvarchar(15)
 
@@ -1349,10 +1374,9 @@ as begin tran
 begin try 
 
 declare @regId numeric(18)
-declare @hotId numeric(18)
 
 set @regId = (select Regimen_Codigo from FOUR_SIZONS.Regimen where Regimen_Descripcion= @regimen)
-set @hotId = (select Hotel_Codigo from FOUR_SIZONS.Hotel where Hotel_Nombre= @hotel)
+
 
 update FOUR_SIZONS.Reserva
 	set Reserva_Fecha_Inicio= @fechaInicio,
@@ -1403,3 +1427,105 @@ end catch
 go
 
 -- esta incompleto, hay que ver lo del precio y otras cosas, como una funcion para buscar clientes
+
+
+create proc four_sizons.bajarDisponibilidad
+@Disp_Fecha numeric(18),
+@hab_tipo nvarchar(50),
+@Hotel numeric(18),
+@cantHab numeric(18)
+
+as begin tran 
+begin try
+
+declare @Habitacion_Tipo_Codigo numeric(18)
+
+set @Habitacion_Tipo_Codigo= (select Habitacion_Tipo_Codigo from Habitacion_Tipo where Habitacion_Tipo_Descripcion= @hab_tipo)
+
+update FOUR_SIZONS.Disponibilidad
+	set Disp_HabDisponibles = Disp_HabDisponibles - @cantHab
+	where Disp_Fecha= @Disp_Fecha and Hotel_Codigo = @hotel and Habitacion_Tipo_Codigo = @Habitacion_Tipo_Codigo
+
+	commit tran
+	end try
+	begin catch
+	declare @mensaje_de_error nvarchar(255)
+	set @mensaje_de_error = ERROR_MESSAGE()
+	RAISERROR(@mensaje_de_error,11,1)
+	rollback tran 
+	end catch
+go
+
+create procedure four_sizons.AgregarTarjeta
+	@Tarjeta_Numero numeric(18),
+	@Tarjeta_Venc datetime,
+	@Tarjeta_Cod numeric(3),
+	@Tarjeta_Titular nvarchar(50),
+	@Tarjeta_Marca nvarchar(50),
+	@Cliente_Codigo numeric(18)
+
+	as begin tran 
+	begin try
+	
+	if(not exists (select Tarjeta_Numero from FOUR_SIZONS.Tarjeta where Tarjeta_Numero = @Tarjeta_Numero))
+	insert into FOUR_SIZONS.Tarjeta (Tarjeta_Numero, Tarjeta_Venc,Tarjeta_Cod,Tarjeta_Titular,Tarjeta_Marca,Cliente_Codigo, tarjeta_estado)
+								values (@Tarjeta_Numero, @Tarjeta_Venc,@Tarjeta_Cod,@Tarjeta_Titular,@Tarjeta_Marca,@Cliente_Codigo,1)
+
+	else print N'la tarjeta ya figura en el sistema, ingrese otra por favor'
+	
+	commit tran
+	end try
+
+	begin catch
+	declare @mensaje_de_error nvarchar(255)
+	set @mensaje_de_error = ERROR_MESSAGE()
+	RAISERROR(@mensaje_de_error,11,1)
+	rollback tran 
+	end catch
+
+go
+
+create procedure four_sizons.cancelarTarjeta
+	@Tarjeta_Numero numeric(18)
+	as begin tran 
+	begin try
+
+	update FOUR_SIZONS.Tarjeta
+	set Tarjeta_estado = '0'
+	where Tarjeta_Numero= @Tarjeta_Numero
+
+	commit tran
+	end try
+	begin catch
+	declare @mensaje_de_error nvarchar(255)
+	set @mensaje_de_error = ERROR_MESSAGE()
+	RAISERROR(@mensaje_de_error,11,1)
+	rollback tran 
+	end catch
+go
+
+create proc four_sizons.cerrarHotel
+			@Cerrado_FechaI datetime,
+			@Cerrado_FechaF datetime,
+			@Cerrado_Detalle nvarchar(255),
+			@Hotel_Codigo numeric(18)
+
+	as begin tran 
+	begin try
+
+	insert into FOUR_SIZONS.Hotel_Cerrado(Cerrado_Detalle, Cerrado_FechaF ,Cerrado_FechaI , Hotel_Codigo)
+									values (@Cerrado_Detalle,@Cerrado_FechaF,@Cerrado_FechaI,@Hotel_Codigo)
+
+	update FOUR_SIZONS.Hotel 
+	 set Hotel_Estado = '0'
+	 where Hotel_Codigo = @Hotel_Codigo
+
+	commit tran
+	end try
+	begin catch
+	declare @mensaje_de_error nvarchar(255)
+	set @mensaje_de_error = ERROR_MESSAGE()
+	RAISERROR(@mensaje_de_error,11,1)
+	rollback tran 
+	end catch
+go
