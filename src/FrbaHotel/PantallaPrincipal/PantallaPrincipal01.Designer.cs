@@ -138,6 +138,7 @@
             this.btn_clientes.TabIndex = 0;
             this.btn_clientes.Text = "ABM de Clientes";
             this.btn_clientes.UseVisualStyleBackColor = true;
+            this.btn_clientes.Click += new System.EventHandler(this.btn_clientes_Click);
             // 
             // btn_usuarios
             // 
