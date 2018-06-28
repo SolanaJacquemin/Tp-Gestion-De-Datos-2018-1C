@@ -48,9 +48,9 @@
             this.label10 = new System.Windows.Forms.Label();
             this.label12 = new System.Windows.Forms.Label();
             this.dt_fecha_nac = new System.Windows.Forms.DateTimePicker();
-            this.btn_volver_Click = new System.Windows.Forms.Button();
+            this.btn_volver = new System.Windows.Forms.Button();
             this.lbl_titulo = new System.Windows.Forms.Label();
-            this.button1 = new System.Windows.Forms.Button();
+            this.btn_Aceptar = new System.Windows.Forms.Button();
             this.btn_aceptar_nuevo = new System.Windows.Forms.Button();
             this.SuspendLayout();
             // 
@@ -220,15 +220,15 @@
             this.dt_fecha_nac.TabIndex = 38;
             this.dt_fecha_nac.ValueChanged += new System.EventHandler(this.dateTimePicker1_ValueChanged);
             // 
-            // btn_volver_Click
+            // btn_volver
             // 
-            this.btn_volver_Click.Location = new System.Drawing.Point(366, 292);
-            this.btn_volver_Click.Name = "btn_volver_Click";
-            this.btn_volver_Click.Size = new System.Drawing.Size(75, 23);
-            this.btn_volver_Click.TabIndex = 39;
-            this.btn_volver_Click.Text = "Volver";
-            this.btn_volver_Click.UseVisualStyleBackColor = true;
-            this.btn_volver_Click.Click += new System.EventHandler(this.btn_volver_Click_Click);
+            this.btn_volver.Location = new System.Drawing.Point(366, 292);
+            this.btn_volver.Name = "btn_volver";
+            this.btn_volver.Size = new System.Drawing.Size(75, 23);
+            this.btn_volver.TabIndex = 39;
+            this.btn_volver.Text = "Volver";
+            this.btn_volver.UseVisualStyleBackColor = true;
+            this.btn_volver.Click += new System.EventHandler(this.btn_volver_Click_Click);
             // 
             // lbl_titulo
             // 
@@ -240,14 +240,15 @@
             this.lbl_titulo.TabIndex = 40;
             this.lbl_titulo.Text = "Titulo";
             // 
-            // button1
+            // btn_Aceptar
             // 
-            this.button1.Location = new System.Drawing.Point(43, 292);
-            this.button1.Name = "button1";
-            this.button1.Size = new System.Drawing.Size(75, 23);
-            this.button1.TabIndex = 41;
-            this.button1.Text = "Aceptar";
-            this.button1.UseVisualStyleBackColor = true;
+            this.btn_Aceptar.Location = new System.Drawing.Point(43, 292);
+            this.btn_Aceptar.Name = "btn_Aceptar";
+            this.btn_Aceptar.Size = new System.Drawing.Size(75, 23);
+            this.btn_Aceptar.TabIndex = 41;
+            this.btn_Aceptar.Text = "Aceptar";
+            this.btn_Aceptar.UseVisualStyleBackColor = true;
+            this.btn_Aceptar.Click += new System.EventHandler(this.btn_Aceptar_Click);
             // 
             // btn_aceptar_nuevo
             // 
@@ -257,6 +258,7 @@
             this.btn_aceptar_nuevo.TabIndex = 42;
             this.btn_aceptar_nuevo.Text = "Aceptar y nuevo";
             this.btn_aceptar_nuevo.UseVisualStyleBackColor = true;
+            this.btn_aceptar_nuevo.Click += new System.EventHandler(this.btn_aceptar_nuevo_Click);
             // 
             // ABMCliente02
             // 
@@ -264,9 +266,9 @@
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(454, 327);
             this.Controls.Add(this.btn_aceptar_nuevo);
-            this.Controls.Add(this.button1);
+            this.Controls.Add(this.btn_Aceptar);
             this.Controls.Add(this.lbl_titulo);
-            this.Controls.Add(this.btn_volver_Click);
+            this.Controls.Add(this.btn_volver);
             this.Controls.Add(this.dt_fecha_nac);
             this.Controls.Add(this.label12);
             this.Controls.Add(this.label10);
@@ -317,9 +319,9 @@
         private System.Windows.Forms.Label label10;
         private System.Windows.Forms.Label label12;
         private System.Windows.Forms.DateTimePicker dt_fecha_nac;
-        private System.Windows.Forms.Button btn_volver_Click;
+        private System.Windows.Forms.Button btn_volver;
         private System.Windows.Forms.Label lbl_titulo;
-        private System.Windows.Forms.Button button1;
+        private System.Windows.Forms.Button btn_Aceptar;
         private System.Windows.Forms.Button btn_aceptar_nuevo;
     }
 }

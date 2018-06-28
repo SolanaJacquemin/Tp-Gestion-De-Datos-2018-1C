@@ -47,7 +47,7 @@
             this.Cliente_Puntos = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.Cliente_Estado = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.Cliente_Consistente = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.btn_volver_Click = new System.Windows.Forms.Button();
+            this.btn_volver = new System.Windows.Forms.Button();
             this.groupBox1 = new System.Windows.Forms.GroupBox();
             this.cb_tipo_doc = new System.Windows.Forms.ComboBox();
             this.txt_nro_doc = new System.Windows.Forms.TextBox();
@@ -61,9 +61,9 @@
             this.txt_nombre = new System.Windows.Forms.TextBox();
             this.btn_alta = new System.Windows.Forms.Button();
             this.btn_baja = new System.Windows.Forms.Button();
-            this.button3 = new System.Windows.Forms.Button();
-            this.btn_buscar_Click = new System.Windows.Forms.Button();
-            this.btn_limpiar_Click = new System.Windows.Forms.Button();
+            this.btn_Modificacion = new System.Windows.Forms.Button();
+            this.btn_buscar = new System.Windows.Forms.Button();
+            this.btn_limpiar = new System.Windows.Forms.Button();
             ((System.ComponentModel.ISupportInitialize)(this.dgv_Clientes)).BeginInit();
             this.groupBox1.SuspendLayout();
             this.SuspendLayout();
@@ -197,15 +197,15 @@
             this.Cliente_Consistente.HeaderText = "Consistente";
             this.Cliente_Consistente.Name = "Cliente_Consistente";
             // 
-            // btn_volver_Click
+            // btn_volver
             // 
-            this.btn_volver_Click.Location = new System.Drawing.Point(588, 376);
-            this.btn_volver_Click.Name = "btn_volver_Click";
-            this.btn_volver_Click.Size = new System.Drawing.Size(75, 23);
-            this.btn_volver_Click.TabIndex = 23;
-            this.btn_volver_Click.Text = "Volver";
-            this.btn_volver_Click.UseVisualStyleBackColor = true;
-            this.btn_volver_Click.Click += new System.EventHandler(this.button2_Click);
+            this.btn_volver.Location = new System.Drawing.Point(588, 376);
+            this.btn_volver.Name = "btn_volver";
+            this.btn_volver.Size = new System.Drawing.Size(75, 23);
+            this.btn_volver.TabIndex = 23;
+            this.btn_volver.Text = "Volver";
+            this.btn_volver.UseVisualStyleBackColor = true;
+            this.btn_volver.Click += new System.EventHandler(this.button2_Click);
             // 
             // groupBox1
             // 
@@ -335,54 +335,55 @@
             this.btn_baja.UseVisualStyleBackColor = true;
             this.btn_baja.Click += new System.EventHandler(this.btn_baja_Click);
             // 
-            // button3
+            // btn_Modificacion
             // 
-            this.button3.Location = new System.Drawing.Point(588, 316);
-            this.button3.Name = "button3";
-            this.button3.Size = new System.Drawing.Size(75, 23);
-            this.button3.TabIndex = 26;
-            this.button3.Text = "Modificación";
-            this.button3.UseVisualStyleBackColor = true;
-            this.button3.Click += new System.EventHandler(this.button3_Click);
+            this.btn_Modificacion.Location = new System.Drawing.Point(588, 316);
+            this.btn_Modificacion.Name = "btn_Modificacion";
+            this.btn_Modificacion.Size = new System.Drawing.Size(75, 23);
+            this.btn_Modificacion.TabIndex = 26;
+            this.btn_Modificacion.Text = "Modificación";
+            this.btn_Modificacion.UseVisualStyleBackColor = true;
+            this.btn_Modificacion.Click += new System.EventHandler(this.btn_Modificacion_Click);
             // 
-            // btn_buscar_Click
+            // btn_buscar
             // 
-            this.btn_buscar_Click.Location = new System.Drawing.Point(588, 115);
-            this.btn_buscar_Click.Name = "btn_buscar_Click";
-            this.btn_buscar_Click.Size = new System.Drawing.Size(75, 23);
-            this.btn_buscar_Click.TabIndex = 27;
-            this.btn_buscar_Click.Text = "Buscar";
-            this.btn_buscar_Click.UseVisualStyleBackColor = true;
-            this.btn_buscar_Click.Click += new System.EventHandler(this.button4_Click);
+            this.btn_buscar.Location = new System.Drawing.Point(588, 115);
+            this.btn_buscar.Name = "btn_buscar";
+            this.btn_buscar.Size = new System.Drawing.Size(75, 23);
+            this.btn_buscar.TabIndex = 27;
+            this.btn_buscar.Text = "Buscar";
+            this.btn_buscar.UseVisualStyleBackColor = true;
+            this.btn_buscar.Click += new System.EventHandler(this.button4_Click);
             // 
-            // btn_limpiar_Click
+            // btn_limpiar
             // 
-            this.btn_limpiar_Click.Location = new System.Drawing.Point(588, 144);
-            this.btn_limpiar_Click.Name = "btn_limpiar_Click";
-            this.btn_limpiar_Click.Size = new System.Drawing.Size(75, 23);
-            this.btn_limpiar_Click.TabIndex = 28;
-            this.btn_limpiar_Click.Text = "Limpiar";
-            this.btn_limpiar_Click.UseVisualStyleBackColor = true;
-            this.btn_limpiar_Click.Click += new System.EventHandler(this.button5_Click);
+            this.btn_limpiar.Location = new System.Drawing.Point(588, 144);
+            this.btn_limpiar.Name = "btn_limpiar";
+            this.btn_limpiar.Size = new System.Drawing.Size(75, 23);
+            this.btn_limpiar.TabIndex = 28;
+            this.btn_limpiar.Text = "Limpiar";
+            this.btn_limpiar.UseVisualStyleBackColor = true;
+            this.btn_limpiar.Click += new System.EventHandler(this.button5_Click);
             // 
             // ABMCliente01
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(711, 411);
-            this.Controls.Add(this.btn_limpiar_Click);
-            this.Controls.Add(this.btn_buscar_Click);
-            this.Controls.Add(this.button3);
+            this.Controls.Add(this.btn_limpiar);
+            this.Controls.Add(this.btn_buscar);
+            this.Controls.Add(this.btn_Modificacion);
             this.Controls.Add(this.btn_baja);
             this.Controls.Add(this.btn_alta);
             this.Controls.Add(this.groupBox1);
-            this.Controls.Add(this.btn_volver_Click);
+            this.Controls.Add(this.btn_volver);
             this.Controls.Add(this.dgv_Clientes);
             this.Controls.Add(this.label8);
             this.Controls.Add(this.label9);
             this.Controls.Add(this.label1);
             this.Name = "ABMCliente01";
             this.Text = "ABMCliente01";
+            this.Load += new System.EventHandler(this.ABMCliente01_Load);
             ((System.ComponentModel.ISupportInitialize)(this.dgv_Clientes)).EndInit();
             this.groupBox1.ResumeLayout(false);
             this.groupBox1.PerformLayout();
@@ -397,7 +398,7 @@
         private System.Windows.Forms.Label label9;
         private System.Windows.Forms.Label label1;
         private System.Windows.Forms.DataGridView dgv_Clientes;
-        private System.Windows.Forms.Button btn_volver_Click;
+        private System.Windows.Forms.Button btn_volver;
         private System.Windows.Forms.GroupBox groupBox1;
         private System.Windows.Forms.DataGridViewTextBoxColumn Cliente_Codigo;
         private System.Windows.Forms.DataGridViewTextBoxColumn Cliente_Nombre;
@@ -416,9 +417,9 @@
         private System.Windows.Forms.DataGridViewTextBoxColumn Cliente_Consistente;
         private System.Windows.Forms.Button btn_alta;
         private System.Windows.Forms.Button btn_baja;
-        private System.Windows.Forms.Button button3;
-        private System.Windows.Forms.Button btn_buscar_Click;
-        private System.Windows.Forms.Button btn_limpiar_Click;
+        private System.Windows.Forms.Button btn_Modificacion;
+        private System.Windows.Forms.Button btn_buscar;
+        private System.Windows.Forms.Button btn_limpiar;
         private System.Windows.Forms.TextBox txt_nombre;
         private System.Windows.Forms.Label label3;
         private System.Windows.Forms.Label label2;

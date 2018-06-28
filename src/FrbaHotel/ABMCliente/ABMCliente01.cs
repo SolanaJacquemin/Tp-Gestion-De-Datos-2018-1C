@@ -142,7 +142,7 @@ namespace FrbaHotel.AbmCliente
             
             string modo = "INS";
             this.Hide();
-            ABMCliente02 formABMCliente02 = new ABMCliente02(modo);
+            ABMCliente02 formABMCliente02 = new ABMCliente02(modo, dgv_cliente_ID );
             formABMCliente02.ShowDialog();
             this.Show();
             this.buscar();
@@ -157,7 +157,7 @@ namespace FrbaHotel.AbmCliente
             {
                 string modo = "DLT";
                 this.Hide();
-                ABMCliente02 formABMCliente02 = new ABMCliente02(modo);
+                ABMCliente02 formABMCliente02 = new ABMCliente02(modo, dgv_cliente_ID);
                 formABMCliente02.ShowDialog();
                 this.Show();
                 this.buscar();
@@ -170,13 +170,13 @@ namespace FrbaHotel.AbmCliente
            
         }
 
-        private void button3_Click(object sender, EventArgs e)
+        private void btn_Modificacion_Click(object sender, EventArgs e)
         {
             if (dgv_Clientes.SelectedRows.Count > 0)
             {
                 string modo = "UPD";
                 this.Hide();
-                ABMCliente02 formABMCliente02 = new ABMCliente02(modo);
+                ABMCliente02 formABMCliente02 = new ABMCliente02(modo, dgv_cliente_ID);
                 formABMCliente02.ShowDialog();
                 this.Show();
                 this.buscar();
@@ -187,6 +187,31 @@ namespace FrbaHotel.AbmCliente
                 MessageBox.Show("Debe seleccionar un cliente de la grilla", "FOUR SIZONS - FRBA Hoteles", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
-      
+
+        private void ABMCliente01_Load(object sender, EventArgs e)
+        {
+            refrescarGrid();
+        }
+
+        
+        public void dgv_Clientes_CellClick(object sender, DataGridViewCellEventArgs e)
+        {
+            int index = e.RowIndex;
+            DataGridViewRow selectedRow = dgv_Clientes.Rows[index];
+            dgv_cliente_ID = Convert.ToDecimal(selectedRow.Cells[0].Value.ToString());
+
+        }
+
+        private void refrescarGrid()
+        {
+            dgv_Clientes.ClearSelection();
+            foreach (DataGridViewRow row in dgv_Clientes.Rows)
+                if (Convert.ToBoolean(row.Cells[13].Value) == false)
+                {
+                    row.DefaultCellStyle.BackColor = Color.Red;
+                }
+        }
+       
+
     }
 }
