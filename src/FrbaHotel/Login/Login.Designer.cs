@@ -31,7 +31,7 @@
             this.label3 = new System.Windows.Forms.Label();
             this.label4 = new System.Windows.Forms.Label();
             this.pictureBox1 = new System.Windows.Forms.PictureBox();
-            this.button1 = new System.Windows.Forms.Button();
+            this.btn_reservar = new System.Windows.Forms.Button();
             this.groupBox1 = new System.Windows.Forms.GroupBox();
             this.label2 = new System.Windows.Forms.Label();
             this.label1 = new System.Windows.Forms.Label();
@@ -69,14 +69,14 @@
             this.pictureBox1.TabIndex = 5;
             this.pictureBox1.TabStop = false;
             // 
-            // button1
+            // btn_reservar
             // 
-            this.button1.Location = new System.Drawing.Point(136, 372);
-            this.button1.Name = "button1";
-            this.button1.Size = new System.Drawing.Size(293, 23);
-            this.button1.TabIndex = 6;
-            this.button1.Text = "Reservar Habitación";
-            this.button1.UseVisualStyleBackColor = true;
+            this.btn_reservar.Location = new System.Drawing.Point(136, 372);
+            this.btn_reservar.Name = "btn_reservar";
+            this.btn_reservar.Size = new System.Drawing.Size(293, 23);
+            this.btn_reservar.TabIndex = 3;
+            this.btn_reservar.Text = "Reservar Habitación";
+            this.btn_reservar.UseVisualStyleBackColor = true;
             // 
             // groupBox1
             // 
@@ -88,7 +88,7 @@
             this.groupBox1.Location = new System.Drawing.Point(136, 12);
             this.groupBox1.Name = "groupBox1";
             this.groupBox1.Size = new System.Drawing.Size(422, 44);
-            this.groupBox1.TabIndex = 7;
+            this.groupBox1.TabIndex = 0;
             this.groupBox1.TabStop = false;
             this.groupBox1.Text = "Iniciar Sesión";
             // 
@@ -115,21 +115,21 @@
             this.txt_password.Location = new System.Drawing.Point(248, 17);
             this.txt_password.Name = "txt_password";
             this.txt_password.Size = new System.Drawing.Size(100, 20);
-            this.txt_password.TabIndex = 5;
+            this.txt_password.TabIndex = 1;
             // 
             // txt_usuario
             // 
             this.txt_usuario.Location = new System.Drawing.Point(75, 18);
             this.txt_usuario.Name = "txt_usuario";
             this.txt_usuario.Size = new System.Drawing.Size(100, 20);
-            this.txt_usuario.TabIndex = 4;
+            this.txt_usuario.TabIndex = 0;
             // 
             // btn_login
             // 
             this.btn_login.Location = new System.Drawing.Point(354, 15);
             this.btn_login.Name = "btn_login";
             this.btn_login.Size = new System.Drawing.Size(60, 23);
-            this.btn_login.TabIndex = 8;
+            this.btn_login.TabIndex = 2;
             this.btn_login.Text = "Login";
             this.btn_login.UseVisualStyleBackColor = true;
             this.btn_login.Click += new System.EventHandler(this.btn_login_Click_1);
@@ -140,7 +140,7 @@
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(566, 403);
             this.Controls.Add(this.groupBox1);
-            this.Controls.Add(this.button1);
+            this.Controls.Add(this.btn_reservar);
             this.Controls.Add(this.pictureBox1);
             this.Controls.Add(this.label4);
             this.Controls.Add(this.label3);
@@ -160,7 +160,7 @@
         private System.Windows.Forms.Label label3;
         private System.Windows.Forms.Label label4;
         private System.Windows.Forms.PictureBox pictureBox1;
-        private System.Windows.Forms.Button button1;
+        private System.Windows.Forms.Button btn_reservar;
         private System.Windows.Forms.GroupBox groupBox1;
         private System.Windows.Forms.Label label2;
         private System.Windows.Forms.Label label1;

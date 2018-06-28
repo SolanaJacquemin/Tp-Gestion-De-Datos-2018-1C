@@ -57,7 +57,7 @@
             this.labelTitulo = new System.Windows.Forms.Label();
             this.dt_fechaDesde = new System.Windows.Forms.DateTimePicker();
             this.label15 = new System.Windows.Forms.Label();
-            this.dateTimePicker1 = new System.Windows.Forms.DateTimePicker();
+            this.dt_fechaHasta = new System.Windows.Forms.DateTimePicker();
             this.textBox1 = new System.Windows.Forms.TextBox();
             this.label12 = new System.Windows.Forms.Label();
             this.textBox2 = new System.Windows.Forms.TextBox();
@@ -95,6 +95,7 @@
             this.boton_aceptar.TabIndex = 21;
             this.boton_aceptar.Text = "Aceptar";
             this.boton_aceptar.UseVisualStyleBackColor = true;
+            this.boton_aceptar.Click += new System.EventHandler(this.boton_aceptar_Click);
             // 
             // dt_fecha_nac
             // 
@@ -329,12 +330,12 @@
             this.label15.TabIndex = 18;
             this.label15.Text = "Fecha Hasta";
             // 
-            // dateTimePicker1
+            // dt_fechaHasta
             // 
-            this.dateTimePicker1.Location = new System.Drawing.Point(365, 94);
-            this.dateTimePicker1.Name = "dateTimePicker1";
-            this.dateTimePicker1.Size = new System.Drawing.Size(94, 20);
-            this.dateTimePicker1.TabIndex = 25;
+            this.dt_fechaHasta.Location = new System.Drawing.Point(365, 94);
+            this.dt_fechaHasta.Name = "dt_fechaHasta";
+            this.dt_fechaHasta.Size = new System.Drawing.Size(94, 20);
+            this.dt_fechaHasta.TabIndex = 25;
             // 
             // textBox1
             // 
@@ -390,7 +391,7 @@
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(512, 500);
             this.Controls.Add(this.btn_promptUsu);
-            this.Controls.Add(this.dateTimePicker1);
+            this.Controls.Add(this.dt_fechaHasta);
             this.Controls.Add(this.cb_tipo_documento);
             this.Controls.Add(this.dt_fechaDesde);
             this.Controls.Add(this.label1);
@@ -449,7 +450,7 @@
         private System.Windows.Forms.Label labelTitulo;
         private System.Windows.Forms.DateTimePicker dt_fechaDesde;
         private System.Windows.Forms.Label label15;
-        private System.Windows.Forms.DateTimePicker dateTimePicker1;
+        private System.Windows.Forms.DateTimePicker dt_fechaHasta;
         private System.Windows.Forms.TextBox textBox1;
         private System.Windows.Forms.Label label12;
         private System.Windows.Forms.TextBox textBox2;

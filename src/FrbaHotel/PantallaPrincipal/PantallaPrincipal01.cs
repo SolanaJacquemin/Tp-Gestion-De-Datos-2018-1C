@@ -13,6 +13,7 @@ using FrbaHotel.ABMHotel;
 using FrbaHotel.ABMHabitacion;
 using FrbaHotel.GestionReservas;
 using FrbaHotel.AbmCliente;
+using FrbaHotel.ListadoEstadistico;
 
 namespace FrbaHotel.PantallaPrincipal
 {
@@ -69,6 +70,14 @@ namespace FrbaHotel.PantallaPrincipal
             this.Show();
         }
 
+
+        private void btn_listado_Click(object sender, EventArgs e)
+        {
+            this.Hide();
+            ListadoEstadistico01 listadoEstadistico01 = new ListadoEstadistico01();
+            listadoEstadistico01.ShowDialog();
+            this.Show();
+        }
         private void btn_clientes_Click(object sender, EventArgs e)
         {
             this.Hide();

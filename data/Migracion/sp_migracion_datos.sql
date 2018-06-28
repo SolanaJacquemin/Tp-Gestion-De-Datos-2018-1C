@@ -83,9 +83,7 @@ BEGIN
 	IF (OBJECT_ID('FOUR_SIZONS.Tarjeta', 'U') IS NOT NULL)
 	BEGIN
 		DROP TABLE FOUR_SIZONS.Tarjeta
-	END
-
-	
+	END	
 
 	IF (OBJECT_ID('FOUR_SIZONS.Funcionalidad', 'U') IS NOT NULL)
 	BEGIN
@@ -126,10 +124,17 @@ BEGIN
 	BEGIN
 		DROP TABLE FOUR_SIZONS.Reserva
 	END
-IF (OBJECT_ID('FOUR_SIZONS.Regimen', 'U') IS NOT NULL)
+
+	IF (OBJECT_ID('FOUR_SIZONS.sec_cod_reserva', 'SO') IS NOT NULL)
+	BEGIN
+		DROP SEQUENCE FOUR_SIZONS.sec_cod_reserva
+	END
+
+	IF (OBJECT_ID('FOUR_SIZONS.Regimen', 'U') IS NOT NULL)
 	BEGIN
 		DROP TABLE FOUR_SIZONS.Regimen
 	END
+
 	IF (OBJECT_ID('FOUR_SIZONS.Usuario', 'U') IS NOT NULL)
 	BEGIN
 		DROP TABLE FOUR_SIZONS.Usuario
@@ -377,7 +382,7 @@ IF (OBJECT_ID('FOUR_SIZONS.Regimen', 'U') IS NOT NULL)
 	BEGIN
 		CREATE TABLE FOUR_SIZONS.Reserva (
 			Reserva_Codigo numeric(18),
-			Reserva_FechaCreacion datetime,
+			Reserva_FechaCreacion datetime default GETDATE(),
 			Reserva_Fecha_Inicio datetime,
 			Reserva_Fecha_Fin datetime,
 			Reserva_Cant_Noches numeric(18),
@@ -395,6 +400,13 @@ IF (OBJECT_ID('FOUR_SIZONS.Regimen', 'U') IS NOT NULL)
 
 			CONSTRAINT PK_Reserva PRIMARY KEY (Reserva_Codigo)
 		)		
+	END
+
+	IF NOT EXISTS (SELECT * FROM sys.sequences WHERE name = 'FOUR_SIZONS.sec_cod_reserva')
+	BEGIN
+		CREATE SEQUENCE FOUR_SIZONS.sec_cod_reserva
+		START WITH 110000
+		INCREMENT BY 1;
 	END
 
 	IF NOT EXISTS (SELECT * FROM sys.tables WHERE name = 'ReservaMod')
@@ -1407,24 +1419,24 @@ go
 --------------------------------------------------DICE QUE NO HAY QUE DESARROLLARLO----------------------------------
 
 create procedure four_sizons.GenerarReserva
-@fechaReserva datetime,
 @fechaInicio datetime,
 @fechaFin datetime,
-@regimen nvarchar(50),
-@hotid numeric(18),
-@clienteCodigo numeric(18)
+@userId nvarchar(15),
+@hotId numeric(18),
+@cliId numeric(18),
+@regId numeric(18)
 
 as begin tran
 begin try
+declare @cantidadNoches numeric(2)
+declare @precio decimal(12)
 
-declare @regId numeric(18)
+set @cantidadNoches = DATEDIFF(day, @fechaInicio, @fechaFin)
 
-
-set @regId = (select Regimen_Codigo from FOUR_SIZONS.Regimen where Regimen_Descripcion= @regimen)
-
-
-insert into FOUR_SIZONS.Reserva(Reserva_FechaCreacion , Reserva_Fecha_Inicio, Reserva_Fecha_Fin,Regimen_Codigo,Reserva_Codigo,Hotel_Codigo,Cliente_Codigo)
-						values(@fechaReserva, @fechaInicio , @fechaFin , @regId,1,@hotId,@clienteCodigo)
+insert into FOUR_SIZONS.Reserva(Reserva_Codigo,Reserva_Fecha_Inicio,Reserva_Fecha_Fin,Reserva_Cant_Noches,
+								Reserva_Precio,Usuario_ID,Hotel_Codigo,Cliente_Codigo,Regimen_Codigo,Reserva_Estado)
+								values((NEXT VALUE FOR sec_cod_reserva),@fechaInicio,@fechaFin,@cantidadNoches,
+								@precio,@userId,@hotId,@cliId,@regId,1)
 
 commit tran 
 end try
@@ -1435,8 +1447,6 @@ declare @mensaje_de_error nvarchar(255)
 	RAISERROR(@mensaje_de_error,11,1)
 rollback tran
 end catch
-
-
 go
 
 
@@ -1536,7 +1546,7 @@ update FOUR_SIZONS.Disponibilidad
 	rollback tran 
 	end catch
 go
-
+/*
 create procedure four_sizons.AgregarTarjeta
 	@Tarjeta_Numero numeric(18),
 	@Tarjeta_Venc datetime,
@@ -1612,7 +1622,7 @@ create proc four_sizons.cerrarHotel
 go
 
 -----------------------------------------------------------FUNCIONES---------------------------------------------------------------------
-alter function four_sizons.InicioTRi(@Tri numeric(18) , @anio numeric(18))
+create function four_sizons.InicioTRi(@Tri numeric(18) , @anio numeric(18))
 	returns datetime
 as begin
 declare @inicio datetime
@@ -1981,3 +1991,4 @@ group by h.Hotel_Codigo
 order by sum(ExC.estXcons_cantidad)
 end 
 go
+*/

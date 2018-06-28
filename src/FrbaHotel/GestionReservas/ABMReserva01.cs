@@ -76,7 +76,11 @@ namespace FrbaHotel.GestionReservas
 
         private void boton_generar_Click(object sender, EventArgs e)
         {
-
+            string modo = "INS";
+            this.Hide();
+            ABMReserva02 formABMReserva02 = new ABMReserva02(modo, "SYSADM");
+            formABMReserva02.ShowDialog();
+            this.Show();
         }
     }
 }

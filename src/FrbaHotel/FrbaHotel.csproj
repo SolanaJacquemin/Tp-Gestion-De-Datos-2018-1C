@@ -131,17 +131,17 @@
     <Compile Include="GestionReservas\ABMReserva02.Designer.cs">
       <DependentUpon>ABMReserva02.cs</DependentUpon>
     </Compile>
+    <Compile Include="ListadoEstadistico\ListadoEstadistico01.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="ListadoEstadistico\ListadoEstadistico01.designer.cs">
+      <DependentUpon>ListadoEstadistico01.cs</DependentUpon>
+    </Compile>
     <Compile Include="Login\Login.cs">
       <SubType>Form</SubType>
     </Compile>
     <Compile Include="Login\Login.Designer.cs">
       <DependentUpon>Login.cs</DependentUpon>
-    </Compile>
-    <Compile Include="ListadoEstadistico\Form1.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="ListadoEstadistico\Form1.Designer.cs">
-      <DependentUpon>Form1.cs</DependentUpon>
     </Compile>
     <Compile Include="PantallaPrincipal\PantallaPrincipal01.cs">
       <SubType>Form</SubType>
@@ -213,6 +213,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="GestionReservas\ABMReserva02.resx">
       <DependentUpon>ABMReserva02.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="ListadoEstadistico\ListadoEstadistico01.resx">
+      <DependentUpon>ListadoEstadistico01.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Login\Login.resx">
       <DependentUpon>Login.cs</DependentUpon>

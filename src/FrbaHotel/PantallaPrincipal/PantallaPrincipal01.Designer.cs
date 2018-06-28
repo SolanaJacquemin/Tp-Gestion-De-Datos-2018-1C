@@ -58,10 +58,10 @@
             // label4
             // 
             this.label4.AutoSize = true;
-            this.label4.Font = new System.Drawing.Font("Calibri", 18F);
-            this.label4.Location = new System.Drawing.Point(228, 28);
+            this.label4.Font = new System.Drawing.Font("Calibri", 24F);
+            this.label4.Location = new System.Drawing.Point(120, 28);
             this.label4.Name = "label4";
-            this.label4.Size = new System.Drawing.Size(184, 29);
+            this.label4.Size = new System.Drawing.Size(239, 39);
             this.label4.TabIndex = 0;
             this.label4.Text = "Pantalla Principal";
             // 
@@ -75,84 +75,85 @@
             this.groupBox2.Controls.Add(this.btn_clientes);
             this.groupBox2.Controls.Add(this.btn_usuarios);
             this.groupBox2.Controls.Add(this.btn_roles);
-            this.groupBox2.Location = new System.Drawing.Point(38, 77);
+            this.groupBox2.Location = new System.Drawing.Point(12, 77);
             this.groupBox2.Name = "groupBox2";
-            this.groupBox2.Size = new System.Drawing.Size(543, 165);
+            this.groupBox2.Size = new System.Drawing.Size(417, 165);
             this.groupBox2.TabIndex = 1;
             this.groupBox2.TabStop = false;
             this.groupBox2.Text = "Menú de Opciones";
             // 
             // btn_reservas
             // 
-            this.btn_reservas.Location = new System.Drawing.Point(269, 90);
+            this.btn_reservas.Location = new System.Drawing.Point(224, 95);
             this.btn_reservas.Name = "btn_reservas";
             this.btn_reservas.Size = new System.Drawing.Size(123, 23);
-            this.btn_reservas.TabIndex = 0;
+            this.btn_reservas.TabIndex = 6;
             this.btn_reservas.Text = "Gestión de Reservas";
             this.btn_reservas.UseVisualStyleBackColor = true;
             this.btn_reservas.Click += new System.EventHandler(this.btn_reservas_Click);
             // 
             // btn_listado
             // 
-            this.btn_listado.Location = new System.Drawing.Point(269, 119);
+            this.btn_listado.Location = new System.Drawing.Point(224, 124);
             this.btn_listado.Name = "btn_listado";
             this.btn_listado.Size = new System.Drawing.Size(123, 23);
-            this.btn_listado.TabIndex = 0;
+            this.btn_listado.TabIndex = 7;
             this.btn_listado.Text = "Listado Estadístico";
             this.btn_listado.UseVisualStyleBackColor = true;
+            this.btn_listado.Click += new System.EventHandler(this.btn_listado_Click);
             // 
             // btn_estadias
             // 
-            this.btn_estadias.Location = new System.Drawing.Point(122, 119);
+            this.btn_estadias.Location = new System.Drawing.Point(77, 124);
             this.btn_estadias.Name = "btn_estadias";
             this.btn_estadias.Size = new System.Drawing.Size(123, 23);
-            this.btn_estadias.TabIndex = 0;
+            this.btn_estadias.TabIndex = 3;
             this.btn_estadias.Text = "Gestión de Estadías";
             this.btn_estadias.UseVisualStyleBackColor = true;
             // 
             // btn_habitaciones
             // 
-            this.btn_habitaciones.Location = new System.Drawing.Point(269, 61);
+            this.btn_habitaciones.Location = new System.Drawing.Point(224, 66);
             this.btn_habitaciones.Name = "btn_habitaciones";
             this.btn_habitaciones.Size = new System.Drawing.Size(123, 23);
-            this.btn_habitaciones.TabIndex = 0;
+            this.btn_habitaciones.TabIndex = 5;
             this.btn_habitaciones.Text = "ABM de Habitaciones";
             this.btn_habitaciones.UseVisualStyleBackColor = true;
             this.btn_habitaciones.Click += new System.EventHandler(this.btn_habitaciones_Click);
             // 
             // btn_hoteles
             // 
-            this.btn_hoteles.Location = new System.Drawing.Point(269, 32);
+            this.btn_hoteles.Location = new System.Drawing.Point(224, 37);
             this.btn_hoteles.Name = "btn_hoteles";
             this.btn_hoteles.Size = new System.Drawing.Size(123, 23);
-            this.btn_hoteles.TabIndex = 0;
+            this.btn_hoteles.TabIndex = 4;
             this.btn_hoteles.Text = "ABM de Hoteles";
             this.btn_hoteles.UseVisualStyleBackColor = true;
             this.btn_hoteles.Click += new System.EventHandler(this.btn_hoteles_Click);
             // 
             // btn_clientes
             // 
-            this.btn_clientes.Location = new System.Drawing.Point(122, 90);
+            this.btn_clientes.Location = new System.Drawing.Point(77, 95);
             this.btn_clientes.Name = "btn_clientes";
             this.btn_clientes.Size = new System.Drawing.Size(123, 23);
-            this.btn_clientes.TabIndex = 0;
+            this.btn_clientes.TabIndex = 2;
             this.btn_clientes.Text = "ABM de Clientes";
             this.btn_clientes.UseVisualStyleBackColor = true;
             this.btn_clientes.Click += new System.EventHandler(this.btn_clientes_Click);
             // 
             // btn_usuarios
             // 
-            this.btn_usuarios.Location = new System.Drawing.Point(122, 61);
+            this.btn_usuarios.Location = new System.Drawing.Point(77, 66);
             this.btn_usuarios.Name = "btn_usuarios";
             this.btn_usuarios.Size = new System.Drawing.Size(123, 23);
-            this.btn_usuarios.TabIndex = 0;
+            this.btn_usuarios.TabIndex = 1;
             this.btn_usuarios.Text = "ABM de Usuarios";
             this.btn_usuarios.UseVisualStyleBackColor = true;
             this.btn_usuarios.Click += new System.EventHandler(this.btn_usuarios_Click);
             // 
             // btn_roles
             // 
-            this.btn_roles.Location = new System.Drawing.Point(122, 32);
+            this.btn_roles.Location = new System.Drawing.Point(77, 37);
             this.btn_roles.Name = "btn_roles";
             this.btn_roles.Size = new System.Drawing.Size(123, 23);
             this.btn_roles.TabIndex = 0;
@@ -182,17 +183,17 @@
             // 
             // btn_salir
             // 
-            this.btn_salir.Location = new System.Drawing.Point(506, 248);
+            this.btn_salir.Location = new System.Drawing.Point(364, 248);
             this.btn_salir.Name = "btn_salir";
             this.btn_salir.Size = new System.Drawing.Size(75, 23);
-            this.btn_salir.TabIndex = 2;
+            this.btn_salir.TabIndex = 8;
             this.btn_salir.Text = "Salir";
             this.btn_salir.UseVisualStyleBackColor = true;
             this.btn_salir.Click += new System.EventHandler(this.btn_salir_Click);
             // 
             // PantallaPrincipal01
             // 
-            this.ClientSize = new System.Drawing.Size(606, 283);
+            this.ClientSize = new System.Drawing.Size(451, 283);
             this.Controls.Add(this.btn_salir);
             this.Controls.Add(this.groupBox2);
             this.Controls.Add(this.label6);
