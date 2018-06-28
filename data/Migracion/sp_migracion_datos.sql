@@ -872,7 +872,7 @@ BEGIN
 END;
 
 
-IF (OBJECT_ID(N'FOUR_SIZONS.calcConsumible', N'IF') IS NOT NULL)
+IF (OBJECT_ID(N'FOUR_SIZONS.calcConsumible', 'FN' ) IS NOT NULL)
 BEGIN
     DROP FUNCTION FOUR_SIZONS.calcConsumible
 END;
@@ -881,7 +881,26 @@ IF (OBJECT_ID('FOUR_SIZONS.calcEstadia', 'IF') IS NOT NULL)
 BEGIN
     DROP FUNCTION FOUR_SIZONS.calcEstadia
 END;
+
+IF (OBJECT_ID('FOUR_SIZONS.inicioTri', 'FN') IS NOT NULL)
+BEGIN
+    DROP FUNCTION FOUR_SIZONS.inicioTri
+END;
+
+IF (OBJECT_ID('FOUR_SIZONS.finTri', 'FN') IS NOT NULL)
+BEGIN
+    DROP FUNCTION FOUR_SIZONS.finTri
+END;
+
+IF (OBJECT_ID('FOUR_SIZONS.RegistrarEstadiaXCliente', 'P') IS NOT NULL)
+BEGIN
+    DROP proc FOUR_SIZONS.RegistrarEstadiaXCliente
+END;
+
 GO
+
+
+
 
 
 --------------------------------------------------------ABM USUARIO------------------------------
@@ -1546,7 +1565,7 @@ update FOUR_SIZONS.Disponibilidad
 	rollback tran 
 	end catch
 go
-/*
+
 create procedure four_sizons.AgregarTarjeta
 	@Tarjeta_Numero numeric(18),
 	@Tarjeta_Venc datetime,
@@ -1639,7 +1658,7 @@ return @inicio
 end
 go
 
-alter function four_sizons.finTri(@Tri numeric(18) , @anio numeric(18))
+create function four_sizons.finTri(@Tri numeric(18) , @anio numeric(18))
 	returns datetime
 as begin
 declare @fin datetime
@@ -1657,7 +1676,7 @@ end
 go
 
 
-alter FUNCTION FOUR_SIZONS.calcConsumible ( @estadia numeric(18))
+create FUNCTION FOUR_SIZONS.calcConsumible ( @estadia numeric(18))
 
 	RETURNS numeric(18,2)
 
@@ -1991,4 +2010,3 @@ group by h.Hotel_Codigo
 order by sum(ExC.estXcons_cantidad)
 end 
 go
-*/
