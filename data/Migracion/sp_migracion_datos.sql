@@ -897,6 +897,22 @@ BEGIN
     DROP proc FOUR_SIZONS.RegistrarEstadiaXCliente
 END;
 
+IF (OBJECT_ID('FOUR_SIZONS.hotelMasCerrado', 'P') IS NOT NULL)
+BEGIN
+    DROP proc FOUR_SIZONS.hotelMasCerrado
+END;
+
+IF (OBJECT_ID('FOUR_SIZONS.clieConMasPuntos', 'P') IS NOT NULL)
+BEGIN
+    DROP proc FOUR_SIZONS.clieConMasPuntos
+END;
+
+IF (OBJECT_ID('FOUR_SIZONS.habOcupadas', 'P') IS NOT NULL)
+BEGIN
+    DROP proc FOUR_SIZONS.habOcupadas
+END;
+
+
 GO
 
 
@@ -2008,5 +2024,64 @@ from Hotel h,Consumible c, EstadiaXConsumible ExC, Estadia e , Factura f
 where h.Hotel_Codigo=e.Hotel_Codigo and (( @inicio<f.Factura_Fecha and f.Factura_Fecha<@fin) and f.Estadia_Codigo = e.Estadia_Codigo and e.Estadia_Codigo = ExC.Estadia_Codigo) 
 group by h.Hotel_Codigo
 order by sum(ExC.estXcons_cantidad)
+end 
+go
+
+
+create procedure four_sizons.hotelMasCerrado
+@anio numeric(18),
+@tri numeric(18)
+
+as begin
+declare @fin datetime
+declare @inicio datetime
+
+set @inicio = FOUR_SIZONS.InicioTRi(@tri,@anio)
+set @fin = FOUR_SIZONS.finTri(@tri,@anio)
+
+select top 5 h.Hotel_Codigo
+from FOUR_SIZONS.Hotel h , FOUR_SIZONS.Hotel_Cerrado c
+where c.Hotel_Codigo = h.Hotel_Codigo and  @inicio<c.Cerrado_FechaI and c.Cerrado_FechaF<@fin
+group by h.Hotel_Codigo
+order by count(c.Cerrado_codigo)
+
+end 
+go
+
+create proc four_sizons.clieConMasPuntos
+@anio numeric(18),
+@tri numeric(18)
+
+as begin
+declare @fin datetime
+declare @inicio datetime
+
+set @inicio = FOUR_SIZONS.InicioTRi(@tri,@anio)
+set @fin = FOUR_SIZONS.finTri(@tri,@anio)
+
+
+
+
+end 
+go
+
+
+create proc four_sizons.habOcupadas
+@anio numeric(18),
+@tri numeric(18)
+
+as begin
+declare @fin datetime
+declare @inicio datetime
+
+set @inicio = FOUR_SIZONS.InicioTRi(@tri,@anio)
+set @fin = FOUR_SIZONS.finTri(@tri,@anio)
+
+select top 5 h.Habitacion_Numero, h.Hotel_Codigo 
+from FOUR_SIZONS.Estadia e ,FOUR_SIZONS.Habitacion h
+where e.Hotel_Codigo = h.Hotel_Codigo and e.Habitacion_Numero = h.Habitacion_Numero and @inicio< e.Estadia_FechaInicio and e.Estadia_FechaFin<@fin
+group by h.Habitacion_Numero, h.Hotel_Codigo
+order by sum(e.Estadia_CantNoches) desc
+
 end 
 go
