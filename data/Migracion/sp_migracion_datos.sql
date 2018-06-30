@@ -155,10 +155,10 @@ BEGIN
 	BEGIN
 		CREATE TABLE FOUR_SIZONS.Parametros(
 			Parametro_Codigo nvarchar(10),
-			Paramentro_NroItem numeric(18) IDENTITY,
+			Parametro_NroItem numeric(18) IDENTITY,
 			Parametro_Descripcion nvarchar(255)
 
-			CONSTRAINT PK_Parametros PRIMARY KEY (Parametro_Codigo, Paramentro_NroItem)
+			CONSTRAINT PK_Parametros PRIMARY KEY (Parametro_Codigo, Parametro_NroItem)
 		)
 	END
 
@@ -386,7 +386,7 @@ BEGIN
 			Reserva_Fecha_Inicio datetime,
 			Reserva_Fecha_Fin datetime,
 			Reserva_Cant_Noches numeric(18),
-			Reserva_Precio decimal(12,2),
+			Reserva_Precio decimal(12,2) default 0.00,
 			Usuario_ID nvarchar(15),
 			Hotel_Codigo numeric(18),
 			Cliente_Codigo numeric(18),
@@ -551,9 +551,10 @@ BEGIN
 	INSERT INTO FOUR_SIZONS.Parametros VALUES ('DOCUMENTO', 'CUIT')
 	INSERT INTO FOUR_SIZONS.Parametros VALUES ('DOCUMENTO', 'LE')
 	INSERT INTO FOUR_SIZONS.Parametros VALUES ('DOCUMENTO', 'LC')
-	INSERT INTO FOUR_SIZONS.Parametros VALUES ('DOCUMENTO', 'PASS')
+	INSERT INTO FOUR_SIZONS.Parametros VALUES ('DOCUMENTO', 'PASSP')
 
 	-- Roles
+	INSERT INTO FOUR_SIZONS.Rol VALUES ('Super Admin', 1)
 	INSERT INTO FOUR_SIZONS.Rol VALUES ('Administrador', 1)
 	INSERT INTO FOUR_SIZONS.Rol VALUES ('Recepcionista', 1)
 	INSERT INTO FOUR_SIZONS.Rol VALUES ('Guest', 1)
@@ -573,6 +574,13 @@ BEGIN
 				('Listado Estadistico', 1);
 	
 	--ROLXFUNC
+	insert into FOUR_SIZONS.RolXFunc (Rol_Codigo,Func_Codigo, RolXFunc_Estado)
+		select distinct R.Rol_Codigo, F.Func_Codigo, 1 from FOUR_SIZONS.Rol R,FOUR_SIZONS.Funcionalidad F
+		where R.Rol_Nombre =  'Super Admin' and
+				F.Func_Nombre in ('ABM Rol', 'ABM Hotel','ABM Habitacion','ABM Regimen','ABM Usuario',
+				'ABM Cliente','Generar/Modificar Reserva','Cancelar Reserva','Registrar Estadia',
+				'Registrar Consumibles', 'Listado Estadistico');
+
 	insert into FOUR_SIZONS.RolXFunc (Rol_Codigo,Func_Codigo, RolXFunc_Estado)
 		select distinct R.Rol_Codigo, F.Func_Codigo, 1 from FOUR_SIZONS.Rol R,FOUR_SIZONS.Funcionalidad F
 		where R.Rol_Nombre =  'Administrador' and
@@ -657,6 +665,12 @@ BEGIN
 	-- Inserta usuario administrador
 	INSERT INTO FOUR_SIZONS.Usuario
 	VALUES ('SYSADM', '3GGQyLOZ4EO537rLsNN/KiZF4z+ZOEkdJLJOApjZzRc=', 'Administrador', '', '', 0, '', '', GETDATE(), '',1,0)
+	INSERT INTO FOUR_SIZONS.Usuario
+	VALUES ('GUEST', '3GGQyLOZ4EO537rLsNN/KiZF4z+ZOEkdJLJOApjZzRc=', 'Guest', '', '', 0, '', '', GETDATE(), '',1,0)
+
+	--UsuarioXRol
+	INSERT INTO FOUR_SIZONS.UsuarioXRol VALUES ('SYSADM', 4, 1)
+	INSERT INTO FOUR_SIZONS.UsuarioXRol VALUES ('GUEST', 3, 1)
 
 	-- Reservas
 	INSERT INTO FOUR_SIZONS.Reserva (Reserva_Codigo, Reserva_FechaCreacion, Reserva_Fecha_Inicio, Reserva_Fecha_Fin,
@@ -1472,6 +1486,7 @@ declare @cantidadNoches numeric(2)
 declare @precio decimal(12)
 
 set @cantidadNoches = DATEDIFF(day, @fechaInicio, @fechaFin)
+set @precio = 0
 
 insert into FOUR_SIZONS.Reserva(Reserva_Codigo,Reserva_Fecha_Inicio,Reserva_Fecha_Fin,Reserva_Cant_Noches,
 								Reserva_Precio,Usuario_ID,Hotel_Codigo,Cliente_Codigo,Regimen_Codigo,Reserva_Estado)
