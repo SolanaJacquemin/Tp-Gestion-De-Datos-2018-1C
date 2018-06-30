@@ -892,6 +892,16 @@ BEGIN
     DROP FUNCTION FOUR_SIZONS.finTri
 END;
 
+IF (OBJECT_ID('FOUR_SIZONS.calcPuntaje', 'FN') IS NOT NULL)
+BEGIN
+    DROP FUNCTION FOUR_SIZONS.calcPuntaje
+END;
+
+IF (OBJECT_ID('FOUR_SIZONS.calcEstadia', 'FN') IS NOT NULL)
+BEGIN
+    DROP FUNCTION FOUR_SIZONS.calcEstadia
+END;
+
 IF (OBJECT_ID('FOUR_SIZONS.RegistrarEstadiaXCliente', 'P') IS NOT NULL)
 BEGIN
     DROP proc FOUR_SIZONS.RegistrarEstadiaXCliente
@@ -912,6 +922,10 @@ BEGIN
     DROP proc FOUR_SIZONS.habOcupadas
 END;
 
+IF (OBJECT_ID('FOUR_SIZONS.MayorPuntaje', 'P') IS NOT NULL)
+BEGIN
+    DROP proc FOUR_SIZONS.MayorPuntaje
+END;
 
 GO
 
@@ -1715,7 +1729,7 @@ RETURN @total
 END	
 go
 
-alter FUNCTION four_sizons.calcEstadia ( @estadia numeric(18))
+create FUNCTION four_sizons.calcEstadia ( @estadia numeric(18))
 
 	RETURNS numeric(18,2)
 
@@ -2083,5 +2097,53 @@ where e.Hotel_Codigo = h.Hotel_Codigo and e.Habitacion_Numero = h.Habitacion_Num
 group by h.Habitacion_Numero, h.Hotel_Codigo
 order by sum(e.Estadia_CantNoches) desc
 
+end 
+go
+
+create FUNCTION FOUR_SIZONS.calcPuntaje ( @estadia numeric(18))
+
+	RETURNS numeric(18)
+
+AS BEGIN
+
+	DECLARE @puntaje numeric(18),
+			@puntajeEst numeric(18),
+			@puntajeCons numeric(18),
+			@reserva numeric(18),
+			@descripcion nvarchar(255),
+			@regimen numeric(18)
+
+	set @puntajeEst= FOUR_SIZONS.calcEstadia(@estadia)/20
+	set @puntajeCons=FOUR_SIZONS.calcConsumible(@estadia)/10
+	set @reserva=(select Reserva_Codigo from FOUR_SIZONS.Estadia where Estadia_Codigo = @estadia)
+	set @regimen = ( select regimen_Codigo from FOUR_SIZONS.Reserva where Reserva_Codigo = @reserva);
+	set @descripcion=(select regimen_descripcion from FOUR_SIZONS.Regimen where Regimen_Codigo=@regimen);
+	if ( @descripcion != 'ALL INCLUSIVE') 
+	set @puntaje = @puntajeEst+@puntajeCons
+	else set @puntaje=@puntajeEst
+	if(@puntaje is null)
+	begin
+	set @puntaje=0
+	end
+RETURN @puntaje
+END	
+go
+
+
+create procedure four_sizons.MayorPuntaje
+@anio numeric(18),
+@tri numeric(18)
+
+as begin
+declare @fin datetime
+declare @inicio datetime
+
+set @inicio = FOUR_SIZONS.InicioTRi(@tri,@anio)
+set @fin = FOUR_SIZONS.finTri(@tri,@anio)
+select top 1 c.Cliente_Codigo, sum(FOUR_SIZONS.calcPuntaje(distinct f.Estadia_Codigo))puntaje
+from Cliente c JOIN Factura f on c.Cliente_Codigo=f.Cliente_Codigo
+where f.Factura_Fecha between @inicio and @fin
+group by c.Cliente_Codigo
+order by sum(FOUR_SIZONS.calcPuntaje(distinct f.Estadia_Codigo)) desc
 end 
 go
