@@ -35,12 +35,14 @@
             this.boton_cancelar = new System.Windows.Forms.Button();
             this.boton_generar = new System.Windows.Forms.Button();
             this.groupBox1 = new System.Windows.Forms.GroupBox();
-            this.label5 = new System.Windows.Forms.Label();
+            this.dt_fechaHasta = new System.Windows.Forms.DateTimePicker();
+            this.dt_fechaDesde = new System.Windows.Forms.DateTimePicker();
+            this.l_hasta = new System.Windows.Forms.Label();
             this.label7 = new System.Windows.Forms.Label();
-            this.label2 = new System.Windows.Forms.Label();
+            this.l_desde = new System.Windows.Forms.Label();
             this.btn_limpiar = new System.Windows.Forms.Button();
             this.btn_buscar = new System.Windows.Forms.Button();
-            this.txt_ReservaId = new System.Windows.Forms.TextBox();
+            this.txt_reservaId = new System.Windows.Forms.TextBox();
             this.label1 = new System.Windows.Forms.Label();
             this.dgv_Reservas = new System.Windows.Forms.DataGridView();
             this.Reserva_Codigo = new System.Windows.Forms.DataGridViewTextBoxColumn();
@@ -50,15 +52,13 @@
             this.Hotel_Nombre = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.Cliente_Nombre_Apellido = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.Reserva_Estado = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.dt_fechaDesde = new System.Windows.Forms.DateTimePicker();
-            this.dt_fechaHasta = new System.Windows.Forms.DateTimePicker();
             this.groupBox1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dgv_Reservas)).BeginInit();
             this.SuspendLayout();
             // 
             // btn_volver
             // 
-            this.btn_volver.Location = new System.Drawing.Point(569, 404);
+            this.btn_volver.Location = new System.Drawing.Point(569, 371);
             this.btn_volver.Name = "btn_volver";
             this.btn_volver.Size = new System.Drawing.Size(89, 23);
             this.btn_volver.TabIndex = 20;
@@ -88,7 +88,7 @@
             // 
             // boton_modificar
             // 
-            this.boton_modificar.Location = new System.Drawing.Point(569, 212);
+            this.boton_modificar.Location = new System.Drawing.Point(569, 179);
             this.boton_modificar.Name = "boton_modificar";
             this.boton_modificar.Size = new System.Drawing.Size(89, 23);
             this.boton_modificar.TabIndex = 19;
@@ -97,7 +97,7 @@
             // 
             // boton_cancelar
             // 
-            this.boton_cancelar.Location = new System.Drawing.Point(569, 241);
+            this.boton_cancelar.Location = new System.Drawing.Point(569, 208);
             this.boton_cancelar.Name = "boton_cancelar";
             this.boton_cancelar.Size = new System.Drawing.Size(89, 23);
             this.boton_cancelar.TabIndex = 18;
@@ -106,7 +106,7 @@
             // 
             // boton_generar
             // 
-            this.boton_generar.Location = new System.Drawing.Point(569, 183);
+            this.boton_generar.Location = new System.Drawing.Point(569, 150);
             this.boton_generar.Name = "boton_generar";
             this.boton_generar.Size = new System.Drawing.Size(89, 23);
             this.boton_generar.TabIndex = 17;
@@ -118,12 +118,12 @@
             // 
             this.groupBox1.Controls.Add(this.dt_fechaHasta);
             this.groupBox1.Controls.Add(this.dt_fechaDesde);
-            this.groupBox1.Controls.Add(this.label5);
+            this.groupBox1.Controls.Add(this.l_hasta);
             this.groupBox1.Controls.Add(this.label7);
-            this.groupBox1.Controls.Add(this.label2);
+            this.groupBox1.Controls.Add(this.l_desde);
             this.groupBox1.Controls.Add(this.btn_limpiar);
             this.groupBox1.Controls.Add(this.btn_buscar);
-            this.groupBox1.Controls.Add(this.txt_ReservaId);
+            this.groupBox1.Controls.Add(this.txt_reservaId);
             this.groupBox1.Location = new System.Drawing.Point(25, 56);
             this.groupBox1.Name = "groupBox1";
             this.groupBox1.Size = new System.Drawing.Size(639, 76);
@@ -131,14 +131,28 @@
             this.groupBox1.TabStop = false;
             this.groupBox1.Text = "Filtros de Búsqueda";
             // 
-            // label5
+            // dt_fechaHasta
             // 
-            this.label5.AutoSize = true;
-            this.label5.Location = new System.Drawing.Point(364, 37);
-            this.label5.Name = "label5";
-            this.label5.Size = new System.Drawing.Size(35, 13);
-            this.label5.TabIndex = 2;
-            this.label5.Text = "Hasta";
+            this.dt_fechaHasta.Location = new System.Drawing.Point(405, 34);
+            this.dt_fechaHasta.Name = "dt_fechaHasta";
+            this.dt_fechaHasta.Size = new System.Drawing.Size(94, 20);
+            this.dt_fechaHasta.TabIndex = 8;
+            // 
+            // dt_fechaDesde
+            // 
+            this.dt_fechaDesde.Location = new System.Drawing.Point(245, 34);
+            this.dt_fechaDesde.Name = "dt_fechaDesde";
+            this.dt_fechaDesde.Size = new System.Drawing.Size(94, 20);
+            this.dt_fechaDesde.TabIndex = 8;
+            // 
+            // l_hasta
+            // 
+            this.l_hasta.AutoSize = true;
+            this.l_hasta.Location = new System.Drawing.Point(364, 37);
+            this.l_hasta.Name = "l_hasta";
+            this.l_hasta.Size = new System.Drawing.Size(35, 13);
+            this.l_hasta.TabIndex = 2;
+            this.l_hasta.Text = "Hasta";
             // 
             // label7
             // 
@@ -149,14 +163,14 @@
             this.label7.TabIndex = 2;
             this.label7.Text = "Reserva Id";
             // 
-            // label2
+            // l_desde
             // 
-            this.label2.AutoSize = true;
-            this.label2.Location = new System.Drawing.Point(201, 38);
-            this.label2.Name = "label2";
-            this.label2.Size = new System.Drawing.Size(38, 13);
-            this.label2.TabIndex = 2;
-            this.label2.Text = "Desde";
+            this.l_desde.AutoSize = true;
+            this.l_desde.Location = new System.Drawing.Point(201, 38);
+            this.l_desde.Name = "l_desde";
+            this.l_desde.Size = new System.Drawing.Size(38, 13);
+            this.l_desde.TabIndex = 2;
+            this.l_desde.Text = "Desde";
             // 
             // btn_limpiar
             // 
@@ -175,13 +189,14 @@
             this.btn_buscar.TabIndex = 6;
             this.btn_buscar.Text = "Buscar";
             this.btn_buscar.UseVisualStyleBackColor = true;
+            this.btn_buscar.Click += new System.EventHandler(this.btn_buscar_Click);
             // 
-            // txt_ReservaId
+            // txt_reservaId
             // 
-            this.txt_ReservaId.Location = new System.Drawing.Point(102, 34);
-            this.txt_ReservaId.Name = "txt_ReservaId";
-            this.txt_ReservaId.Size = new System.Drawing.Size(64, 20);
-            this.txt_ReservaId.TabIndex = 0;
+            this.txt_reservaId.Location = new System.Drawing.Point(102, 34);
+            this.txt_reservaId.Name = "txt_reservaId";
+            this.txt_reservaId.Size = new System.Drawing.Size(64, 20);
+            this.txt_reservaId.TabIndex = 0;
             // 
             // label1
             // 
@@ -205,7 +220,7 @@
             this.Hotel_Nombre,
             this.Cliente_Nombre_Apellido,
             this.Reserva_Estado});
-            this.dgv_Reservas.Location = new System.Drawing.Point(25, 183);
+            this.dgv_Reservas.Location = new System.Drawing.Point(25, 150);
             this.dgv_Reservas.Name = "dgv_Reservas";
             this.dgv_Reservas.Size = new System.Drawing.Size(519, 244);
             this.dgv_Reservas.TabIndex = 14;
@@ -253,25 +268,11 @@
             this.Reserva_Estado.Name = "Reserva_Estado";
             this.Reserva_Estado.ReadOnly = true;
             // 
-            // dt_fechaDesde
-            // 
-            this.dt_fechaDesde.Location = new System.Drawing.Point(245, 34);
-            this.dt_fechaDesde.Name = "dt_fechaDesde";
-            this.dt_fechaDesde.Size = new System.Drawing.Size(94, 20);
-            this.dt_fechaDesde.TabIndex = 8;
-            // 
-            // dt_fechaHasta
-            // 
-            this.dt_fechaHasta.Location = new System.Drawing.Point(405, 34);
-            this.dt_fechaHasta.Name = "dt_fechaHasta";
-            this.dt_fechaHasta.Size = new System.Drawing.Size(94, 20);
-            this.dt_fechaHasta.TabIndex = 8;
-            // 
             // ABMReserva01
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(666, 436);
+            this.ClientSize = new System.Drawing.Size(666, 408);
             this.Controls.Add(this.btn_volver);
             this.Controls.Add(this.label8);
             this.Controls.Add(this.label9);
@@ -301,12 +302,12 @@
         private System.Windows.Forms.Button boton_cancelar;
         private System.Windows.Forms.Button boton_generar;
         private System.Windows.Forms.GroupBox groupBox1;
-        private System.Windows.Forms.Label label5;
+        private System.Windows.Forms.Label l_hasta;
         private System.Windows.Forms.Label label7;
-        private System.Windows.Forms.Label label2;
+        private System.Windows.Forms.Label l_desde;
         private System.Windows.Forms.Button btn_limpiar;
         private System.Windows.Forms.Button btn_buscar;
-        private System.Windows.Forms.TextBox txt_ReservaId;
+        private System.Windows.Forms.TextBox txt_reservaId;
         private System.Windows.Forms.Label label1;
         private System.Windows.Forms.DataGridView dgv_Reservas;
         private System.Windows.Forms.DataGridViewTextBoxColumn Reserva_Codigo;

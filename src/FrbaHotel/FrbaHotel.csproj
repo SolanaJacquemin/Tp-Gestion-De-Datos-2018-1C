@@ -150,11 +150,23 @@
       <DependentUpon>PantallaPrincipal01.cs</DependentUpon>
     </Compile>
     <Compile Include="Program.cs" />
+    <Compile Include="Prompts\PromptElegirHotel.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Prompts\PromptElegirHotel.Designer.cs">
+      <DependentUpon>PromptElegirHotel.cs</DependentUpon>
+    </Compile>
     <Compile Include="Prompts\PromptHoteles.cs">
       <SubType>Form</SubType>
     </Compile>
     <Compile Include="Prompts\PromptHoteles.Designer.cs">
       <DependentUpon>PromptHoteles.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Prompts\PromptRegimenes.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Prompts\PromptRegimenes.Designer.cs">
+      <DependentUpon>PromptRegimenes.cs</DependentUpon>
     </Compile>
     <Compile Include="Prompts\PromptUsuarios.cs">
       <SubType>Form</SubType>
@@ -223,8 +235,14 @@
     <EmbeddedResource Include="PantallaPrincipal\PantallaPrincipal01.resx">
       <DependentUpon>PantallaPrincipal01.cs</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="Prompts\PromptElegirHotel.resx">
+      <DependentUpon>PromptElegirHotel.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Prompts\PromptHoteles.resx">
       <DependentUpon>PromptHoteles.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Prompts\PromptRegimenes.resx">
+      <DependentUpon>PromptRegimenes.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Prompts\PromptUsuarios.resx">
       <DependentUpon>PromptUsuarios.cs</DependentUpon>

@@ -10,9 +10,11 @@ using System.Windows.Forms;
 
 namespace FrbaHotel.Prompts
 {
-    public partial class PromptHoteles : Form
+    public partial class PromptElegirHotel : Form
     {
-        public PromptHoteles()
+        public string usuario;
+
+        public PromptElegirHotel(string user)
         {
             InitializeComponent();
             this.StartPosition = FormStartPosition.CenterScreen;
@@ -22,9 +24,17 @@ namespace FrbaHotel.Prompts
 
             dgvHotelesPrompt.Rows.Clear();
 
+
+
+            usuario = user;
+        }
+
+        private void PromptElegirHotel_Load(object sender, EventArgs e)
+        {
             Conexion con = new Conexion();
-            con.strQuery = "SELECT Hotel_Codigo, Hotel_Nombre " +
-                           "FROM FOUR_SIZONS.Hotel ORDER BY Hotel_Codigo";
+            con.strQuery = "SELECT H.Hotel_Codigo, H.Hotel_Nombre FROM FOUR_SIZONS.UsuarioXHotel UH"
+                           + " JOIN FOUR_SIZONS.Hotel H ON H.Hotel_Codigo = UH.Hotel_Codigo"
+                           + " WHERE Usuario_ID = '" + usuario + "'";
             con.executeQuery();
             if (!con.reader())
             {
@@ -40,39 +50,11 @@ namespace FrbaHotel.Prompts
             {
                 dgvHotelesPrompt.Rows.Add(new Object[] { con.lector.GetDecimal(0), con.lector.GetString(1) });
             }
+
             con.closeConection();
         }
 
-        private void btn_buscar_Click(object sender, EventArgs e)
-        {
-            dgvHotelesPrompt.Rows.Clear();
 
-            Conexion con = new Conexion();
-            con.strQuery = "SELECT Hotel_Codigo, Hotel_Nombre FROM FOUR_SIZONS.Hotel WHERE 1=1";
-            if (txt_hotelid.Text != "")
-                con.strQuery = con.strQuery + " AND Hotel_Codigo = " + txt_hotelid.Text + " ";
-                con.strQuery = con.strQuery + " AND Hotel_Nombre like '%" + txt_hotelnombre.Text + "%' ";
-                con.strQuery = con.strQuery + "ORDER BY Hotel_Codigo";
-                con.executeQuery();
-
-            if (!con.reader())
-            {
-                MessageBox.Show("La busqueda no produjo resultados");
-                con.strQuery = "";
-                con.closeConection();
-                return;
-            }
-
-            dgvHotelesPrompt.Rows.Add(new Object[] { con.lector.GetDecimal(0), con.lector.GetString(1) });
-
-            while (con.reader())
-            {
-                dgvHotelesPrompt.Rows.Add(new Object[] { con.lector.GetDecimal(0), con.lector.GetString(1) });
-            }
-
-            con.closeConection();
-
-        }
 
         private void dgvHotelesPrompt_CellClick(object sender, DataGridViewCellEventArgs e)
         {
@@ -102,5 +84,6 @@ namespace FrbaHotel.Prompts
                 return txt_aux_hotelnombre;
             }
         }
+
     }
 }

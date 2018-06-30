@@ -71,12 +71,13 @@
             // 
             // btn_reservar
             // 
-            this.btn_reservar.Location = new System.Drawing.Point(136, 372);
+            this.btn_reservar.Location = new System.Drawing.Point(180, 372);
             this.btn_reservar.Name = "btn_reservar";
-            this.btn_reservar.Size = new System.Drawing.Size(293, 23);
+            this.btn_reservar.Size = new System.Drawing.Size(198, 23);
             this.btn_reservar.TabIndex = 3;
             this.btn_reservar.Text = "Reservar Habitación";
             this.btn_reservar.UseVisualStyleBackColor = true;
+            this.btn_reservar.Click += new System.EventHandler(this.btn_reservar_Click);
             // 
             // groupBox1
             // 
