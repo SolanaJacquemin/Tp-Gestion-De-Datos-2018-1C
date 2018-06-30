@@ -872,7 +872,7 @@ BEGIN
 END;
 
 
-IF (OBJECT_ID(N'FOUR_SIZONS.calcConsumible', N'IF') IS NOT NULL)
+IF (OBJECT_ID(N'FOUR_SIZONS.calcConsumible', 'FN' ) IS NOT NULL)
 BEGIN
     DROP FUNCTION FOUR_SIZONS.calcConsumible
 END;
@@ -881,7 +881,56 @@ IF (OBJECT_ID('FOUR_SIZONS.calcEstadia', 'IF') IS NOT NULL)
 BEGIN
     DROP FUNCTION FOUR_SIZONS.calcEstadia
 END;
+
+IF (OBJECT_ID('FOUR_SIZONS.inicioTri', 'FN') IS NOT NULL)
+BEGIN
+    DROP FUNCTION FOUR_SIZONS.inicioTri
+END;
+
+IF (OBJECT_ID('FOUR_SIZONS.finTri', 'FN') IS NOT NULL)
+BEGIN
+    DROP FUNCTION FOUR_SIZONS.finTri
+END;
+
+IF (OBJECT_ID('FOUR_SIZONS.calcPuntaje', 'FN') IS NOT NULL)
+BEGIN
+    DROP FUNCTION FOUR_SIZONS.calcPuntaje
+END;
+
+IF (OBJECT_ID('FOUR_SIZONS.calcEstadia', 'FN') IS NOT NULL)
+BEGIN
+    DROP FUNCTION FOUR_SIZONS.calcEstadia
+END;
+
+IF (OBJECT_ID('FOUR_SIZONS.RegistrarEstadiaXCliente', 'P') IS NOT NULL)
+BEGIN
+    DROP proc FOUR_SIZONS.RegistrarEstadiaXCliente
+END;
+
+IF (OBJECT_ID('FOUR_SIZONS.hotelMasCerrado', 'P') IS NOT NULL)
+BEGIN
+    DROP proc FOUR_SIZONS.hotelMasCerrado
+END;
+
+IF (OBJECT_ID('FOUR_SIZONS.clieConMasPuntos', 'P') IS NOT NULL)
+BEGIN
+    DROP proc FOUR_SIZONS.clieConMasPuntos
+END;
+
+IF (OBJECT_ID('FOUR_SIZONS.habOcupadas', 'P') IS NOT NULL)
+BEGIN
+    DROP proc FOUR_SIZONS.habOcupadas
+END;
+
+IF (OBJECT_ID('FOUR_SIZONS.MayorPuntaje', 'P') IS NOT NULL)
+BEGIN
+    DROP proc FOUR_SIZONS.MayorPuntaje
+END;
+
 GO
+
+
+
 
 
 --------------------------------------------------------ABM USUARIO------------------------------
@@ -1276,7 +1325,7 @@ create proc FOUR_SIZONS.InsertarRol
 
 create procedure FOUR_SIZONS.ModificacionRol
 	@rolname nvarchar(50),
-	@codigo nvarchar(50),
+	@codigo numeric(18),
 	@estado bit
 
 	as begin tran
@@ -1299,20 +1348,16 @@ create procedure FOUR_SIZONS.ModificacionRol
 go
 
 create procedure four_sizons.altaRolxFunc
-@rolname nvarchar(50),
-@func nvarchar(50)
+@rol numeric(18),
+@func numeric(18)
 
 	as begin tran 
 	begin try 
-	
-	declare @rolID numeric(18)
-	declare @funcID numeric(18)
 
-	set @rolID = (select Rol_Codigo  from four_sizons.Rol where Rol_Nombre = @rolname)
-	set @funcID = (select Func_Codigo from FOUR_SIZONS.Funcionalidad where Func_Nombre = @func)
-
+	if (not exists (select RolXFunc_Estado from four_sizons.RolXFunc where Rol_Codigo=@rol and Func_Codigo=@func ))
 	insert into FOUR_SIZONS.RolXFunc(Rol_Codigo,Func_Codigo,RolXFunc_Estado) 
-							values (@rolID,@funcID,1)
+							values (@rol,@func,1)
+	else print N'ya existe la relacion entre ese rol y esa funcion'
 
 	commit tran 
 	end try
@@ -1325,23 +1370,18 @@ create procedure four_sizons.altaRolxFunc
 	end catch 
 go
 
+
 create procedure four_sizons.modificacionRolxFunc
-@rolname nvarchar(50),
-@func nvarchar(50),
+@rol numeric(18),
+@func numeric(18),
 @estado bit
 
 	as begin tran 
 	begin try 
 
-	declare @rolID numeric(18)
-	declare @funcID numeric(18)
-
-	set @rolID = (select Rol_Codigo  from four_sizons.Rol where Rol_Nombre = @rolname)
-	set @funcID = (select Func_Codigo from FOUR_SIZONS.Funcionalidad where Func_Nombre = @func)
-
 	update FOUR_SIZONS.RolXFunc
 		set RolXFunc_Estado = @estado
-	where Rol_Codigo=@rolID and Func_Codigo=@funcID
+	where Rol_Codigo=@rol and Func_Codigo=@func
 
 	commit tran 
 	end try
@@ -1546,7 +1586,7 @@ update FOUR_SIZONS.Disponibilidad
 	rollback tran 
 	end catch
 go
-/*
+
 create procedure four_sizons.AgregarTarjeta
 	@Tarjeta_Numero numeric(18),
 	@Tarjeta_Venc datetime,
@@ -1639,7 +1679,7 @@ return @inicio
 end
 go
 
-alter function four_sizons.finTri(@Tri numeric(18) , @anio numeric(18))
+create function four_sizons.finTri(@Tri numeric(18) , @anio numeric(18))
 	returns datetime
 as begin
 declare @fin datetime
@@ -1657,7 +1697,7 @@ end
 go
 
 
-alter FUNCTION FOUR_SIZONS.calcConsumible ( @estadia numeric(18))
+create FUNCTION FOUR_SIZONS.calcConsumible ( @estadia numeric(18))
 
 	RETURNS numeric(18,2)
 
@@ -1680,7 +1720,7 @@ RETURN @total
 END	
 go
 
-alter FUNCTION four_sizons.calcEstadia ( @estadia numeric(18))
+create FUNCTION four_sizons.calcEstadia ( @estadia numeric(18))
 
 	RETURNS numeric(18,2)
 
@@ -1991,4 +2031,110 @@ group by h.Hotel_Codigo
 order by sum(ExC.estXcons_cantidad)
 end 
 go
-*/
+
+
+create procedure four_sizons.hotelMasCerrado
+@anio numeric(18),
+@tri numeric(18)
+
+as begin
+declare @fin datetime
+declare @inicio datetime
+
+set @inicio = FOUR_SIZONS.InicioTRi(@tri,@anio)
+set @fin = FOUR_SIZONS.finTri(@tri,@anio)
+
+select top 5 h.Hotel_Codigo
+from FOUR_SIZONS.Hotel h , FOUR_SIZONS.Hotel_Cerrado c
+where c.Hotel_Codigo = h.Hotel_Codigo and  @inicio<c.Cerrado_FechaI and c.Cerrado_FechaF<@fin
+group by h.Hotel_Codigo
+order by count(c.Cerrado_codigo)
+
+end 
+go
+
+create proc four_sizons.clieConMasPuntos
+@anio numeric(18),
+@tri numeric(18)
+
+as begin
+declare @fin datetime
+declare @inicio datetime
+
+set @inicio = FOUR_SIZONS.InicioTRi(@tri,@anio)
+set @fin = FOUR_SIZONS.finTri(@tri,@anio)
+
+
+
+
+end 
+go
+
+
+create proc four_sizons.habOcupadas
+@anio numeric(18),
+@tri numeric(18)
+
+as begin
+declare @fin datetime
+declare @inicio datetime
+
+set @inicio = FOUR_SIZONS.InicioTRi(@tri,@anio)
+set @fin = FOUR_SIZONS.finTri(@tri,@anio)
+
+select top 5 h.Habitacion_Numero, h.Hotel_Codigo 
+from FOUR_SIZONS.Estadia e ,FOUR_SIZONS.Habitacion h
+where e.Hotel_Codigo = h.Hotel_Codigo and e.Habitacion_Numero = h.Habitacion_Numero and @inicio< e.Estadia_FechaInicio and e.Estadia_FechaFin<@fin
+group by h.Habitacion_Numero, h.Hotel_Codigo
+order by sum(e.Estadia_CantNoches) desc
+
+end 
+go
+
+create FUNCTION FOUR_SIZONS.calcPuntaje ( @estadia numeric(18))
+
+	RETURNS numeric(18)
+
+AS BEGIN
+
+	DECLARE @puntaje numeric(18),
+			@puntajeEst numeric(18),
+			@puntajeCons numeric(18),
+			@reserva numeric(18),
+			@descripcion nvarchar(255),
+			@regimen numeric(18)
+
+	set @puntajeEst= FOUR_SIZONS.calcEstadia(@estadia)/20
+	set @puntajeCons=FOUR_SIZONS.calcConsumible(@estadia)/10
+	set @reserva=(select Reserva_Codigo from FOUR_SIZONS.Estadia where Estadia_Codigo = @estadia)
+	set @regimen = ( select regimen_Codigo from FOUR_SIZONS.Reserva where Reserva_Codigo = @reserva);
+	set @descripcion=(select regimen_descripcion from FOUR_SIZONS.Regimen where Regimen_Codigo=@regimen);
+	if ( @descripcion != 'ALL INCLUSIVE') 
+	set @puntaje = @puntajeEst+@puntajeCons
+	else set @puntaje=@puntajeEst
+	if(@puntaje is null)
+	begin
+	set @puntaje=0
+	end
+RETURN @puntaje
+END	
+go
+
+
+create procedure four_sizons.MayorPuntaje
+@anio numeric(18),
+@tri numeric(18)
+
+as begin
+declare @fin datetime
+declare @inicio datetime
+
+set @inicio = FOUR_SIZONS.InicioTRi(@tri,@anio)
+set @fin = FOUR_SIZONS.finTri(@tri,@anio)
+select top 1 c.Cliente_Codigo, sum(FOUR_SIZONS.calcPuntaje(distinct f.Estadia_Codigo))puntaje
+from Cliente c JOIN Factura f on c.Cliente_Codigo=f.Cliente_Codigo
+where f.Factura_Fecha between @inicio and @fin
+group by c.Cliente_Codigo
+order by sum(FOUR_SIZONS.calcPuntaje(distinct f.Estadia_Codigo)) desc
+end 
+go
