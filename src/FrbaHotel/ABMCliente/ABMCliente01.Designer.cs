@@ -32,21 +32,6 @@
             this.label9 = new System.Windows.Forms.Label();
             this.label1 = new System.Windows.Forms.Label();
             this.dgv_Clientes = new System.Windows.Forms.DataGridView();
-            this.Cliente_Codigo = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.Cliente_Nombre = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.Cliente_Apellido = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.Cliente_TipoDoc = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.Cliente_NumDoc = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.Cliente_Dom_Calle = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.Cliente_Nro_calle = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.Cliente_Piso = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.Cliente_Depto = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.Cliente_Mail = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.Cliente_Nacionalidad = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.Cliente_Fecha_Nac = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.Cliente_Puntos = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.Cliente_Estado = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.Cliente_Consistente = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.btn_volver = new System.Windows.Forms.Button();
             this.groupBox1 = new System.Windows.Forms.GroupBox();
             this.cb_tipo_doc = new System.Windows.Forms.ComboBox();
@@ -64,6 +49,22 @@
             this.btn_Modificacion = new System.Windows.Forms.Button();
             this.btn_buscar = new System.Windows.Forms.Button();
             this.btn_limpiar = new System.Windows.Forms.Button();
+            this.Cliente_Codigo = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.Cliente_Nombre = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.Cliente_Apellido = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.Cliente_TipoDoc = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.Cliente_NumDoc = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.Cliente_Dom_Calle = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.Cliente_Nro_calle = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.Cliente_Piso = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.Cliente_Depto = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.Cliente_Mail = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.Cliente_Telefono = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.Cliente_Nacionalidad = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.Cliente_Fecha_Nac = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.Cliente_Puntos = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.Cliente_Estado = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.Cliente_Consistente = new System.Windows.Forms.DataGridViewTextBoxColumn();
             ((System.ComponentModel.ISupportInitialize)(this.dgv_Clientes)).BeginInit();
             this.groupBox1.SuspendLayout();
             this.SuspendLayout();
@@ -112,6 +113,7 @@
             this.Cliente_Piso,
             this.Cliente_Depto,
             this.Cliente_Mail,
+            this.Cliente_Telefono,
             this.Cliente_Nacionalidad,
             this.Cliente_Fecha_Nac,
             this.Cliente_Puntos,
@@ -121,81 +123,6 @@
             this.dgv_Clientes.Name = "dgv_Clientes";
             this.dgv_Clientes.Size = new System.Drawing.Size(516, 141);
             this.dgv_Clientes.TabIndex = 21;
-            // 
-            // Cliente_Codigo
-            // 
-            this.Cliente_Codigo.HeaderText = "Codigo";
-            this.Cliente_Codigo.Name = "Cliente_Codigo";
-            // 
-            // Cliente_Nombre
-            // 
-            this.Cliente_Nombre.HeaderText = "Nombre";
-            this.Cliente_Nombre.Name = "Cliente_Nombre";
-            // 
-            // Cliente_Apellido
-            // 
-            this.Cliente_Apellido.HeaderText = "Apellido";
-            this.Cliente_Apellido.Name = "Cliente_Apellido";
-            // 
-            // Cliente_TipoDoc
-            // 
-            this.Cliente_TipoDoc.HeaderText = "Tipo Doc.";
-            this.Cliente_TipoDoc.Name = "Cliente_TipoDoc";
-            // 
-            // Cliente_NumDoc
-            // 
-            this.Cliente_NumDoc.HeaderText = "Nro. Doc.";
-            this.Cliente_NumDoc.Name = "Cliente_NumDoc";
-            // 
-            // Cliente_Dom_Calle
-            // 
-            this.Cliente_Dom_Calle.HeaderText = "Dom. Calle";
-            this.Cliente_Dom_Calle.Name = "Cliente_Dom_Calle";
-            // 
-            // Cliente_Nro_calle
-            // 
-            this.Cliente_Nro_calle.HeaderText = "Nro. Calle";
-            this.Cliente_Nro_calle.Name = "Cliente_Nro_calle";
-            // 
-            // Cliente_Piso
-            // 
-            this.Cliente_Piso.HeaderText = "Piso";
-            this.Cliente_Piso.Name = "Cliente_Piso";
-            // 
-            // Cliente_Depto
-            // 
-            this.Cliente_Depto.HeaderText = "Depto";
-            this.Cliente_Depto.Name = "Cliente_Depto";
-            // 
-            // Cliente_Mail
-            // 
-            this.Cliente_Mail.HeaderText = "Mail";
-            this.Cliente_Mail.Name = "Cliente_Mail";
-            // 
-            // Cliente_Nacionalidad
-            // 
-            this.Cliente_Nacionalidad.HeaderText = "Nacionalidad";
-            this.Cliente_Nacionalidad.Name = "Cliente_Nacionalidad";
-            // 
-            // Cliente_Fecha_Nac
-            // 
-            this.Cliente_Fecha_Nac.HeaderText = "Fecha Nac.";
-            this.Cliente_Fecha_Nac.Name = "Cliente_Fecha_Nac";
-            // 
-            // Cliente_Puntos
-            // 
-            this.Cliente_Puntos.HeaderText = "Puntos";
-            this.Cliente_Puntos.Name = "Cliente_Puntos";
-            // 
-            // Cliente_Estado
-            // 
-            this.Cliente_Estado.HeaderText = "Estado";
-            this.Cliente_Estado.Name = "Cliente_Estado";
-            // 
-            // Cliente_Consistente
-            // 
-            this.Cliente_Consistente.HeaderText = "Consistente";
-            this.Cliente_Consistente.Name = "Cliente_Consistente";
             // 
             // btn_volver
             // 
@@ -365,6 +292,86 @@
             this.btn_limpiar.UseVisualStyleBackColor = true;
             this.btn_limpiar.Click += new System.EventHandler(this.button5_Click);
             // 
+            // Cliente_Codigo
+            // 
+            this.Cliente_Codigo.HeaderText = "Codigo";
+            this.Cliente_Codigo.Name = "Cliente_Codigo";
+            // 
+            // Cliente_Nombre
+            // 
+            this.Cliente_Nombre.HeaderText = "Nombre";
+            this.Cliente_Nombre.Name = "Cliente_Nombre";
+            // 
+            // Cliente_Apellido
+            // 
+            this.Cliente_Apellido.HeaderText = "Apellido";
+            this.Cliente_Apellido.Name = "Cliente_Apellido";
+            // 
+            // Cliente_TipoDoc
+            // 
+            this.Cliente_TipoDoc.HeaderText = "Tipo Doc.";
+            this.Cliente_TipoDoc.Name = "Cliente_TipoDoc";
+            // 
+            // Cliente_NumDoc
+            // 
+            this.Cliente_NumDoc.HeaderText = "Nro. Doc.";
+            this.Cliente_NumDoc.Name = "Cliente_NumDoc";
+            // 
+            // Cliente_Dom_Calle
+            // 
+            this.Cliente_Dom_Calle.HeaderText = "Dom. Calle";
+            this.Cliente_Dom_Calle.Name = "Cliente_Dom_Calle";
+            // 
+            // Cliente_Nro_calle
+            // 
+            this.Cliente_Nro_calle.HeaderText = "Nro. Calle";
+            this.Cliente_Nro_calle.Name = "Cliente_Nro_calle";
+            // 
+            // Cliente_Piso
+            // 
+            this.Cliente_Piso.HeaderText = "Piso";
+            this.Cliente_Piso.Name = "Cliente_Piso";
+            // 
+            // Cliente_Depto
+            // 
+            this.Cliente_Depto.HeaderText = "Depto";
+            this.Cliente_Depto.Name = "Cliente_Depto";
+            // 
+            // Cliente_Mail
+            // 
+            this.Cliente_Mail.HeaderText = "Mail";
+            this.Cliente_Mail.Name = "Cliente_Mail";
+            // 
+            // Cliente_Telefono
+            // 
+            this.Cliente_Telefono.HeaderText = "Telefono";
+            this.Cliente_Telefono.Name = "Cliente_Telefono";
+            // 
+            // Cliente_Nacionalidad
+            // 
+            this.Cliente_Nacionalidad.HeaderText = "Nacionalidad";
+            this.Cliente_Nacionalidad.Name = "Cliente_Nacionalidad";
+            // 
+            // Cliente_Fecha_Nac
+            // 
+            this.Cliente_Fecha_Nac.HeaderText = "Fecha Nac.";
+            this.Cliente_Fecha_Nac.Name = "Cliente_Fecha_Nac";
+            // 
+            // Cliente_Puntos
+            // 
+            this.Cliente_Puntos.HeaderText = "Puntos";
+            this.Cliente_Puntos.Name = "Cliente_Puntos";
+            // 
+            // Cliente_Estado
+            // 
+            this.Cliente_Estado.HeaderText = "Estado";
+            this.Cliente_Estado.Name = "Cliente_Estado";
+            // 
+            // Cliente_Consistente
+            // 
+            this.Cliente_Consistente.HeaderText = "Consistente";
+            this.Cliente_Consistente.Name = "Cliente_Consistente";
+            // 
             // ABMCliente01
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -400,21 +407,6 @@
         private System.Windows.Forms.DataGridView dgv_Clientes;
         private System.Windows.Forms.Button btn_volver;
         private System.Windows.Forms.GroupBox groupBox1;
-        private System.Windows.Forms.DataGridViewTextBoxColumn Cliente_Codigo;
-        private System.Windows.Forms.DataGridViewTextBoxColumn Cliente_Nombre;
-        private System.Windows.Forms.DataGridViewTextBoxColumn Cliente_Apellido;
-        private System.Windows.Forms.DataGridViewTextBoxColumn Cliente_TipoDoc;
-        private System.Windows.Forms.DataGridViewTextBoxColumn Cliente_NumDoc;
-        private System.Windows.Forms.DataGridViewTextBoxColumn Cliente_Dom_Calle;
-        private System.Windows.Forms.DataGridViewTextBoxColumn Cliente_Nro_calle;
-        private System.Windows.Forms.DataGridViewTextBoxColumn Cliente_Piso;
-        private System.Windows.Forms.DataGridViewTextBoxColumn Cliente_Depto;
-        private System.Windows.Forms.DataGridViewTextBoxColumn Cliente_Mail;
-        private System.Windows.Forms.DataGridViewTextBoxColumn Cliente_Nacionalidad;
-        private System.Windows.Forms.DataGridViewTextBoxColumn Cliente_Fecha_Nac;
-        private System.Windows.Forms.DataGridViewTextBoxColumn Cliente_Puntos;
-        private System.Windows.Forms.DataGridViewTextBoxColumn Cliente_Estado;
-        private System.Windows.Forms.DataGridViewTextBoxColumn Cliente_Consistente;
         private System.Windows.Forms.Button btn_alta;
         private System.Windows.Forms.Button btn_baja;
         private System.Windows.Forms.Button btn_Modificacion;
@@ -430,5 +422,21 @@
         private System.Windows.Forms.TextBox txt_nro_doc;
         private System.Windows.Forms.Label label6;
         private System.Windows.Forms.Label label5;
+        private System.Windows.Forms.DataGridViewTextBoxColumn Cliente_Codigo;
+        private System.Windows.Forms.DataGridViewTextBoxColumn Cliente_Nombre;
+        private System.Windows.Forms.DataGridViewTextBoxColumn Cliente_Apellido;
+        private System.Windows.Forms.DataGridViewTextBoxColumn Cliente_TipoDoc;
+        private System.Windows.Forms.DataGridViewTextBoxColumn Cliente_NumDoc;
+        private System.Windows.Forms.DataGridViewTextBoxColumn Cliente_Dom_Calle;
+        private System.Windows.Forms.DataGridViewTextBoxColumn Cliente_Nro_calle;
+        private System.Windows.Forms.DataGridViewTextBoxColumn Cliente_Piso;
+        private System.Windows.Forms.DataGridViewTextBoxColumn Cliente_Depto;
+        private System.Windows.Forms.DataGridViewTextBoxColumn Cliente_Mail;
+        private System.Windows.Forms.DataGridViewTextBoxColumn Cliente_Telefono;
+        private System.Windows.Forms.DataGridViewTextBoxColumn Cliente_Nacionalidad;
+        private System.Windows.Forms.DataGridViewTextBoxColumn Cliente_Fecha_Nac;
+        private System.Windows.Forms.DataGridViewTextBoxColumn Cliente_Puntos;
+        private System.Windows.Forms.DataGridViewTextBoxColumn Cliente_Estado;
+        private System.Windows.Forms.DataGridViewTextBoxColumn Cliente_Consistente;
     }
 }

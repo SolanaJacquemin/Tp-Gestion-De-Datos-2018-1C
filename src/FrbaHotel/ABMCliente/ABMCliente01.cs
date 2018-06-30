@@ -30,8 +30,8 @@ namespace FrbaHotel.AbmCliente
        
             Conexion con = new Conexion();
             con.strQuery = "SELECT TOP 100 Cliente_Codigo, Cliente_Nombre, Cliente_Apellido, " +
-                                "Cliente_TipoDoc, Cliente_NumDoc, Cliente_Dom_Calle, Cliente_Nro_Calle, Cliente_Piso, Cliente_Depto, " +
-                                " Cliente_Mail, Cliente_Nacionalidad, Cliente_Fecha_Nac, Cliente_Puntos, " +
+                                "Cliente_TipoDoc, Cliente_NumDoc, Cliente_Localidad, Cliente_Dom_Calle, Cliente_Nro_Calle, Cliente_Piso, Cliente_Depto, " +
+                                " Cliente_Mail, Cliente_Telefono, Cliente_Nacionalidad, Cliente_Fecha_Nac, Cliente_Puntos, " +
                                 "Cliente_Estado, Cliente_Consistente " +
                                 "FROM FOUR_SIZONS.Cliente ORDER BY Cliente_Codigo";
               con.executeQuery();
@@ -41,21 +41,23 @@ namespace FrbaHotel.AbmCliente
                   con.strQuery = "";
                   con.closeConection();
                   return;
-                }
+                }          
 
-               dgv_Clientes.Rows.Add(new Object[] { con.lector.GetDecimal(0), con.lector.GetString(1),
+            dgv_Clientes.Rows.Add(new Object[] { con.lector.GetDecimal(0), con.lector.GetString(1),
             con.lector.GetString(2), con.lector.GetString(3), con.lector.GetDecimal(4), con.lector.GetString(5),
-            con.lector.GetDecimal(6), con.lector.GetDecimal(7), con.lector.GetString(8), con.lector.GetString(9),
-            con.lector.GetString(10), con.lector.GetDateTime(11), con.lector.GetDecimal(12), con.lector.GetBoolean(13), con.lector.GetBoolean(14)});
+            con.lector.GetString(6),con.lector.GetDecimal(7), con.lector.GetDecimal(8), con.lector.GetString(9), con.lector.GetString(10),
+            con.lector.GetString(11), con.lector.GetString(12), con.lector.GetDateTime(13), con.lector.GetDecimal(14), con.lector.GetBoolean(15),
+            con.lector.GetBoolean(16)});
 
                while (con.reader())
                {
                    dgv_Clientes.Rows.Add(new Object[] { con.lector.GetDecimal(0), con.lector.GetString(1),
             con.lector.GetString(2), con.lector.GetString(3), con.lector.GetDecimal(4), con.lector.GetString(5),
-            con.lector.GetDecimal(6), con.lector.GetDecimal(7), con.lector.GetString(8), con.lector.GetString(9),
-            con.lector.GetString(10), con.lector.GetDateTime(11), con.lector.GetDecimal(12), con.lector.GetBoolean(13), con.lector.GetBoolean(14)});
+            con.lector.GetString(6),con.lector.GetDecimal(7), con.lector.GetDecimal(8), con.lector.GetString(9), con.lector.GetString(10),
+            con.lector.GetString(11), con.lector.GetString(12), con.lector.GetDateTime(13), con.lector.GetDecimal(14), con.lector.GetBoolean(15),
+            con.lector.GetBoolean(16)});
                }
-               con.closeConection();        
+               con.closeConection(); 
 
             /*
 
@@ -98,15 +100,17 @@ namespace FrbaHotel.AbmCliente
 
             dgv_Clientes.Rows.Add(new Object[] { con.lector.GetDecimal(0), con.lector.GetString(1),
             con.lector.GetString(2), con.lector.GetString(3), con.lector.GetDecimal(4), con.lector.GetString(5),
-            con.lector.GetDecimal(6), con.lector.GetDecimal(7), con.lector.GetString(8), con.lector.GetString(9),
-            con.lector.GetString(10), con.lector.GetDateTime(11), con.lector.GetDecimal(12), con.lector.GetBoolean(13), con.lector.GetBoolean(14)});
+            con.lector.GetString(6),con.lector.GetDecimal(7), con.lector.GetDecimal(8), con.lector.GetString(9), con.lector.GetString(10),
+            con.lector.GetString(11), con.lector.GetString(12), con.lector.GetDateTime(13), con.lector.GetDecimal(14), con.lector.GetBoolean(15),
+            con.lector.GetBoolean(16)});
 
             while (con.reader() && contador<=100)
             {
             dgv_Clientes.Rows.Add(new Object[] { con.lector.GetDecimal(0), con.lector.GetString(1),
             con.lector.GetString(2), con.lector.GetString(3), con.lector.GetDecimal(4), con.lector.GetString(5),
-            con.lector.GetDecimal(6), con.lector.GetDecimal(7), con.lector.GetString(8), con.lector.GetString(9),
-            con.lector.GetString(10), con.lector.GetDateTime(11), con.lector.GetDecimal(12), con.lector.GetBoolean(13), con.lector.GetBoolean(14)});
+            con.lector.GetString(6),con.lector.GetDecimal(7), con.lector.GetDecimal(8), con.lector.GetString(9), con.lector.GetString(10),
+            con.lector.GetString(11), con.lector.GetString(12), con.lector.GetDateTime(13), con.lector.GetDecimal(14), con.lector.GetBoolean(15),
+            con.lector.GetBoolean(16)});
                 contador += 1;
             }
             contador = 0;
@@ -206,7 +210,7 @@ namespace FrbaHotel.AbmCliente
         {
             dgv_Clientes.ClearSelection();
             foreach (DataGridViewRow row in dgv_Clientes.Rows)
-                if (Convert.ToBoolean(row.Cells[13].Value) == false)
+                if (Convert.ToBoolean(row.Cells[15].Value) == false)
                 {
                     row.DefaultCellStyle.BackColor = Color.Red;
                 }
