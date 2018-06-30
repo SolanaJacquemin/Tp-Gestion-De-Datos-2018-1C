@@ -1325,7 +1325,7 @@ create proc FOUR_SIZONS.InsertarRol
 
 create procedure FOUR_SIZONS.ModificacionRol
 	@rolname nvarchar(50),
-	@codigo nvarchar(50),
+	@codigo numeric(18),
 	@estado bit
 
 	as begin tran
@@ -1348,20 +1348,16 @@ create procedure FOUR_SIZONS.ModificacionRol
 go
 
 create procedure four_sizons.altaRolxFunc
-@rolname nvarchar(50),
-@func nvarchar(50)
+@rol numeric(18),
+@func numeric(18)
 
 	as begin tran 
 	begin try 
-	
-	declare @rolID numeric(18)
-	declare @funcID numeric(18)
 
-	set @rolID = (select Rol_Codigo  from four_sizons.Rol where Rol_Nombre = @rolname)
-	set @funcID = (select Func_Codigo from FOUR_SIZONS.Funcionalidad where Func_Nombre = @func)
-
+	if (not exists (select RolXFunc_Estado from four_sizons.RolXFunc where Rol_Codigo=@rol and Func_Codigo=@func ))
 	insert into FOUR_SIZONS.RolXFunc(Rol_Codigo,Func_Codigo,RolXFunc_Estado) 
-							values (@rolID,@funcID,1)
+							values (@rol,@func,1)
+	else print N'ya existe la relacion entre ese rol y esa funcion'
 
 	commit tran 
 	end try
@@ -1374,23 +1370,18 @@ create procedure four_sizons.altaRolxFunc
 	end catch 
 go
 
+
 create procedure four_sizons.modificacionRolxFunc
-@rolname nvarchar(50),
-@func nvarchar(50),
+@rol numeric(18),
+@func numeric(18),
 @estado bit
 
 	as begin tran 
 	begin try 
 
-	declare @rolID numeric(18)
-	declare @funcID numeric(18)
-
-	set @rolID = (select Rol_Codigo  from four_sizons.Rol where Rol_Nombre = @rolname)
-	set @funcID = (select Func_Codigo from FOUR_SIZONS.Funcionalidad where Func_Nombre = @func)
-
 	update FOUR_SIZONS.RolXFunc
 		set RolXFunc_Estado = @estado
-	where Rol_Codigo=@rolID and Func_Codigo=@funcID
+	where Rol_Codigo=@rol and Func_Codigo=@func
 
 	commit tran 
 	end try
