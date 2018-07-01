@@ -728,6 +728,7 @@ BEGIN
 	WHERE Factura_Nro IS NOT NULL
 	ORDER BY M.Factura_Nro
 
+
 	--Item_Factura
 	INSERT INTO FOUR_SIZONS.Item_Factura (Factura_Nro, Item_Factura_Cant, Item_Factura_Monto)
 	SELECT DISTINCT M.Factura_Nro,Item_Factura_Cantidad, Item_Factura_Monto
@@ -735,6 +736,23 @@ BEGIN
 	WHERE Factura_Nro IS NOT NULL
 	ORDER BY M.Factura_Nro
 END
+go
+
+    --PRIMERO TIENE QUE SER LA MIGRACION DE FACTURA E ITEMS
+		/**Toma las Facturas, en la que la suma de sus items no es igual a la fact_total **/
+	DECLARE @facturaInc TABLE(
+		facturaI numeric(18)
+	)
+
+	INSERT INTO @facturaInc (facturaI)
+	SELECT F.Factura_Nro
+	FROM FOUR_SIZONS.Factura F JOIN FOUR_SIZONS.Item_Factura i on f.Factura_Nro = i.Factura_Nro
+	group by F.Factura_Nro,F.Factura_Total
+	having F.Factura_Total != sum(i.Item_Factura_Monto)
+	
+	UPDATE FOUR_SIZONS.Factura
+	SET Factura_Consistencia = 0
+	WHERE Factura_Nro IN (select facturaI from @facturaInc)
 go
 -------------------------------------------------------Comienzo de procedures--------------------------------------------------------------
 
@@ -1909,6 +1927,7 @@ begin try
 	set @Reserva = (select Reserva_Codigo from FOUR_SIZONS.Estadia where Estadia_Codigo = @Estadia);
 	set @finR = (select Reserva_Fecha_Fin from FOUR_SIZONS.Reserva where Reserva_Codigo = @Reserva);
 	set @difDates = DATEDIFF(day,@fecha,@finR);
+	set @precioXNoche = (select Estadia_PreXNoche from FOUR_SIZONS.Estadia where Estadia_Codigo = @Estadia);
 	
 	UPDATE FOUR_SIZONS.Estadia
 	set 
@@ -1917,11 +1936,24 @@ begin try
 		Estadia_DiasRest = @difDates,
 		Estadia_CantNoches =  @cantDias
 		where Estadia_Codigo = @Estadia;
-	--Como pongo en la fact los dias que no estuvo? SERIA OTRO ITEM?
 	set @monto = (select Reserva_Precio from FOUR_SIZONS.Reserva where Reserva_Codigo =@Reserva)
 	set @fact = (select Factura_Nro from FOUR_SIZONS.Factura where Estadia_Codigo = @Estadia)
-	insert into FOUR_SIZONS.Item_Factura(Factura_Nro,item_descripcion,Item_Factura_Cant,Item_Factura_Monto)
-	values(@fact,'Estadia',1, @monto)
+	if(@difDates=0)
+		begin
+			insert into FOUR_SIZONS.Item_Factura(Factura_Nro,item_descripcion,Item_Factura_Cant,Item_Factura_Monto)
+				values(@fact,'Estadia',(@cantDias-1), @monto)
+
+				----- EN CANTIDAD DE ESTADIA PONGO LA CANTIDAD DE NOCHES QUE SE QUEDA
+				---- EL -1 SE DEBE A QUE EL DIA EN EL QUE SE RETIRAN NO SE COBRA SUPONGO, YA QUE NO PASAN LA NOCHE EN EL HOTEL
+		end
+	else 
+		begin
+			insert into FOUR_SIZONS.Item_Factura(Factura_Nro,item_descripcion,Item_Factura_Cant,Item_Factura_Monto)
+				values(@fact,'Estadia',@cantDias, (@cantDias-1)*@precioXNoche)
+			insert into FOUR_SIZONS.Item_Factura(Factura_Nro,item_descripcion,Item_Factura_Cant,Item_Factura_Monto)
+				values(@fact,'Recargo de estadia',(@difDates-1),( @difDates-1)*@precioXNoche)
+		end
+
 commit tran 
 end try
 
@@ -1962,16 +1994,14 @@ as begin tran
 	
 			if((select Regimen_Descripcion from Regimen where Regimen_Codigo=@regimen)='ALL INCLUSIVE')
 				begin
-				insert into FOUR_SIZONS.Item_Factura(Factura_Nro , item_descripcion , Item_Factura_Cant , Item_Factura_Monto)
+					insert into FOUR_SIZONS.Item_Factura(Factura_Nro , item_descripcion , Item_Factura_Cant , Item_Factura_Monto)
 								values(@factura,@desc,@cant,0)
-			end
+				end
 			else 
 				begin
-				
-				insert into FOUR_SIZONS.Item_Factura(Factura_Nro , item_descripcion , Item_Factura_Cant , Item_Factura_Monto)
+					insert into FOUR_SIZONS.Item_Factura(Factura_Nro , item_descripcion , Item_Factura_Cant , Item_Factura_Monto)
 								values(@factura,@desc,@cant,@monto*@cant)
-			end
-
+				end
 		end 
 	else 
 		begin
@@ -1982,17 +2012,17 @@ as begin tran
 			where Estadia_Codigo= @estadia and Consumible_Codigo = @consumible
 				if((select Regimen_Descripcion from Regimen where Regimen_Codigo=@regimen)='ALL INCLUSIVE')
 					begin
-				update FOUR_SIZONS.Item_Factura
-					set Item_Factura_Cant = Item_Factura_Cant+@cant,
-						Item_Factura_Monto = 0
-					where @factura=Factura_Nro and @numItem = Item_Factura_NroItem
-			end
+						update FOUR_SIZONS.Item_Factura
+							set Item_Factura_Cant = Item_Factura_Cant+@cant,
+								Item_Factura_Monto = 0
+							where @factura=Factura_Nro and @numItem = Item_Factura_NroItem
+					end
 				else 
 					begin
 						update FOUR_SIZONS.Item_Factura
-					set Item_Factura_Cant = Item_Factura_Cant+@cant,
-						Item_Factura_Monto = Item_Factura_Monto + (@monto*@cant)
-					where @factura=Factura_Nro and @numItem = Item_Factura_NroItem
+							set Item_Factura_Cant = Item_Factura_Cant+@cant,
+								Item_Factura_Monto = Item_Factura_Monto + (@monto*@cant)
+							where @factura=Factura_Nro and @numItem = Item_Factura_NroItem
 					end
 		end
 	commit tran
@@ -2042,7 +2072,7 @@ set @fin = FOUR_SIZONS.finTri(@tri,@anio)
 
 select top 5 h.Hotel_Codigo
 from Hotel h,Consumible c, EstadiaXConsumible ExC, Estadia e , Factura f 
-where h.Hotel_Codigo=e.Hotel_Codigo and (( @inicio<f.Factura_Fecha and f.Factura_Fecha<@fin) and f.Estadia_Codigo = e.Estadia_Codigo and e.Estadia_Codigo = ExC.Estadia_Codigo) 
+where h.Hotel_Codigo=e.Hotel_Codigo and (( @inicio<f.Factura_Fecha and f.Factura_Fecha<@fin) and f.Estadia_Codigo = e.Estadia_Codigo and e.Estadia_Codigo = ExC.Estadia_Codigo) and f.Factura_Consistencia=1
 group by h.Hotel_Codigo
 order by sum(ExC.estXcons_cantidad)
 end 
@@ -2117,7 +2147,7 @@ END
 go
 
 
-create procedure four_sizons.MayorPuntaje
+create procedure four_sizons.clieMayorPuntaje
 @anio numeric(18),
 @tri numeric(18)
 
@@ -2128,7 +2158,7 @@ as begin
 	set @inicio = FOUR_SIZONS.InicioTRi(@tri,@anio)
 	set @fin = FOUR_SIZONS.finTri(@tri,@anio)
 
-	select top 1 c.Cliente_Codigo, sum(FOUR_SIZONS.calcPuntaje(distinct f.Estadia_Codigo))puntaje
+	select top 1 c.Cliente_Codigo
 		from Cliente c JOIN Factura f on c.Cliente_Codigo=f.Cliente_Codigo
 		where f.Factura_Fecha between @inicio and @fin and f.Factura_Consistencia=1
 		group by c.Cliente_Codigo
