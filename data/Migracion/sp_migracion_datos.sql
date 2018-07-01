@@ -415,6 +415,7 @@ BEGIN
 	IF NOT EXISTS (SELECT * FROM sys.tables WHERE name = 'ReservaMod')
 	BEGIN
 		CREATE TABLE FOUR_SIZONS.ReservaMod (
+			ResMod_Codigo numeric(18),
 			Reserva_Codigo numeric(18),
 			Usuario_ID nvarchar(15),
 			ResMod_Detalle nvarchar(255),
@@ -423,7 +424,7 @@ BEGIN
 			CONSTRAINT FK_ReservaMod_1 FOREIGN KEY (Reserva_Codigo) REFERENCES FOUR_SIZONS.Reserva(Reserva_Codigo),
 			CONSTRAINT FK_ReservaMod_2 FOREIGN KEY (Usuario_ID) REFERENCES FOUR_SIZONS.Usuario(Usuario_ID),
 
-			CONSTRAINT PK_ReservaMod PRIMARY KEY (Reserva_Codigo, Usuario_ID)
+			CONSTRAINT PK_ReservaMod PRIMARY KEY (ResMod_Codigo, Reserva_Codigo, Usuario_ID)
 		)
 	END
 
@@ -759,9 +760,9 @@ BEGIN
 	SET Factura_Consistencia = 0
 	WHERE Factura_Nro IN (select facturaI from @facturaInc)
 
--------------------------------------------------------Comienzo de procedures--------------------------------------------------------------
-
 END
+
+-------------------------------------------------------Comienzo de procedures--------------------------------------------------------------
 
 -- Borrado de procedures en la base
 IF (OBJECT_ID('FOUR_SIZONS.ValidarUsuario', 'P') IS NOT NULL)
