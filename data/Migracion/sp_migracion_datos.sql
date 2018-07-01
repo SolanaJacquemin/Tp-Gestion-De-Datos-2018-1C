@@ -675,9 +675,9 @@ BEGIN
 
 	-- Reservas
 	INSERT INTO FOUR_SIZONS.Reserva (Reserva_Codigo, Reserva_FechaCreacion, Reserva_Fecha_Inicio, Reserva_Fecha_Fin,
-	Reserva_Cant_Noches, Reserva_Precio, Usuario_ID, Hotel_Codigo, Cliente_Codigo, Reserva_Estado)
+	Reserva_Cant_Noches, Reserva_Precio, Usuario_ID, Hotel_Codigo, Cliente_Codigo, Reserva_Estado,regimen_codigo)
 	SELECT DISTINCT M.Reserva_Codigo, M.Reserva_Fecha_Inicio, M.Reserva_Fecha_Inicio, M.Reserva_Fecha_Inicio, 
-	M.Reserva_Cant_Noches, 0, 'SYSADM', H.Hotel_Codigo, C.Cliente_Codigo, 1
+	M.Reserva_Cant_Noches, 0, 'SYSADM', H.Hotel_Codigo, C.Cliente_Codigo, 1 , r.regimen_codigo
 	FROM GD1C2018.gd_esquema.Maestra AS M
 	JOIN FOUR_SIZONS.Hotel AS H ON H.Hotel_Ciudad = M.Hotel_Ciudad and H.Hotel_Nro_Calle = M.Hotel_Nro_Calle
 	JOIN FOUR_SIZONS.Regimen AS R ON R.Regimen_Descripcion = M.Regimen_Descripcion
@@ -1755,7 +1755,7 @@ go
 
 create FUNCTION FOUR_SIZONS.calcConsumible ( @estadia numeric(18))
 
-	RETURNS numeric(18,2)
+	RETURNS numeric(18,2) 
 
 AS BEGIN
 
@@ -2112,7 +2112,7 @@ select top 5 h.Hotel_Codigo--, COUNT(r.Reserva_Codigo)???????????????????????
 from Hotel h,Reserva r, ReservaMod m  
 where h.Hotel_Codigo=r.Hotel_Codigo and
 	( (r.Reserva_Estado = 3 or r.Reserva_Estado = 4 or r.Reserva_Estado = 5)
-	and m.Reserva_Codigo=r.Reserva_Codigo and m.ResMod_Detalle='Cancelada' and @inicio<m.ResMod_Fecha and m.ResMod_Fecha<@fin)
+	and m.Reserva_Codigo=r.Reserva_Codigo and m.ResMod_Detalle='Cancelada' and m.ResMod_Fecha between @inicio and @fin)
 group by h.Hotel_Codigo
 order by count(r.Reserva_Codigo)
 end 
@@ -2127,14 +2127,14 @@ as begin
 declare @fin datetime
 declare @inicio datetime
 
-set @inicio = FOUR_SIZONS.InicioTRi(@tri,@anio)
-set @fin = FOUR_SIZONS.finTri(@tri,@anio)
+set @inicio = CONVERT(datetime, FOUR_SIZONS.InicioTRi(@tri,@anio),121)
+set @fin = CONVERT(datetime,FOUR_SIZONS.finTri(@tri,@anio),121)
 
 select top 5 h.Hotel_Codigo
-from Hotel h,Consumible c, EstadiaXConsumible ExC, Estadia e , Factura f 
-where h.Hotel_Codigo=e.Hotel_Codigo and (( @inicio<f.Factura_Fecha and f.Factura_Fecha<@fin) and f.Estadia_Codigo = e.Estadia_Codigo and e.Estadia_Codigo = ExC.Estadia_Codigo) and f.Factura_Consistencia=1
+from FOUR_SIZONS.Hotel h, FOUR_SIZONS.Estadia e
+where h.Hotel_Codigo=e.Hotel_Codigo and e.Estadia_FechaInicio between @inicio and @fin
 group by h.Hotel_Codigo
-order by sum(ExC.estXcons_cantidad)
+order by sum(FOUR_SIZONS.calcConsumible(e.Estadia_Codigo))
 end 
 go
 
@@ -2147,12 +2147,12 @@ as begin
 declare @fin datetime
 declare @inicio datetime
 
-set @inicio = FOUR_SIZONS.InicioTRi(@tri,@anio)
-set @fin = FOUR_SIZONS.finTri(@tri,@anio)
+set @inicio =CONVERT(datetime, FOUR_SIZONS.InicioTRi(@tri,@anio),121)
+set @fin = CONVERT(datetime,FOUR_SIZONS.finTri(@tri,@anio),121)
 
 select top 5 h.Hotel_Codigo
 from FOUR_SIZONS.Hotel h , FOUR_SIZONS.Hotel_Cerrado c
-where c.Hotel_Codigo = h.Hotel_Codigo and  @inicio<c.Cerrado_FechaI and c.Cerrado_FechaF<@fin
+where c.Hotel_Codigo = h.Hotel_Codigo and ((c.Cerrado_FechaI between @inicio and @fin) or (c.Cerrado_FechaF between @inicio and @fin))
 group by h.Hotel_Codigo
 order by count(c.Cerrado_codigo)
 
@@ -2185,12 +2185,12 @@ as begin
 declare @fin datetime
 declare @inicio datetime
 
-set @inicio = FOUR_SIZONS.InicioTRi(@tri,@anio)
-set @fin = FOUR_SIZONS.finTri(@tri,@anio)
+set @inicio = CONVERT(datetime,FOUR_SIZONS.InicioTRi(@tri,@anio),121)
+set @fin =CONVERT(datetime, FOUR_SIZONS.finTri(@tri,@anio),121)
 
 select top 5 h.Habitacion_Numero, h.Hotel_Codigo 
 from FOUR_SIZONS.Estadia e ,FOUR_SIZONS.Habitacion h
-where e.Hotel_Codigo = h.Hotel_Codigo and e.Habitacion_Numero = h.Habitacion_Numero and @inicio< e.Estadia_FechaInicio and e.Estadia_FechaFin<@fin
+where e.Hotel_Codigo = h.Hotel_Codigo and e.Habitacion_Numero = h.Habitacion_Numero and ((e.Estadia_FechaInicio between @inicio and @fin) or (e.Estadia_FechaFin between @inicio and @fin))
 group by h.Habitacion_Numero, h.Hotel_Codigo
 order by sum(e.Estadia_CantNoches) desc
 
@@ -2242,7 +2242,7 @@ as begin
 
 	select top 1 c.Cliente_Codigo
 		from Cliente c JOIN Factura f on c.Cliente_Codigo=f.Cliente_Codigo
-		where f.Factura_Fecha between @inicio and @fin and f.Factura_Consistencia=1
+		where CONVERT(datetime,f.Factura_Fecha,103) between @inicio and @fin and f.Factura_Consistencia=1
 		group by c.Cliente_Codigo
 		order by sum(FOUR_SIZONS.calcPuntaje(distinct f.Estadia_Codigo)) desc
 end 
