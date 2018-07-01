@@ -131,6 +131,12 @@
     <Compile Include="GestionReservas\ABMReserva02.Designer.cs">
       <DependentUpon>ABMReserva02.cs</DependentUpon>
     </Compile>
+    <Compile Include="GestionReservas\ABMReserva03.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="GestionReservas\ABMReserva03.Designer.cs">
+      <DependentUpon>ABMReserva03.cs</DependentUpon>
+    </Compile>
     <Compile Include="ListadoEstadistico\ListadoEstadistico01.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -225,6 +231,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="GestionReservas\ABMReserva02.resx">
       <DependentUpon>ABMReserva02.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="GestionReservas\ABMReserva03.resx">
+      <DependentUpon>ABMReserva03.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="ListadoEstadistico\ListadoEstadistico01.resx">
       <DependentUpon>ListadoEstadistico01.cs</DependentUpon>

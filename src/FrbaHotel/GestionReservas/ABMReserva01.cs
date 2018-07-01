@@ -14,6 +14,8 @@ namespace FrbaHotel.GestionReservas
     {
 
         public string usuario;
+        public decimal dgv_reserva_ID;
+        public int index;
 
         public ABMReserva01(string userSession)
         {
@@ -44,12 +46,14 @@ namespace FrbaHotel.GestionReservas
         private void ABMReserva01_Load(object sender, EventArgs e)
         {
             Conexion con = new Conexion();
-            con.strQuery = "SELECT TOP 50 RE.Reserva_Codigo, RE.Reserva_Fecha_Inicio, RE.Reserva_Fecha_Fin, " +
-               "RE.Reserva_Precio, HO.Hotel_Nombre, CL.Cliente_Nombre + ' ' + CL.Cliente_Apellido, " +
-               "RE.Reserva_Estado " +
-               "FROM FOUR_SIZONS.Reserva RE " +
-               "JOIN FOUR_SIZONS.Hotel HO ON HO.Hotel_Codigo = RE.Hotel_Codigo " +
-               "JOIN FOUR_SIZONS.Cliente CL ON CL.Cliente_Codigo = RE.Cliente_Codigo";
+            con.strQuery = "SELECT TOP 50 RE.Reserva_Codigo, RE.Reserva_Fecha_Inicio, RE.Reserva_Fecha_Fin," +
+               " RE.Reserva_Precio, HO.Hotel_Nombre, CL.Cliente_Nombre + ' ' + CL.Cliente_Apellido," +
+               " RE.Reserva_Estado" +
+               " FROM FOUR_SIZONS.Reserva RE" +
+               " JOIN FOUR_SIZONS.Hotel HO ON HO.Hotel_Codigo = RE.Hotel_Codigo" +
+               " JOIN FOUR_SIZONS.Cliente CL ON CL.Cliente_Codigo = RE.Cliente_Codigo" +
+               " WHERE YEAR(RE.Reserva_FechaCreacion) = YEAR(GETDATE()) AND MONTH(RE.Reserva_FechaCreacion) = MONTH(GETDATE())" +
+               " ORDER BY RE.Reserva_FechaCreacion";
 
             con.executeQuery();
             if (!con.reader())
@@ -81,6 +85,7 @@ namespace FrbaHotel.GestionReservas
         {
             int index = e.RowIndex;
             DataGridViewRow selectedRow = dgv_Reservas.Rows[index];
+            dgv_reserva_ID = Convert.ToDecimal(selectedRow.Cells[0].Value.ToString());
         }
 
         private void boton_generar_Click(object sender, EventArgs e)
@@ -99,6 +104,17 @@ namespace FrbaHotel.GestionReservas
             Conexion con = new Conexion();
             if (usuario == "GUEST") 
             {
+                con.strQuery = "SELECT Reserva_Codigo, Reserva_Fecha_Inicio, Reserva_Fecha_Fin, " +
+               "RE.Reserva_Precio, HO.Hotel_Nombre, CL.Cliente_Nombre + ' ' + CL.Cliente_Apellido, " +
+               "RE.Reserva_Estado " +
+               "FROM FOUR_SIZONS.Reserva RE " +
+               "JOIN FOUR_SIZONS.Hotel HO ON HO.Hotel_Codigo = RE.Hotel_Codigo " +
+               "JOIN FOUR_SIZONS.Cliente CL ON CL.Cliente_Codigo = RE.Cliente_Codigo" +
+               " WHERE 1=1 ";
+                if (txt_reservaId.Text != "")
+                    con.strQuery = con.strQuery + "AND RE.Reserva_Codigo = " + txt_reservaId.Text;
+                con.strQuery = con.strQuery + " ORDER BY RE.Reserva_Codigo";
+            }else{
                 con.strQuery = "SELECT Reserva_Codigo, Reserva_Fecha_Inicio, Reserva_Fecha_Fin, " +
                "RE.Reserva_Precio, HO.Hotel_Nombre, CL.Cliente_Nombre + ' ' + CL.Cliente_Apellido, " +
                "RE.Reserva_Estado " +
@@ -136,6 +152,24 @@ namespace FrbaHotel.GestionReservas
         private void btn_buscar_Click(object sender, EventArgs e)
         {
             buscar();
+        }
+
+        private void boton_modificar_Click(object sender, EventArgs e)
+        {
+            string modo = "UPD";
+            this.Hide();
+            ABMReserva03 formABMReserva03 = new ABMReserva03(modo, usuario, dgv_reserva_ID);
+            formABMReserva03.ShowDialog();
+            this.Show();
+        }
+
+        private void boton_cancelar_Click(object sender, EventArgs e)
+        {
+            string modo = "DLT";
+            this.Hide();
+            ABMReserva03 formABMReserva03 = new ABMReserva03(modo, usuario, dgv_reserva_ID);
+            formABMReserva03.ShowDialog();
+            this.Show();
         }
     }
 }

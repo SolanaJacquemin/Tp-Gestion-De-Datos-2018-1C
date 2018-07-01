@@ -94,6 +94,7 @@
             this.boton_modificar.TabIndex = 19;
             this.boton_modificar.Text = "Modificar";
             this.boton_modificar.UseVisualStyleBackColor = true;
+            this.boton_modificar.Click += new System.EventHandler(this.boton_modificar_Click);
             // 
             // boton_cancelar
             // 
@@ -103,6 +104,7 @@
             this.boton_cancelar.TabIndex = 18;
             this.boton_cancelar.Text = "Cancelar";
             this.boton_cancelar.UseVisualStyleBackColor = true;
+            this.boton_cancelar.Click += new System.EventHandler(this.boton_cancelar_Click);
             // 
             // boton_generar
             // 
