@@ -112,12 +112,14 @@ namespace FrbaHotel.ABMRol
                     func_codigo = con.lector.GetDecimal(1);
 
                     Conexion con2 = new Conexion();
-                    con2.strQuery = "SELECT * FROM FOUR_SIZONS.Funcionalidad WHERE Func_Codigo = " + func_codigo;
-
+                    con2.strQuery = "SELECT F.Func_Nombre FROM FOUR_SIZONS.RolXFunc RF" + 
+                                    " JOIN FOUR_SIZONS.Funcionalidad F ON F.Func_Codigo = RF.Func_Codigo " +
+                                    " WHERE RF.Rol_Codigo = " + rol + " AND RF.Func_Codigo = " + func_codigo + 
+                                    " AND RF.RolXFunc_Estado = 1";
                     con2.executeQuery();
                     while (con2.reader())
                     {
-                        lb_func_usralta.Items.Add(con2.lector.GetString(1));
+                        lb_func_usralta.Items.Add(con2.lector.GetString(0));
                     }
                     con2.closeConection(); 
                 }
@@ -142,8 +144,9 @@ namespace FrbaHotel.ABMRol
         private void btn_eliminar_Click(object sender, EventArgs e)
         {
 
-            if (lb_func.SelectedItem != null)
+            if (lb_func_usralta.SelectedItem != null)
             {
+                lb_func_usrbaja.Items.Add(lb_func_usralta.SelectedItem);
                 lb_func_usralta.Items.Remove(lb_func_usralta.SelectedItem);
             }
             else
@@ -162,6 +165,10 @@ namespace FrbaHotel.ABMRol
 
         private void btn_eliminarTodo_Click(object sender, EventArgs e)
         {
+            for (int i = 0; i < lb_func_usralta.Items.Count; i++)
+            {
+                lb_func_usrbaja.Items.Add(lb_func_usralta.Items[i].ToString());
+            }
             lb_func_usralta.Items.Clear();
         }
 
@@ -234,9 +241,49 @@ namespace FrbaHotel.ABMRol
                     }else{
                         con.command.Parameters.Add("@rolname", SqlDbType.NVarChar).Value = txt_nombreRol.Text;
                         con.command.Parameters.Add("@codigo", SqlDbType.NVarChar).Value = rol;
+                        
                         if (modoABM == "UPD")
                         {
                             con.command.Parameters.Add("@estado", SqlDbType.Bit).Value = 1;
+
+                            con.openConection();
+                            con.command.ExecuteNonQuery();
+                            con.closeConection();
+
+                            con.strQuery = "FOUR_SIZONS.modificacionRolxFunc";
+
+                            for (int i = 0; i < lb_func_usralta.Items.Count; i++)
+                            {
+                                con.execute();
+                                con.command.CommandType = CommandType.StoredProcedure;
+
+                                MessageBox.Show(lb_func_usralta.Items[i].ToString());
+
+                                con.command.Parameters.Add("@rolname", SqlDbType.NVarChar).Value = txt_nombreRol.Text;
+                                con.command.Parameters.Add("@func", SqlDbType.NVarChar).Value = lb_func_usralta.Items[i].ToString();
+                                con.command.Parameters.Add("@estado", SqlDbType.Bit).Value = 1;
+
+                                con.openConection();
+                                con.command.ExecuteNonQuery();
+                                con.closeConection();
+                            }
+
+                            for (int i = 0; i < lb_func_usrbaja.Items.Count; i++)
+                            {
+                                con.execute();
+                                con.command.CommandType = CommandType.StoredProcedure;
+
+                                MessageBox.Show(lb_func_usrbaja.Items[i].ToString());
+
+                                con.command.Parameters.Add("@rolname", SqlDbType.NVarChar).Value = txt_nombreRol.Text;
+                                con.command.Parameters.Add("@func", SqlDbType.NVarChar).Value = lb_func_usrbaja.Items[i].ToString();
+                                con.command.Parameters.Add("@estado", SqlDbType.Bit).Value = 0;
+
+                                con.openConection();
+                                con.command.ExecuteNonQuery();
+                                con.closeConection();
+                            }
+
                         }else{
                             con.command.Parameters.Add("@estado", SqlDbType.Bit).Value = 0;
                         }
