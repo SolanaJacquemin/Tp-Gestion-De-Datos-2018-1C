@@ -950,9 +950,9 @@ BEGIN
     DROP proc FOUR_SIZONS.habOcupadas
 END;
 
-IF (OBJECT_ID('FOUR_SIZONS.MayorPuntaje', 'P') IS NOT NULL)
+IF (OBJECT_ID('FOUR_SIZONS.clieMayorPuntaje', 'P') IS NOT NULL)
 BEGIN
-    DROP proc FOUR_SIZONS.MayorPuntaje
+    DROP proc FOUR_SIZONS.clieMayorPuntaje
 END;
 
 GO
@@ -1914,13 +1914,14 @@ create proc FOUR_SIZONS.registrarCheckOut
 as
 begin
 
-declare @cantDias numeric(18,0),
-		@difDates numeric(18,0),
+declare @cantDias numeric(18),
+		@difDates numeric(18),
 		@precioXNoche numeric(18,0),
 		@Reserva numeric(18),
 		@finR datetime,
-		@fact numeric(18,0),
-		@monto numeric(18,0)
+		@fact numeric(18),
+		@monto numeric(18,2),
+		@regimen numeric(18)
 begin tran ta
 begin try
 	set @cantDias = DATEDIFF(day,( select Estadia_FechaInicio from FOUR_SIZONS.Estadia where Estadia_Codigo = @Estadia ),@fecha);
@@ -1938,11 +1939,16 @@ begin try
 		where Estadia_Codigo = @Estadia;
 	set @monto = (select Reserva_Precio from FOUR_SIZONS.Reserva where Reserva_Codigo =@Reserva)
 	set @fact = (select Factura_Nro from FOUR_SIZONS.Factura where Estadia_Codigo = @Estadia)
+	set @regimen=(select Regimen_Codigo from Reserva where Reserva_Codigo=@Reserva)
+	if((select Regimen_Descripcion from Regimen where Regimen_Codigo=@regimen)='ALL INCLUSIVE')
+	begin
+		insert into FOUR_SIZONS.Item_Factura(Factura_Nro,item_descripcion,Item_Factura_Cant,Item_Factura_Monto)
+					values(@fact,'Descuento Por Regimen',1, FOUR_SIZONS.calcConsumible(@Estadia)*-1)
+	end
 	if(@difDates=0)
 		begin
 			insert into FOUR_SIZONS.Item_Factura(Factura_Nro,item_descripcion,Item_Factura_Cant,Item_Factura_Monto)
 				values(@fact,'Estadia',(@cantDias-1), @monto)
-
 				----- EN CANTIDAD DE ESTADIA PONGO LA CANTIDAD DE NOCHES QUE SE QUEDA
 				---- EL -1 SE DEBE A QUE EL DIA EN EL QUE SE RETIRAN NO SE COBRA SUPONGO, YA QUE NO PASAN LA NOCHE EN EL HOTEL
 		end
@@ -1977,53 +1983,34 @@ as begin tran
 	declare @total numeric (18,2)
 	declare @factura numeric(18)
 	declare @desc nvarchar(50)
-	declare @monto numeric(18),
-			@regimen numeric(18),
-			@reserva numeric(18)
+	declare @monto numeric(18)
 
 	set @factura=(select f.Factura_Nro from FOUR_SIZONS.Factura f where @estadia = f.Estadia_Codigo)
 	set @desc=(select Consumible_Descripcion from FOUR_SIZONS.Consumible where @consumible = Consumible_Codigo)
 	set @monto =(select Consumible_Precio from FOUR_SIZONS.Consumible where @consumible = Consumible_Codigo)
-	set @reserva=(select Reserva_Codigo from Estadia where Estadia_Codigo=@estadia)
-	set @regimen=(select Regimen_Codigo  from Reserva where Reserva_Codigo=@reserva)
 
 	if(not exists (select Estadia_Codigo from FOUR_SIZONS.EstadiaXConsumible where Estadia_Codigo= @estadia and Consumible_Codigo = @consumible))
 		begin
 			insert into FOUR_SIZONS.EstadiaXConsumible(Estadia_Codigo,estXcons_cantidad,Consumible_Codigo)
 										values(@estadia,@cant,@consumible)
 	
-			if((select Regimen_Descripcion from Regimen where Regimen_Codigo=@regimen)='ALL INCLUSIVE')
-				begin
-					insert into FOUR_SIZONS.Item_Factura(Factura_Nro , item_descripcion , Item_Factura_Cant , Item_Factura_Monto)
-								values(@factura,@desc,@cant,0)
-				end
-			else 
-				begin
-					insert into FOUR_SIZONS.Item_Factura(Factura_Nro , item_descripcion , Item_Factura_Cant , Item_Factura_Monto)
+			insert into FOUR_SIZONS.Item_Factura(Factura_Nro , item_descripcion , Item_Factura_Cant , Item_Factura_Monto)
 								values(@factura,@desc,@cant,@monto*@cant)
-				end
+
 		end 
 	else 
 		begin
 			declare @numItem numeric(18)
 			set @numItem=(select f.Item_Factura_NroItem from FOUR_SIZONS.Item_Factura f where Factura_Nro= @factura and @desc = item_descripcion)
+			
 			update FOUR_SIZONS.EstadiaXConsumible 
-			set estXcons_cantidad = @cant+ estXcons_cantidad
-			where Estadia_Codigo= @estadia and Consumible_Codigo = @consumible
-				if((select Regimen_Descripcion from Regimen where Regimen_Codigo=@regimen)='ALL INCLUSIVE')
-					begin
-						update FOUR_SIZONS.Item_Factura
-							set Item_Factura_Cant = Item_Factura_Cant+@cant,
-								Item_Factura_Monto = 0
-							where @factura=Factura_Nro and @numItem = Item_Factura_NroItem
-					end
-				else 
-					begin
-						update FOUR_SIZONS.Item_Factura
-							set Item_Factura_Cant = Item_Factura_Cant+@cant,
-								Item_Factura_Monto = Item_Factura_Monto + (@monto*@cant)
-							where @factura=Factura_Nro and @numItem = Item_Factura_NroItem
-					end
+				set estXcons_cantidad = @cant+ estXcons_cantidad
+				where Estadia_Codigo= @estadia and Consumible_Codigo = @consumible
+			
+			update FOUR_SIZONS.Item_Factura
+					set Item_Factura_Cant = Item_Factura_Cant+@cant,
+						Item_Factura_Monto = Item_Factura_Monto + (@monto*@cant)
+					where @factura=Factura_Nro and @numItem = Item_Factura_NroItem
 		end
 	commit tran
 	end try
