@@ -115,15 +115,17 @@ BEGIN
 		DROP TABLE FOUR_SIZONS.Habitacion
 	END
 
+	IF (OBJECT_ID('FOUR_SIZONS.Reserva', 'U') IS NOT NULL)
+	BEGIN
+		DROP TABLE FOUR_SIZONS.Reserva
+	END
+
 	IF (OBJECT_ID('FOUR_SIZONS.Habitacion_Tipo', 'U') IS NOT NULL)
 	BEGIN
 		DROP TABLE FOUR_SIZONS.Habitacion_Tipo
 	END
 
-	IF (OBJECT_ID('FOUR_SIZONS.Reserva', 'U') IS NOT NULL)
-	BEGIN
-		DROP TABLE FOUR_SIZONS.Reserva
-	END
+	
 
 	IF (OBJECT_ID('FOUR_SIZONS.sec_cod_reserva', 'SO') IS NOT NULL)
 	BEGIN
@@ -395,11 +397,16 @@ BEGIN
 			Cliente_Codigo numeric(18),
 			Regimen_Codigo numeric(18),
 			Reserva_Estado decimal(1),
+			Reserva_cant_hab numeric(18),
+			habitacion_tipo_codigo numeric (18),
+
+
 
 			CONSTRAINT FK_Reserva_1 FOREIGN KEY (Usuario_ID) REFERENCES FOUR_SIZONS.Usuario(Usuario_ID),
 			CONSTRAINT FK_Reserva_2 FOREIGN KEY (Hotel_Codigo) REFERENCES FOUR_SIZONS.Hotel(Hotel_Codigo),
 			CONSTRAINT FK_Reserva_3 FOREIGN KEY (Cliente_Codigo) REFERENCES FOUR_SIZONS.Cliente(Cliente_Codigo),
 			CONSTRAINT FK_Reserva_4 FOREIGN KEY (Regimen_Codigo) REFERENCES FOUR_SIZONS.Regimen(Regimen_Codigo),
+			CONSTRAINT FK_Reserva_5 FOREIGN KEY (habitacion_tipo_codigo) REFERENCES FOUR_SIZONS.habitacion_tipo(habitacion_tipo_codigo),
 
 			CONSTRAINT PK_Reserva PRIMARY KEY (Reserva_Codigo)
 		)		
@@ -680,13 +687,14 @@ BEGIN
 
 	-- Reservas
 	INSERT INTO FOUR_SIZONS.Reserva (Reserva_Codigo, Reserva_FechaCreacion, Reserva_Fecha_Inicio, Reserva_Fecha_Fin,
-	Reserva_Cant_Noches, Reserva_Precio, Usuario_ID, Hotel_Codigo, Cliente_Codigo, Reserva_Estado,regimen_codigo)
+	Reserva_Cant_Noches, Reserva_Precio, Usuario_ID, Hotel_Codigo, Cliente_Codigo, Reserva_Estado,regimen_codigo,habitacion_tipo_codigo,reserva_cant_hab)
 	SELECT DISTINCT M.Reserva_Codigo, M.Reserva_Fecha_Inicio, M.Reserva_Fecha_Inicio, M.Reserva_Fecha_Inicio, 
-	M.Reserva_Cant_Noches, 0, 'SYSADM', H.Hotel_Codigo, C.Cliente_Codigo, 1 , r.regimen_codigo
+	M.Reserva_Cant_Noches, 0, 'SYSADM', H.Hotel_Codigo, C.Cliente_Codigo, 1 , r.regimen_codigo,HT.habitacion_tipo_codigo,1
 	FROM GD1C2018.gd_esquema.Maestra AS M
 	JOIN FOUR_SIZONS.Hotel AS H ON H.Hotel_Ciudad = M.Hotel_Ciudad and H.Hotel_Nro_Calle = M.Hotel_Nro_Calle
 	JOIN FOUR_SIZONS.Regimen AS R ON R.Regimen_Descripcion = M.Regimen_Descripcion
 	JOIN FOUR_SIZONS.Cliente AS C ON C.Cliente_NumDoc = M.Cliente_Pasaporte_Nro
+	JOIN FOUR_SIZONS.habitacion_tipo AS HT ON ht.habitacion_tipo_codigo = M.habitacion_tipo_codigo
 	ORDER BY H.Hotel_Codigo
 
 	-- Habitacion_TipoXReserva
@@ -916,6 +924,12 @@ IF (OBJECT_ID(N'FOUR_SIZONS.calcConsumible', 'FN' ) IS NOT NULL)
 BEGIN
 
     DROP FUNCTION FOUR_SIZONS.calcConsumible
+END;
+
+IF (OBJECT_ID(N'FOUR_SIZONS.verificarDisp', 'FN' ) IS NOT NULL)
+BEGIN
+
+    DROP FUNCTION FOUR_SIZONS.verificarDisp
 END;
 
 IF (OBJECT_ID('FOUR_SIZONS.calcEstadia', 'IF') IS NOT NULL)
@@ -1671,7 +1685,9 @@ create procedure four_sizons.GenerarReserva
 @userId nvarchar(15),
 @hotId numeric(18),
 @cliId numeric(18),
-@regId numeric(18)
+@regId numeric(18),
+@cantHab numeric(18),
+@tipoHab numeric(18)
 
 as begin tran
 begin try
@@ -1681,10 +1697,27 @@ declare @precio decimal(12)
 set @cantidadNoches = DATEDIFF(day, @fechaInicio, @fechaFin)
 set @precio = 0
 
+if(1= four_sizons.verificarDisp(@fechaInicio, @fechaFin,@hotId, @tipoHab,@cantHab))
+begin
 insert into FOUR_SIZONS.Reserva(Reserva_Codigo,Reserva_Fecha_Inicio,Reserva_Fecha_Fin,Reserva_Cant_Noches,
-								Reserva_Precio,Usuario_ID,Hotel_Codigo,Cliente_Codigo,Regimen_Codigo,Reserva_Estado)
+								Reserva_Precio,Usuario_ID,Hotel_Codigo,Cliente_Codigo,Regimen_Codigo,Reserva_Estado,habitacion_tipo_codigo,reserva_cant_hab)
 								values((NEXT VALUE FOR sec_cod_reserva),@fechaInicio,@fechaFin,@cantidadNoches,
-								@precio,@userId,@hotId,@cliId,@regId,1)
+								@precio,@userId,@hotId,@cliId,@regId,1,@tipohab,@canthab)
+
+
+--aca baja la disponibilidad
+declare @aux datetime = convert(datetime,@fechaInicio,121 )
+declare @aux2 datetime 
+while(@aux!= convert(datetime,@fechaFin, 121))
+begin
+set @aux2= @aux
+update FOUR_SIZONS.Disponibilidad
+	set Disp_HabDisponibles = Disp_HabDisponibles - @cantHab
+	where Disp_Fecha= @aux and Hotel_Codigo = @hotId and Habitacion_Tipo_Codigo = @tipohab
+set @aux = DATEADD(day, 1, @aux2)
+end
+end
+
 
 commit tran 
 end try
@@ -1779,41 +1812,49 @@ create procedure four_sizons.altaTipoHabXRes
 
 
 
+create function four_sizons.verificarDisp (@inicio datetime , @fin datetime , @hotel numeric(18) , @tipohab numeric(18) , @canthab numeric(18))
+returns bit
+as begin 
+declare @respuesta bit = 1
+declare @aux datetime = convert(datetime,@inicio,121 )
+declare @aux2 datetime
 
+while (@aux!= convert(datetime,@fin, 121))
+begin
+set @aux2=@aux
+declare @habDisp numeric(18) = (select Disp_HabDisponibles from FOUR_SIZONS.Disponibilidad where Hotel_Codigo=@hotel and Habitacion_Tipo_Codigo=@tipohab and Disp_Fecha=@aux)
+if(@habDisp<@canthab )
+begin 
+set @respuesta = 0
+end
+set @aux = DATEADD(day, 1, @aux2)
+end
 
-
-
-
-
+return @respuesta
+end
+go
 
 
 
 create proc four_sizons.bajarDisponibilidad
-@Disp_Fecha numeric(18),
-@hab_tipo nvarchar(50),
+@inicio datetime,
+@fin datetime,
+@hab_tipo numeric(18),
 @Hotel numeric(18),
 @cantHab numeric(18)
 
-
-
-
-
 as begin tran 
 begin try
-
-
-
-declare @Habitacion_Tipo_Codigo numeric(18)
-
-
-set @Habitacion_Tipo_Codigo= (select Habitacion_Tipo_Codigo from Habitacion_Tipo where Habitacion_Tipo_Descripcion= @hab_tipo)
-
-
-
-
+declare @aux datetime = convert(datetime,@inicio,121 )
+declare @aux2 datetime 
+while(@aux!= convert(datetime,@fin, 121))
+begin
+set @aux2= @aux
 update FOUR_SIZONS.Disponibilidad
 	set Disp_HabDisponibles = Disp_HabDisponibles - @cantHab
-	where Disp_Fecha= @Disp_Fecha and Hotel_Codigo = @hotel and Habitacion_Tipo_Codigo = @Habitacion_Tipo_Codigo
+	where Disp_Fecha= @aux and Hotel_Codigo = @hotel and Habitacion_Tipo_Codigo = @hab_tipo
+set @aux = DATEADD(day, 1, @aux2)
+end
 
 	commit tran
 	end try
