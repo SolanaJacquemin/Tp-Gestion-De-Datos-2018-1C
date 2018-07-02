@@ -44,6 +44,7 @@
             this.btn_eliminarTodo = new System.Windows.Forms.Button();
             this.txt_estado = new System.Windows.Forms.TextBox();
             this.label2 = new System.Windows.Forms.Label();
+            this.lb_func_usrbaja = new System.Windows.Forms.ListBox();
             this.SuspendLayout();
             // 
             // label1
@@ -193,11 +194,19 @@
             this.label2.TabIndex = 14;
             this.label2.Text = "Estado";
             // 
+            // lb_func_usrbaja
+            // 
+            this.lb_func_usrbaja.FormattingEnabled = true;
+            this.lb_func_usrbaja.Location = new System.Drawing.Point(509, 111);
+            this.lb_func_usrbaja.Name = "lb_func_usrbaja";
+            this.lb_func_usrbaja.Size = new System.Drawing.Size(189, 186);
+            this.lb_func_usrbaja.TabIndex = 16;
+            // 
             // ABMRol02
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(501, 357);
+            this.ClientSize = new System.Drawing.Size(481, 357);
             this.Controls.Add(this.boton_volver);
             this.Controls.Add(this.btn_aceptar_nuevo);
             this.Controls.Add(this.boton_aceptar);
@@ -205,6 +214,7 @@
             this.Controls.Add(this.btn_agregarTodo);
             this.Controls.Add(this.btn_eliminar);
             this.Controls.Add(this.btn_agregar);
+            this.Controls.Add(this.lb_func_usrbaja);
             this.Controls.Add(this.lb_func_usralta);
             this.Controls.Add(this.lb_func);
             this.Controls.Add(this.label2);
@@ -240,5 +250,6 @@
         private System.Windows.Forms.Button btn_eliminarTodo;
         private System.Windows.Forms.TextBox txt_estado;
         private System.Windows.Forms.Label label2;
+        private System.Windows.Forms.ListBox lb_func_usrbaja;
     }
 }

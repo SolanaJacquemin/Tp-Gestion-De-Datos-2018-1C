@@ -115,15 +115,17 @@ BEGIN
 		DROP TABLE FOUR_SIZONS.Habitacion
 	END
 
+	IF (OBJECT_ID('FOUR_SIZONS.Reserva', 'U') IS NOT NULL)
+	BEGIN
+		DROP TABLE FOUR_SIZONS.Reserva
+	END
+
 	IF (OBJECT_ID('FOUR_SIZONS.Habitacion_Tipo', 'U') IS NOT NULL)
 	BEGIN
 		DROP TABLE FOUR_SIZONS.Habitacion_Tipo
 	END
 
-	IF (OBJECT_ID('FOUR_SIZONS.Reserva', 'U') IS NOT NULL)
-	BEGIN
-		DROP TABLE FOUR_SIZONS.Reserva
-	END
+	
 
 	IF (OBJECT_ID('FOUR_SIZONS.sec_cod_reserva', 'SO') IS NOT NULL)
 	BEGIN
@@ -155,10 +157,10 @@ BEGIN
 	BEGIN
 		CREATE TABLE FOUR_SIZONS.Parametros(
 			Parametro_Codigo nvarchar(10),
-			Paramentro_NroItem numeric(18) IDENTITY,
+			Parametro_NroItem numeric(18) IDENTITY,
 			Parametro_Descripcion nvarchar(255)
 
-			CONSTRAINT PK_Parametros PRIMARY KEY (Parametro_Codigo, Paramentro_NroItem)
+			CONSTRAINT PK_Parametros PRIMARY KEY (Parametro_Codigo, Parametro_NroItem)
 		)
 	END
 
@@ -353,6 +355,9 @@ BEGIN
 			Cliente_Piso numeric(18),
 			Cliente_Depto nvarchar(50) ,
 			Cliente_Mail nvarchar(255) NOT NULL,
+			Cliente_Telefono nvarchar(18),
+			Cliente_Pais nvarchar(50),
+			Cliente_Ciudad nvarchar(100),
 			Cliente_Nacionalidad nvarchar(50),
 			Cliente_Fecha_Nac datetime,
 			Cliente_Puntos decimal(18,2),
@@ -386,17 +391,22 @@ BEGIN
 			Reserva_Fecha_Inicio datetime,
 			Reserva_Fecha_Fin datetime,
 			Reserva_Cant_Noches numeric(18),
-			Reserva_Precio decimal(12,2),
+			Reserva_Precio decimal(12,2) default 0.00,
 			Usuario_ID nvarchar(15),
 			Hotel_Codigo numeric(18),
 			Cliente_Codigo numeric(18),
 			Regimen_Codigo numeric(18),
 			Reserva_Estado decimal(1),
+			Reserva_cant_hab numeric(18),
+			habitacion_tipo_codigo numeric (18),
+
+
 
 			CONSTRAINT FK_Reserva_1 FOREIGN KEY (Usuario_ID) REFERENCES FOUR_SIZONS.Usuario(Usuario_ID),
 			CONSTRAINT FK_Reserva_2 FOREIGN KEY (Hotel_Codigo) REFERENCES FOUR_SIZONS.Hotel(Hotel_Codigo),
 			CONSTRAINT FK_Reserva_3 FOREIGN KEY (Cliente_Codigo) REFERENCES FOUR_SIZONS.Cliente(Cliente_Codigo),
 			CONSTRAINT FK_Reserva_4 FOREIGN KEY (Regimen_Codigo) REFERENCES FOUR_SIZONS.Regimen(Regimen_Codigo),
+			CONSTRAINT FK_Reserva_5 FOREIGN KEY (habitacion_tipo_codigo) REFERENCES FOUR_SIZONS.habitacion_tipo(habitacion_tipo_codigo),
 
 			CONSTRAINT PK_Reserva PRIMARY KEY (Reserva_Codigo)
 		)		
@@ -412,15 +422,16 @@ BEGIN
 	IF NOT EXISTS (SELECT * FROM sys.tables WHERE name = 'ReservaMod')
 	BEGIN
 		CREATE TABLE FOUR_SIZONS.ReservaMod (
+			ResMod_Codigo numeric(18),
 			Reserva_Codigo numeric(18),
 			Usuario_ID nvarchar(15),
 			ResMod_Detalle nvarchar(255),
-			ResMod_Fecha datetime,
+			ResMod_Fecha datetime default GETDATE(),
 			
 			CONSTRAINT FK_ReservaMod_1 FOREIGN KEY (Reserva_Codigo) REFERENCES FOUR_SIZONS.Reserva(Reserva_Codigo),
 			CONSTRAINT FK_ReservaMod_2 FOREIGN KEY (Usuario_ID) REFERENCES FOUR_SIZONS.Usuario(Usuario_ID),
 
-			CONSTRAINT PK_ReservaMod PRIMARY KEY (Reserva_Codigo, Usuario_ID)
+			CONSTRAINT PK_ReservaMod PRIMARY KEY (ResMod_Codigo, Reserva_Codigo, Usuario_ID)
 		)
 	END
 
@@ -482,7 +493,7 @@ BEGIN
 		CREATE TABLE FOUR_SIZONS.EstadiaXConsumible (
 			Estadia_Codigo numeric(18),
 			Consumible_Codigo numeric(18),
-			estXcons_cantidad numeric(18),
+			estXcons_cantidad numeric(18) default 1,
 
 
 			CONSTRAINT FK_EstadiaXConsumible_1 FOREIGN KEY (Estadia_Codigo) REFERENCES FOUR_SIZONS.Estadia(Estadia_Codigo),
@@ -500,6 +511,7 @@ BEGIN
 			Factura_Total decimal(18,2),
 			Factura_FormaPago nvarchar(50),
 			Factura_Estado bit,
+			Factura_Consistencia bit,
 			Usuario_ID nvarchar(15),
 			Estadia_Codigo numeric(18),
 			Cliente_Codigo numeric(18),
@@ -532,7 +544,7 @@ BEGIN
 	IF NOT EXISTS (SELECT * FROM sys.tables WHERE name = 'Disponibilidad')
 	BEGIN
 		CREATE TABLE FOUR_SIZONS.Disponibilidad (
-			Disp_Fecha numeric(18),
+			Disp_Fecha datetime,
 			Habitacion_Tipo_Codigo numeric(18),
 			Hotel_Codigo numeric(18),
 			Disp_HabDisponibles numeric(3),
@@ -544,16 +556,19 @@ BEGIN
 		)
 	END
 
+
 	-- Migración de datos de la tabla maestra
+
 	-- Parámetros
 	INSERT INTO FOUR_SIZONS.Parametros VALUES ('DOCUMENTO', 'DNI')
 	INSERT INTO FOUR_SIZONS.Parametros VALUES ('DOCUMENTO', 'CUIL')
 	INSERT INTO FOUR_SIZONS.Parametros VALUES ('DOCUMENTO', 'CUIT')
 	INSERT INTO FOUR_SIZONS.Parametros VALUES ('DOCUMENTO', 'LE')
 	INSERT INTO FOUR_SIZONS.Parametros VALUES ('DOCUMENTO', 'LC')
-	INSERT INTO FOUR_SIZONS.Parametros VALUES ('DOCUMENTO', 'PASS')
+	INSERT INTO FOUR_SIZONS.Parametros VALUES ('DOCUMENTO', 'PASSP')
 
 	-- Roles
+	INSERT INTO FOUR_SIZONS.Rol VALUES ('Super Admin', 1)
 	INSERT INTO FOUR_SIZONS.Rol VALUES ('Administrador', 1)
 	INSERT INTO FOUR_SIZONS.Rol VALUES ('Recepcionista', 1)
 	INSERT INTO FOUR_SIZONS.Rol VALUES ('Guest', 1)
@@ -573,6 +588,13 @@ BEGIN
 				('Listado Estadistico', 1);
 	
 	--ROLXFUNC
+	insert into FOUR_SIZONS.RolXFunc (Rol_Codigo,Func_Codigo, RolXFunc_Estado)
+		select distinct R.Rol_Codigo, F.Func_Codigo, 1 from FOUR_SIZONS.Rol R,FOUR_SIZONS.Funcionalidad F
+		where R.Rol_Nombre =  'Super Admin' and
+				F.Func_Nombre in ('ABM Rol', 'ABM Hotel','ABM Habitacion','ABM Regimen','ABM Usuario',
+				'ABM Cliente','Generar/Modificar Reserva','Cancelar Reserva','Registrar Estadia',
+				'Registrar Consumibles', 'Listado Estadistico');
+
 	insert into FOUR_SIZONS.RolXFunc (Rol_Codigo,Func_Codigo, RolXFunc_Estado)
 		select distinct R.Rol_Codigo, F.Func_Codigo, 1 from FOUR_SIZONS.Rol R,FOUR_SIZONS.Funcionalidad F
 		where R.Rol_Nombre =  'Administrador' and
@@ -657,17 +679,69 @@ BEGIN
 	-- Inserta usuario administrador
 	INSERT INTO FOUR_SIZONS.Usuario
 	VALUES ('SYSADM', '3GGQyLOZ4EO537rLsNN/KiZF4z+ZOEkdJLJOApjZzRc=', 'Administrador', '', '', 0, '', '', GETDATE(), '',1,0)
+	INSERT INTO FOUR_SIZONS.Usuario
+	VALUES ('GUEST', '3GGQyLOZ4EO537rLsNN/KiZF4z+ZOEkdJLJOApjZzRc=', 'Guest', '', '', 0, '', '', GETDATE(), '',1,0)
+
+	--UsuarioXRol
+	INSERT INTO FOUR_SIZONS.UsuarioXRol VALUES ('SYSADM', 1, 1)
+	INSERT INTO FOUR_SIZONS.UsuarioXRol VALUES ('GUEST', 3, 1)
+
+
+	-- disponibilidad
+
+
+	declare @tipohab numeric = 1001
+while(@tipohab<1006)
+begin
+declare @hotel numeric = 1
+
+
+while(@hotel <16)
+begin
+declare @aux datetime = convert(datetime, '01-01-2017' ,121)
+
+declare @aux2 datetime
+declare @fin datetime= convert(datetime, '01-01-2021' ,121)
+declare @cantHab numeric(18) = isnull((select count(h.Habitacion_Numero) from FOUR_SIZONS.Hotel ho , FOUR_SIZONS.Habitacion_Tipo ht , FOUR_SIZONS.Habitacion h where ho.Hotel_Codigo=@hotel and h.Hotel_Codigo= ho.Hotel_Codigo and h.Habitacion_Tipo_Codigo= ht.Habitacion_Tipo_Codigo and ht.Habitacion_Tipo_Codigo=@tipohab group by ho.Hotel_Codigo,ht.Habitacion_Tipo_Descripcion),0)
+
+
+while (@aux != @fin)
+begin
+set @aux2= @aux 
+insert into FOUR_SIZONS.Disponibilidad(Disp_Fecha,Disp_HabDisponibles,Habitacion_Tipo_Codigo,Hotel_Codigo)
+								values(@aux , @cantHab,@tipohab,@hotel)
+set @aux = DATEADD(day, 1, @aux2)
+end
+
+set @hotel = @hotel+1
+end
+set @tipohab = @tipohab+1
+end
+
+
+
+
+
+
+
+
+
+
+
 
 	-- Reservas
 	INSERT INTO FOUR_SIZONS.Reserva (Reserva_Codigo, Reserva_FechaCreacion, Reserva_Fecha_Inicio, Reserva_Fecha_Fin,
-	Reserva_Cant_Noches, Reserva_Precio, Usuario_ID, Hotel_Codigo, Cliente_Codigo, Reserva_Estado)
+	Reserva_Cant_Noches, Reserva_Precio, Usuario_ID, Hotel_Codigo, Cliente_Codigo, Reserva_Estado,regimen_codigo,habitacion_tipo_codigo,reserva_cant_hab)
 	SELECT DISTINCT M.Reserva_Codigo, M.Reserva_Fecha_Inicio, M.Reserva_Fecha_Inicio, M.Reserva_Fecha_Inicio, 
-	M.Reserva_Cant_Noches, 0, 'SYSADM', H.Hotel_Codigo, C.Cliente_Codigo, 1
+	M.Reserva_Cant_Noches, 0, 'SYSADM', H.Hotel_Codigo, C.Cliente_Codigo, 1 , r.regimen_codigo,HT.habitacion_tipo_codigo,1
 	FROM GD1C2018.gd_esquema.Maestra AS M
 	JOIN FOUR_SIZONS.Hotel AS H ON H.Hotel_Ciudad = M.Hotel_Ciudad and H.Hotel_Nro_Calle = M.Hotel_Nro_Calle
 	JOIN FOUR_SIZONS.Regimen AS R ON R.Regimen_Descripcion = M.Regimen_Descripcion
 	JOIN FOUR_SIZONS.Cliente AS C ON C.Cliente_NumDoc = M.Cliente_Pasaporte_Nro
+	JOIN FOUR_SIZONS.habitacion_tipo AS HT ON ht.habitacion_tipo_codigo = M.habitacion_tipo_codigo
 	ORDER BY H.Hotel_Codigo
+
+
 
 	-- Habitacion_TipoXReserva
 	INSERT INTO FOUR_SIZONS.Habitacion_TipoXReser(Reserva_Codigo, Habitacion_Tipo_Codigo)
@@ -713,22 +787,43 @@ BEGIN
 	WHERE Factura_Nro IS NOT NULL
 	ORDER BY M.Factura_Nro
 
+
 	--Item_Factura
 	INSERT INTO FOUR_SIZONS.Item_Factura (Factura_Nro, Item_Factura_Cant, Item_Factura_Monto)
 	SELECT DISTINCT M.Factura_Nro,Item_Factura_Cantidad, Item_Factura_Monto
 	FROM gd_esquema.Maestra AS M
 	WHERE Factura_Nro IS NOT NULL
 	ORDER BY M.Factura_Nro
+
+	
+	
+
+    --PRIMERO TIENE QUE SER LA MIGRACION DE FACTURA E ITEMS
+		/**Toma las Facturas, en la que la suma de sus items no es igual a la fact_total **/
+	DECLARE @facturaInc TABLE(
+		facturaI numeric(18)
+	)
+
+	INSERT INTO @facturaInc (facturaI)
+	SELECT F.Factura_Nro
+	FROM FOUR_SIZONS.Factura F JOIN FOUR_SIZONS.Item_Factura i on f.Factura_Nro = i.Factura_Nro
+	group by F.Factura_Nro,F.Factura_Total
+	having F.Factura_Total != sum(i.Item_Factura_Monto)
+	
+	UPDATE FOUR_SIZONS.Factura
+	SET Factura_Consistencia = 0
+	WHERE Factura_Nro IN (select facturaI from @facturaInc)
+
 END
 go
 -------------------------------------------------------Comienzo de procedures--------------------------------------------------------------
-
 
 -- Borrado de procedures en la base
 IF (OBJECT_ID('FOUR_SIZONS.ValidarUsuario', 'P') IS NOT NULL)
 BEGIN
     DROP PROCEDURE FOUR_SIZONS.ValidarUsuario
 END;
+
 
 IF (OBJECT_ID('FOUR_SIZONS.AltaUsuario', 'P') IS NOT NULL)
 BEGIN
@@ -871,10 +966,16 @@ BEGIN
     DROP PROCEDURE FOUR_SIZONS.HotelesMayorConsFact
 END;
 
-
 IF (OBJECT_ID(N'FOUR_SIZONS.calcConsumible', 'FN' ) IS NOT NULL)
 BEGIN
+
     DROP FUNCTION FOUR_SIZONS.calcConsumible
+END;
+
+IF (OBJECT_ID(N'FOUR_SIZONS.verificarDisp', 'FN' ) IS NOT NULL)
+BEGIN
+
+    DROP FUNCTION FOUR_SIZONS.verificarDisp
 END;
 
 IF (OBJECT_ID('FOUR_SIZONS.calcEstadia', 'IF') IS NOT NULL)
@@ -884,6 +985,7 @@ END;
 
 IF (OBJECT_ID('FOUR_SIZONS.inicioTri', 'FN') IS NOT NULL)
 BEGIN
+
     DROP FUNCTION FOUR_SIZONS.inicioTri
 END;
 
@@ -912,26 +1014,17 @@ BEGIN
     DROP proc FOUR_SIZONS.hotelMasCerrado
 END;
 
-IF (OBJECT_ID('FOUR_SIZONS.clieConMasPuntos', 'P') IS NOT NULL)
-BEGIN
-    DROP proc FOUR_SIZONS.clieConMasPuntos
-END;
-
 IF (OBJECT_ID('FOUR_SIZONS.habOcupadas', 'P') IS NOT NULL)
 BEGIN
     DROP proc FOUR_SIZONS.habOcupadas
 END;
 
-IF (OBJECT_ID('FOUR_SIZONS.MayorPuntaje', 'P') IS NOT NULL)
+IF (OBJECT_ID('FOUR_SIZONS.clieMayorPuntaje', 'P') IS NOT NULL)
 BEGIN
-    DROP proc FOUR_SIZONS.MayorPuntaje
+    DROP proc FOUR_SIZONS.clieMayorPuntaje
 END;
 
 GO
-
-
-
-
 
 --------------------------------------------------------ABM USUARIO------------------------------
 create procedure FOUR_SIZONS.ValidarUsuario
@@ -949,10 +1042,14 @@ begin try
 		select @fallalog = Usuario_FallaLog, @passret = Usuario_Password, @estado = Usuario_Estado from FOUR_SIZONS.Usuario where Usuario_ID = @usuario
 		if @estado = 1
 		begin
+
+
 			if @fallalog <> 3
 			begin
+
 				if @passret = @password
 				begin
+
 					set @loginok = 1
 					if @fallalog <> 0
 						update FOUR_SIZONS.Usuario set Usuario_FallaLog = 0
@@ -961,21 +1058,39 @@ begin try
 				begin
 					if @fallalog = 2
 					begin
+
+
+
 						update FOUR_SIZONS.Usuario set Usuario_FallaLog = Usuario_FallaLog + 1, Usuario_Estado = 0
 						set @loginok = 0
 						set @errorMsg = 'Contraseña incorrecta. El usuario está deshabilitado'
 					end
+
 					if @fallalog < 2
 					begin
+
+
 						update FOUR_SIZONS.Usuario set Usuario_FallaLog = Usuario_FallaLog + 1
 						set @loginok = 0
 						set @errorMsg = 'Contraseña incorrecta.'
+
 						if @fallalog = 1
 						begin
+
+
+
+
+
 							set @errorMsg = 'Contraseña incorrecta. El usuario se deshabilitará ante el próximo inicio de sesión inválido'
+
 						end
 					end
 				end
+
+
+
+
+
 			end
 			else
 			begin
@@ -989,6 +1104,7 @@ begin try
 			set @errorMsg = 'El usuario está deshabilitado'
 		end
 	end
+
 	else
 	begin
 		set @loginok = 0
@@ -1003,6 +1119,17 @@ begin catch
 end catch
 go
 
+
+
+
+
+
+
+
+
+
+
+
 create procedure FOUR_SIZONS.AltaUsuario
 	@username nvarchar(15),
 	@password nvarchar(100),
@@ -1014,6 +1141,7 @@ create procedure FOUR_SIZONS.AltaUsuario
 	@mail nvarchar(50),
 	@telefono nvarchar(18),
 	@direccion nvarchar(255),
+
 	@fechaNac datetime
 
 	AS
@@ -1080,6 +1208,7 @@ create procedure FOUR_SIZONS.ModificacionUsuario
 	@mail nvarchar(50),
 	@telefono nvarchar(18),
 	@direccion nvarchar(255),
+
 	@fechaNac datetime,
 	@estado bit
 
@@ -1095,6 +1224,7 @@ create procedure FOUR_SIZONS.ModificacionUsuario
 	--si estado se modifica a activo se resetea el campo falla_log
 	if(@estado = 1)
 	begin
+
 		update FOUR_SIZONS.usuario
 				set Usuario_Password = @username,Usuario_Nombre =@nombre,Usuario_Apellido = @apellido ,
 				Usuario_TipoDoc =@tipoDoc,Usuario_NroDoc =@numDoc,Usuario_Telefono =@telefono,
@@ -1105,6 +1235,7 @@ create procedure FOUR_SIZONS.ModificacionUsuario
 	end
 	else
 	begin
+
 			update FOUR_SIZONS.usuario
 				set Usuario_Password = @username,Usuario_Nombre =@nombre,Usuario_Apellido = @apellido ,
 				Usuario_TipoDoc =@tipoDoc,Usuario_NroDoc =@numDoc,Usuario_Telefono =@telefono,
@@ -1137,6 +1268,8 @@ create procedure four_sizons.AltaCliente
 @tipoDoc nvarchar(50),
 @mail nvarchar(50),
 @telefono nvarchar(18),
+@pais nvarchar(50),
+@ciudad nvarchar(100),
 @calle nvarchar(255),
 @numCalle numeric(18),
 @piso numeric(18),
@@ -1150,14 +1283,16 @@ begin tran
 
 if(not exists (select cliente_codigo from cliente where @mail = Cliente_Mail))
 insert into four_sizons.Cliente(Cliente_Nombre ,cliente_Apellido,cliente_TipoDoc, Cliente_NumDoc,Cliente_Dom_Calle,Cliente_Nro_Calle
-								,Cliente_Piso,Cliente_Depto,Cliente_Localidad,Cliente_Mail,Cliente_Nacionalidad,Cliente_Fecha_Nac,Cliente_Puntos,Cliente_Estado,Cliente_Consistente)
-								values (@nombre,@apellido,@tipoDoc,@numDoc,@calle,@numCalle,@piso,@depto,@localidad, @mail,@nacionalidad,@fechaNac,0,1,1)
+								,Cliente_Piso,Cliente_Depto,Cliente_Localidad,Cliente_Mail,Cliente_Telefono, Cliente_Pais, Cliente_Ciudad,
+								Cliente_Nacionalidad,Cliente_Fecha_Nac,Cliente_Puntos,Cliente_Estado,Cliente_Consistente)
+								values (@nombre,@apellido,@tipoDoc,@numDoc,@calle,@numCalle,@piso,@depto,@localidad,@mail,@telefono,
+								@pais,@ciudad,@nacionalidad,@fechaNac,0,1,1)
 else 
-PRINT N'el mail ingresado ya figura en el sistema, ingrese otro por favor';
+RAISERROR('el mail ingresado ya figura en el sistema, ingrese otro por favor',1,1)
+		ROLLBACK TRANSACTION
 commit tran 
 end try
 begin catch
-	
 	declare @mensaje_de_error nvarchar(255)
 	set @mensaje_de_error = ERROR_MESSAGE()
 	RAISERROR(@mensaje_de_error,11,1)
@@ -1178,6 +1313,7 @@ create procedure four_sizons.modificacionCliente
 @depto nvarchar(18),
 @localidad nvarchar(50),
 @nacionalidad nvarchar(50),
+
 @fechaNac datetime,
 @estado bit,
 @codigo nvarchar(50)
@@ -1194,7 +1330,8 @@ set Cliente_Nombre=@nombre ,cliente_Apellido=@apellido,cliente_TipoDoc=@tipoDoc,
 		 Cliente_Fecha_Nac=@fechaNac,Cliente_Estado=@estado
 
 	where Cliente_Codigo = @codigo
-else print N'el mail ingresado ya figura en el sistema, ingrese otro por favor'
+else RAISERROR('el mail ingresado ya figura en el sistema, ingrese otro por favor',1,1)
+		ROLLBACK TRANSACTION
 
 commit tran 
 end try
@@ -1258,6 +1395,7 @@ insert into FOUR_SIZONS.RegXHotel(Hotel_Codigo,Regimen_Codigo,RegXHotel_Estado)
 commit tran 
 end try
 
+
 begin catch
 declare @mensaje_de_error nvarchar(255)
 	set @mensaje_de_error = ERROR_MESSAGE()
@@ -1320,20 +1458,39 @@ create proc FOUR_SIZONS.InsertarRol
 		set @mensaje_de_error = ERROR_MESSAGE()
 		RAISERROR(@mensaje_de_error,11,1)
 		rollback tran  
+
+
+
+
 		END CATCH
 	GO
 
 create procedure FOUR_SIZONS.ModificacionRol
+
+
+
+
 	@rolname nvarchar(50),
+
 	@codigo numeric(18),
+
+
+
+
 	@estado bit
+
+
 
 	as begin tran
 	begin try
 		
 	update FOUR_SIZONS.Rol
+
+
+
 				set Rol_Nombre= @rolname,Rol_Estado= @estado
 			where Rol_Codigo=@codigo
+
 
 	
 	commit tran 
@@ -1347,41 +1504,63 @@ create procedure FOUR_SIZONS.ModificacionRol
 	end catch
 go
 
+
+
+
 create procedure four_sizons.altaRolxFunc
-@rol numeric(18),
-@func numeric(18)
+@rolname nvarchar(50),
+@func nvarchar(50)
 
-	as begin tran 
-	begin try 
+as begin tran 
+begin try 
+	declare @rolID nvarchar(50)
+	declare @funcID nvarchar(50)
 
-	if (not exists (select RolXFunc_Estado from four_sizons.RolXFunc where Rol_Codigo=@rol and Func_Codigo=@func ))
+
+	set @rolID = (select Rol_Codigo  from four_sizons.Rol where Rol_Nombre = @rolname)
+
+	set @funcID = (select Func_Codigo from FOUR_SIZONS.Funcionalidad where Func_Nombre = @func)
+
 	insert into FOUR_SIZONS.RolXFunc(Rol_Codigo,Func_Codigo,RolXFunc_Estado) 
-							values (@rol,@func,1)
-	else print N'ya existe la relacion entre ese rol y esa funcion'
+							values (@rolID,@funcID,1)
+	commit tran
 
-	commit tran 
-	end try
+end try
 
-	begin catch
+begin catch
 	declare @mensaje_de_error nvarchar(255)
+
 	set @mensaje_de_error = ERROR_MESSAGE()
 	RAISERROR(@mensaje_de_error,11,1)
 	rollback tran  
-	end catch 
+end catch 
 go
 
 
 create procedure four_sizons.modificacionRolxFunc
-@rol numeric(18),
-@func numeric(18),
+@rolname nvarchar(50),
+@func nvarchar(50),
 @estado bit
 
-	as begin tran 
-	begin try 
+as begin tran 
+begin try
 
-	update FOUR_SIZONS.RolXFunc
-		set RolXFunc_Estado = @estado
-	where Rol_Codigo=@rol and Func_Codigo=@func
+	declare @rolID numeric(18)	
+	declare @funcID numeric(18)	
+	
+	set @rolID = (select Rol_Codigo  from four_sizons.Rol where Rol_Nombre = @rolname)	
+	set @funcID = (select Func_Codigo from FOUR_SIZONS.Funcionalidad where Func_Nombre = @func)
+
+	if exists(select * from FOUR_SIZONS.RolXFunc where Rol_Codigo=@rolID and Func_Codigo=@funcID)
+	begin
+		update FOUR_SIZONS.RolXFunc
+			set RolXFunc_Estado = @estado
+		where Rol_Codigo=@rolID and Func_Codigo=@funcID
+	end
+	else
+	begin
+		exec four_sizons.altaRolxFunc @rolname, @func
+	end
 
 	commit tran 
 	end try
@@ -1393,6 +1572,7 @@ create procedure four_sizons.modificacionRolxFunc
 	rollback tran  
 	end catch 
 go
+
 
 --------------------------------------------------ABM HABITACION-------------------------------------------------------------
 create procedure four_sizons.AltaHabitacion
@@ -1403,20 +1583,45 @@ create procedure four_sizons.AltaHabitacion
 @TipoHab nvarchar(255),
 @descripcion nvarchar(255)
 
+
 as begin try
 begin tran 
 declare @TipoHabID numeric(18)
 	
+
+
 		set @TipoHabID = (select Habitacion_Tipo_Codigo from FOUR_SIZONS.Habitacion_Tipo where @TipoHab = Habitacion_Tipo_Descripcion)
 
 		--Valida que no haya dos hab con el mismo numero en el mismo hotel		
 
 		if (not exists (select Habitacion_Numero from Habitacion where Hotel_Codigo=@HotelId and Habitacion_Numero= @numero))
+		begin
 			insert into FOUR_SIZONS.Habitacion(Habitacion_Numero,Hotel_Codigo,Habitacion_Piso,Habitacion_Frente,Habitacion_Tipo_Codigo,
 			Habitacion_Descripcion,Habitacion_Estado)
 					values (@numero,@HotelId,@piso,@frente,@TipoHabID,@descripcion,1)
-		else print N'el numero de habitacion ya figura en ese hotel, ingrese otro por favor'
+		
+		declare @aux datetime = convert(datetime, '01-01-2017' ,121)
 
+		declare @aux2 datetime
+		declare @fin datetime= convert(datetime, '01-01-2021' ,121)
+
+
+		while (@aux != @fin)
+		begin
+		set @aux2= @aux 
+		update FOUR_SIZONS.Disponibilidad
+		set Disp_HabDisponibles= Disp_HabDisponibles+1
+		where @TipoHab=Habitacion_Tipo_Codigo and @aux= Disp_Fecha and Hotel_Codigo =@HotelId
+
+
+		set @aux = DATEADD(day, 1, @aux2)
+
+		end
+
+		end
+		else 
+		RAISERROR('el numero de habitacion ya figura en ese hotel, ingrese otro por favor',1,1)
+		ROLLBACK TRANSACTION
 commit tran 
 end try
 begin catch
@@ -1427,11 +1632,13 @@ begin catch
 end catch
 go
 
+
 create procedure four_sizons.modificarHabitacion
 @numero numeric(18),
 @hotId numeric(18),
+
 @piso numeric(18),
-@ubicacion nvarchar(50), -- ¿para que vas a cambiar el piso y la ubicacion de la habitacion en el hotel? Lo pide el enunciado
+@ubicacion nvarchar(50), 
 @descripcion nvarchar(255),
 @estado bit
 as 
@@ -1442,8 +1649,7 @@ update FOUR_SIZONS.Habitacion
 
 set Habitacion_Piso= @piso,Habitacion_Frente=@ubicacion,Habitacion_Estado=@estado,Habitacion_Descripcion=@descripcion
 	
-	where Habitacion_Numero=@numero and Hotel_Codigo= @hotId
-
+where Habitacion_Numero=@numero and Hotel_Codigo= @hotId
 
 commit tran 
 end try
@@ -1456,6 +1662,15 @@ end catch
 go
 --------------------------------------------------ABM REGIMEN DE ESTADIA---------------------------------------------------
 
+
+
+
+
+
+
+
+
+
 --------------------------------------------------DICE QUE NO HAY QUE DESARROLLARLO----------------------------------
 
 create procedure four_sizons.GenerarReserva
@@ -1464,20 +1679,44 @@ create procedure four_sizons.GenerarReserva
 @userId nvarchar(15),
 @hotId numeric(18),
 @cliId numeric(18),
-@regId numeric(18)
+@regId numeric(18),
+@cantHab numeric(18),
+@tipoHab numeric(18)
 
 as begin tran
 begin try
 declare @cantidadNoches numeric(2)
 declare @precio decimal(12)
+declare @preReg decimal(12)  = (select Regimen_Precio from four_sizons.regimen where Regimen_Codigo=@regId)
+declare @recarga decimal(12) = (select Hotel_CantEstrella*Hotel_Recarga_Estrella from FOUR_SIZONS.Hotel where Hotel_Codigo=@hotId)
+declare @porcentual decimal(12) = (select Habitacion_Tipo_Porcentual from FOUR_SIZONS.Habitacion_Tipo where Habitacion_Tipo_Codigo =@tipoHab)
 
 set @cantidadNoches = DATEDIFF(day, @fechaInicio, @fechaFin)
+set @precio = @cantidadNoches * @cantHab*(@preReg*@porcentual+@recarga)
 
+if(1= four_sizons.verificarDisp(@fechaInicio, @fechaFin,@hotId, @tipoHab,@cantHab))
+begin
 insert into FOUR_SIZONS.Reserva(Reserva_Codigo,Reserva_Fecha_Inicio,Reserva_Fecha_Fin,Reserva_Cant_Noches,
-								Reserva_Precio,Usuario_ID,Hotel_Codigo,Cliente_Codigo,Regimen_Codigo,Reserva_Estado)
+								Reserva_Precio,Usuario_ID,Hotel_Codigo,Cliente_Codigo,Regimen_Codigo,Reserva_Estado,habitacion_tipo_codigo,reserva_cant_hab)
 								values((NEXT VALUE FOR sec_cod_reserva),@fechaInicio,@fechaFin,@cantidadNoches,
-								@precio,@userId,@hotId,@cliId,@regId,1)
+								@precio,@userId,@hotId,@cliId,@regId,1,@tipohab,@canthab)
 
+
+--aca baja la disponibilidad
+declare @aux datetime = convert(datetime,@fechaInicio,121 )
+declare @aux2 datetime 
+while(@aux!= convert(datetime,@fechaFin, 121))
+begin
+set @aux2= @aux
+update FOUR_SIZONS.Disponibilidad
+	set Disp_HabDisponibles = Disp_HabDisponibles - @cantHab
+	where Disp_Fecha= @aux and Hotel_Codigo = @hotId and Habitacion_Tipo_Codigo = @tipohab
+set @aux = DATEADD(day, 1, @aux2)
+end
+end
+else 
+RAISERROR('no hay lugar en este hotel para estas fechas, intente nuevamente',1,1)
+		ROLLBACK TRANSACTION
 commit tran 
 end try
 
@@ -1487,95 +1726,144 @@ declare @mensaje_de_error nvarchar(255)
 	RAISERROR(@mensaje_de_error,11,1)
 rollback tran
 end catch
-go
 
+go
 
 create procedure four_sizons.ModificarReserva
-@fechaCambio datetime,
-@fechaInicio datetime,
-@fechaFin datetime,
-@regimen nvarchar(50),
-@codigoReserva numeric(18),
-@estado numeric(1),
-@hotid numeric (18),
-@detalle nvarchar (255),
-@username nvarchar(15)
-
-as begin tran
-begin try 
-
-declare @regId numeric(18)
-
-set @regId = (select Regimen_Codigo from FOUR_SIZONS.Regimen where Regimen_Descripcion= @regimen)
+	@codigoReserva numeric(18),
+	@fechaInicio datetime,
+	@fechaFin datetime,
+	@userId nvarchar(15),
+	@hotid numeric (18),
+	@tipoHab numeric(18),
+	@detalle nvarchar (255),
+	@regId numeric(18),
+	@estado numeric(1),
+	@canthab numeric(18)
 
 
-update FOUR_SIZONS.Reserva
-	set Reserva_Fecha_Inicio= @fechaInicio,
-	Reserva_Fecha_Fin = @fechaFin,
-	Regimen_Codigo = @regId,
-	Reserva_Estado = @estado,
-	Hotel_Codigo = @hotId
+	as begin tran
+	begin try 
+	declare @cantidadNoches numeric(2)
+	declare @fechaCambio datetime
+	set @fechaCambio = GETDATE()
+	declare @precio decimal(12)
+	declare @preReg decimal(12)  = (select Regimen_Precio from four_sizons.regimen where Regimen_Codigo=@regId)
+	declare @recarga decimal(12) = (select Hotel_CantEstrella*Hotel_Recarga_Estrella from FOUR_SIZONS.Hotel where Hotel_Codigo=@hotId)
+	declare @porcentual decimal(12) = (select Habitacion_Tipo_Porcentual from FOUR_SIZONS.Habitacion_Tipo where Habitacion_Tipo_Codigo =@tipoHab)
 
-	where Reserva_Codigo = @codigoReserva
+	set @cantidadNoches = DATEDIFF(day, @fechaInicio, @fechaFin)
+	set @precio = @cantidadNoches * @cantHab*(@preReg*@porcentual+@recarga)
 
-insert into FOUR_SIZONS.ReservaMod (Reserva_Codigo,Usuario_ID, ResMod_Detalle,ResMod_Fecha)
-			               values (@codigoReserva,@username,@detalle,@fechaCambio)
+	declare @mod_numero decimal(18)
 
-commit tran
-end try
-begin catch
-	declare @mensaje_de_error nvarchar(255)
-	set @mensaje_de_error = ERROR_MESSAGE()
-	RAISERROR(@mensaje_de_error,11,1)
-	rollback tran 
-end catch
+	select @mod_numero = count(*) from FOUR_SIZONS.ReservaMod where Reserva_Codigo = @codigoReserva
+	if(@canthab != (select reserva_cant_hab from four_sizons.reserva where reserva_codigo = @codigoReserva) or @tipohab != (select habitacion_tipo_codigo from four_sizons.reserva where reserva_codigo = @codigoReserva ))
+	begin
+	if(1= four_sizons.verificarDisp(@fechaInicio, @fechaFin,@hotId, @tipoHab,@cantHab))
+	begin
+	update FOUR_SIZONS.Reserva
+		set Reserva_Fecha_Inicio= @fechaInicio,
+		Reserva_Fecha_Fin = @fechaFin,
+		Regimen_Codigo = @regId,
+		Reserva_Estado = @estado,
+		Hotel_Codigo = @hotId,
+		habitacion_tipo_codigo = @tipoHab,
+		reserva_cant_hab = @canthab,
+		Reserva_Precio= @precio,
+		Reserva_Cant_Noches=@cantidadNoches
+
+		where Reserva_Codigo = @codigoReserva
+
+		--aca baja la disponibilidad
+declare @aux datetime = convert(datetime,@fechaInicio,121 )
+declare @aux2 datetime 
+while(@aux!= convert(datetime,@fechaFin, 121))
+begin
+set @aux2= @aux
+update FOUR_SIZONS.Disponibilidad
+	set Disp_HabDisponibles = Disp_HabDisponibles - @cantHab
+	where Disp_Fecha= @aux and Hotel_Codigo = @hotId and Habitacion_Tipo_Codigo = @tipohab
+set @aux = DATEADD(day, 1, @aux2)
+end
+	end
+	else RAISERROR('no hay lugar en este hotel para estas fechas, intente nuevamente',1,1)
+		ROLLBACK TRANSACTION
+
+
+	end
+
+	else 
+	update FOUR_SIZONS.Reserva
+		set Reserva_Fecha_Inicio= @fechaInicio,
+		Reserva_Fecha_Fin = @fechaFin,
+		Regimen_Codigo = @regId,
+		Reserva_Estado = @estado,
+		Hotel_Codigo = @hotId,
+		Reserva_Precio= @precio,
+		Reserva_Cant_Noches=@cantidadNoches
+
+		where Reserva_Codigo = @codigoReserva
+
+	insert into FOUR_SIZONS.ReservaMod (ResMod_Codigo,Reserva_Codigo,Usuario_ID, ResMod_Detalle,ResMod_Fecha)
+							   values (@mod_numero,@codigoReserva,@userId,@detalle,@fechaCambio)
+
+	commit tran
+	end try
+	begin catch
+		declare @mensaje_de_error nvarchar(255)
+		set @mensaje_de_error = ERROR_MESSAGE()
+		RAISERROR(@mensaje_de_error,11,1)
+		rollback tran 
+	end catch
+	go
+
+
+
+
+create function four_sizons.verificarDisp (@inicio datetime , @fin datetime , @hotel numeric(18) , @tipohab numeric(18) , @canthab numeric(18))
+returns bit
+as begin 
+declare @respuesta bit = 1
+declare @aux datetime = convert(datetime,@inicio,121 )
+declare @aux2 datetime
+
+while (@aux!= convert(datetime,@fin, 121))
+begin
+set @aux2=@aux
+declare @habDisp numeric(18) = (select Disp_HabDisponibles from FOUR_SIZONS.Disponibilidad where Hotel_Codigo=@hotel and Habitacion_Tipo_Codigo=@tipohab and Disp_Fecha=@aux)
+if(@habDisp<@canthab )
+begin 
+set @respuesta = 0
+end
+set @aux = DATEADD(day, 1, @aux2)
+end
+
+return @respuesta
+end
 go
--- la cancelacion la hago aca tambien
 
 
-create procedure four_sizons.altaTipoHabXRes
-@tipoHab nvarchar(50),
-@cantHab numeric(18),
-@reservaCodigo numeric(18)
-
-as begin tran 
-begin try
-
-declare @tipoHabCodigo numeric(18)
-
-set @tipoHabCodigo = (select Habitacion_Tipo_Codigo from FOUR_SIZONS.Habitacion_Tipo where Habitacion_Tipo_Descripcion=@tipoHab)
-insert into FOUR_SIZONS.Habitacion_TipoXReser (Habitacion_Tipo_Codigo,HabTipoXRes_CantHab,Reserva_Codigo)
-										values(@tipoHabCodigo, @cantHab , @reservaCodigo)
-
-commit tran
-end try
-begin catch
-	declare @mensaje_de_error nvarchar(255)
-	set @mensaje_de_error = ERROR_MESSAGE()
-	RAISERROR(@mensaje_de_error,11,1)
-	rollback tran 
-end catch
-go
-
--- esta incompleto, hay que ver lo del precio y otras cosas, como una funcion para buscar clientes
-
-
+-- este no va mas xq no es bueno ejecutar un proc dentro de otro proc
 create proc four_sizons.bajarDisponibilidad
-@Disp_Fecha numeric(18),
-@hab_tipo nvarchar(50),
+@inicio datetime,
+@fin datetime,
+@hab_tipo numeric(18),
 @Hotel numeric(18),
 @cantHab numeric(18)
 
 as begin tran 
 begin try
-
-declare @Habitacion_Tipo_Codigo numeric(18)
-
-set @Habitacion_Tipo_Codigo= (select Habitacion_Tipo_Codigo from Habitacion_Tipo where Habitacion_Tipo_Descripcion= @hab_tipo)
-
+declare @aux datetime = convert(datetime,@inicio,121 )
+declare @aux2 datetime 
+while(@aux!= convert(datetime,@fin, 121))
+begin
+set @aux2= @aux
 update FOUR_SIZONS.Disponibilidad
 	set Disp_HabDisponibles = Disp_HabDisponibles - @cantHab
-	where Disp_Fecha= @Disp_Fecha and Hotel_Codigo = @hotel and Habitacion_Tipo_Codigo = @Habitacion_Tipo_Codigo
+	where Disp_Fecha= @aux and Hotel_Codigo = @hotel and Habitacion_Tipo_Codigo = @hab_tipo
+set @aux = DATEADD(day, 1, @aux2)
+end
 
 	commit tran
 	end try
@@ -1587,23 +1875,28 @@ update FOUR_SIZONS.Disponibilidad
 	end catch
 go
 
+
+
+
 create procedure four_sizons.AgregarTarjeta
 	@Tarjeta_Numero numeric(18),
 	@Tarjeta_Venc datetime,
 	@Tarjeta_Cod numeric(3),
 	@Tarjeta_Titular nvarchar(50),
+
 	@Tarjeta_Marca nvarchar(50),
 	@Cliente_Codigo numeric(18)
 
 	as begin tran 
 	begin try
-	
+
 	if(not exists (select Tarjeta_Numero from FOUR_SIZONS.Tarjeta where Tarjeta_Numero = @Tarjeta_Numero))
 	insert into FOUR_SIZONS.Tarjeta (Tarjeta_Numero, Tarjeta_Venc,Tarjeta_Cod,Tarjeta_Titular,Tarjeta_Marca,Cliente_Codigo ,tarjeta_estado)
 								values (@Tarjeta_Numero, @Tarjeta_Venc,@Tarjeta_Cod,@Tarjeta_Titular,@Tarjeta_Marca,@Cliente_Codigo,1)
 
-	else print N'la tarjeta ya figura en el sistema, ingrese otra por favor'
-	
+	else
+	RAISERROR('la tarjeta ya figura en el sistema, ingrese otra por favor',1,1)
+		ROLLBACK TRANSACTION
 	commit tran
 	end try
 
@@ -1665,15 +1958,17 @@ go
 create function four_sizons.InicioTRi(@Tri numeric(18) , @anio numeric(18))
 	returns datetime
 as begin
-declare @inicio datetime
+declare @inicio datetime,
+		@Aaux char(4)
+set @Aaux = CAST(@anio as CHAR(4))
 if(@tri = 1)
-set @inicio = '01-01-'+@anio
+set @inicio = '01-01-'+@Aaux
 else if(@tri = 2)
-	   set @inicio = '01-04-'+@anio
+	   set @inicio = '01-04-'+@Aaux
 	 else if(@tri = 3)
-			set @inicio = '01-07-'+@anio
+			set @inicio = '01-07-'+@Aaux
 		  else if(@tri = 4)
-				set @inicio = '01-10-'+@anio
+				set @inicio = '01-10-'+@Aaux
 
 return @inicio
 end
@@ -1682,40 +1977,46 @@ go
 create function four_sizons.finTri(@Tri numeric(18) , @anio numeric(18))
 	returns datetime
 as begin
-declare @fin datetime
-if(@tri = 1)
-set @fin = '31-03-'+@anio
-else if(@tri = 2)
-	   set @fin = '30-06-'+@anio
-	 else if(@tri = 3)
-			set @fin = '30-09-'+@anio
-		  else if(@tri = 4)
-				set @fin = '31-12-'+@anio
+declare @fin datetime,
+		@Aaux char(4)
+set @Aaux = CAST(@anio as CHAR(4))
+if(@Tri = 1)
+set @fin = '31-03-'+@Aaux
+else if(@Tri = 2)
+	   set @fin = '30-06-'+@Aaux
+	 else if(@Tri = 3)
+			set @fin = '30-09-'+@Aaux
+		  else if(@Tri = 4)
+				set @fin = '31-12-'+@Aaux
 
 return @fin
 end
 go
 
 
-create FUNCTION FOUR_SIZONS.calcConsumible ( @estadia numeric(18))
+create FUNCTION FOUR_SIZONS.calcConsumible ( @estadia numeric(18),@ignora bit)
 
-	RETURNS numeric(18,2)
+	RETURNS numeric(18,2) 
 
 AS BEGIN
 
-	DECLARE @total numeric(18,2)
-	set @total = (select consumibles.Costo 
-					from (select estXCons.Estadia_Codigo Est, SUM(cons.Consumible_Precio) Costo
-							from FOUR_SIZONS.EstadiaXConsumible estXCons, FOUR_SIZONS.Consumible cons
-							where estXCons.Consumible_Codigo = cons.Consumible_Codigo
-								group by estXCons.Estadia_Codigo
-						 ) as consumibles
-				where consumibles.Est = @estadia
-				)
-	if(@total is null)
-	begin
-	set @total=0
+	DECLARE @total numeric(18,2),
+			@regimen numeric(18),
+			@reserva numeric(18)
+	set @reserva=(select Reserva_Codigo from Estadia where Estadia_Codigo=@estadia)
+	set @regimen=(select Regimen_Codigo  from Reserva where Reserva_Codigo=@reserva)
+	if((select Regimen_Descripcion from Regimen where Regimen_Codigo=@regimen)='ALL INCLUSIVE' and @ignora=0)
+		begin
+			set @total=0
+		end
+	else
+		begin
+			set @total=(select sum(c.Consumible_Precio*isnull(exc.estXcons_cantidad,1)) 
+				from EstadiaXConsumible exc join Consumible c on exc.Consumible_Codigo=c.Consumible_Codigo
+				where exc.Estadia_Codigo=@estadia
+				group by exc.Estadia_Codigo)
 	end
+	
 RETURN @total
 END	
 go
@@ -1727,13 +2028,23 @@ create FUNCTION four_sizons.calcEstadia ( @estadia numeric(18))
 AS BEGIN
 
 	DECLARE @total numeric(18,2)
-	set @total = (select estadias.Costo 
-					from ( select es.Estadia_Codigo Est, SUM(re.Reserva_Precio) Costo
-							from FOUR_SIZONS.Estadia es, FOUR_SIZONS.Reserva re
-							where es.reserva_Codigo = re.Reserva_Codigo
-								group by es.Estadia_Codigo) as estadias
-				  where estadias.Est = @estadia
-				 )
+	set @total=(select r.Reserva_Precio 
+				from Estadia e join Reserva r on e.Reserva_Codigo=r.Reserva_Codigo
+				where e.Estadia_Codigo=@estadia
+
+
+
+				group by e.Estadia_Codigo,r.Reserva_Precio)
+	if(@total is null)
+
+
+
+	begin
+	set @total=0
+	end
+	
+
+
 RETURN @total
 END	
 go
@@ -1746,28 +2057,22 @@ create procedure four_sizons.generarFactura
 @fechaI datetime --la fecha del sistema
 as begin
 
-declare @regimen numeric(18),
-		@reserva numeric(18),
+
+declare @reserva numeric(18),
 		@total numeric(18,2),
-		@cliente numeric(18),
-		@descripcion nvarchar(255)
+		@cliente numeric(18)
+
 begin tran ta
 begin try
 		set @reserva = ( select Reserva_Codigo from FOUR_SIZONS.Estadia where Estadia_Codigo = @estadia);
 		set @cliente = ( select Cliente_Codigo from FOUR_SIZONS.Reserva where Reserva_Codigo = @reserva);
-		set @regimen = ( select regimen_Codigo from FOUR_SIZONS.Reserva where Reserva_Codigo = @reserva);
-		set @descripcion=(select regimen_descripcion from FOUR_SIZONS.Regimen where Regimen_Codigo=@regimen);
-		if ( @descripcion != 'ALL INCLUSIVE') 
-		begin
-			set @total = FOUR_SIZONS.calcEstadia(@estadia) + FOUR_SIZONS.calcConsumible(@estadia);
+
+
+		set @total = FOUR_SIZONS.calcEstadia(@estadia) + FOUR_SIZONS.calcConsumible(@estadia,0);
 			--Es necesario tener al usuario en factura?
-			insert into FOUR_SIZONS.Factura(Estadia_Codigo,Factura_FormaPago,Cliente_Codigo,Factura_Fecha,Factura_Total,Factura_Estado) values (@estadia,@formaPago,@cliente,@fechaI,@total,0);
-		end
-		else
-			begin
-				set @total = FOUR_SIZONS.calcEstadia(@estadia);
-				insert into FOUR_SIZONS.Factura(Estadia_Codigo,Factura_FormaPago,Cliente_Codigo,Factura_Fecha,Factura_Total,Factura_Estado) values (@estadia,@formaPago,@cliente,@fechaI,@total,0);
-			end
+		insert into FOUR_SIZONS.Factura(Estadia_Codigo,Factura_FormaPago,Cliente_Codigo,Factura_Fecha,Factura_Total,Factura_Estado,Factura_Consistencia) values (@estadia,@formaPago,@cliente,@fechaI,@total,0,1);
+
+
 commit tran
 end try
 begin catch
@@ -1787,33 +2092,33 @@ create procedure FOUR_SIZONS.ModificarFactura
 as
 begin
 
-declare @regimen numeric(18),
-		@reserva numeric(18),
-		@descripcion nvarchar(255),
+
+declare @reserva numeric(18),
+		@estadoA bit,
+
 		@total numeric(18,2),
-		@cliente numeric(18),
+
 		@fact_Nro numeric(18)
 begin tran ta
 begin try
 		set @reserva = ( select Reserva_Codigo from FOUR_SIZONS.Estadia where Estadia_Codigo = @estadia);
-		set @cliente = ( select cliente_Codigo from FOUR_SIZONS.Reserva where Reserva_Codigo = @reserva);
-		set @regimen = ( select Regimen_Codigo from FOUR_SIZONS.Reserva where Reserva_Codigo = @reserva);
-		set @descripcion = ( select regimen_descripcion from FOUR_SIZONS.Regimen where Regimen_Codigo=@regimen);
+
+
+
 		set @fact_Nro = (select Factura_Nro from FOUR_SIZONS.Factura where Estadia_Codigo = @estadia);
-		if ( @descripcion != 'ALL INCLUSIVE')
+		if ( @estadoA != 1)
+
 		begin
-			set @total = FOUR_SIZONS.calcEstadia(@estadia) + FOUR_SIZONS.calcConsumible(@estadia);
+
+			set @total = FOUR_SIZONS.calcEstadia(@estadia) + FOUR_SIZONS.calcConsumible(@estadia,0);
 			update FOUR_SIZONS.Factura
 			set Factura_FormaPago =@formaPago , Factura_Fecha = @fechaI, Factura_Total = @total, Factura_Estado=@estado
 			where Factura_Nro = @fact_Nro
 		end
-		else
-		begin
-			set @total = FOUR_SIZONS.calcEstadia(@estadia);
-			update FOUR_SIZONS.Factura
-			set Factura_FormaPago =@formaPago , Factura_Fecha = @fechaI, Factura_Total = @total, Factura_Estado=@estado
-			where Factura_Nro = @fact_Nro
-		end
+		else 
+		RAISERROR('La factura ya fue facturada, no se puede realizar cambios',1,1)
+		ROLLBACK TRANSACTION
+
 commit tran
 end try
 begin catch
@@ -1854,7 +2159,11 @@ as begin
 if (not exists (select Reserva_Codigo from Reserva where Reserva_Codigo=@reserva and Reserva_Fecha_Inicio= @fecha))	
 	IF(EXISTS (select Reserva_Codigo from Reserva where Reserva_Codigo=@reserva and Reserva_Fecha_Inicio< @fecha))
 		update FOUR_SIZONS.Reserva set Reserva_Estado=5 where Reserva_Codigo = @reserva--SE CANCELA LA RESERVA POR NO-SHOW CUANDO ES TARDE
-	else print N'el numero de reserva esta mal o todavia no es la fecha'
+	else 
+	begin
+	RAISERROR('el numero de reserva esta mal o todavia no es la fecha',1,1)
+		ROLLBACK TRANSACTION
+		end
 else
 declare @precioXNoche numeric(18),
 		@cantNoches numeric(18),
@@ -1867,11 +2176,30 @@ begin try
 			if(not exists (select Reserva_Codigo from Reserva where Reserva_Codigo=@reserva and Reserva_Estado= 4))
 				if(not exists (select Reserva_Codigo from Reserva where Reserva_Codigo=@reserva and Reserva_Estado= 5))
 					if(not exists (select Reserva_Codigo from Reserva where Reserva_Codigo=@reserva and Reserva_Estado= 6))
-						print N'Error de estado'
-					else print N'Reserva ya efectivizada'
-				else print N'Reserva cancelada por No-Show'
-			else print N'la reserva fue cancelada por cliente'
-		else print N'la reserva fue cancelada por recepcionista'
+						begin
+						RAISERROR('Error de estado',1,1)
+						ROLLBACK TRANSACTION
+						end
+					else 
+					begin
+					RAISERROR('Reserva ya efectivizada',1,1)
+					ROLLBACK TRANSACTION
+					end
+				else 
+				begin
+				RAISERROR('Reserva cancelada por No-Show',1,1)
+				ROLLBACK TRANSACTION
+				end
+			else 
+			begin
+			RAISERROR('la reserva fue cancelada por cliente',1,1)
+			ROLLBACK TRANSACTION
+			end
+		else 
+			begin
+			RAISERROR('la reserva fue cancelada por recepcionista',1,1)
+			ROLLBACK TRANSACTION
+			end
 	else set @estado= 6			
 	set @cantNoches = (select Reserva_Cant_Noches from FOUR_SIZONS.Reserva   where Reserva_Codigo = @reserva)
 	set @precioXNoche = (select Reserva_Precio from FOUR_SIZONS.Reserva res where res.Reserva_Codigo = @reserva)/@cantNoches
@@ -1897,19 +2225,22 @@ create proc FOUR_SIZONS.registrarCheckOut
 as
 begin
 
-declare @cantDias numeric(18,0),
-		@difDates numeric(18,0),
+declare @cantDias numeric(18),
+		@difDates numeric(18),
 		@precioXNoche numeric(18,0),
 		@Reserva numeric(18),
 		@finR datetime,
-		@fact numeric(18,0),
-		@monto numeric(18,0)
+		@fact numeric(18),
+		@monto numeric(18,2),
+
+		@regimen numeric(18)
 begin tran ta
 begin try
 	set @cantDias = DATEDIFF(day,( select Estadia_FechaInicio from FOUR_SIZONS.Estadia where Estadia_Codigo = @Estadia ),@fecha);
 	set @Reserva = (select Reserva_Codigo from FOUR_SIZONS.Estadia where Estadia_Codigo = @Estadia);
 	set @finR = (select Reserva_Fecha_Fin from FOUR_SIZONS.Reserva where Reserva_Codigo = @Reserva);
 	set @difDates = DATEDIFF(day,@fecha,@finR);
+	set @precioXNoche = (select Estadia_PreXNoche from FOUR_SIZONS.Estadia where Estadia_Codigo = @Estadia);
 	
 	UPDATE FOUR_SIZONS.Estadia
 	set 
@@ -1918,11 +2249,39 @@ begin try
 		Estadia_DiasRest = @difDates,
 		Estadia_CantNoches =  @cantDias
 		where Estadia_Codigo = @Estadia;
-	--Como pongo en la fact los dias que no estuvo? SERIA OTRO ITEM?
+
 	set @monto = (select Reserva_Precio from FOUR_SIZONS.Reserva where Reserva_Codigo =@Reserva)
 	set @fact = (select Factura_Nro from FOUR_SIZONS.Factura where Estadia_Codigo = @Estadia)
-	insert into FOUR_SIZONS.Item_Factura(Factura_Nro,item_descripcion,Item_Factura_Cant,Item_Factura_Monto)
-	values(@fact,'Estadia',1, @monto)
+	set @regimen=(select Regimen_Codigo from Reserva where Reserva_Codigo=@Reserva)
+	if((select Regimen_Descripcion from Regimen where Regimen_Codigo=@regimen)='ALL INCLUSIVE')
+	begin
+		insert into FOUR_SIZONS.Item_Factura(Factura_Nro,item_descripcion,Item_Factura_Cant,Item_Factura_Monto)
+					values(@fact,'Descuento Por Regimen',1, FOUR_SIZONS.calcConsumible(@Estadia,1)*-1)
+	end
+	if(@difDates=0)
+		begin
+			insert into FOUR_SIZONS.Item_Factura(Factura_Nro,item_descripcion,Item_Factura_Cant,Item_Factura_Monto)
+
+				values(@fact,'Estadia',(@cantDias-1), @monto)
+				----- EN CANTIDAD DE ESTADIA PONGO LA CANTIDAD DE NOCHES QUE SE QUEDA
+				---- EL -1 SE DEBE A QUE EL DIA EN EL QUE SE RETIRAN NO SE COBRA SUPONGO, YA QUE NO PASAN LA NOCHE EN EL HOTEL
+		end
+
+
+
+
+
+
+
+	else 
+		begin
+			insert into FOUR_SIZONS.Item_Factura(Factura_Nro,item_descripcion,Item_Factura_Cant,Item_Factura_Monto)
+				values(@fact,'Estadia',@cantDias, (@cantDias-1)*@precioXNoche)
+			insert into FOUR_SIZONS.Item_Factura(Factura_Nro,item_descripcion,Item_Factura_Cant,Item_Factura_Monto)
+				values(@fact,'Recargo de estadia',(@difDates-1),( @difDates-1)*@precioXNoche)
+		end
+
+
 commit tran 
 end try
 
@@ -1955,30 +2314,33 @@ as begin tran
 
 
 	if(not exists (select Estadia_Codigo from FOUR_SIZONS.EstadiaXConsumible where Estadia_Codigo= @estadia and Consumible_Codigo = @consumible))
-	begin
-	insert into FOUR_SIZONS.EstadiaXConsumible(Estadia_Codigo,estXcons_cantidad,Consumible_Codigo)
+		begin
+			insert into FOUR_SIZONS.EstadiaXConsumible(Estadia_Codigo,estXcons_cantidad,Consumible_Codigo)
 										values(@estadia,@cant,@consumible)
 	
-	insert into FOUR_SIZONS.Item_Factura(Factura_Nro , item_descripcion , Item_Factura_Cant , Item_Factura_Monto)
+			insert into FOUR_SIZONS.Item_Factura(Factura_Nro , item_descripcion , Item_Factura_Cant , Item_Factura_Monto)
 								values(@factura,@desc,@cant,@monto*@cant)
 
-	end 
+		end 
 	else 
-	begin
-	declare @numItem numeric(18)
-	
-	set @numItem=(select f.Item_Factura_NroItem from FOUR_SIZONS.Item_Factura f where Factura_Nro= @factura and @desc = item_descripcion)
-	update FOUR_SIZONS.EstadiaXConsumible 
-	set estXcons_cantidad = @cant+ estXcons_cantidad
-	where Estadia_Codigo= @estadia and Consumible_Codigo = @consumible
+		begin
+			declare @numItem numeric(18)
 
-	update FOUR_SIZONS.Item_Factura
-	set Item_Factura_Cant = Item_Factura_Cant+@cant,
-		Item_Factura_Monto = Item_Factura_Monto + (@monto*@cant)
-		
-		where @factura=Factura_Nro and @numItem = Item_Factura_NroItem
-		
-	end 
+			set @numItem=(select f.Item_Factura_NroItem from FOUR_SIZONS.Item_Factura f where Factura_Nro= @factura and @desc = item_descripcion)
+			
+			update FOUR_SIZONS.EstadiaXConsumible 
+				set estXcons_cantidad = @cant+ estXcons_cantidad
+				where Estadia_Codigo= @estadia and Consumible_Codigo = @consumible
+			
+
+			update FOUR_SIZONS.Item_Factura
+					set Item_Factura_Cant = Item_Factura_Cant+@cant,
+						Item_Factura_Monto = Item_Factura_Monto + (@monto*@cant)
+
+					where @factura=Factura_Nro and @numItem = Item_Factura_NroItem
+
+
+		end
 	commit tran
 	end try
 	begin catch
@@ -2006,7 +2368,7 @@ select top 5 h.Hotel_Codigo--, COUNT(r.Reserva_Codigo)???????????????????????
 from Hotel h,Reserva r, ReservaMod m  
 where h.Hotel_Codigo=r.Hotel_Codigo and
 	( (r.Reserva_Estado = 3 or r.Reserva_Estado = 4 or r.Reserva_Estado = 5)
-	and m.Reserva_Codigo=r.Reserva_Codigo and m.ResMod_Detalle='Cancelada' and @inicio<m.ResMod_Fecha and m.ResMod_Fecha<@fin)
+	and m.Reserva_Codigo=r.Reserva_Codigo  and m.ResMod_Fecha between @inicio and @fin)
 group by h.Hotel_Codigo
 order by count(r.Reserva_Codigo)
 end 
@@ -2021,14 +2383,16 @@ as begin
 declare @fin datetime
 declare @inicio datetime
 
-set @inicio = FOUR_SIZONS.InicioTRi(@tri,@anio)
-set @fin = FOUR_SIZONS.finTri(@tri,@anio)
+set @inicio = CONVERT(datetime, FOUR_SIZONS.InicioTRi(@tri,@anio),121)
+set @fin = CONVERT(datetime,FOUR_SIZONS.finTri(@tri,@anio),121)
 
 select top 5 h.Hotel_Codigo
-from Hotel h,Consumible c, EstadiaXConsumible ExC, Estadia e , Factura f 
-where h.Hotel_Codigo=e.Hotel_Codigo and (( @inicio<f.Factura_Fecha and f.Factura_Fecha<@fin) and f.Estadia_Codigo = e.Estadia_Codigo and e.Estadia_Codigo = ExC.Estadia_Codigo) 
+
+
+from FOUR_SIZONS.Hotel h, FOUR_SIZONS.Estadia e
+where h.Hotel_Codigo=e.Hotel_Codigo and e.Estadia_FechaInicio between @inicio and @fin
 group by h.Hotel_Codigo
-order by sum(ExC.estXcons_cantidad)
+order by sum(FOUR_SIZONS.calcConsumible(e.Estadia_Codigo,0))
 end 
 go
 
@@ -2041,31 +2405,14 @@ as begin
 declare @fin datetime
 declare @inicio datetime
 
-set @inicio = FOUR_SIZONS.InicioTRi(@tri,@anio)
-set @fin = FOUR_SIZONS.finTri(@tri,@anio)
+set @inicio =CONVERT(datetime, FOUR_SIZONS.InicioTRi(@tri,@anio),121)
+set @fin = CONVERT(datetime,FOUR_SIZONS.finTri(@tri,@anio),121)
 
 select top 5 h.Hotel_Codigo
 from FOUR_SIZONS.Hotel h , FOUR_SIZONS.Hotel_Cerrado c
-where c.Hotel_Codigo = h.Hotel_Codigo and  @inicio<c.Cerrado_FechaI and c.Cerrado_FechaF<@fin
+where c.Hotel_Codigo = h.Hotel_Codigo and ((c.Cerrado_FechaI between @inicio and @fin) or (c.Cerrado_FechaF between @inicio and @fin))
 group by h.Hotel_Codigo
 order by count(c.Cerrado_codigo)
-
-end 
-go
-
-create proc four_sizons.clieConMasPuntos
-@anio numeric(18),
-@tri numeric(18)
-
-as begin
-declare @fin datetime
-declare @inicio datetime
-
-set @inicio = FOUR_SIZONS.InicioTRi(@tri,@anio)
-set @fin = FOUR_SIZONS.finTri(@tri,@anio)
-
-
-
 
 end 
 go
@@ -2079,12 +2426,12 @@ as begin
 declare @fin datetime
 declare @inicio datetime
 
-set @inicio = FOUR_SIZONS.InicioTRi(@tri,@anio)
-set @fin = FOUR_SIZONS.finTri(@tri,@anio)
+set @inicio = CONVERT(datetime,FOUR_SIZONS.InicioTRi(@tri,@anio),121)
+set @fin =CONVERT(datetime, FOUR_SIZONS.finTri(@tri,@anio),121)
 
 select top 5 h.Habitacion_Numero, h.Hotel_Codigo 
 from FOUR_SIZONS.Estadia e ,FOUR_SIZONS.Habitacion h
-where e.Hotel_Codigo = h.Hotel_Codigo and e.Habitacion_Numero = h.Habitacion_Numero and @inicio< e.Estadia_FechaInicio and e.Estadia_FechaFin<@fin
+where e.Hotel_Codigo = h.Hotel_Codigo and e.Habitacion_Numero = h.Habitacion_Numero and ((e.Estadia_FechaInicio between @inicio and @fin) or (e.Estadia_FechaFin between @inicio and @fin))
 group by h.Habitacion_Numero, h.Hotel_Codigo
 order by sum(e.Estadia_CantNoches) desc
 
@@ -2102,39 +2449,46 @@ AS BEGIN
 			@puntajeCons numeric(18),
 			@reserva numeric(18),
 			@descripcion nvarchar(255),
+
 			@regimen numeric(18)
 
 	set @puntajeEst= FOUR_SIZONS.calcEstadia(@estadia)/20
-	set @puntajeCons=FOUR_SIZONS.calcConsumible(@estadia)/10
+	set @puntajeCons=FOUR_SIZONS.calcConsumible(@estadia,0)/10
 	set @reserva=(select Reserva_Codigo from FOUR_SIZONS.Estadia where Estadia_Codigo = @estadia)
 	set @regimen = ( select regimen_Codigo from FOUR_SIZONS.Reserva where Reserva_Codigo = @reserva);
 	set @descripcion=(select regimen_descripcion from FOUR_SIZONS.Regimen where Regimen_Codigo=@regimen);
-	if ( @descripcion != 'ALL INCLUSIVE') 
+
 	set @puntaje = @puntajeEst+@puntajeCons
-	else set @puntaje=@puntajeEst
+
 	if(@puntaje is null)
 	begin
 	set @puntaje=0
+
+
 	end
 RETURN @puntaje
 END	
+
 go
 
 
-create procedure four_sizons.MayorPuntaje
+create procedure four_sizons.clieMayorPuntaje
 @anio numeric(18),
 @tri numeric(18)
 
 as begin
-declare @fin datetime
-declare @inicio datetime
+	declare @fin datetime
+	declare @inicio datetime
 
-set @inicio = FOUR_SIZONS.InicioTRi(@tri,@anio)
-set @fin = FOUR_SIZONS.finTri(@tri,@anio)
-select top 1 c.Cliente_Codigo, sum(FOUR_SIZONS.calcPuntaje(distinct f.Estadia_Codigo))puntaje
-from Cliente c JOIN Factura f on c.Cliente_Codigo=f.Cliente_Codigo
-where f.Factura_Fecha between @inicio and @fin
-group by c.Cliente_Codigo
-order by sum(FOUR_SIZONS.calcPuntaje(distinct f.Estadia_Codigo)) desc
+	set @inicio = convert(datetime,FOUR_SIZONS.InicioTRi(@tri,@anio),121)
+	set @fin = convert(datetime,FOUR_SIZONS.finTri(@tri,@anio),121)
+
+
+
+	select top 5 c.Cliente_Codigo, c.cliente_numdoc , c.cliente_nombre , c.cliente_apellido
+		from Cliente c JOIN Factura f on c.Cliente_Codigo=f.Cliente_Codigo
+		where f.Factura_Fecha between @inicio and @fin-- and f.Factura_Consistencia=1 lo comente porque sino no devuelve nada ya que ninguna fact es cons
+		group by c.Cliente_Codigo, c.cliente_numdoc , c.cliente_nombre , c.cliente_apellido
+		order by sum(FOUR_SIZONS.calcPuntaje(f.Estadia_Codigo)) desc
 end 
 go

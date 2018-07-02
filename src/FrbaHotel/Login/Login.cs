@@ -7,8 +7,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
-using FrbaHotel.PantallaPrincipal;
 using System.Data.SqlClient;
+using FrbaHotel.PantallaPrincipal;
+using FrbaHotel.GestionReservas;
 
 namespace FrbaHotel
 {
@@ -87,12 +88,21 @@ namespace FrbaHotel
                 else
                 {
                     this.Hide();
-                    FrbaHotel.PantallaPrincipal.PantallaPrincipal01 pantallaPrincipal = new PantallaPrincipal01();
+                    FrbaHotel.PantallaPrincipal.PantallaPrincipal01 pantallaPrincipal = new PantallaPrincipal01(txt_usuario.Text);
                     pantallaPrincipal.ShowDialog();
                     this.Close();
                 }
             }
         }
+
+        private void btn_reservar_Click(object sender, EventArgs e)
+        {
+            this.Hide();
+            ABMReserva01 formABMReserva01 = new ABMReserva01("GUEST");
+            formABMReserva01.ShowDialog();
+            this.Show();
+        }
+
 
     }
 }
