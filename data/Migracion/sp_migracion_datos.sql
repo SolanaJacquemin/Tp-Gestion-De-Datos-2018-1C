@@ -486,7 +486,7 @@ BEGIN
 		CREATE TABLE FOUR_SIZONS.EstadiaXConsumible (
 			Estadia_Codigo numeric(18),
 			Consumible_Codigo numeric(18),
-			estXcons_cantidad numeric(18),
+			estXcons_cantidad numeric(18) default 1,
 
 
 			CONSTRAINT FK_EstadiaXConsumible_1 FOREIGN KEY (Estadia_Codigo) REFERENCES FOUR_SIZONS.Estadia(Estadia_Codigo),
@@ -761,7 +761,7 @@ BEGIN
 	WHERE Factura_Nro IN (select facturaI from @facturaInc)
 
 END
-
+go
 -------------------------------------------------------Comienzo de procedures--------------------------------------------------------------
 
 -- Borrado de procedures en la base
@@ -780,7 +780,6 @@ IF (OBJECT_ID('FOUR_SIZONS.altaUserXHot', 'P') IS NOT NULL)
 BEGIN
     DROP PROCEDURE FOUR_SIZONS.altaUserXHot
 END;
-
 
 IF (OBJECT_ID('FOUR_SIZONS.ModificacionUsuario', 'P') IS NOT NULL)
 BEGIN
@@ -912,11 +911,6 @@ IF (OBJECT_ID('FOUR_SIZONS.HotelesMayorConsFact', 'P') IS NOT NULL)
 BEGIN
     DROP PROCEDURE FOUR_SIZONS.HotelesMayorConsFact
 END;
-
-
-
-
-
 
 IF (OBJECT_ID(N'FOUR_SIZONS.calcConsumible', 'FN' ) IS NOT NULL)
 BEGIN
@@ -1978,7 +1972,7 @@ end
 go
 
 
-create FUNCTION FOUR_SIZONS.calcConsumible ( @estadia numeric(18))
+create FUNCTION FOUR_SIZONS.calcConsumible ( @estadia numeric(18),@ignora bit)
 
 	RETURNS numeric(18,2) 
 
@@ -1989,31 +1983,17 @@ AS BEGIN
 			@reserva numeric(18)
 	set @reserva=(select Reserva_Codigo from Estadia where Estadia_Codigo=@estadia)
 	set @regimen=(select Regimen_Codigo  from Reserva where Reserva_Codigo=@reserva)
-	if((select Regimen_Descripcion from Regimen where Regimen_Codigo=@regimen)='ALL INCLUSIVE')
-
-
-
+	if((select Regimen_Descripcion from Regimen where Regimen_Codigo=@regimen)='ALL INCLUSIVE' and @ignora=0)
 		begin
-		set @total=0
+			set @total=0
 		end
 	else
-
-
-
-
-
-
-
-
-
-	begin
-	set @total=(select sum(c.Consumible_Precio*exc.estXcons_cantidad) 
+		begin
+			set @total=(select sum(c.Consumible_Precio*isnull(exc.estXcons_cantidad,1)) 
 				from EstadiaXConsumible exc join Consumible c on exc.Consumible_Codigo=c.Consumible_Codigo
 				where exc.Estadia_Codigo=@estadia
 				group by exc.Estadia_Codigo)
-
 	end
-	
 	
 RETURN @total
 END	
@@ -2066,17 +2046,9 @@ begin try
 		set @cliente = ( select Cliente_Codigo from FOUR_SIZONS.Reserva where Reserva_Codigo = @reserva);
 
 
-
-
-
-		set @total = FOUR_SIZONS.calcEstadia(@estadia) + FOUR_SIZONS.calcConsumible(@estadia);
+		set @total = FOUR_SIZONS.calcEstadia(@estadia) + FOUR_SIZONS.calcConsumible(@estadia,0);
 			--Es necesario tener al usuario en factura?
 		insert into FOUR_SIZONS.Factura(Estadia_Codigo,Factura_FormaPago,Cliente_Codigo,Factura_Fecha,Factura_Total,Factura_Estado,Factura_Consistencia) values (@estadia,@formaPago,@cliente,@fechaI,@total,0,1);
-
-
-
-
-
 
 
 commit tran
@@ -2116,17 +2088,12 @@ begin try
 
 		begin
 
-			set @total = FOUR_SIZONS.calcEstadia(@estadia) + FOUR_SIZONS.calcConsumible(@estadia);
+			set @total = FOUR_SIZONS.calcEstadia(@estadia) + FOUR_SIZONS.calcConsumible(@estadia,0);
 			update FOUR_SIZONS.Factura
 			set Factura_FormaPago =@formaPago , Factura_Fecha = @fechaI, Factura_Total = @total, Factura_Estado=@estado
 			where Factura_Nro = @fact_Nro
 		end
 		else print N'La factura ya fue facturada, no se puede realizar cambios'
-
-
-
-
-
 
 
 commit tran
@@ -2243,7 +2210,7 @@ begin try
 	if((select Regimen_Descripcion from Regimen where Regimen_Codigo=@regimen)='ALL INCLUSIVE')
 	begin
 		insert into FOUR_SIZONS.Item_Factura(Factura_Nro,item_descripcion,Item_Factura_Cant,Item_Factura_Monto)
-					values(@fact,'Descuento Por Regimen',1, FOUR_SIZONS.calcConsumible(@Estadia)*-1)
+					values(@fact,'Descuento Por Regimen',1, FOUR_SIZONS.calcConsumible(@Estadia,1)*-1)
 	end
 	if(@difDates=0)
 		begin
@@ -2379,7 +2346,7 @@ select top 5 h.Hotel_Codigo
 from FOUR_SIZONS.Hotel h, FOUR_SIZONS.Estadia e
 where h.Hotel_Codigo=e.Hotel_Codigo and e.Estadia_FechaInicio between @inicio and @fin
 group by h.Hotel_Codigo
-order by sum(FOUR_SIZONS.calcConsumible(e.Estadia_Codigo))
+order by sum(FOUR_SIZONS.calcConsumible(e.Estadia_Codigo,0))
 end 
 go
 
@@ -2457,7 +2424,7 @@ AS BEGIN
 			@regimen numeric(18)
 
 	set @puntajeEst= FOUR_SIZONS.calcEstadia(@estadia)/20
-	set @puntajeCons=FOUR_SIZONS.calcConsumible(@estadia)/10
+	set @puntajeCons=FOUR_SIZONS.calcConsumible(@estadia,0)/10
 	set @reserva=(select Reserva_Codigo from FOUR_SIZONS.Estadia where Estadia_Codigo = @estadia)
 	set @regimen = ( select regimen_Codigo from FOUR_SIZONS.Reserva where Reserva_Codigo = @reserva);
 	set @descripcion=(select regimen_descripcion from FOUR_SIZONS.Regimen where Regimen_Codigo=@regimen);
