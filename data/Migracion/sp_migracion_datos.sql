@@ -1288,7 +1288,8 @@ insert into four_sizons.Cliente(Cliente_Nombre ,cliente_Apellido,cliente_TipoDoc
 								values (@nombre,@apellido,@tipoDoc,@numDoc,@calle,@numCalle,@piso,@depto,@localidad,@mail,@telefono,
 								@pais,@ciudad,@nacionalidad,@fechaNac,0,1,1)
 else 
-PRINT N'el mail ingresado ya figura en el sistema, ingrese otro por favor';
+RAISERROR('el mail ingresado ya figura en el sistema, ingrese otro por favor',1,1)
+		ROLLBACK TRANSACTION
 commit tran 
 end try
 begin catch
@@ -1329,7 +1330,8 @@ set Cliente_Nombre=@nombre ,cliente_Apellido=@apellido,cliente_TipoDoc=@tipoDoc,
 		 Cliente_Fecha_Nac=@fechaNac,Cliente_Estado=@estado
 
 	where Cliente_Codigo = @codigo
-else print N'el mail ingresado ya figura en el sistema, ingrese otro por favor'
+else RAISERROR('el mail ingresado ya figura en el sistema, ingrese otro por favor',1,1)
+		ROLLBACK TRANSACTION
 
 commit tran 
 end try
@@ -1507,58 +1509,17 @@ go
 
 create procedure four_sizons.altaRolxFunc
 @rolname nvarchar(50),
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 @func nvarchar(50)
-
-
-
-
 
 as begin tran 
 begin try 
-
-
-
-
-
-
-
-
-
-
-
-
-
 	declare @rolID nvarchar(50)
-
-
-
-
-
 	declare @funcID nvarchar(50)
 
 
 	set @rolID = (select Rol_Codigo  from four_sizons.Rol where Rol_Nombre = @rolname)
 
 	set @funcID = (select Func_Codigo from FOUR_SIZONS.Funcionalidad where Func_Nombre = @func)
-
-
 
 	insert into FOUR_SIZONS.RolXFunc(Rol_Codigo,Func_Codigo,RolXFunc_Estado) 
 							values (@rolID,@funcID,1)
@@ -1574,11 +1535,6 @@ begin catch
 	rollback tran  
 end catch 
 go
-
-
-
-
-
 
 
 create procedure four_sizons.modificacionRolxFunc
@@ -1616,13 +1572,6 @@ begin try
 	rollback tran  
 	end catch 
 go
-
-
-
-
-
-
-
 
 
 --------------------------------------------------ABM HABITACION-------------------------------------------------------------
@@ -1670,8 +1619,9 @@ declare @TipoHabID numeric(18)
 		end
 
 		end
-		else print N'el numero de habitacion ya figura en ese hotel, ingrese otro por favor'
-
+		else 
+		RAISERROR('el numero de habitacion ya figura en ese hotel, ingrese otro por favor',1,1)
+		ROLLBACK TRANSACTION
 commit tran 
 end try
 begin catch
@@ -1688,29 +1638,18 @@ create procedure four_sizons.modificarHabitacion
 @hotId numeric(18),
 
 @piso numeric(18),
-@ubicacion nvarchar(50), -- ¿para que vas a cambiar el piso y la ubicacion de la habitacion en el hotel? Lo pide el enunciado
+@ubicacion nvarchar(50), 
 @descripcion nvarchar(255),
 @estado bit
 as 
 begin tran 
 begin try
 
-
-
-
 update FOUR_SIZONS.Habitacion
 
 set Habitacion_Piso= @piso,Habitacion_Frente=@ubicacion,Habitacion_Estado=@estado,Habitacion_Descripcion=@descripcion
 	
-
-	where Habitacion_Numero=@numero and Hotel_Codigo= @hotId
-
-
-
-
-
-
-
+where Habitacion_Numero=@numero and Hotel_Codigo= @hotId
 
 commit tran 
 end try
@@ -1775,8 +1714,9 @@ update FOUR_SIZONS.Disponibilidad
 set @aux = DATEADD(day, 1, @aux2)
 end
 end
-else print N'no hay lugar en este hotel para estas fechas, intente nuevamente'
-
+else 
+RAISERROR('no hay lugar en este hotel para estas fechas, intente nuevamente',1,1)
+		ROLLBACK TRANSACTION
 commit tran 
 end try
 
@@ -1847,7 +1787,8 @@ update FOUR_SIZONS.Disponibilidad
 set @aux = DATEADD(day, 1, @aux2)
 end
 	end
-	else print N'no hay lugar en este hotel para estas fechas, intente nuevamente'
+	else RAISERROR('no hay lugar en este hotel para estas fechas, intente nuevamente',1,1)
+		ROLLBACK TRANSACTION
 
 
 	end
@@ -1876,7 +1817,7 @@ end
 		rollback tran 
 	end catch
 	go
--- esta incompleto, hay que ver lo del precio y otras cosas, como una funcion para buscar clientes
+
 
 
 
@@ -1903,7 +1844,7 @@ end
 go
 
 
-
+-- este no va mas xq no es bueno ejecutar un proc dentro de otro proc
 create proc four_sizons.bajarDisponibilidad
 @inicio datetime,
 @fin datetime,
@@ -1949,41 +1890,13 @@ create procedure four_sizons.AgregarTarjeta
 	as begin tran 
 	begin try
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-	
 	if(not exists (select Tarjeta_Numero from FOUR_SIZONS.Tarjeta where Tarjeta_Numero = @Tarjeta_Numero))
 	insert into FOUR_SIZONS.Tarjeta (Tarjeta_Numero, Tarjeta_Venc,Tarjeta_Cod,Tarjeta_Titular,Tarjeta_Marca,Cliente_Codigo ,tarjeta_estado)
 								values (@Tarjeta_Numero, @Tarjeta_Venc,@Tarjeta_Cod,@Tarjeta_Titular,@Tarjeta_Marca,@Cliente_Codigo,1)
 
-	else print N'la tarjeta ya figura en el sistema, ingrese otra por favor'
-	
+	else
+	RAISERROR('la tarjeta ya figura en el sistema, ingrese otra por favor',1,1)
+		ROLLBACK TRANSACTION
 	commit tran
 	end try
 
@@ -2202,8 +2115,9 @@ begin try
 			set Factura_FormaPago =@formaPago , Factura_Fecha = @fechaI, Factura_Total = @total, Factura_Estado=@estado
 			where Factura_Nro = @fact_Nro
 		end
-		else print N'La factura ya fue facturada, no se puede realizar cambios'
-
+		else 
+		RAISERROR('La factura ya fue facturada, no se puede realizar cambios',1,1)
+		ROLLBACK TRANSACTION
 
 commit tran
 end try
@@ -2245,7 +2159,11 @@ as begin
 if (not exists (select Reserva_Codigo from Reserva where Reserva_Codigo=@reserva and Reserva_Fecha_Inicio= @fecha))	
 	IF(EXISTS (select Reserva_Codigo from Reserva where Reserva_Codigo=@reserva and Reserva_Fecha_Inicio< @fecha))
 		update FOUR_SIZONS.Reserva set Reserva_Estado=5 where Reserva_Codigo = @reserva--SE CANCELA LA RESERVA POR NO-SHOW CUANDO ES TARDE
-	else print N'el numero de reserva esta mal o todavia no es la fecha'
+	else 
+	begin
+	RAISERROR('el numero de reserva esta mal o todavia no es la fecha',1,1)
+		ROLLBACK TRANSACTION
+		end
 else
 declare @precioXNoche numeric(18),
 		@cantNoches numeric(18),
@@ -2258,11 +2176,30 @@ begin try
 			if(not exists (select Reserva_Codigo from Reserva where Reserva_Codigo=@reserva and Reserva_Estado= 4))
 				if(not exists (select Reserva_Codigo from Reserva where Reserva_Codigo=@reserva and Reserva_Estado= 5))
 					if(not exists (select Reserva_Codigo from Reserva where Reserva_Codigo=@reserva and Reserva_Estado= 6))
-						print N'Error de estado'
-					else print N'Reserva ya efectivizada'
-				else print N'Reserva cancelada por No-Show'
-			else print N'la reserva fue cancelada por cliente'
-		else print N'la reserva fue cancelada por recepcionista'
+						begin
+						RAISERROR('Error de estado',1,1)
+						ROLLBACK TRANSACTION
+						end
+					else 
+					begin
+					RAISERROR('Reserva ya efectivizada',1,1)
+					ROLLBACK TRANSACTION
+					end
+				else 
+				begin
+				RAISERROR('Reserva cancelada por No-Show',1,1)
+				ROLLBACK TRANSACTION
+				end
+			else 
+			begin
+			RAISERROR('la reserva fue cancelada por cliente',1,1)
+			ROLLBACK TRANSACTION
+			end
+		else 
+			begin
+			RAISERROR('la reserva fue cancelada por recepcionista',1,1)
+			ROLLBACK TRANSACTION
+			end
 	else set @estado= 6			
 	set @cantNoches = (select Reserva_Cant_Noches from FOUR_SIZONS.Reserva   where Reserva_Codigo = @reserva)
 	set @precioXNoche = (select Reserva_Precio from FOUR_SIZONS.Reserva res where res.Reserva_Codigo = @reserva)/@cantNoches
@@ -2479,23 +2416,6 @@ order by count(c.Cerrado_codigo)
 
 end 
 go
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 create proc four_sizons.habOcupadas
