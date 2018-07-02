@@ -110,6 +110,7 @@
             this.btn_estadias.TabIndex = 3;
             this.btn_estadias.Text = "Gestión de Estadías";
             this.btn_estadias.UseVisualStyleBackColor = true;
+            this.btn_estadias.Click += new System.EventHandler(this.btn_estadias_Click);
             // 
             // btn_habitaciones
             // 
@@ -200,6 +201,7 @@
             this.Controls.Add(this.label5);
             this.Controls.Add(this.label4);
             this.Name = "PantallaPrincipal01";
+            this.Load += new System.EventHandler(this.PantallaPrincipal01_Load);
             this.groupBox2.ResumeLayout(false);
             this.ResumeLayout(false);
             this.PerformLayout();
