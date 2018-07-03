@@ -8,6 +8,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using FrbaHotel.Prompts;
+using System.Data.SqlClient;
 
 namespace FrbaHotel.GestionReservas
 {
@@ -107,6 +108,7 @@ namespace FrbaHotel.GestionReservas
                         txt_direccion.Text = con.lector.GetString(4);
                         txt_ciudad.Text = con.lector.GetString(5);
                         txt_pais.Text = con.lector.GetString(6);
+                        esCliente = true;
                 }
 
                 con.closeConection();
@@ -170,12 +172,15 @@ namespace FrbaHotel.GestionReservas
                         con.command.Parameters.Add("@hotId", SqlDbType.Decimal).Value = hotelID;
                         con.command.Parameters.Add("@cliId", SqlDbType.Decimal).Value = clienteID;
                         con.command.Parameters.Add("@regId", SqlDbType.Decimal).Value = regimenID;
+                        con.command.Parameters.Add("@cantHab", SqlDbType.Decimal).Value = Convert.ToDecimal(txt_cantHab.Text);
+                        con.command.Parameters.Add("@tipoHabDesc", SqlDbType.NVarChar).Value = cb_tipoHabitacion.Text;
+                        con.command.Parameters.Add("@precio", SqlDbType.Decimal).Value = Convert.ToDecimal(txt_costoTotal.Text);
 
                         con.openConection();
                         con.command.ExecuteNonQuery();
                         con.closeConection();
 
-                        ejecutarAltaTipoHab();
+                        //ejecutarAltaTipoHab();
 
                         MessageBox.Show("Operación exitosa", "FOUR SIZONS - FRBA Hoteles", MessageBoxButtons.OK, MessageBoxIcon.Information);
                     }
@@ -281,7 +286,7 @@ namespace FrbaHotel.GestionReservas
                 con.execute();
                 con.command.CommandType = CommandType.StoredProcedure;
 
-                MessageBox.Show((Convert.ToDecimal(txt_cantHab.Text)).ToString());
+                //MessageBox.Show((Convert.ToDecimal(txt_cantHab.Text)).ToString());
                 con.command.Parameters.Add("@tipoHab", SqlDbType.NVarChar).Value = cb_tipoHabitacion.Text;
                 con.command.Parameters.Add("@cantHab", SqlDbType.Decimal).Value = Convert.ToDecimal(txt_cantHab.Text);
                 con.command.Parameters.Add("@reservaCodigo", SqlDbType.Decimal).Value = reservaID;
@@ -351,6 +356,39 @@ namespace FrbaHotel.GestionReservas
         private void btn_aceptar_nuevo_Click(object sender, EventArgs e)
         {
             ejecutarABMCliente();
+        }
+
+        private void txt_disponibilidad_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                Conexion con = new Conexion();
+                con.strQuery = "four_sizons.DisponbilidadyPrecio";
+                con.execute();
+                con.command.CommandType = CommandType.StoredProcedure;
+
+                con.command.Parameters.Add("@fechaInicio", SqlDbType.DateTime).Value = dt_fechaDesde.Value.ToString();
+                con.command.Parameters.Add("@fechaFin", SqlDbType.DateTime).Value = dt_fechaHasta.Value.ToString();
+                con.command.Parameters.Add("@hotId", SqlDbType.Decimal).Value = hotelID;
+                con.command.Parameters.Add("@regId", SqlDbType.Decimal).Value = regimenID;
+                con.command.Parameters.Add("@canthab", SqlDbType.Decimal).Value = txt_cantHab.Text;
+                con.command.Parameters.Add("@tipoHabDesc", SqlDbType.NVarChar).Value = cb_tipoHabitacion.Text;
+                con.command.Parameters.Add("@precio", SqlDbType.Decimal).Direction = ParameterDirection.Output;
+
+                con.openConection();
+                con.command.ExecuteNonQuery();
+                con.closeConection();
+
+                txt_costoTotal.Text = con.command.Parameters["@precio"].Value.ToString();
+                MessageBox.Show("Existe disponbilidad y el precio es de: " + txt_costoTotal.Text, "FOUR SIZONS - FRBA Hoteles", MessageBoxButtons.OK, MessageBoxIcon.Information);
+
+            }
+            catch (Exception ex)
+            {
+                error = 1;
+                MessageBox.Show("Error al completar la operación. " + ex.Message, "FOUR SIZONS - FRBA Hoteles", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+
         }
     }
 }

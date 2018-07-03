@@ -15,6 +15,8 @@ using FrbaHotel.GestionReservas;
 using FrbaHotel.AbmCliente;
 using FrbaHotel.ListadoEstadistico;
 using FrbaHotel.Prompts;
+using FrbaHotel.FacturarEstadia;
+using FrbaHotel.RegistrarEstadia;
 
 namespace FrbaHotel.PantallaPrincipal
 {
@@ -193,6 +195,22 @@ namespace FrbaHotel.PantallaPrincipal
 
             con.closeConection();
 
+        }
+
+        private void button1_Click(object sender, EventArgs e)
+        {
+            this.Hide();
+            FacturarEstadia01 formFacturarEstadia01 = new FacturarEstadia01();
+            formFacturarEstadia01.ShowDialog();
+            this.Show();
+        }
+
+        private void btn_estadias_Click(object sender, EventArgs e)
+        {
+            this.Hide();
+            GestionEstadias formGestionEstadia01 = new GestionEstadias();
+            formGestionEstadia01.ShowDialog();
+            this.Show();
         }
     }
 }

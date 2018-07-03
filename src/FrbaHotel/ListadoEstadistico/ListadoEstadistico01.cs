@@ -7,11 +7,15 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using System.Data.SqlClient;
 
 namespace FrbaHotel.ListadoEstadistico
 {
     public partial class ListadoEstadistico01 : Form
     {
+        public string nombreStored;
+        //public DataSet dataset;
+
         public ListadoEstadistico01()
         {
             InitializeComponent();
@@ -30,11 +34,11 @@ namespace FrbaHotel.ListadoEstadistico
             cb_Trimestre.Items.Add("2");
             cb_Trimestre.Items.Add("3");
 
-            cb_TipoListado.Items.Add("LISTADO 1");
-            cb_TipoListado.Items.Add("LISTADO 2");
-            cb_TipoListado.Items.Add("LISTADO 3");
-            cb_TipoListado.Items.Add("LISTADO 4");
-            cb_TipoListado.Items.Add("LISTADO 5");
+            cb_TipoListado.Items.Add("Hotel con mayor cantidad de reservas canceladas");
+            cb_TipoListado.Items.Add("Hoteles con mayor cantidad de consumibles facturados");
+            cb_TipoListado.Items.Add("Hoteles con mayor cantidad de días fuera de servicio");
+            cb_TipoListado.Items.Add("Habitaciones con mayor cantidad de días y veces que fueron ocupadas");
+            cb_TipoListado.Items.Add("Cliente con mayor cantidad de puntos");
         }
 
         private void btn_limpiar_Click(object sender, EventArgs e)
@@ -46,53 +50,119 @@ namespace FrbaHotel.ListadoEstadistico
 
         private void btn_buscar_Click(object sender, EventArgs e)
         {
-                        /*try
-                        {
-                            Conexion con = new Conexion();
-                            Encriptor encriptor = new Encriptor();
-                            con.strQuery = nombreStored;
-                            con.execute();
-                            con.command.CommandType = CommandType.StoredProcedure;
-                            
-                            con.command.Parameters.Add("@username", SqlDbType.NVarChar).Value = txt_usuario.Text;
-                            con.command.Parameters.Add("@password", SqlDbType.NVarChar).Value = encriptor.Encrypt(txt_password.Text);
-                            con.command.Parameters.Add("@rolNombre", SqlDbType.NVarChar).Value = cb_rol.Text;
-                            con.command.Parameters.Add("@nombre", SqlDbType.NVarChar).Value = txt_nombre.Text;
-                            con.command.Parameters.Add("@apellido", SqlDbType.NVarChar).Value = txt_apellido.Text;
-                            con.command.Parameters.Add("@tipoDoc", SqlDbType.NVarChar).Value = cb_tipo_documento.Text;
-                            con.command.Parameters.Add("@numDoc", SqlDbType.Int).Value = txt_nro_documento.Text;
-                            con.command.Parameters.Add("@mail", SqlDbType.NVarChar).Value = txt_mail.Text;
-                            con.command.Parameters.Add("@telefono", SqlDbType.NVarChar).Value = txt_telefono.Text;
-                            con.command.Parameters.Add("@direccion", SqlDbType.NVarChar).Value = txt_direccion.Text;
-                            con.command.Parameters.Add("@fechanac", SqlDbType.DateTime).Value = dt_fecha_nac.Value.ToString();
+            DataSet dataset = new DataSet();
+            switch (cb_TipoListado.Text)
+            {
+                case "Hotel con mayor cantidad de reservas canceladas":
+                    nombreStored = "FOUR_SIZONS.HotelesMasReservasC";
+                    ejecutarListado(nombreStored, dataset);
+                    dgv_Listado.ColumnCount = 1;
+                    dgv_Listado.Columns[0].Name = "Código Hotel";
 
-                            if (modoABM == "DLT")
-                            {
-                                con.command.Parameters.Add("@estado", SqlDbType.Bit).Value = 0;
-                            }else if (modoABM == "UPD")
-                            {
-                                con.command.Parameters.Add("@estado", SqlDbType.Bit).Value = 1;
-                            }
-
-                            con.openConection();
-                            con.command.ExecuteNonQuery();
-                            con.closeConection();
-
-                            MessageBox.Show("Operación exitosa", "FOUR SIZONS - FRBA Hoteles", MessageBoxButtons.OK, MessageBoxIcon.Information);
-                        }
-                        catch (Exception ex)
-                        {
-                            error = 1;
-                            MessageBox.Show("Error al completar la operación. " + ex.Message, "FOUR SIZONS - FRBA Hoteles", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                        }
-
-
-                    }
-                    else
+                    for (int i = 0; i < dataset.Tables[0].Rows.Count; i++)
                     {
-                        error = 1;
-                        MessageBox.Show("No se ha completado la operación", "FOUR SIZONS - FRBA Hoteles", MessageBoxButtons.OK, MessageBoxIcon.Information);
-                    }*/
+                        dgv_Listado.Rows.Add(new Object[] { (dataset.Tables[0].Rows[i][0]).ToString()});
+                    }
+                    break;
+                case "Hoteles con mayor cantidad de consumibles facturados":
+                    nombreStored = "FOUR_SIZONS.HotelesMayorConsFact";
+                    ejecutarListado(nombreStored, dataset);
+                    dgv_Listado.ColumnCount = 1;
+                    dgv_Listado.Columns[0].Name = "Código Hotel";
+
+                    for (int i = 0; i < dataset.Tables[0].Rows.Count; i++)
+                    {
+                        dgv_Listado.Rows.Add(new Object[] { (dataset.Tables[0].Rows[i][0]).ToString()});
+                    }
+                    break;
+                case "Hoteles con mayor cantidad de días fuera de servicio":
+                    nombreStored = "FOUR_SIZONS.hotelMasCerrado";
+                    ejecutarListado(nombreStored, dataset);
+                    dgv_Listado.ColumnCount = 1;
+                    dgv_Listado.Columns[0].Name = "Código Hotel";
+
+                    for (int i = 0; i < dataset.Tables[0].Rows.Count; i++)
+                    {
+                        dgv_Listado.Rows.Add(new Object[] { (dataset.Tables[0].Rows[i][0]).ToString()});
+                    }
+                    break;
+                case "Habitaciones con mayor cantidad de días y veces que fueron ocupadas":
+                    nombreStored = "FOUR_SIZONS.habOcupadas";
+                    ejecutarListado(nombreStored, dataset);
+
+                    dgv_Listado.ColumnCount = 2;
+                    dgv_Listado.Columns[0].Name = "Número Habitación";
+                    dgv_Listado.Columns[1].Name = "Código Hotel";
+
+                    for (int i = 0; i < dataset.Tables[0].Rows.Count; i++)
+                    {
+                        dgv_Listado.Rows.Add(new Object[] { (dataset.Tables[0].Rows[i][0]).ToString(), 
+                                                            (dataset.Tables[0].Rows[i][1]).ToString()});
+                    }
+                    break;
+                case "Cliente con mayor cantidad de puntos":
+                    nombreStored = "FOUR_SIZONS.clieMayorPuntaje";
+                    ejecutarListado(nombreStored, dataset);
+                    dgv_Listado.ColumnCount = 2;
+                    dgv_Listado.Columns[0].Name = "Código Cliente";
+
+                    for (int i = 0; i < dataset.Tables[0].Rows.Count; i++)
+                    {
+                        dgv_Listado.Rows.Add(new Object[] { (dataset.Tables[0].Rows[i][0]).ToString(), 
+                                                            (dataset.Tables[0].Rows[i][1]).ToString()});
+                    }
+                    break;
+            }
+
         }
+
+        private void ejecutarListado(string nombreStored, DataSet dataset) 
+        {
+            try
+            {
+                Conexion con = new Conexion();
+                con.strQuery = nombreStored;
+                con.execute();
+                con.command.CommandType = CommandType.StoredProcedure;
+
+                con.command.Parameters.Add("@anio", SqlDbType.Decimal).Value = Convert.ToDecimal(txt_Anio.Text);
+                con.command.Parameters.Add("@tri", SqlDbType.Decimal).Value = Convert.ToDecimal(cb_Trimestre.Text);
+
+                con.openConection();
+
+                /*DataSet dataset = new DataSet();
+                SqlDataAdapter adaptador = new SqlDataAdapter(con.command);
+
+                adaptador.Fill(dataset);*/
+
+
+                SqlDataAdapter da = new SqlDataAdapter(con.command);
+
+                da.Fill(dataset);
+
+                /*dgv_Listado.ColumnCount = 2;
+                dgv_Listado.Columns[0].Name = "Número Habitación";
+                dgv_Listado.Columns[1].Name = "Código Hotel";
+
+
+
+                for (int i = 0; i < dataset.Tables[0].Rows.Count; i++)
+                {
+                    dgv_Listado.Rows.Add(new Object[] { (dataset.Tables[0].Rows[i][0]).ToString(), (dataset.Tables[0].Rows[i][1]).ToString() });
+                }*/
+
+                MessageBox.Show("Consulta correcta", "FOUR SIZONS - FRBA Hoteles", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("Error al completar la operación. " + ex.Message, "FOUR SIZONS - FRBA Hoteles", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+        }
+
+        private void button1_Click(object sender, EventArgs e)
+        {
+            
+        }
+
     }
 }

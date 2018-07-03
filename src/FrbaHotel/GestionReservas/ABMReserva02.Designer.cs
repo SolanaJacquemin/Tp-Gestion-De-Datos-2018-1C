@@ -63,7 +63,7 @@
             this.label12 = new System.Windows.Forms.Label();
             this.txt_regimen = new System.Windows.Forms.TextBox();
             this.label16 = new System.Windows.Forms.Label();
-            this.txt_costoDia = new System.Windows.Forms.TextBox();
+            this.txt_costoTotal = new System.Windows.Forms.TextBox();
             this.txt_fechaCreacion = new System.Windows.Forms.TextBox();
             this.label18 = new System.Windows.Forms.Label();
             this.txt_hotel = new System.Windows.Forms.TextBox();
@@ -71,6 +71,7 @@
             this.btn_regimen = new System.Windows.Forms.Button();
             this.label19 = new System.Windows.Forms.Label();
             this.txt_cantHab = new System.Windows.Forms.TextBox();
+            this.txt_disponibilidad = new System.Windows.Forms.Button();
             this.groupBox1.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -384,18 +385,18 @@
             // label16
             // 
             this.label16.AutoSize = true;
-            this.label16.Location = new System.Drawing.Point(285, 152);
+            this.label16.Location = new System.Drawing.Point(271, 152);
             this.label16.Name = "label16";
-            this.label16.Size = new System.Drawing.Size(65, 13);
+            this.label16.Size = new System.Drawing.Size(91, 13);
             this.label16.TabIndex = 18;
-            this.label16.Text = "Costo X Día";
+            this.label16.Text = "Costo Total (U$S)";
             // 
-            // txt_costoDia
+            // txt_costoTotal
             // 
-            this.txt_costoDia.Location = new System.Drawing.Point(366, 149);
-            this.txt_costoDia.Name = "txt_costoDia";
-            this.txt_costoDia.Size = new System.Drawing.Size(94, 20);
-            this.txt_costoDia.TabIndex = 19;
+            this.txt_costoTotal.Location = new System.Drawing.Point(366, 149);
+            this.txt_costoTotal.Name = "txt_costoTotal";
+            this.txt_costoTotal.Size = new System.Drawing.Size(94, 20);
+            this.txt_costoTotal.TabIndex = 19;
             // 
             // txt_fechaCreacion
             // 
@@ -456,11 +457,22 @@
             this.txt_cantHab.Size = new System.Drawing.Size(94, 20);
             this.txt_cantHab.TabIndex = 19;
             // 
+            // txt_disponibilidad
+            // 
+            this.txt_disponibilidad.Location = new System.Drawing.Point(309, 185);
+            this.txt_disponibilidad.Name = "txt_disponibilidad";
+            this.txt_disponibilidad.Size = new System.Drawing.Size(175, 23);
+            this.txt_disponibilidad.TabIndex = 27;
+            this.txt_disponibilidad.Text = "Verificar Disponibilidad";
+            this.txt_disponibilidad.UseVisualStyleBackColor = true;
+            this.txt_disponibilidad.Click += new System.EventHandler(this.txt_disponibilidad_Click);
+            // 
             // ABMReserva02
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(512, 599);
+            this.Controls.Add(this.txt_disponibilidad);
             this.Controls.Add(this.btn_regimen);
             this.Controls.Add(this.btn_hotel);
             this.Controls.Add(this.dt_fechaHasta);
@@ -473,7 +485,7 @@
             this.Controls.Add(this.label18);
             this.Controls.Add(this.label12);
             this.Controls.Add(this.txt_cantHab);
-            this.Controls.Add(this.txt_costoDia);
+            this.Controls.Add(this.txt_costoTotal);
             this.Controls.Add(this.txt_hotel);
             this.Controls.Add(this.txt_regimen);
             this.Controls.Add(this.txt_fechaCreacion);
@@ -528,7 +540,7 @@
         private System.Windows.Forms.Label label12;
         private System.Windows.Forms.TextBox txt_regimen;
         private System.Windows.Forms.Label label16;
-        private System.Windows.Forms.TextBox txt_costoDia;
+        private System.Windows.Forms.TextBox txt_costoTotal;
         private System.Windows.Forms.TextBox txt_fechaCreacion;
         private System.Windows.Forms.ComboBox cb_tipoDocumento;
         private System.Windows.Forms.Label label17;
@@ -540,5 +552,6 @@
         private System.Windows.Forms.Button btn_regimen;
         private System.Windows.Forms.Label label19;
         private System.Windows.Forms.TextBox txt_cantHab;
+        private System.Windows.Forms.Button txt_disponibilidad;
     }
 }

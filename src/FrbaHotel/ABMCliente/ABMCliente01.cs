@@ -75,7 +75,7 @@ namespace FrbaHotel.AbmCliente
             dgv_Clientes.Rows.Clear();
 
             Conexion con = new Conexion();
-            con.strQuery = "SELECT * FROM FOUR_SIZONS.Cliente WHERE 1=1";
+            con.strQuery = "SELECT TOP 100 * FROM FOUR_SIZONS.Cliente WHERE 1=1";
 
             if (txt_nombre.Text != "")
                 con.strQuery = con.strQuery + "AND Cliente_Nombre like '%" + txt_nombre.Text + "%' ";
@@ -98,18 +98,20 @@ namespace FrbaHotel.AbmCliente
 
             dgv_Clientes.Rows.Add(new Object[] { con.lector.GetDecimal(0), con.lector.GetString(1),
             con.lector.GetString(2), con.lector.GetString(3), con.lector.GetDecimal(4), con.lector.GetString(5),
-            con.lector.GetDecimal(6), con.lector.GetDecimal(7), con.lector.GetString(8), con.lector.GetString(9),
-            con.lector.GetString(10), con.lector.GetDateTime(11), con.lector.GetDecimal(12), con.lector.GetBoolean(13), con.lector.GetBoolean(14)});
+            con.lector.GetString(6), con.lector.GetDecimal(7), con.lector.GetDecimal(8), con.lector.GetString(9),
+            con.lector.GetString(10), con.lector.GetString(11), con.lector.GetString(12), con.lector.GetString(13), 
+            con.lector.GetString(14), con.lector.GetDateTime(15), con.lector.GetDecimal(16), con.lector.GetBoolean(17),
+            con.lector.GetBoolean(18)});
 
-            while (con.reader() && contador<=100)
+            while (con.reader())
             {
-            dgv_Clientes.Rows.Add(new Object[] { con.lector.GetDecimal(0), con.lector.GetString(1),
-            con.lector.GetString(2), con.lector.GetString(3), con.lector.GetDecimal(4), con.lector.GetString(5),
-            con.lector.GetDecimal(6), con.lector.GetDecimal(7), con.lector.GetString(8), con.lector.GetString(9),
-            con.lector.GetString(10), con.lector.GetDateTime(11), con.lector.GetDecimal(12), con.lector.GetBoolean(13), con.lector.GetBoolean(14)});
-                contador += 1;
+                dgv_Clientes.Rows.Add(new Object[] { con.lector.GetDecimal(0), con.lector.GetString(1),
+                con.lector.GetString(2), con.lector.GetString(3), con.lector.GetDecimal(4), con.lector.GetString(5),
+                con.lector.GetString(6), con.lector.GetDecimal(7), con.lector.GetDecimal(8), con.lector.GetString(9),
+                con.lector.GetString(10), con.lector.GetString(11), con.lector.GetString(12), con.lector.GetString(13), 
+                con.lector.GetString(14), con.lector.GetDateTime(15), con.lector.GetDecimal(16), con.lector.GetBoolean(17),
+                con.lector.GetBoolean(18)});
             }
-            contador = 0;
             con.closeConection();
         } 
           
@@ -142,7 +144,7 @@ namespace FrbaHotel.AbmCliente
             
             string modo = "INS";
             this.Hide();
-            ABMCliente02 formABMCliente02 = new ABMCliente02(modo, dgv_cliente_ID );
+            ABMCliente02 formABMCliente02 = new ABMCliente02(modo, dgv_cliente_ID);
             formABMCliente02.ShowDialog();
             this.Show();
             this.buscar();
@@ -193,15 +195,6 @@ namespace FrbaHotel.AbmCliente
             refrescarGrid();
         }
 
-        
-        public void dgv_Clientes_CellClick(object sender, DataGridViewCellEventArgs e)
-        {
-            int index = e.RowIndex;
-            DataGridViewRow selectedRow = dgv_Clientes.Rows[index];
-            dgv_cliente_ID = Convert.ToDecimal(selectedRow.Cells[0].Value.ToString());
-
-        }
-
         private void refrescarGrid()
         {
             dgv_Clientes.ClearSelection();
@@ -210,6 +203,13 @@ namespace FrbaHotel.AbmCliente
                 {
                     row.DefaultCellStyle.BackColor = Color.Red;
                 }
+        }
+
+        private void dgv_Clientes_CellClick(object sender, DataGridViewCellEventArgs e)
+        {
+            int index = e.RowIndex;
+            DataGridViewRow selectedRow = dgv_Clientes.Rows[index];
+            dgv_cliente_ID = Convert.ToDecimal(selectedRow.Cells[0].Value.ToString());
         }
        
 

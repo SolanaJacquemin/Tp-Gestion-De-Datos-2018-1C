@@ -44,6 +44,7 @@
             this.btn_salir = new System.Windows.Forms.Button();
             this.txt_nombreHotel = new System.Windows.Forms.TextBox();
             this.txt_usuario = new System.Windows.Forms.TextBox();
+            this.button1 = new System.Windows.Forms.Button();
             this.groupBox2.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -208,11 +209,22 @@
             this.txt_usuario.Size = new System.Drawing.Size(137, 20);
             this.txt_usuario.TabIndex = 9;
             // 
+            // button1
+            // 
+            this.button1.Location = new System.Drawing.Point(131, 241);
+            this.button1.Name = "button1";
+            this.button1.Size = new System.Drawing.Size(123, 23);
+            this.button1.TabIndex = 3;
+            this.button1.Text = "Facturar";
+            this.button1.UseVisualStyleBackColor = true;
+            this.button1.Click += new System.EventHandler(this.button1_Click);
+            // 
             // PantallaPrincipal01
             // 
             this.ClientSize = new System.Drawing.Size(524, 272);
             this.Controls.Add(this.txt_usuario);
             this.Controls.Add(this.txt_nombreHotel);
+            this.Controls.Add(this.button1);
             this.Controls.Add(this.btn_salir);
             this.Controls.Add(this.groupBox2);
             this.Controls.Add(this.label6);
@@ -247,6 +259,7 @@
         private System.Windows.Forms.Button btn_salir;
         private System.Windows.Forms.TextBox txt_nombreHotel;
         private System.Windows.Forms.TextBox txt_usuario;
+        private System.Windows.Forms.Button button1;
         /*private System.Windows.Forms.Button button9;
         private System.Windows.Forms.Button button8;
         private System.Windows.Forms.Button button7;

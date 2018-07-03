@@ -25,14 +25,14 @@ namespace FrbaHotel.RegistrarEstadia
             dgv_Reserva.Rows.Clear();
 
             limpiar();
-        
+
         }
 
         private void GestionEstadia_Load(object sender, EventArgs e)
         {
 
         }
-        
+
         private void btn_volver_Click(object sender, EventArgs e)
         {
             this.Close();
@@ -44,7 +44,7 @@ namespace FrbaHotel.RegistrarEstadia
 
         }
 
-        private void buscar() 
+        private void buscar()
         {
             dgv_Reserva.Rows.Clear();
 
@@ -70,9 +70,9 @@ namespace FrbaHotel.RegistrarEstadia
             con.lector.GetDateTime(2), con.lector.GetDateTime(3), con.lector.GetDecimal(4), con.lector.GetDecimal(5),
             con.lector.GetString(6), con.lector.GetDecimal(7), con.lector.GetDecimal(8), con.lector.GetDecimal(9),
             con.lector.GetDecimal(10)});
-          
+
             con.closeConection();
-             
+
         }
 
         private void btn_limpiar_Click(object sender, EventArgs e)
@@ -119,48 +119,48 @@ namespace FrbaHotel.RegistrarEstadia
 
         private void btn_Abrir_Click(object sender, EventArgs e)
         {
-            
+
             string modo = "IN";
             this.Hide();
-            RegistrarEstadia formRegistrarEstadia = new RegistrarEstadia(modo, dgv_CodReserva );
+            RegistrarEstadia formRegistrarEstadia = new RegistrarEstadia(modo, dgv_CodReserva);
             formRegistrarEstadia.ShowDialog();
             this.Show();
-          //  this.buscar();
-          //  this.refrescarGrid();
-             
+            //  this.buscar();
+            //  this.refrescarGrid();
+
         }
 
-         public void dgv_Reserva_CellClick(object sender, DataGridViewCellEventArgs e)
-         {
-             int index = e.RowIndex;
-             DataGridViewRow selectedRow = dgv_Reserva.Rows[index];
-             dgv_CodReserva = Convert.ToDecimal(selectedRow.Cells[0].Value.ToString());
-         }
+        public void dgv_Reserva_CellClick(object sender, DataGridViewCellEventArgs e)
+        {
+            int index = e.RowIndex;
+            DataGridViewRow selectedRow = dgv_Reserva.Rows[index];
+            dgv_CodReserva = Convert.ToDecimal(selectedRow.Cells[0].Value.ToString());
+        }
 
-         private void btn_Cerrar_Click(object sender, EventArgs e)
-         {
-             if (dgv_Reserva.SelectedRows.Count>0)
-             {
-                 string modo = "OUT";
-                 this.Hide();
-                 RegistrarEstadia formRegistrarEstadia = new RegistrarEstadia(modo, dgv_CodReserva);
-                 formRegistrarEstadia.ShowDialog();
-                 this.Show();
-               //  this.buscar();
-                 //    this.refrescarGrid();
-             }
-             else
-             {
-                 MessageBox.Show("Debe seleccionar una reserva de la grilla", "FOUR SIZONS - FRBA Hoteles", MessageBoxButtons.OK, MessageBoxIcon.Error);
-             }
-         }
+        private void btn_Cerrar_Click(object sender, EventArgs e)
+        {
+            if (dgv_Reserva.SelectedRows.Count > 0)
+            {
+                string modo = "OUT";
+                this.Hide();
+                RegistrarEstadia formRegistrarEstadia = new RegistrarEstadia(modo, dgv_CodReserva);
+                formRegistrarEstadia.ShowDialog();
+                this.Show();
+                //  this.buscar();
+                //    this.refrescarGrid();
+            }
+            else
+            {
+                MessageBox.Show("Debe seleccionar una reserva de la grilla", "FOUR SIZONS - FRBA Hoteles", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+        }
 
-         private void dgv_Reserva_CellContentClick(object sender, DataGridViewCellEventArgs e)
-         {
-             int index = e.RowIndex;
-             DataGridViewRow selectedRow = dgv_Reserva.Rows[index];
-             dgv_CodReserva = Convert.ToDecimal(selectedRow.Cells[0].Value.ToString());
-         }
-         
+        private void dgv_Reserva_CellContentClick(object sender, DataGridViewCellEventArgs e)
+        {
+            int index = e.RowIndex;
+            DataGridViewRow selectedRow = dgv_Reserva.Rows[index];
+            dgv_CodReserva = Convert.ToDecimal(selectedRow.Cells[0].Value.ToString());
+        }
+
     }
 }

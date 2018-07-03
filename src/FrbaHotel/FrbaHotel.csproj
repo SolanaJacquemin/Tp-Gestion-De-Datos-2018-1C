@@ -119,6 +119,12 @@
     <Compile Include="Conexion.cs" />
     <Compile Include="Config.cs" />
     <Compile Include="Encriptor.cs" />
+    <Compile Include="FacturarEstadia\FacturarEstadia01.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="FacturarEstadia\FacturarEstadia01.Designer.cs">
+      <DependentUpon>FacturarEstadia01.cs</DependentUpon>
+    </Compile>
     <Compile Include="GestionReservas\ABMReserva01.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -187,11 +193,17 @@
     <Compile Include="RegistrarConsumible\Form1.Designer.cs">
       <DependentUpon>Form1.cs</DependentUpon>
     </Compile>
-    <Compile Include="RegistrarEstadia\Form1.cs">
+    <Compile Include="RegistrarEstadia\GestionEstadia.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="RegistrarEstadia\Form1.Designer.cs">
-      <DependentUpon>Form1.cs</DependentUpon>
+    <Compile Include="RegistrarEstadia\GestionEstadia.Designer.cs">
+      <DependentUpon>GestionEstadia.cs</DependentUpon>
+    </Compile>
+    <Compile Include="RegistrarEstadia\RegistroEstadia.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="RegistrarEstadia\RegistroEstadia.Designer.cs">
+      <DependentUpon>RegistroEstadia.cs</DependentUpon>
     </Compile>
     <EmbeddedResource Include="ABMCliente\ABMCliente01.resx">
       <DependentUpon>ABMCliente01.cs</DependentUpon>
@@ -225,6 +237,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="ABMUsuario\ABMUsuario03.resx">
       <DependentUpon>ABMUsuario03.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="FacturarEstadia\FacturarEstadia01.resx">
+      <DependentUpon>FacturarEstadia01.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="GestionReservas\ABMReserva01.resx">
       <DependentUpon>ABMReserva01.cs</DependentUpon>
@@ -265,6 +280,12 @@
       <AutoGen>True</AutoGen>
       <DependentUpon>Resources.resx</DependentUpon>
     </Compile>
+    <EmbeddedResource Include="RegistrarEstadia\GestionEstadia.resx">
+      <DependentUpon>GestionEstadia.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="RegistrarEstadia\RegistroEstadia.resx">
+      <DependentUpon>RegistroEstadia.cs</DependentUpon>
+    </EmbeddedResource>
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
       <LastGenOutput>Settings.Designer.cs</LastGenOutput>
