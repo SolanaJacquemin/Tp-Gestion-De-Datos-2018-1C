@@ -510,7 +510,7 @@ BEGIN
 	IF NOT EXISTS (SELECT * FROM sys.tables WHERE name = 'Factura')
 	BEGIN
 		CREATE TABLE FOUR_SIZONS.Factura (
-			Factura_Nro numeric(18) IDENTITY (1,1),
+			Factura_Nro numeric(18) IDENTITY(2396745,1) NOT NULL,
 			Factura_Fecha datetime,
 			Factura_Total decimal(18,2),
 			Factura_FormaPago nvarchar(50),
@@ -779,8 +779,9 @@ end
 	JOIN FOUR_SIZONS.Estadia AS E ON E.Reserva_Codigo = M.Reserva_Codigo
 	WHERE M.Consumible_Codigo IS NOT NULL
 	ORDER BY E.Estadia_Codigo
-
+	
 	--Factura
+	SET IDENTITY_INSERT four_sizons.Factura ON
 	INSERT INTO FOUR_SIZONS.Factura (Factura_Nro, Factura_Fecha, Factura_Total, Factura_FormaPago, Usuario_ID, Estadia_Codigo, Cliente_Codigo)
 	SELECT DISTINCT M.Factura_Nro, M.Factura_Fecha, M.Factura_Total, NULL, 'SYSADM', EC.Estadia_Codigo, C.Cliente_Codigo
 	FROM GD1C2018.gd_esquema.Maestra AS M
@@ -790,15 +791,16 @@ end
 	JOIN FOUR_SIZONS.Estadia AS E ON E.Estadia_Codigo = EC.Estadia_Codigo AND E.Reserva_Codigo = R.Reserva_Codigo
 	WHERE Factura_Nro IS NOT NULL
 	ORDER BY M.Factura_Nro
-
+	SET IDENTITY_INSERT four_sizons.Factura OFF
 
 	--Item_Factura
+	
 	INSERT INTO FOUR_SIZONS.Item_Factura (Factura_Nro, Item_Factura_Cant, Item_Factura_Monto)
 	SELECT DISTINCT M.Factura_Nro,Item_Factura_Cantidad, Item_Factura_Monto
 	FROM gd_esquema.Maestra AS M
 	WHERE Factura_Nro IS NOT NULL
 	ORDER BY M.Factura_Nro
-
+	
 	
 	
 
@@ -821,7 +823,7 @@ end
 END
 
 -------------------------------------------------------Comienzo de procedures--------------------------------------------------------------
-
+go
 -- Borrado de procedures en la base
 IF (OBJECT_ID('FOUR_SIZONS.ValidarUsuario', 'P') IS NOT NULL)
 BEGIN
@@ -2250,7 +2252,7 @@ begin try
 
 		set @total = FOUR_SIZONS.calcEstadia(@estadia) + FOUR_SIZONS.calcConsumible(@estadia,0);
 			--Es necesario tener al usuario en factura?
-		if (@total=Null) set @total=0
+		if (@total is Null) set @total=0
 		insert into FOUR_SIZONS.Factura(Estadia_Codigo,Factura_FormaPago,Cliente_Codigo,Factura_Fecha,Factura_Total,Factura_Estado,Factura_Consistencia) values (@estadia,@formaPago,@cliente,@fechaI,@total,0,1);
 
 
@@ -2266,9 +2268,8 @@ end
 GO
 --------------------------------------------------------------
 create procedure FOUR_SIZONS.ModificarFactura 
-@estadia numeric(18,0),
-@formaPago numeric(18,0),
-@fechaI datetime,
+@estadia numeric(18),
+@formaPago nvarchar(50),
 @estado bit
 as
 begin
@@ -2276,22 +2277,19 @@ begin
 
 declare @reserva numeric(18),
 		@estadoA bit,
-
+		@fechaI datetime,
 		@total numeric(18,2),
-
 		@fact_Nro numeric(18)
 begin tran ta
 begin try
+		set @fechaI= CONVERT(datetime,getdate(),121) 
 		set @reserva = ( select Reserva_Codigo from FOUR_SIZONS.Estadia where Estadia_Codigo = @estadia);
-
-
-
 		set @fact_Nro = (select Factura_Nro from FOUR_SIZONS.Factura where Estadia_Codigo = @estadia);
 		if ( @estadoA != 1)
 
 		begin
-
 			set @total = FOUR_SIZONS.calcEstadia(@estadia) + FOUR_SIZONS.calcConsumible(@estadia,0);
+			if (@total is Null) set @total=0
 			update FOUR_SIZONS.Factura
 			set Factura_FormaPago =@formaPago , Factura_Fecha = @fechaI, Factura_Total = @total, Factura_Estado=@estado
 			where Factura_Nro = @fact_Nro
