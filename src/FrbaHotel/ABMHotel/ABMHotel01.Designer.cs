@@ -79,7 +79,7 @@
             this.btn_volver.Location = new System.Drawing.Point(569, 431);
             this.btn_volver.Name = "btn_volver";
             this.btn_volver.Size = new System.Drawing.Size(89, 23);
-            this.btn_volver.TabIndex = 20;
+            this.btn_volver.TabIndex = 13;
             this.btn_volver.Text = "Volver";
             this.btn_volver.UseVisualStyleBackColor = true;
             this.btn_volver.Click += new System.EventHandler(this.btn_volver_Click);
@@ -109,7 +109,7 @@
             this.boton_modificacion.Location = new System.Drawing.Point(569, 268);
             this.boton_modificacion.Name = "boton_modificacion";
             this.boton_modificacion.Size = new System.Drawing.Size(89, 23);
-            this.boton_modificacion.TabIndex = 19;
+            this.boton_modificacion.TabIndex = 12;
             this.boton_modificacion.Text = "Modificación";
             this.boton_modificacion.UseVisualStyleBackColor = true;
             this.boton_modificacion.Click += new System.EventHandler(this.boton_modificacion_Click);
@@ -119,7 +119,7 @@
             this.boton_baja.Location = new System.Drawing.Point(569, 239);
             this.boton_baja.Name = "boton_baja";
             this.boton_baja.Size = new System.Drawing.Size(89, 23);
-            this.boton_baja.TabIndex = 18;
+            this.boton_baja.TabIndex = 11;
             this.boton_baja.Text = "Baja";
             this.boton_baja.UseVisualStyleBackColor = true;
             this.boton_baja.Click += new System.EventHandler(this.boton_baja_Click);
@@ -129,7 +129,7 @@
             this.boton_alta.Location = new System.Drawing.Point(569, 210);
             this.boton_alta.Name = "boton_alta";
             this.boton_alta.Size = new System.Drawing.Size(89, 23);
-            this.boton_alta.TabIndex = 17;
+            this.boton_alta.TabIndex = 10;
             this.boton_alta.Text = "Alta";
             this.boton_alta.UseVisualStyleBackColor = true;
             this.boton_alta.Click += new System.EventHandler(this.boton_alta_Click);
@@ -197,7 +197,7 @@
             this.cb_estrellas.Location = new System.Drawing.Point(296, 78);
             this.cb_estrellas.Name = "cb_estrellas";
             this.cb_estrellas.Size = new System.Drawing.Size(78, 21);
-            this.cb_estrellas.TabIndex = 3;
+            this.cb_estrellas.TabIndex = 5;
             this.cb_estrellas.SelectedIndexChanged += new System.EventHandler(this.cb_estrellas_SelectedIndexChanged);
             // 
             // label5
@@ -277,7 +277,7 @@
             this.btn_limpiar.Location = new System.Drawing.Point(544, 51);
             this.btn_limpiar.Name = "btn_limpiar";
             this.btn_limpiar.Size = new System.Drawing.Size(89, 23);
-            this.btn_limpiar.TabIndex = 7;
+            this.btn_limpiar.TabIndex = 9;
             this.btn_limpiar.Text = "Limpiar";
             this.btn_limpiar.UseVisualStyleBackColor = true;
             this.btn_limpiar.Click += new System.EventHandler(this.btn_limpiar_Click);
@@ -287,7 +287,7 @@
             this.btn_buscar.Location = new System.Drawing.Point(544, 22);
             this.btn_buscar.Name = "btn_buscar";
             this.btn_buscar.Size = new System.Drawing.Size(89, 23);
-            this.btn_buscar.TabIndex = 6;
+            this.btn_buscar.TabIndex = 8;
             this.btn_buscar.Text = "Buscar";
             this.btn_buscar.UseVisualStyleBackColor = true;
             this.btn_buscar.Click += new System.EventHandler(this.btn_buscar_Click);
@@ -297,28 +297,28 @@
             this.txt_calle.Location = new System.Drawing.Point(60, 74);
             this.txt_calle.Name = "txt_calle";
             this.txt_calle.Size = new System.Drawing.Size(139, 20);
-            this.txt_calle.TabIndex = 5;
+            this.txt_calle.TabIndex = 4;
             // 
             // txt_mail
             // 
             this.txt_mail.Location = new System.Drawing.Point(60, 45);
             this.txt_mail.Name = "txt_mail";
             this.txt_mail.Size = new System.Drawing.Size(139, 20);
-            this.txt_mail.TabIndex = 5;
+            this.txt_mail.TabIndex = 2;
             // 
             // txt_pais
             // 
             this.txt_pais.Location = new System.Drawing.Point(296, 105);
             this.txt_pais.Name = "txt_pais";
             this.txt_pais.Size = new System.Drawing.Size(191, 20);
-            this.txt_pais.TabIndex = 4;
+            this.txt_pais.TabIndex = 7;
             // 
             // txt_telefono
             // 
             this.txt_telefono.Location = new System.Drawing.Point(296, 48);
             this.txt_telefono.Name = "txt_telefono";
             this.txt_telefono.Size = new System.Drawing.Size(191, 20);
-            this.txt_telefono.TabIndex = 2;
+            this.txt_telefono.TabIndex = 3;
             this.txt_telefono.TextChanged += new System.EventHandler(this.txt_telefono_TextChanged);
             // 
             // txt_ciudad
@@ -326,7 +326,7 @@
             this.txt_ciudad.Location = new System.Drawing.Point(60, 102);
             this.txt_ciudad.Name = "txt_ciudad";
             this.txt_ciudad.Size = new System.Drawing.Size(139, 20);
-            this.txt_ciudad.TabIndex = 0;
+            this.txt_ciudad.TabIndex = 6;
             // 
             // txt_codigo
             // 
@@ -381,51 +381,60 @@
             // 
             this.Hotel_Codigo.HeaderText = "Codigo";
             this.Hotel_Codigo.Name = "Hotel_Codigo";
+            this.Hotel_Codigo.ReadOnly = true;
             // 
             // Hotel_Nombre
             // 
             this.Hotel_Nombre.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.AllCellsExceptHeader;
             this.Hotel_Nombre.HeaderText = "Nombre";
             this.Hotel_Nombre.Name = "Hotel_Nombre";
+            this.Hotel_Nombre.ReadOnly = true;
             this.Hotel_Nombre.Width = 5;
             // 
             // Hotel_Mail
             // 
             this.Hotel_Mail.HeaderText = "Mail";
             this.Hotel_Mail.Name = "Hotel_Mail";
+            this.Hotel_Mail.ReadOnly = true;
             // 
             // Hotel_Telefono
             // 
             this.Hotel_Telefono.HeaderText = "Telefono";
             this.Hotel_Telefono.Name = "Hotel_Telefono";
+            this.Hotel_Telefono.ReadOnly = true;
             // 
             // Hotel_Calle
             // 
             this.Hotel_Calle.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.AllCellsExceptHeader;
             this.Hotel_Calle.HeaderText = "Calle";
             this.Hotel_Calle.Name = "Hotel_Calle";
+            this.Hotel_Calle.ReadOnly = true;
             this.Hotel_Calle.Width = 5;
             // 
             // Hotel_Nro_Calle
             // 
             this.Hotel_Nro_Calle.HeaderText = "Nro. Calle";
             this.Hotel_Nro_Calle.Name = "Hotel_Nro_Calle";
+            this.Hotel_Nro_Calle.ReadOnly = true;
             // 
             // Hotel_CantEstrella
             // 
             this.Hotel_CantEstrella.HeaderText = "Cantidad Estrellas";
             this.Hotel_CantEstrella.Name = "Hotel_CantEstrella";
+            this.Hotel_CantEstrella.ReadOnly = true;
             // 
             // Hotel_Recarga_Estrella
             // 
             this.Hotel_Recarga_Estrella.HeaderText = "Recarga Estrella";
             this.Hotel_Recarga_Estrella.Name = "Hotel_Recarga_Estrella";
+            this.Hotel_Recarga_Estrella.ReadOnly = true;
             // 
             // Hotel_Ciudad
             // 
             this.Hotel_Ciudad.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.AllCellsExceptHeader;
             this.Hotel_Ciudad.HeaderText = "Ciudad";
             this.Hotel_Ciudad.Name = "Hotel_Ciudad";
+            this.Hotel_Ciudad.ReadOnly = true;
             this.Hotel_Ciudad.Width = 5;
             // 
             // Hotel_Pais
@@ -433,6 +442,7 @@
             this.Hotel_Pais.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.AllCellsExceptHeader;
             this.Hotel_Pais.HeaderText = "País";
             this.Hotel_Pais.Name = "Hotel_Pais";
+            this.Hotel_Pais.ReadOnly = true;
             this.Hotel_Pais.Width = 5;
             // 
             // Hotel_FechaCreacion
@@ -440,12 +450,14 @@
             this.Hotel_FechaCreacion.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.AllCellsExceptHeader;
             this.Hotel_FechaCreacion.HeaderText = "Fecha de Creación";
             this.Hotel_FechaCreacion.Name = "Hotel_FechaCreacion";
+            this.Hotel_FechaCreacion.ReadOnly = true;
             this.Hotel_FechaCreacion.Width = 5;
             // 
             // Hotel_Estado
             // 
             this.Hotel_Estado.HeaderText = "Estado";
             this.Hotel_Estado.Name = "Hotel_Estado";
+            this.Hotel_Estado.ReadOnly = true;
             // 
             // ABMHotel01
             // 

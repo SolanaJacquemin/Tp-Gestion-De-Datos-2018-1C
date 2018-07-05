@@ -29,6 +29,9 @@ namespace FrbaHotel.ABMHabitacion
 
             modoABM = modo;
 
+            cb_tipoFrente.DropDownStyle = ComboBoxStyle.DropDownList;
+            cb_tipohab.DropDownStyle = ComboBoxStyle.DropDownList;
+
             switch (modoABM)
             {
                 case "INS":

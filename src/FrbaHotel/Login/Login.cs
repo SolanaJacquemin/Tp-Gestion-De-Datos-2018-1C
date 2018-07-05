@@ -21,16 +21,8 @@ namespace FrbaHotel
             InitializeComponent();
             this.StartPosition = FormStartPosition.CenterScreen;
             txt_usuario.CharacterCasing = CharacterCasing.Upper;
-            //txt_password.CharacterCasing = CharacterCasing.Upper;
 
             txt_password.PasswordChar = '●';
-        }
-
-        private void btn_login_Click(object sender, EventArgs e)
-        {
-            
-            
-
         }
 
         private void label1_Click(object sender, EventArgs e)
@@ -90,7 +82,7 @@ namespace FrbaHotel
                     this.Hide();
                     FrbaHotel.PantallaPrincipal.PantallaPrincipal01 pantallaPrincipal = new PantallaPrincipal01(txt_usuario.Text);
                     pantallaPrincipal.ShowDialog();
-                    this.Close();
+                    this.Show();
                 }
             }
         }
@@ -98,11 +90,12 @@ namespace FrbaHotel
         private void btn_reservar_Click(object sender, EventArgs e)
         {
             this.Hide();
-            ABMReserva01 formABMReserva01 = new ABMReserva01("GUEST");
+            ABMReserva01 formABMReserva01 = new ABMReserva01("GUEST", 0);
             formABMReserva01.ShowDialog();
+            txt_usuario.Clear();
+            txt_password.Clear();
             this.Show();
         }
-
 
     }
 }

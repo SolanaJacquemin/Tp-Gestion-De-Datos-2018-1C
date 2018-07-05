@@ -79,7 +79,7 @@
             this.boton_aceptar.Location = new System.Drawing.Point(29, 287);
             this.boton_aceptar.Name = "boton_aceptar";
             this.boton_aceptar.Size = new System.Drawing.Size(75, 23);
-            this.boton_aceptar.TabIndex = 21;
+            this.boton_aceptar.TabIndex = 8;
             this.boton_aceptar.Text = "Aceptar";
             this.boton_aceptar.UseVisualStyleBackColor = true;
             this.boton_aceptar.Click += new System.EventHandler(this.boton_aceptar_Click);
@@ -89,7 +89,7 @@
             this.boton_volver.Location = new System.Drawing.Point(397, 287);
             this.boton_volver.Name = "boton_volver";
             this.boton_volver.Size = new System.Drawing.Size(75, 23);
-            this.boton_volver.TabIndex = 20;
+            this.boton_volver.TabIndex = 10;
             this.boton_volver.Text = "Volver";
             this.boton_volver.UseVisualStyleBackColor = true;
             this.boton_volver.Click += new System.EventHandler(this.boton_volver_Click);
@@ -99,14 +99,14 @@
             this.btn_aceptar_nuevo.Location = new System.Drawing.Point(110, 287);
             this.btn_aceptar_nuevo.Name = "btn_aceptar_nuevo";
             this.btn_aceptar_nuevo.Size = new System.Drawing.Size(108, 23);
-            this.btn_aceptar_nuevo.TabIndex = 22;
+            this.btn_aceptar_nuevo.TabIndex = 9;
             this.btn_aceptar_nuevo.Text = "Aceptar y Nuevo";
             this.btn_aceptar_nuevo.UseVisualStyleBackColor = true;
             // 
             // labelTitulo
             // 
             this.labelTitulo.Font = new System.Drawing.Font("Calibri", 20F);
-            this.labelTitulo.Location = new System.Drawing.Point(122, 9);
+            this.labelTitulo.Location = new System.Drawing.Point(119, 9);
             this.labelTitulo.Name = "labelTitulo";
             this.labelTitulo.Size = new System.Drawing.Size(350, 33);
             this.labelTitulo.TabIndex = 9;
@@ -152,7 +152,7 @@
             this.cb_tipoFrente.Location = new System.Drawing.Point(241, 80);
             this.cb_tipoFrente.Name = "cb_tipoFrente";
             this.cb_tipoFrente.Size = new System.Drawing.Size(78, 21);
-            this.cb_tipoFrente.TabIndex = 44;
+            this.cb_tipoFrente.TabIndex = 4;
             // 
             // cb_tipohab
             // 
@@ -160,7 +160,7 @@
             this.cb_tipohab.Location = new System.Drawing.Point(69, 50);
             this.cb_tipohab.Name = "cb_tipohab";
             this.cb_tipohab.Size = new System.Drawing.Size(78, 21);
-            this.cb_tipohab.TabIndex = 45;
+            this.cb_tipohab.TabIndex = 2;
             // 
             // label6
             // 
@@ -230,7 +230,7 @@
             this.txt_estado.Location = new System.Drawing.Point(240, 112);
             this.txt_estado.Name = "txt_estado";
             this.txt_estado.Size = new System.Drawing.Size(108, 20);
-            this.txt_estado.TabIndex = 42;
+            this.txt_estado.TabIndex = 6;
             // 
             // txt_descripcion
             // 
@@ -239,35 +239,35 @@
             this.txt_descripcion.Name = "txt_descripcion";
             this.txt_descripcion.ScrollBars = System.Windows.Forms.ScrollBars.Vertical;
             this.txt_descripcion.Size = new System.Drawing.Size(322, 66);
-            this.txt_descripcion.TabIndex = 42;
+            this.txt_descripcion.TabIndex = 7;
             // 
             // txt_hotel_codigo
             // 
             this.txt_hotel_codigo.Location = new System.Drawing.Point(69, 19);
             this.txt_hotel_codigo.Name = "txt_hotel_codigo";
             this.txt_hotel_codigo.Size = new System.Drawing.Size(35, 20);
-            this.txt_hotel_codigo.TabIndex = 42;
+            this.txt_hotel_codigo.TabIndex = 0;
             // 
             // txt_nro_hab
             // 
             this.txt_nro_hab.Location = new System.Drawing.Point(69, 81);
             this.txt_nro_hab.Name = "txt_nro_hab";
             this.txt_nro_hab.Size = new System.Drawing.Size(60, 20);
-            this.txt_nro_hab.TabIndex = 42;
+            this.txt_nro_hab.TabIndex = 3;
             // 
             // txt_piso
             // 
             this.txt_piso.Location = new System.Drawing.Point(69, 110);
             this.txt_piso.Name = "txt_piso";
             this.txt_piso.Size = new System.Drawing.Size(60, 20);
-            this.txt_piso.TabIndex = 43;
+            this.txt_piso.TabIndex = 5;
             // 
             // txt_hotel_nombre
             // 
             this.txt_hotel_nombre.Location = new System.Drawing.Point(110, 19);
             this.txt_hotel_nombre.Name = "txt_hotel_nombre";
             this.txt_hotel_nombre.Size = new System.Drawing.Size(238, 20);
-            this.txt_hotel_nombre.TabIndex = 36;
+            this.txt_hotel_nombre.TabIndex = 1;
             // 
             // ABMHabitacion02
             // 

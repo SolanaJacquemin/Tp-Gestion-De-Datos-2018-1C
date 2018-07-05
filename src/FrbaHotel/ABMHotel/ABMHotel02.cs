@@ -26,6 +26,8 @@ namespace FrbaHotel.ABMHotel
             hotel = hotelId;
             modoABM = modo;
 
+            cb_estrellas.DropDownStyle = ComboBoxStyle.DropDownList;
+
             switch (modoABM)
             {
                 case "INS":

@@ -66,7 +66,7 @@
             this.btn_volver.Location = new System.Drawing.Point(573, 362);
             this.btn_volver.Name = "btn_volver";
             this.btn_volver.Size = new System.Drawing.Size(89, 23);
-            this.btn_volver.TabIndex = 20;
+            this.btn_volver.TabIndex = 11;
             this.btn_volver.Text = "Volver";
             this.btn_volver.UseVisualStyleBackColor = true;
             this.btn_volver.Click += new System.EventHandler(this.btn_volver_Click);
@@ -96,7 +96,7 @@
             this.boton_modificacion.Location = new System.Drawing.Point(573, 199);
             this.boton_modificacion.Name = "boton_modificacion";
             this.boton_modificacion.Size = new System.Drawing.Size(89, 23);
-            this.boton_modificacion.TabIndex = 19;
+            this.boton_modificacion.TabIndex = 10;
             this.boton_modificacion.Text = "Modificación";
             this.boton_modificacion.UseVisualStyleBackColor = true;
             this.boton_modificacion.Click += new System.EventHandler(this.boton_modificacion_Click);
@@ -106,7 +106,7 @@
             this.boton_baja.Location = new System.Drawing.Point(573, 170);
             this.boton_baja.Name = "boton_baja";
             this.boton_baja.Size = new System.Drawing.Size(89, 23);
-            this.boton_baja.TabIndex = 18;
+            this.boton_baja.TabIndex = 9;
             this.boton_baja.Text = "Baja";
             this.boton_baja.UseVisualStyleBackColor = true;
             this.boton_baja.Click += new System.EventHandler(this.boton_baja_Click);
@@ -116,7 +116,7 @@
             this.boton_alta.Location = new System.Drawing.Point(573, 141);
             this.boton_alta.Name = "boton_alta";
             this.boton_alta.Size = new System.Drawing.Size(89, 23);
-            this.boton_alta.TabIndex = 17;
+            this.boton_alta.TabIndex = 8;
             this.boton_alta.Text = "Alta";
             this.boton_alta.UseVisualStyleBackColor = true;
             this.boton_alta.Click += new System.EventHandler(this.boton_alta_Click);
@@ -158,7 +158,7 @@
             this.cb_tipoFrente.Location = new System.Drawing.Point(198, 48);
             this.cb_tipoFrente.Name = "cb_tipoFrente";
             this.cb_tipoFrente.Size = new System.Drawing.Size(78, 21);
-            this.cb_tipoFrente.TabIndex = 3;
+            this.cb_tipoFrente.TabIndex = 5;
             // 
             // cb_tipohab
             // 
@@ -166,7 +166,7 @@
             this.cb_tipohab.Location = new System.Drawing.Point(60, 48);
             this.cb_tipohab.Name = "cb_tipohab";
             this.cb_tipohab.Size = new System.Drawing.Size(78, 21);
-            this.cb_tipohab.TabIndex = 3;
+            this.cb_tipohab.TabIndex = 4;
             // 
             // label7
             // 
@@ -238,7 +238,7 @@
             this.txt_nro_hab.Location = new System.Drawing.Point(407, 20);
             this.txt_nro_hab.Name = "txt_nro_hab";
             this.txt_nro_hab.Size = new System.Drawing.Size(60, 20);
-            this.txt_nro_hab.TabIndex = 2;
+            this.txt_nro_hab.TabIndex = 3;
             this.txt_nro_hab.TextChanged += new System.EventHandler(this.txt_apellido_TextChanged);
             // 
             // txt_piso
@@ -246,7 +246,7 @@
             this.txt_piso.Location = new System.Drawing.Point(282, 19);
             this.txt_piso.Name = "txt_piso";
             this.txt_piso.Size = new System.Drawing.Size(60, 20);
-            this.txt_piso.TabIndex = 2;
+            this.txt_piso.TabIndex = 1;
             this.txt_piso.TextChanged += new System.EventHandler(this.txt_apellido_TextChanged);
             // 
             // txt_nombre_hotel
@@ -254,7 +254,7 @@
             this.txt_nombre_hotel.Location = new System.Drawing.Point(60, 19);
             this.txt_nombre_hotel.Name = "txt_nombre_hotel";
             this.txt_nombre_hotel.Size = new System.Drawing.Size(145, 20);
-            this.txt_nombre_hotel.TabIndex = 1;
+            this.txt_nombre_hotel.TabIndex = 0;
             // 
             // label1
             // 

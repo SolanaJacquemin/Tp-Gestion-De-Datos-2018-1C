@@ -27,6 +27,7 @@ namespace FrbaHotel.ABMCliente
 
             modoABM = modo;
             cliente = clie;
+            cb_tipo_doc.DropDownStyle = ComboBoxStyle.DropDownList;
 
             switch (modoABM)
             {

@@ -76,7 +76,7 @@
             this.dt_fechaHasta.Location = new System.Drawing.Point(360, 85);
             this.dt_fechaHasta.Name = "dt_fechaHasta";
             this.dt_fechaHasta.Size = new System.Drawing.Size(94, 20);
-            this.dt_fechaHasta.TabIndex = 43;
+            this.dt_fechaHasta.TabIndex = 3;
             // 
             // cb_tipoHabitacion
             // 
@@ -84,14 +84,14 @@
             this.cb_tipoHabitacion.Location = new System.Drawing.Point(359, 58);
             this.cb_tipoHabitacion.Name = "cb_tipoHabitacion";
             this.cb_tipoHabitacion.Size = new System.Drawing.Size(120, 21);
-            this.cb_tipoHabitacion.TabIndex = 30;
+            this.cb_tipoHabitacion.TabIndex = 1;
             // 
             // dt_fechaDesde
             // 
             this.dt_fechaDesde.Location = new System.Drawing.Point(131, 87);
             this.dt_fechaDesde.Name = "dt_fechaDesde";
             this.dt_fechaDesde.Size = new System.Drawing.Size(94, 20);
-            this.dt_fechaDesde.TabIndex = 42;
+            this.dt_fechaDesde.TabIndex = 2;
             // 
             // label1
             // 
@@ -136,14 +136,14 @@
             this.txt_hotel.Location = new System.Drawing.Point(359, 112);
             this.txt_hotel.Name = "txt_hotel";
             this.txt_hotel.Size = new System.Drawing.Size(94, 20);
-            this.txt_hotel.TabIndex = 39;
+            this.txt_hotel.TabIndex = 5;
             // 
             // txt_regimen
             // 
             this.txt_regimen.Location = new System.Drawing.Point(130, 116);
             this.txt_regimen.Name = "txt_regimen";
             this.txt_regimen.Size = new System.Drawing.Size(94, 20);
-            this.txt_regimen.TabIndex = 37;
+            this.txt_regimen.TabIndex = 4;
             // 
             // label4
             // 
@@ -196,7 +196,7 @@
             this.txt_reservaID.Location = new System.Drawing.Point(130, 58);
             this.txt_reservaID.Name = "txt_reservaID";
             this.txt_reservaID.Size = new System.Drawing.Size(93, 20);
-            this.txt_reservaID.TabIndex = 36;
+            this.txt_reservaID.TabIndex = 0;
             // 
             // txt_detalle
             // 
@@ -204,7 +204,7 @@
             this.txt_detalle.Multiline = true;
             this.txt_detalle.Name = "txt_detalle";
             this.txt_detalle.Size = new System.Drawing.Size(349, 63);
-            this.txt_detalle.TabIndex = 39;
+            this.txt_detalle.TabIndex = 6;
             // 
             // label3
             // 
@@ -220,7 +220,7 @@
             this.boton_aceptar.Location = new System.Drawing.Point(323, 217);
             this.boton_aceptar.Name = "boton_aceptar";
             this.boton_aceptar.Size = new System.Drawing.Size(75, 23);
-            this.boton_aceptar.TabIndex = 47;
+            this.boton_aceptar.TabIndex = 7;
             this.boton_aceptar.Text = "Aceptar";
             this.boton_aceptar.UseVisualStyleBackColor = true;
             this.boton_aceptar.Click += new System.EventHandler(this.boton_aceptar_Click);
@@ -230,7 +230,7 @@
             this.boton_volver.Location = new System.Drawing.Point(404, 217);
             this.boton_volver.Name = "boton_volver";
             this.boton_volver.Size = new System.Drawing.Size(75, 23);
-            this.boton_volver.TabIndex = 46;
+            this.boton_volver.TabIndex = 8;
             this.boton_volver.Text = "Volver";
             this.boton_volver.UseVisualStyleBackColor = true;
             this.boton_volver.Click += new System.EventHandler(this.boton_volver_Click);

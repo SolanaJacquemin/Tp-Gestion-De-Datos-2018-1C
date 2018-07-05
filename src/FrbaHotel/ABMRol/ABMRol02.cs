@@ -32,6 +32,8 @@ namespace FrbaHotel.ABMRol
             {
                 case "INS":
                     labelTitulo.Text = "Alta de Rol";
+                    lEstado.Visible = false;
+                    txt_estado.Visible = false;
                     break;
                 case "DLT":
                     labelTitulo.Text = "Baja de Rol";
@@ -42,11 +44,9 @@ namespace FrbaHotel.ABMRol
                     btn_agregarTodo.Enabled = false;
                     btn_eliminar.Enabled = false;
                     btn_eliminarTodo.Enabled = false;
-                    btn_aceptar_nuevo.Visible = false;
                     break;
                 case "UPD":
                     labelTitulo.Text = "Modificación de Rol";
-                    btn_aceptar_nuevo.Visible = false;
                     break;
             }
         }
@@ -210,7 +210,6 @@ namespace FrbaHotel.ABMRol
                 try
                 {
                     Conexion con = new Conexion();
-                    Encriptor encriptor = new Encriptor();
                     con.strQuery = nombreStored;
                     con.execute();
                     con.command.CommandType = CommandType.StoredProcedure;
@@ -256,8 +255,6 @@ namespace FrbaHotel.ABMRol
                             {
                                 con.execute();
                                 con.command.CommandType = CommandType.StoredProcedure;
-
-                                MessageBox.Show(lb_func_usralta.Items[i].ToString());
 
                                 con.command.Parameters.Add("@rolname", SqlDbType.NVarChar).Value = txt_nombreRol.Text;
                                 con.command.Parameters.Add("@func", SqlDbType.NVarChar).Value = lb_func_usralta.Items[i].ToString();

@@ -40,6 +40,8 @@ namespace FrbaHotel.ABMUsuario
                     txt_estado.Visible = false;
                     l_log.Visible = false;
                     txt_intentoslog.Visible = false;
+                    cb_tipo_documento.DropDownStyle = ComboBoxStyle.DropDownList;
+                    cb_rol.DropDownStyle = ComboBoxStyle.DropDownList;
                     break;
                 case "DLT":
                     labelTitulo.Text = "Baja de Usuario";
@@ -201,22 +203,25 @@ namespace FrbaHotel.ABMUsuario
         public void boton_aceptar_nuevo_Click(object sender, EventArgs e) 
         {
             error = 0;
-            nombreSP = "FOUR_SIZONS.AltaUsuario";
-            ejecutarABMUsuario(nombreSP);
-            txt_usuario.Text = "";
-            txt_password.Text = "";
-            cb_rol.Text = "";
-            cb_tipo_documento.Text = "";
-            txt_nro_documento.Text = "";
-            txt_direccion.Text = "";
-            txt_telefono.Text = "";
-            txt_mail.Text = "";
-            txt_nombre.Text = "";
-            txt_apellido.Text = "";
-            //txt_hotel.Text = "";
-            cb_rol.Items.Clear();
-            cb_tipo_documento.Items.Clear();
-            levantarCombos();
+            verificarCampos();
+            if (error == 0)
+            {
+                nombreSP = "FOUR_SIZONS.AltaUsuario";
+                ejecutarABMUsuario(nombreSP);
+                txt_usuario.Text = "";
+                txt_password.Text = "";
+                cb_rol.Text = "";
+                cb_tipo_documento.Text = "";
+                txt_nro_documento.Text = "";
+                txt_direccion.Text = "";
+                txt_telefono.Text = "";
+                txt_mail.Text = "";
+                txt_nombre.Text = "";
+                txt_apellido.Text = "";
+                cb_rol.Items.Clear();
+                cb_tipo_documento.Items.Clear();
+                levantarCombos();
+            }
         }
 
         private void levantarCombos() 
@@ -240,28 +245,101 @@ namespace FrbaHotel.ABMUsuario
             con.closeConection();
         }
 
+        private void verificarCampos()
+        {
+            if(txt_usuario.Text == "")
+            {
+                error = 1;
+                MessageBox.Show("El campo Usuario no puede estar vacío", "FOUR SIZONS - FRBA Hoteles", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            }
+            if (cb_rol.Text == "")
+            {
+                error = 1;
+                MessageBox.Show("El campo Rol no puede estar vacío", "FOUR SIZONS - FRBA Hoteles", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            }
+            if (txt_password.Text == "")
+            {
+                error = 1;
+                MessageBox.Show("El campo Contraseña no puede estar vacío", "FOUR SIZONS - FRBA Hoteles", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            }
+            if (txt_nombre.Text == "")
+            {
+                error = 1;
+                MessageBox.Show("El campo Nombre no puede estar vacío", "FOUR SIZONS - FRBA Hoteles", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            }
+            if (txt_apellido.Text == "")
+            {
+                error = 1;
+                MessageBox.Show("El campo Apellido no puede estar vacío", "FOUR SIZONS - FRBA Hoteles", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            }
+            if (cb_tipo_documento.Text == "")
+            {
+                error = 1;
+                MessageBox.Show("El campo Tipo de Documento no puede estar vacío", "FOUR SIZONS - FRBA Hoteles", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            }
+            if (txt_nro_documento.Text == "")
+            {
+                error = 1;
+                MessageBox.Show("El campo Nro de Documento no puede estar vacío", "FOUR SIZONS - FRBA Hoteles", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            }
+            if (IsNumber(txt_nro_documento.Text) == false)
+            {
+                error = 1;
+                MessageBox.Show("El campo Nro de Documento no puede contener carácteres", "FOUR SIZONS - FRBA Hoteles", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            }
+            if (txt_telefono.Text == "")
+            {
+                error = 1;
+                MessageBox.Show("El campo Teléfono no puede estar vacío", "FOUR SIZONS - FRBA Hoteles", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            }
+            if (txt_direccion.Text == "")
+            {
+                error = 1;
+                MessageBox.Show("El campo Dirección no puede estar vacío", "FOUR SIZONS - FRBA Hoteles", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            }
+            if (txt_mail.Text == "")
+            {
+                error = 1;
+                MessageBox.Show("El campo Mail no puede estar vacío", "FOUR SIZONS - FRBA Hoteles", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            }
+        }
+
+        bool IsNumber(string s)
+        {
+            foreach (char c in s)
+            {
+                if (!Char.IsDigit(c))
+                    return false;
+            }
+            return true;
+        }
+
         public void boton_aceptar_Click(object sender, EventArgs e)
         {
             error = 0;
-            switch (modoABM)
+            verificarCampos();
+            if (error == 0)
             {
-                case "INS":
-                    nombreSP = "FOUR_SIZONS.AltaUsuario";
-                    break;
+                switch (modoABM)
+                {
+                    case "INS":
+                        nombreSP = "FOUR_SIZONS.AltaUsuario";
+                        break;
 
-                case "UPD":
-                    nombreSP = "FOUR_SIZONS.ModificacionUsuario";
-                    break;
+                    case "UPD":
+                        nombreSP = "FOUR_SIZONS.ModificacionUsuario";
+                        break;
 
-                case "DLT":
-                    // Baja lógica - Se pone estado en 0
-                    nombreSP = "FOUR_SIZONS.ModificacionUsuario";
-                    break;
-            }
-            ejecutarABMUsuario(nombreSP);
-            if (error == 0) 
-            {
-                this.Close();
+                    case "DLT":
+                        // Baja lógica - Se pone estado en 0
+                        nombreSP = "FOUR_SIZONS.ModificacionUsuario";
+                        break;
+                }
+                ejecutarABMUsuario(nombreSP);
+                if (error == 0)
+                {
+                    this.Close();
+                }
             }
         }
 

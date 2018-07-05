@@ -149,7 +149,7 @@
             this.btn_limpiar.Location = new System.Drawing.Point(366, 43);
             this.btn_limpiar.Name = "btn_limpiar";
             this.btn_limpiar.Size = new System.Drawing.Size(75, 23);
-            this.btn_limpiar.TabIndex = 7;
+            this.btn_limpiar.TabIndex = 3;
             this.btn_limpiar.Text = "Limpiar";
             this.btn_limpiar.UseVisualStyleBackColor = true;
             // 
@@ -158,7 +158,7 @@
             this.btn_buscar.Location = new System.Drawing.Point(366, 14);
             this.btn_buscar.Name = "btn_buscar";
             this.btn_buscar.Size = new System.Drawing.Size(75, 23);
-            this.btn_buscar.TabIndex = 6;
+            this.btn_buscar.TabIndex = 2;
             this.btn_buscar.Text = "Buscar";
             this.btn_buscar.UseVisualStyleBackColor = true;
             this.btn_buscar.Click += new System.EventHandler(this.btn_buscar_Click);
@@ -179,10 +179,10 @@
             // 
             // btn_volver
             // 
-            this.btn_volver.Location = new System.Drawing.Point(382, 329);
+            this.btn_volver.Location = new System.Drawing.Point(382, 291);
             this.btn_volver.Name = "btn_volver";
             this.btn_volver.Size = new System.Drawing.Size(89, 23);
-            this.btn_volver.TabIndex = 15;
+            this.btn_volver.TabIndex = 7;
             this.btn_volver.Text = "Volver";
             this.btn_volver.UseVisualStyleBackColor = true;
             this.btn_volver.Click += new System.EventHandler(this.btn_volver_Click);
@@ -192,7 +192,7 @@
             this.boton_modificacion.Location = new System.Drawing.Point(382, 224);
             this.boton_modificacion.Name = "boton_modificacion";
             this.boton_modificacion.Size = new System.Drawing.Size(89, 23);
-            this.boton_modificacion.TabIndex = 14;
+            this.boton_modificacion.TabIndex = 6;
             this.boton_modificacion.Text = "Modificación";
             this.boton_modificacion.UseVisualStyleBackColor = true;
             this.boton_modificacion.Click += new System.EventHandler(this.boton_modificacion_Click);
@@ -202,7 +202,7 @@
             this.boton_baja.Location = new System.Drawing.Point(382, 195);
             this.boton_baja.Name = "boton_baja";
             this.boton_baja.Size = new System.Drawing.Size(89, 23);
-            this.boton_baja.TabIndex = 13;
+            this.boton_baja.TabIndex = 5;
             this.boton_baja.Text = "Baja";
             this.boton_baja.UseVisualStyleBackColor = true;
             this.boton_baja.Click += new System.EventHandler(this.boton_baja_Click);
@@ -212,7 +212,7 @@
             this.boton_alta.Location = new System.Drawing.Point(382, 166);
             this.boton_alta.Name = "boton_alta";
             this.boton_alta.Size = new System.Drawing.Size(89, 23);
-            this.boton_alta.TabIndex = 12;
+            this.boton_alta.TabIndex = 4;
             this.boton_alta.Text = "Alta";
             this.boton_alta.UseVisualStyleBackColor = true;
             this.boton_alta.Click += new System.EventHandler(this.boton_alta_Click);
@@ -221,7 +221,7 @@
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(483, 361);
+            this.ClientSize = new System.Drawing.Size(483, 325);
             this.Controls.Add(this.btn_volver);
             this.Controls.Add(this.boton_modificacion);
             this.Controls.Add(this.boton_baja);

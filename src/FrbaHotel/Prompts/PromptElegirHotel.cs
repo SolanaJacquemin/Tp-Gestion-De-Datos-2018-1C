@@ -24,8 +24,6 @@ namespace FrbaHotel.Prompts
 
             dgvHotelesPrompt.Rows.Clear();
 
-
-
             usuario = user;
         }
 
@@ -34,7 +32,7 @@ namespace FrbaHotel.Prompts
             Conexion con = new Conexion();
             con.strQuery = "SELECT H.Hotel_Codigo, H.Hotel_Nombre FROM FOUR_SIZONS.UsuarioXHotel UH"
                            + " JOIN FOUR_SIZONS.Hotel H ON H.Hotel_Codigo = UH.Hotel_Codigo"
-                           + " WHERE Usuario_ID = '" + usuario + "'";
+                           + " WHERE UH.UsuarioXHotel_Estado = 1 AND UH.Usuario_ID = '" + usuario + "'";
             con.executeQuery();
             if (!con.reader())
             {

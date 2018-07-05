@@ -24,6 +24,7 @@ namespace FrbaHotel.ABMUsuario
 
             dgv_Usuarios.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
             txt_Id.ReadOnly = true;
+            cb_tipodoc.DropDownStyle = ComboBoxStyle.DropDownList;
             dgv_Usuarios.Rows.Clear();
 
             Conexion con = new Conexion();
@@ -76,12 +77,19 @@ namespace FrbaHotel.ABMUsuario
 
         private void boton_hoteles_Click(object sender, EventArgs e)
         {
-            this.Hide();
-            ABMUsuario03 formABMUsuario03 = new ABMUsuario03(dgv_usuario_ID);
-            formABMUsuario03.ShowDialog();
-            this.Show();
-            this.buscar();
-            this.refrescarGrid();
+            if (dgv_Usuarios.SelectedRows.Count > 0)
+            {
+                this.Hide();
+                ABMUsuario03 formABMUsuario03 = new ABMUsuario03(dgv_usuario_ID);
+                formABMUsuario03.ShowDialog();
+                this.Show();
+                this.buscar();
+                this.refrescarGrid();
+            }
+            else
+            {
+                MessageBox.Show("Debe seleccionar un usuario de la grilla", "FOUR SIZONS - FRBA Hoteles", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
         }
 
         private void boton_baja_Click(object sender, EventArgs e)
@@ -226,6 +234,22 @@ namespace FrbaHotel.ABMUsuario
 
         }
 
+        private void btn_roles_Click(object sender, EventArgs e)
+        {
+            if (dgv_Usuarios.SelectedRows.Count > 0)
+            {
+                this.Hide();
+                ABMUsuario05 formABMUsuario05 = new ABMUsuario05(dgv_usuario_ID);
+                formABMUsuario05.ShowDialog();
+                this.Show();
+                this.buscar();
+                this.refrescarGrid();
+            }
+            else
+            {
+                MessageBox.Show("Debe seleccionar un usuario de la grilla", "FOUR SIZONS - FRBA Hoteles", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+        }
 
     }
 }

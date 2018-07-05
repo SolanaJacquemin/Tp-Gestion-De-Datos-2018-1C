@@ -80,12 +80,6 @@
     <Compile Include="ABMHotel\ABMHotel02.Designer.cs">
       <DependentUpon>ABMHotel02.cs</DependentUpon>
     </Compile>
-    <Compile Include="ABMRegimen\Form1.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="ABMRegimen\Form1.Designer.cs">
-      <DependentUpon>Form1.cs</DependentUpon>
-    </Compile>
     <Compile Include="ABMRol\ABMRol01.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -115,6 +109,24 @@
     </Compile>
     <Compile Include="ABMUsuario\ABMUsuario03.Designer.cs">
       <DependentUpon>ABMUsuario03.cs</DependentUpon>
+    </Compile>
+    <Compile Include="ABMUsuario\ABMUsuario04.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="ABMUsuario\ABMUsuario04.Designer.cs">
+      <DependentUpon>ABMUsuario04.cs</DependentUpon>
+    </Compile>
+    <Compile Include="ABMUsuario\ABMUsuario05.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="ABMUsuario\ABMUsuario05.Designer.cs">
+      <DependentUpon>ABMUsuario05.cs</DependentUpon>
+    </Compile>
+    <Compile Include="ABMUsuario\ABMUsuario06.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="ABMUsuario\ABMUsuario06.Designer.cs">
+      <DependentUpon>ABMUsuario06.cs</DependentUpon>
     </Compile>
     <Compile Include="Conexion.cs" />
     <Compile Include="Config.cs" />
@@ -168,6 +180,12 @@
     <Compile Include="Prompts\PromptElegirHotel.Designer.cs">
       <DependentUpon>PromptElegirHotel.cs</DependentUpon>
     </Compile>
+    <Compile Include="Prompts\PromptElegirRol.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Prompts\PromptElegirRol.Designer.cs">
+      <DependentUpon>PromptElegirRol.cs</DependentUpon>
+    </Compile>
     <Compile Include="Prompts\PromptHoteles.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -179,6 +197,12 @@
     </Compile>
     <Compile Include="Prompts\PromptRegimenes.Designer.cs">
       <DependentUpon>PromptRegimenes.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Prompts\PromptRoles.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Prompts\PromptRoles.Designer.cs">
+      <DependentUpon>PromptRoles.cs</DependentUpon>
     </Compile>
     <Compile Include="Prompts\PromptUsuarios.cs">
       <SubType>Form</SubType>
@@ -238,6 +262,15 @@
     <EmbeddedResource Include="ABMUsuario\ABMUsuario03.resx">
       <DependentUpon>ABMUsuario03.cs</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="ABMUsuario\ABMUsuario04.resx">
+      <DependentUpon>ABMUsuario04.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="ABMUsuario\ABMUsuario05.resx">
+      <DependentUpon>ABMUsuario05.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="ABMUsuario\ABMUsuario06.resx">
+      <DependentUpon>ABMUsuario06.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="FacturarEstadia\FacturarEstadia01.resx">
       <DependentUpon>FacturarEstadia01.cs</DependentUpon>
     </EmbeddedResource>
@@ -262,11 +295,17 @@
     <EmbeddedResource Include="Prompts\PromptElegirHotel.resx">
       <DependentUpon>PromptElegirHotel.cs</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="Prompts\PromptElegirRol.resx">
+      <DependentUpon>PromptElegirRol.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Prompts\PromptHoteles.resx">
       <DependentUpon>PromptHoteles.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Prompts\PromptRegimenes.resx">
       <DependentUpon>PromptRegimenes.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Prompts\PromptRoles.resx">
+      <DependentUpon>PromptRoles.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Prompts\PromptUsuarios.resx">
       <DependentUpon>PromptUsuarios.cs</DependentUpon>

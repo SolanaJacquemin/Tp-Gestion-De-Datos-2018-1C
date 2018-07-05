@@ -109,7 +109,7 @@
             this.groupBox1.Controls.Add(this.txt_nombre);
             this.groupBox1.Location = new System.Drawing.Point(25, 145);
             this.groupBox1.Name = "groupBox1";
-            this.groupBox1.Size = new System.Drawing.Size(395, 264);
+            this.groupBox1.Size = new System.Drawing.Size(395, 278);
             this.groupBox1.TabIndex = 3;
             this.groupBox1.TabStop = false;
             this.groupBox1.Text = "Datos de la Persona";
@@ -143,7 +143,7 @@
             // label13
             // 
             this.label13.AutoSize = true;
-            this.label13.Location = new System.Drawing.Point(84, 236);
+            this.label13.Location = new System.Drawing.Point(84, 241);
             this.label13.Name = "label13";
             this.label13.Size = new System.Drawing.Size(26, 13);
             this.label13.TabIndex = 3;
@@ -205,7 +205,7 @@
             // 
             // txt_mail
             // 
-            this.txt_mail.Location = new System.Drawing.Point(140, 236);
+            this.txt_mail.Location = new System.Drawing.Point(140, 238);
             this.txt_mail.Name = "txt_mail";
             this.txt_mail.Size = new System.Drawing.Size(200, 20);
             this.txt_mail.TabIndex = 12;
@@ -266,20 +266,20 @@
             // 
             // boton_aceptar
             // 
-            this.boton_aceptar.Location = new System.Drawing.Point(25, 415);
+            this.boton_aceptar.Location = new System.Drawing.Point(25, 429);
             this.boton_aceptar.Name = "boton_aceptar";
             this.boton_aceptar.Size = new System.Drawing.Size(75, 23);
-            this.boton_aceptar.TabIndex = 4;
+            this.boton_aceptar.TabIndex = 13;
             this.boton_aceptar.Text = "Aceptar";
             this.boton_aceptar.UseVisualStyleBackColor = true;
             this.boton_aceptar.Click += new System.EventHandler(this.boton_aceptar_Click);
             // 
             // boton_volver
             // 
-            this.boton_volver.Location = new System.Drawing.Point(345, 415);
+            this.boton_volver.Location = new System.Drawing.Point(345, 429);
             this.boton_volver.Name = "boton_volver";
             this.boton_volver.Size = new System.Drawing.Size(75, 23);
-            this.boton_volver.TabIndex = 4;
+            this.boton_volver.TabIndex = 15;
             this.boton_volver.Text = "Volver";
             this.boton_volver.UseVisualStyleBackColor = true;
             this.boton_volver.Click += new System.EventHandler(this.boton_volver_Click);
@@ -355,10 +355,10 @@
             // 
             // btn_aceptar_nuevo
             // 
-            this.btn_aceptar_nuevo.Location = new System.Drawing.Point(113, 415);
+            this.btn_aceptar_nuevo.Location = new System.Drawing.Point(101, 429);
             this.btn_aceptar_nuevo.Name = "btn_aceptar_nuevo";
             this.btn_aceptar_nuevo.Size = new System.Drawing.Size(108, 23);
-            this.btn_aceptar_nuevo.TabIndex = 4;
+            this.btn_aceptar_nuevo.TabIndex = 14;
             this.btn_aceptar_nuevo.Text = "Aceptar y Nuevo";
             this.btn_aceptar_nuevo.UseVisualStyleBackColor = true;
             this.btn_aceptar_nuevo.Click += new System.EventHandler(this.boton_aceptar_nuevo_Click);
@@ -367,7 +367,7 @@
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(437, 443);
+            this.ClientSize = new System.Drawing.Size(437, 458);
             this.Controls.Add(this.cb_rol);
             this.Controls.Add(this.label1);
             this.Controls.Add(this.label11);

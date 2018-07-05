@@ -14,12 +14,14 @@ namespace FrbaHotel.ListadoEstadistico
     public partial class ListadoEstadistico01 : Form
     {
         public string nombreStored;
-        //public DataSet dataset;
+        public int error;
 
         public ListadoEstadistico01()
         {
             InitializeComponent();
             this.StartPosition = FormStartPosition.CenterScreen;
+            cb_TipoListado.DropDownStyle = ComboBoxStyle.DropDownList;
+            cb_Trimestre.DropDownStyle = ComboBoxStyle.DropDownList;
         }
 
         private void btn_salir_Click(object sender, EventArgs e)
@@ -33,6 +35,7 @@ namespace FrbaHotel.ListadoEstadistico
             cb_Trimestre.Items.Add("1");
             cb_Trimestre.Items.Add("2");
             cb_Trimestre.Items.Add("3");
+            cb_Trimestre.Items.Add("4");
 
             cb_TipoListado.Items.Add("Hotel con mayor cantidad de reservas canceladas");
             cb_TipoListado.Items.Add("Hoteles con mayor cantidad de consumibles facturados");
@@ -48,72 +51,115 @@ namespace FrbaHotel.ListadoEstadistico
             cb_TipoListado.Text = "";
         }
 
+       private void verificarCampos()
+        {
+            if (cb_TipoListado.Text == "")
+            {
+                error = 1;
+                MessageBox.Show("El campo Tipo Listado no puede estar vacío", "FOUR SIZONS - FRBA Hoteles", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            }
+            if(txt_Anio.Text == "")
+            {
+                error = 1;
+                MessageBox.Show("El campo Año no puede estar vacío", "FOUR SIZONS - FRBA Hoteles", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            }
+            if (IsNumber(txt_Anio.Text) == false)
+            {
+                error = 1;
+                MessageBox.Show("El campo Año no puede contener carácteres", "FOUR SIZONS - FRBA Hoteles", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            }
+            if ((Convert.ToDecimal(txt_Anio.Text) > 2999) || (Convert.ToDecimal(txt_Anio.Text) < 0))
+            {
+                error = 1;
+                MessageBox.Show("Ingrese un año válido", "FOUR SIZONS - FRBA Hoteles", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            }
+            if (cb_Trimestre.Text == "")
+            {
+                error = 1;
+                MessageBox.Show("El campo Trimestre no puede estar vacío", "FOUR SIZONS - FRBA Hoteles", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            }
+        }
+
+        bool IsNumber(string s)
+        {
+            foreach (char c in s)
+            {
+                if (!Char.IsDigit(c))
+                    return false;
+            }
+            return true;
+        }
+
         private void btn_buscar_Click(object sender, EventArgs e)
         {
-            DataSet dataset = new DataSet();
-            switch (cb_TipoListado.Text)
+            error = 0;
+            verificarCampos();
+            if (error == 0)
             {
-                case "Hotel con mayor cantidad de reservas canceladas":
-                    nombreStored = "FOUR_SIZONS.HotelesMasReservasC";
-                    ejecutarListado(nombreStored, dataset);
-                    dgv_Listado.ColumnCount = 1;
-                    dgv_Listado.Columns[0].Name = "Código Hotel";
+                DataSet dataset = new DataSet();
+                switch (cb_TipoListado.Text)
+                {
+                    case "Hotel con mayor cantidad de reservas canceladas":
+                        nombreStored = "FOUR_SIZONS.HotelesMasReservasC";
+                        ejecutarListado(nombreStored, dataset);
+                        dgv_Listado.ColumnCount = 1;
+                        dgv_Listado.Columns[0].Name = "Código Hotel";
 
-                    for (int i = 0; i < dataset.Tables[0].Rows.Count; i++)
-                    {
-                        dgv_Listado.Rows.Add(new Object[] { (dataset.Tables[0].Rows[i][0]).ToString()});
-                    }
-                    break;
-                case "Hoteles con mayor cantidad de consumibles facturados":
-                    nombreStored = "FOUR_SIZONS.HotelesMayorConsFact";
-                    ejecutarListado(nombreStored, dataset);
-                    dgv_Listado.ColumnCount = 1;
-                    dgv_Listado.Columns[0].Name = "Código Hotel";
+                        for (int i = 0; i < dataset.Tables[0].Rows.Count; i++)
+                        {
+                            dgv_Listado.Rows.Add(new Object[] { (dataset.Tables[0].Rows[i][0]).ToString() });
+                        }
+                        break;
+                    case "Hoteles con mayor cantidad de consumibles facturados":
+                        nombreStored = "FOUR_SIZONS.HotelesMayorConsFact";
+                        ejecutarListado(nombreStored, dataset);
+                        dgv_Listado.ColumnCount = 1;
+                        dgv_Listado.Columns[0].Name = "Código Hotel";
 
-                    for (int i = 0; i < dataset.Tables[0].Rows.Count; i++)
-                    {
-                        dgv_Listado.Rows.Add(new Object[] { (dataset.Tables[0].Rows[i][0]).ToString()});
-                    }
-                    break;
-                case "Hoteles con mayor cantidad de días fuera de servicio":
-                    nombreStored = "FOUR_SIZONS.hotelMasCerrado";
-                    ejecutarListado(nombreStored, dataset);
-                    dgv_Listado.ColumnCount = 1;
-                    dgv_Listado.Columns[0].Name = "Código Hotel";
+                        for (int i = 0; i < dataset.Tables[0].Rows.Count; i++)
+                        {
+                            dgv_Listado.Rows.Add(new Object[] { (dataset.Tables[0].Rows[i][0]).ToString() });
+                        }
+                        break;
+                    case "Hoteles con mayor cantidad de días fuera de servicio":
+                        nombreStored = "FOUR_SIZONS.hotelMasCerrado";
+                        ejecutarListado(nombreStored, dataset);
+                        dgv_Listado.ColumnCount = 1;
+                        dgv_Listado.Columns[0].Name = "Código Hotel";
 
-                    for (int i = 0; i < dataset.Tables[0].Rows.Count; i++)
-                    {
-                        dgv_Listado.Rows.Add(new Object[] { (dataset.Tables[0].Rows[i][0]).ToString()});
-                    }
-                    break;
-                case "Habitaciones con mayor cantidad de días y veces que fueron ocupadas":
-                    nombreStored = "FOUR_SIZONS.habOcupadas";
-                    ejecutarListado(nombreStored, dataset);
+                        for (int i = 0; i < dataset.Tables[0].Rows.Count; i++)
+                        {
+                            dgv_Listado.Rows.Add(new Object[] { (dataset.Tables[0].Rows[i][0]).ToString() });
+                        }
+                        break;
+                    case "Habitaciones con mayor cantidad de días y veces que fueron ocupadas":
+                        nombreStored = "FOUR_SIZONS.habOcupadas";
+                        ejecutarListado(nombreStored, dataset);
 
-                    dgv_Listado.ColumnCount = 2;
-                    dgv_Listado.Columns[0].Name = "Número Habitación";
-                    dgv_Listado.Columns[1].Name = "Código Hotel";
+                        dgv_Listado.ColumnCount = 2;
+                        dgv_Listado.Columns[0].Name = "Número Habitación";
+                        dgv_Listado.Columns[1].Name = "Código Hotel";
 
-                    for (int i = 0; i < dataset.Tables[0].Rows.Count; i++)
-                    {
-                        dgv_Listado.Rows.Add(new Object[] { (dataset.Tables[0].Rows[i][0]).ToString(), 
-                                                            (dataset.Tables[0].Rows[i][1]).ToString()});
-                    }
-                    break;
-                case "Cliente con mayor cantidad de puntos":
-                    nombreStored = "FOUR_SIZONS.clieMayorPuntaje";
-                    ejecutarListado(nombreStored, dataset);
-                    dgv_Listado.ColumnCount = 2;
-                    dgv_Listado.Columns[0].Name = "Código Cliente";
+                        for (int i = 0; i < dataset.Tables[0].Rows.Count; i++)
+                        {
+                            dgv_Listado.Rows.Add(new Object[] { (dataset.Tables[0].Rows[i][0]).ToString(), 
+                                                                (dataset.Tables[0].Rows[i][1]).ToString()});
+                        }
+                        break;
+                    case "Cliente con mayor cantidad de puntos":
+                        nombreStored = "FOUR_SIZONS.clieMayorPuntaje";
+                        ejecutarListado(nombreStored, dataset);
+                        dgv_Listado.ColumnCount = 2;
+                        dgv_Listado.Columns[0].Name = "Código Cliente";
 
-                    for (int i = 0; i < dataset.Tables[0].Rows.Count; i++)
-                    {
-                        dgv_Listado.Rows.Add(new Object[] { (dataset.Tables[0].Rows[i][0]).ToString(), 
-                                                            (dataset.Tables[0].Rows[i][1]).ToString()});
-                    }
-                    break;
+                        for (int i = 0; i < dataset.Tables[0].Rows.Count; i++)
+                        {
+                            dgv_Listado.Rows.Add(new Object[] { (dataset.Tables[0].Rows[i][0]).ToString(), 
+                                                                (dataset.Tables[0].Rows[i][1]).ToString()});
+                        }
+                        break;
+                }
             }
-
         }
 
         private void ejecutarListado(string nombreStored, DataSet dataset) 

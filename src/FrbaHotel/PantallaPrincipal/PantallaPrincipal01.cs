@@ -26,6 +26,9 @@ namespace FrbaHotel.PantallaPrincipal
         public decimal hotelCant;
         public decimal hotel;
         public string hotelNombre;
+        public decimal rol;
+        public string rolNombre;
+        public decimal rolCant;
 
         public PantallaPrincipal01(string userSession)
         {
@@ -90,7 +93,7 @@ namespace FrbaHotel.PantallaPrincipal
         private void btn_reservas_Click(object sender, EventArgs e)
         {
             this.Hide();
-            ABMReserva01 formABMReserva01 = new ABMReserva01(usuario);
+            ABMReserva01 formABMReserva01 = new ABMReserva01(usuario, hotel);
             formABMReserva01.ShowDialog();
             this.Show();
         }
@@ -114,35 +117,62 @@ namespace FrbaHotel.PantallaPrincipal
         private void PantallaPrincipal01_Load(object sender, EventArgs e)
         {
             Conexion con = new Conexion();
-            
-            con.strQuery = "SELECT Hotel_Codigo FROM FOUR_SIZONS.UsuarioXHotel WHERE Usuario_ID = '" + usuario + "'";
+
+            con.strQuery = "SELECT R.Rol_Codigo, R.Rol_Nombre FROM FOUR_SIZONS.UsuarioXRol UR " +
+                           "JOIN FOUR_SIZONS.Rol R ON R.Rol_Codigo = UR.Rol_Codigo " +
+                           "WHERE UR.UsuarioXRol_Estado = 1 AND UR.Usuario_ID = '" + usuario + "'";
             con.executeQuery();
 
             while (con.reader())
             {
-                hotelCant = hotelCant + 1;
+                rol = con.lector.GetDecimal(0);
+                rolNombre = con.lector.GetString(1);
+                rolCant = rolCant + 1;
             }
             con.closeConection();
 
-            if (hotelCant > 1) 
+            if (rolCant > 1)
             {
-                using (PromptElegirHotel promptEH = new PromptElegirHotel(usuario))
+                using (PromptElegirRol promptER = new PromptElegirRol(usuario))
                 {
-                    promptEH.ShowDialog();
-                    hotel = Convert.ToDecimal(promptEH.TextBox1.Text);
-                    hotelNombre = promptEH.TextBox2.Text;
-                    //promptEH.Close();
+                    promptER.ShowDialog();
+                    rol = Convert.ToDecimal(promptER.TextBox1.Text);
+                    rolNombre = promptER.TextBox2.Text;
                 }
             }
 
-            txt_nombreHotel.Text = hotelNombre;
+            txt_nombreHotel.Text = rolNombre;
+            if (usuario != "SYSADM")
+            {
+                con.strQuery = "SELECT Hotel_Codigo FROM FOUR_SIZONS.UsuarioXHotel WHERE UsuarioXHotel_Estado = 1 AND Usuario_ID = '" + usuario + "'";
+                con.executeQuery();
+
+                while (con.reader())
+                {
+                    hotel = con.lector.GetDecimal(0);
+                    hotelCant = hotelCant + 1;
+                }
+                con.closeConection();
+
+                if (hotelCant > 1) 
+                {
+                    using (PromptElegirHotel promptEH = new PromptElegirHotel(usuario))
+                    {
+                        promptEH.ShowDialog();
+                        hotel = Convert.ToDecimal(promptEH.TextBox1.Text);
+                        hotelNombre = promptEH.TextBox2.Text;
+                    }
+                }
+
+                txt_nombreHotel.Text = hotelNombre + " - " + rolNombre;
+            }
 
             con.strQuery = "SELECT F.Func_Codigo FROM FOUR_SIZONS.UsuarioXRol UR" +
                             " JOIN FOUR_SIZONS.Rol R ON R.Rol_Codigo = UR.Rol_Codigo" +
                             " JOIN FOUR_SIZONS.RolXFunc RF ON RF.Rol_Codigo = UR.Rol_Codigo" +
                             " JOIN FOUR_SIZONS.Funcionalidad F ON F.Func_Codigo = RF.Func_Codigo" +
                             " WHERE UR.UsuarioXRol_Estado = 1 AND" +
-                            " F.Func_Estado = 1 AND UR.Usuario_ID = '" + usuario + "'";
+                            " F.Func_Estado = 1 AND UR.Usuario_ID = '" + usuario + "' AND UR.Rol_Codigo = " + rol;
 
             con.executeQuery();
            /* if (!con.reader())
@@ -195,14 +225,6 @@ namespace FrbaHotel.PantallaPrincipal
 
             con.closeConection();
 
-        }
-
-        private void button1_Click(object sender, EventArgs e)
-        {
-            this.Hide();
-            FacturarEstadia01 formFacturarEstadia01 = new FacturarEstadia01();
-            formFacturarEstadia01.ShowDialog();
-            this.Show();
         }
 
         private void btn_estadias_Click(object sender, EventArgs e)

@@ -21,8 +21,9 @@ namespace FrbaHotel.ABMHotel
             this.StartPosition = FormStartPosition.CenterScreen;
 
             dgv_Hoteles.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
-            //txt_Id.ReadOnly = true;
             dgv_Hoteles.Rows.Clear();
+
+            cb_estrellas.DropDownStyle = ComboBoxStyle.DropDownList;
 
             Conexion con = new Conexion();
             con.strQuery = "SELECT * FROM FOUR_SIZONS.Hotel ORDER BY Hotel_Codigo";
@@ -34,8 +35,6 @@ namespace FrbaHotel.ABMHotel
                 con.closeConection();
                 return;
             }
-
-            //dgv_Hoteles.Rows.Add(new Object[] { con.lector.GetDecimal(0), con.lector.GetString(1), con.lector.GetString(2), con.lector.GetString(3), con.lector.GetString(4)});
 
             dgv_Hoteles.Rows.Add(new Object[] { con.lector.GetDecimal(0), con.lector.GetString(1),
             con.lector.GetString(2), con.lector.GetString(3), con.lector.GetString(4), con.lector.GetDecimal(5),

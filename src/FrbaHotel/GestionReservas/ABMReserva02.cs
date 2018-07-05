@@ -23,6 +23,7 @@ namespace FrbaHotel.GestionReservas
         public decimal clienteID;
         public bool esCliente;
         public bool buscoCliente;
+        public bool tieneDisponibilidad;
         public decimal reservaID;
 
         public ABMReserva02(string modo, string user)
@@ -33,6 +34,9 @@ namespace FrbaHotel.GestionReservas
 
             usuario = user;
             modoABM = modo;
+
+            cb_tipoDocumento.DropDownStyle = ComboBoxStyle.DropDownList;
+            cb_tipoHabitacion.DropDownStyle = ComboBoxStyle.DropDownList;
 
             dt_fechaDesde.Format = DateTimePickerFormat.Custom;
             dt_fechaDesde.CustomFormat = "dd/MM/yyyy";
@@ -49,32 +53,40 @@ namespace FrbaHotel.GestionReservas
             txt_direccion.ReadOnly = true;
             txt_pais.ReadOnly = true;
             txt_ciudad.ReadOnly = true;
+            txt_costoTotal.ReadOnly = true;
+            cb_tipoDocumento.Enabled = false;
+            txt_nro_documento.Enabled = false;
+            txt_mail.Enabled = false;
+            btn_buscarCliente.Enabled = false;
 
             buscoCliente = false;
+            tieneDisponibilidad = false;
             
         }
 
         private void btn_buscarCliente_Click(object sender, EventArgs e)
         {
             error = 0;
-            if (txt_mail.Text == "")
-            {
-                error = 1;
-                MessageBox.Show("Por favor, ingrese el mail", "FOUR SIZONS - FRBA Hoteles", MessageBoxButtons.OK, MessageBoxIcon.Information);
-            }
-
             if (cb_tipoDocumento.Text == "")
             {
                 error = 1;
-                MessageBox.Show("Por favor, ingrese el tipo de documento", "FOUR SIZONS - FRBA Hoteles", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                MessageBox.Show("El campo Tipo de Documento no puede estar vacío", "FOUR SIZONS - FRBA Hoteles", MessageBoxButtons.OK, MessageBoxIcon.Information);
             }
-
             if (txt_nro_documento.Text == "")
             {
                 error = 1;
-                MessageBox.Show("Por favor, ingrese el número de documento", "FOUR SIZONS - FRBA Hoteles", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                MessageBox.Show("El campo Nro de Documento no puede estar vacío", "FOUR SIZONS - FRBA Hoteles", MessageBoxButtons.OK, MessageBoxIcon.Information);
             }
-
+            if (IsNumber(txt_nro_documento.Text) == false)
+            {
+                error = 1;
+                MessageBox.Show("El campo Nro de Documento no puede contener carácteres", "FOUR SIZONS - FRBA Hoteles", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            }
+            if (txt_mail.Text == "")
+            {
+                error = 1;
+                MessageBox.Show("El campo Mail no puede estar vacío", "FOUR SIZONS - FRBA Hoteles", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            }
             if (error == 0)
             {
                 Conexion con = new Conexion();
@@ -117,32 +129,49 @@ namespace FrbaHotel.GestionReservas
 
         }
 
+        bool IsNumber(string s)
+        {
+            foreach (char c in s)
+            {
+                if (!Char.IsDigit(c))
+                    return false;
+            }
+            return true;
+        }
+
         private void boton_aceptar_Click(object sender, EventArgs e)
         {
-            if (!buscoCliente)
+            if (!tieneDisponibilidad)
             {
-                MessageBox.Show("Por favor haga click en buscar cliente antes de continuar", "FOUR SIZONS - FRBA Hoteles", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                MessageBox.Show("Por favor haga click en Verificar Disponibilidad antes de continuar", "FOUR SIZONS - FRBA Hoteles", MessageBoxButtons.OK, MessageBoxIcon.Information);
             }else{
-                error = 0;
-                switch (modoABM)
+                if (!buscoCliente)
                 {
-                    case "INS":
-                        nombreSP = "FOUR_SIZONS.GenerarReserva";  
-                        break;
-
-                    case "UPD":
-                        nombreSP = "FOUR_SIZONS.ModificacionUsuario";
-                        break;
-
-                    case "DLT":
-                        // Baja lógica - Se pone estado en 0
-                        nombreSP = "FOUR_SIZONS.ModificacionUsuario";
-                        break;
+                    MessageBox.Show("Por favor haga click en buscar cliente antes de continuar", "FOUR SIZONS - FRBA Hoteles", MessageBoxButtons.OK, MessageBoxIcon.Information);
                 }
-                ejecutarAltaReserva(nombreSP);
-                if (error == 0)
+                else
                 {
-                    this.Close();
+                    error = 0;
+                    switch (modoABM)
+                    {
+                        case "INS":
+                            nombreSP = "FOUR_SIZONS.GenerarReserva";
+                            break;
+
+                        case "UPD":
+                            nombreSP = "FOUR_SIZONS.ModificacionUsuario";
+                            break;
+
+                        case "DLT":
+                            // Baja lógica - Se pone estado en 0
+                            nombreSP = "FOUR_SIZONS.ModificacionUsuario";
+                            break;
+                    }
+                    ejecutarAltaReserva(nombreSP);
+                    if (error == 0)
+                    {
+                        this.Close();
+                    }
                 }
             }
         }
@@ -358,37 +387,79 @@ namespace FrbaHotel.GestionReservas
             ejecutarABMCliente();
         }
 
-        private void txt_disponibilidad_Click(object sender, EventArgs e)
+        private void verificarCampos()
         {
-            try
-            {
-                Conexion con = new Conexion();
-                con.strQuery = "four_sizons.DisponbilidadyPrecio";
-                con.execute();
-                con.command.CommandType = CommandType.StoredProcedure;
-
-                con.command.Parameters.Add("@fechaInicio", SqlDbType.DateTime).Value = dt_fechaDesde.Value.ToString();
-                con.command.Parameters.Add("@fechaFin", SqlDbType.DateTime).Value = dt_fechaHasta.Value.ToString();
-                con.command.Parameters.Add("@hotId", SqlDbType.Decimal).Value = hotelID;
-                con.command.Parameters.Add("@regId", SqlDbType.Decimal).Value = regimenID;
-                con.command.Parameters.Add("@canthab", SqlDbType.Decimal).Value = txt_cantHab.Text;
-                con.command.Parameters.Add("@tipoHabDesc", SqlDbType.NVarChar).Value = cb_tipoHabitacion.Text;
-                con.command.Parameters.Add("@precio", SqlDbType.Decimal).Direction = ParameterDirection.Output;
-
-                con.openConection();
-                con.command.ExecuteNonQuery();
-                con.closeConection();
-
-                txt_costoTotal.Text = con.command.Parameters["@precio"].Value.ToString();
-                MessageBox.Show("Existe disponbilidad y el precio es de: " + txt_costoTotal.Text, "FOUR SIZONS - FRBA Hoteles", MessageBoxButtons.OK, MessageBoxIcon.Information);
-
-            }
-            catch (Exception ex)
+            if (cb_tipoHabitacion.Text == "")
             {
                 error = 1;
-                MessageBox.Show("Error al completar la operación. " + ex.Message, "FOUR SIZONS - FRBA Hoteles", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                MessageBox.Show("El campo Tipo de Habitación no puede estar vacío", "FOUR SIZONS - FRBA Hoteles", MessageBoxButtons.OK, MessageBoxIcon.Information);
             }
+            if (txt_cantHab.Text == "")
+            {
+                error = 1;
+                MessageBox.Show("El campo Cantidad de Habitaciones no puede estar vacío", "FOUR SIZONS - FRBA Hoteles", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            }
+            if (dt_fechaHasta.Value < dt_fechaDesde.Value)
+            {
+                error = 1;
+                MessageBox.Show("El campo Fecha Hasta no puede ser posterior a Fecha Desde", "FOUR SIZONS - FRBA Hoteles", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            }
+            if (dt_fechaHasta.Value == dt_fechaDesde.Value)
+            {
+                error = 1;
+                MessageBox.Show("Los campos Fecha Desde y Fecha Hasta no pueden ser iguales", "FOUR SIZONS - FRBA Hoteles", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            }
+            if (regimenID == 0)
+            {
+                error = 1;
+                MessageBox.Show("El campo Régimen no puede estar vacío", "FOUR SIZONS - FRBA Hoteles", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            }
+            if (hotelID == 0)
+            {
+                error = 1;
+                MessageBox.Show("El campo Hotel no puede estar vacío", "FOUR SIZONS - FRBA Hoteles", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            }
+        }
 
+        private void txt_disponibilidad_Click(object sender, EventArgs e)
+        {
+            error = 0;
+            verificarCampos();
+            if(error == 0)
+            {
+                try
+                {
+                    Conexion con = new Conexion();
+                    con.strQuery = "four_sizons.DisponbilidadyPrecio";
+                    con.execute();
+                    con.command.CommandType = CommandType.StoredProcedure;
+
+                    con.command.Parameters.Add("@fechaInicio", SqlDbType.DateTime).Value = dt_fechaDesde.Value.ToString();
+                    con.command.Parameters.Add("@fechaFin", SqlDbType.DateTime).Value = dt_fechaHasta.Value.ToString();
+                    con.command.Parameters.Add("@hotId", SqlDbType.Decimal).Value = hotelID;
+                    con.command.Parameters.Add("@regId", SqlDbType.Decimal).Value = regimenID;
+                    con.command.Parameters.Add("@canthab", SqlDbType.Decimal).Value = txt_cantHab.Text;
+                    con.command.Parameters.Add("@tipoHabDesc", SqlDbType.NVarChar).Value = cb_tipoHabitacion.Text;
+                    con.command.Parameters.Add("@precio", SqlDbType.Decimal).Direction = ParameterDirection.Output;
+
+                    con.openConection();
+                    con.command.ExecuteNonQuery();
+                    con.closeConection();
+
+                    txt_costoTotal.Text = con.command.Parameters["@precio"].Value.ToString();
+                    MessageBox.Show("Existe disponbilidad y el precio es de: " + txt_costoTotal.Text, "FOUR SIZONS - FRBA Hoteles", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                    cb_tipoDocumento.Enabled = true;
+                    txt_nro_documento.Enabled = true;
+                    txt_mail.Enabled = true;
+                    tieneDisponibilidad = true;
+                    btn_buscarCliente.Enabled = true;
+                }
+                catch (Exception ex)
+                {
+                    error = 1;
+                    MessageBox.Show("Error al completar la operación. " + ex.Message, "FOUR SIZONS - FRBA Hoteles", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                }
+            }
         }
     }
 }

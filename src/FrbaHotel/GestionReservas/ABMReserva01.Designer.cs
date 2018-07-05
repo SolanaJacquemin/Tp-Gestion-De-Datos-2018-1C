@@ -35,6 +35,7 @@
             this.boton_cancelar = new System.Windows.Forms.Button();
             this.boton_generar = new System.Windows.Forms.Button();
             this.groupBox1 = new System.Windows.Forms.GroupBox();
+            this.chk_conFecha = new System.Windows.Forms.CheckBox();
             this.dt_fechaHasta = new System.Windows.Forms.DateTimePicker();
             this.dt_fechaDesde = new System.Windows.Forms.DateTimePicker();
             this.l_hasta = new System.Windows.Forms.Label();
@@ -61,7 +62,7 @@
             this.btn_volver.Location = new System.Drawing.Point(569, 371);
             this.btn_volver.Name = "btn_volver";
             this.btn_volver.Size = new System.Drawing.Size(89, 23);
-            this.btn_volver.TabIndex = 20;
+            this.btn_volver.TabIndex = 9;
             this.btn_volver.Text = "Volver";
             this.btn_volver.UseVisualStyleBackColor = true;
             this.btn_volver.Click += new System.EventHandler(this.btn_volver_Click);
@@ -91,7 +92,7 @@
             this.boton_modificar.Location = new System.Drawing.Point(569, 179);
             this.boton_modificar.Name = "boton_modificar";
             this.boton_modificar.Size = new System.Drawing.Size(89, 23);
-            this.boton_modificar.TabIndex = 19;
+            this.boton_modificar.TabIndex = 7;
             this.boton_modificar.Text = "Modificar";
             this.boton_modificar.UseVisualStyleBackColor = true;
             this.boton_modificar.Click += new System.EventHandler(this.boton_modificar_Click);
@@ -101,7 +102,7 @@
             this.boton_cancelar.Location = new System.Drawing.Point(569, 208);
             this.boton_cancelar.Name = "boton_cancelar";
             this.boton_cancelar.Size = new System.Drawing.Size(89, 23);
-            this.boton_cancelar.TabIndex = 18;
+            this.boton_cancelar.TabIndex = 8;
             this.boton_cancelar.Text = "Cancelar";
             this.boton_cancelar.UseVisualStyleBackColor = true;
             this.boton_cancelar.Click += new System.EventHandler(this.boton_cancelar_Click);
@@ -111,13 +112,14 @@
             this.boton_generar.Location = new System.Drawing.Point(569, 150);
             this.boton_generar.Name = "boton_generar";
             this.boton_generar.Size = new System.Drawing.Size(89, 23);
-            this.boton_generar.TabIndex = 17;
+            this.boton_generar.TabIndex = 6;
             this.boton_generar.Text = "Generar";
             this.boton_generar.UseVisualStyleBackColor = true;
             this.boton_generar.Click += new System.EventHandler(this.boton_generar_Click);
             // 
             // groupBox1
             // 
+            this.groupBox1.Controls.Add(this.chk_conFecha);
             this.groupBox1.Controls.Add(this.dt_fechaHasta);
             this.groupBox1.Controls.Add(this.dt_fechaDesde);
             this.groupBox1.Controls.Add(this.l_hasta);
@@ -133,19 +135,29 @@
             this.groupBox1.TabStop = false;
             this.groupBox1.Text = "Filtros de Búsqueda";
             // 
+            // chk_conFecha
+            // 
+            this.chk_conFecha.AutoSize = true;
+            this.chk_conFecha.Location = new System.Drawing.Point(204, 11);
+            this.chk_conFecha.Name = "chk_conFecha";
+            this.chk_conFecha.Size = new System.Drawing.Size(110, 17);
+            this.chk_conFecha.TabIndex = 1;
+            this.chk_conFecha.Text = "Buscar con fecha";
+            this.chk_conFecha.UseVisualStyleBackColor = true;
+            // 
             // dt_fechaHasta
             // 
             this.dt_fechaHasta.Location = new System.Drawing.Point(405, 34);
             this.dt_fechaHasta.Name = "dt_fechaHasta";
             this.dt_fechaHasta.Size = new System.Drawing.Size(94, 20);
-            this.dt_fechaHasta.TabIndex = 8;
+            this.dt_fechaHasta.TabIndex = 3;
             // 
             // dt_fechaDesde
             // 
             this.dt_fechaDesde.Location = new System.Drawing.Point(245, 34);
             this.dt_fechaDesde.Name = "dt_fechaDesde";
             this.dt_fechaDesde.Size = new System.Drawing.Size(94, 20);
-            this.dt_fechaDesde.TabIndex = 8;
+            this.dt_fechaDesde.TabIndex = 2;
             // 
             // l_hasta
             // 
@@ -179,7 +191,7 @@
             this.btn_limpiar.Location = new System.Drawing.Point(544, 44);
             this.btn_limpiar.Name = "btn_limpiar";
             this.btn_limpiar.Size = new System.Drawing.Size(89, 23);
-            this.btn_limpiar.TabIndex = 7;
+            this.btn_limpiar.TabIndex = 5;
             this.btn_limpiar.Text = "Limpiar";
             this.btn_limpiar.UseVisualStyleBackColor = true;
             // 
@@ -188,7 +200,7 @@
             this.btn_buscar.Location = new System.Drawing.Point(544, 15);
             this.btn_buscar.Name = "btn_buscar";
             this.btn_buscar.Size = new System.Drawing.Size(89, 23);
-            this.btn_buscar.TabIndex = 6;
+            this.btn_buscar.TabIndex = 4;
             this.btn_buscar.Text = "Buscar";
             this.btn_buscar.UseVisualStyleBackColor = true;
             this.btn_buscar.Click += new System.EventHandler(this.btn_buscar_Click);
@@ -321,5 +333,6 @@
         private System.Windows.Forms.DataGridViewTextBoxColumn Reserva_Estado;
         private System.Windows.Forms.DateTimePicker dt_fechaHasta;
         private System.Windows.Forms.DateTimePicker dt_fechaDesde;
+        private System.Windows.Forms.CheckBox chk_conFecha;
     }
 }

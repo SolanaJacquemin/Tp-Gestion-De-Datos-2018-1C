@@ -16,8 +16,9 @@ namespace FrbaHotel.GestionReservas
         public string usuario;
         public decimal dgv_reserva_ID;
         public int index;
+        public decimal hotel;
 
-        public ABMReserva01(string userSession)
+        public ABMReserva01(string userSession, decimal hotelID)
         {
             InitializeComponent();
 
@@ -27,6 +28,8 @@ namespace FrbaHotel.GestionReservas
             dgv_Reservas.Rows.Clear();
 
             usuario = userSession;
+            hotel = hotelID;
+
 
             dt_fechaDesde.Format = DateTimePickerFormat.Custom;
             dt_fechaDesde.CustomFormat = "dd/MM/yyyy";
@@ -52,8 +55,12 @@ namespace FrbaHotel.GestionReservas
                " FROM FOUR_SIZONS.Reserva RE" +
                " JOIN FOUR_SIZONS.Hotel HO ON HO.Hotel_Codigo = RE.Hotel_Codigo" +
                " JOIN FOUR_SIZONS.Cliente CL ON CL.Cliente_Codigo = RE.Cliente_Codigo" +
-               " WHERE YEAR(RE.Reserva_FechaCreacion) = YEAR(GETDATE()) AND MONTH(RE.Reserva_FechaCreacion) = MONTH(GETDATE())" +
-               " ORDER BY RE.Reserva_FechaCreacion";
+               " WHERE YEAR(RE.Reserva_FechaCreacion) = YEAR(GETDATE()) AND MONTH(RE.Reserva_FechaCreacion) = MONTH(GETDATE())";
+                if (hotel != 0) 
+                {
+                    con.strQuery = con.strQuery + " AND HO.Hotel_Codigo = " + hotel;
+                }
+                con.strQuery = con.strQuery + " ORDER BY RE.Reserva_FechaCreacion";
 
             con.executeQuery();
             if (!con.reader())
@@ -100,7 +107,10 @@ namespace FrbaHotel.GestionReservas
         private void buscar()
         {
             dgv_Reservas.Rows.Clear();
-
+            string sqlFormattedDate1;
+            string sqlFormattedDate2;
+            sqlFormattedDate1 = dt_fechaDesde.Value.ToString("dd-MM-yyyy");
+            sqlFormattedDate2 = dt_fechaHasta.Value.ToString("dd-MM-yyyy");
             Conexion con = new Conexion();
             if (usuario == "GUEST") 
             {
@@ -109,21 +119,28 @@ namespace FrbaHotel.GestionReservas
                "RE.Reserva_Estado " +
                "FROM FOUR_SIZONS.Reserva RE " +
                "JOIN FOUR_SIZONS.Hotel HO ON HO.Hotel_Codigo = RE.Hotel_Codigo " +
-               "JOIN FOUR_SIZONS.Cliente CL ON CL.Cliente_Codigo = RE.Cliente_Codigo" +
-               " WHERE 1=1 ";
+               "JOIN FOUR_SIZONS.Cliente CL ON CL.Cliente_Codigo = RE.Cliente_Codigo " +
+               "WHERE 1=1 ";
                 if (txt_reservaId.Text != "")
-                    con.strQuery = con.strQuery + "AND RE.Reserva_Codigo = " + txt_reservaId.Text;
+                con.strQuery = con.strQuery + "AND RE.Reserva_Codigo = " + txt_reservaId.Text;
                 con.strQuery = con.strQuery + " ORDER BY RE.Reserva_Codigo";
+
             }else{
                 con.strQuery = "SELECT Reserva_Codigo, Reserva_Fecha_Inicio, Reserva_Fecha_Fin, " +
                "RE.Reserva_Precio, HO.Hotel_Nombre, CL.Cliente_Nombre + ' ' + CL.Cliente_Apellido, " +
                "RE.Reserva_Estado " +
                "FROM FOUR_SIZONS.Reserva RE " +
                "JOIN FOUR_SIZONS.Hotel HO ON HO.Hotel_Codigo = RE.Hotel_Codigo " +
-               "JOIN FOUR_SIZONS.Cliente CL ON CL.Cliente_Codigo = RE.Cliente_Codigo" +
-               " WHERE 1=1 ";
-                if (txt_reservaId.Text != "")
-                    con.strQuery = con.strQuery + "AND RE.Reserva_Codigo = " + txt_reservaId.Text;
+               "JOIN FOUR_SIZONS.Cliente CL ON CL.Cliente_Codigo = RE.Cliente_Codigo " +
+               "WHERE 1=1";
+                if (txt_reservaId.Text != "") 
+                {
+                    con.strQuery = con.strQuery + " AND RE.Reserva_Codigo = " + txt_reservaId.Text;
+                }
+                if (chk_conFecha.Checked) 
+                {
+                    con.strQuery = con.strQuery + " AND (RE.Reserva_Fecha_Inicio >= '" + sqlFormattedDate1 + "' AND RE.Reserva_Fecha_Fin <= '" + sqlFormattedDate2 + "')";
+                }
                 con.strQuery = con.strQuery + " ORDER BY RE.Reserva_Codigo";
             }
 
@@ -151,7 +168,15 @@ namespace FrbaHotel.GestionReservas
 
         private void btn_buscar_Click(object sender, EventArgs e)
         {
-            buscar();
+            if (dt_fechaHasta.Value < dt_fechaDesde.Value)
+            {
+                MessageBox.Show("El campo Fecha Hasta no puede ser posterior a Fecha Desde", "FOUR SIZONS - FRBA Hoteles", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            }
+            else
+            {
+                buscar();
+            }
+
         }
 
         private void boton_modificar_Click(object sender, EventArgs e)

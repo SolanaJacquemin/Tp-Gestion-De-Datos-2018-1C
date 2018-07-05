@@ -49,7 +49,9 @@
             this.Cliente_Consistente = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.btn_volver = new System.Windows.Forms.Button();
             this.groupBox1 = new System.Windows.Forms.GroupBox();
+            this.btn_limpiar = new System.Windows.Forms.Button();
             this.cb_tipo_doc = new System.Windows.Forms.ComboBox();
+            this.btn_buscar = new System.Windows.Forms.Button();
             this.txt_nro_doc = new System.Windows.Forms.TextBox();
             this.label6 = new System.Windows.Forms.Label();
             this.label5 = new System.Windows.Forms.Label();
@@ -62,8 +64,6 @@
             this.btn_alta = new System.Windows.Forms.Button();
             this.btn_baja = new System.Windows.Forms.Button();
             this.btn_Modificacion = new System.Windows.Forms.Button();
-            this.btn_buscar = new System.Windows.Forms.Button();
-            this.btn_limpiar = new System.Windows.Forms.Button();
             ((System.ComponentModel.ISupportInitialize)(this.dgv_Clientes)).BeginInit();
             this.groupBox1.SuspendLayout();
             this.SuspendLayout();
@@ -203,7 +203,7 @@
             this.btn_volver.Location = new System.Drawing.Point(559, 376);
             this.btn_volver.Name = "btn_volver";
             this.btn_volver.Size = new System.Drawing.Size(75, 23);
-            this.btn_volver.TabIndex = 23;
+            this.btn_volver.TabIndex = 10;
             this.btn_volver.Text = "Volver";
             this.btn_volver.UseVisualStyleBackColor = true;
             this.btn_volver.Click += new System.EventHandler(this.button2_Click);
@@ -229,6 +229,16 @@
             this.groupBox1.TabStop = false;
             this.groupBox1.Text = "Filtros de Búsqueda";
             // 
+            // btn_limpiar
+            // 
+            this.btn_limpiar.Location = new System.Drawing.Point(534, 51);
+            this.btn_limpiar.Name = "btn_limpiar";
+            this.btn_limpiar.Size = new System.Drawing.Size(75, 23);
+            this.btn_limpiar.TabIndex = 6;
+            this.btn_limpiar.Text = "Limpiar";
+            this.btn_limpiar.UseVisualStyleBackColor = true;
+            this.btn_limpiar.Click += new System.EventHandler(this.button5_Click);
+            // 
             // cb_tipo_doc
             // 
             this.cb_tipo_doc.FormattingEnabled = true;
@@ -242,15 +252,25 @@
             this.cb_tipo_doc.Location = new System.Drawing.Point(351, 27);
             this.cb_tipo_doc.Name = "cb_tipo_doc";
             this.cb_tipo_doc.Size = new System.Drawing.Size(121, 21);
-            this.cb_tipo_doc.TabIndex = 36;
+            this.cb_tipo_doc.TabIndex = 2;
             this.cb_tipo_doc.SelectedIndexChanged += new System.EventHandler(this.comboBox1_SelectedIndexChanged);
+            // 
+            // btn_buscar
+            // 
+            this.btn_buscar.Location = new System.Drawing.Point(534, 21);
+            this.btn_buscar.Name = "btn_buscar";
+            this.btn_buscar.Size = new System.Drawing.Size(75, 23);
+            this.btn_buscar.TabIndex = 5;
+            this.btn_buscar.Text = "Buscar";
+            this.btn_buscar.UseVisualStyleBackColor = true;
+            this.btn_buscar.Click += new System.EventHandler(this.button4_Click);
             // 
             // txt_nro_doc
             // 
             this.txt_nro_doc.Location = new System.Drawing.Point(351, 53);
             this.txt_nro_doc.Name = "txt_nro_doc";
             this.txt_nro_doc.Size = new System.Drawing.Size(121, 20);
-            this.txt_nro_doc.TabIndex = 35;
+            this.txt_nro_doc.TabIndex = 3;
             // 
             // label6
             // 
@@ -275,7 +295,7 @@
             this.txt_mail.Location = new System.Drawing.Point(85, 79);
             this.txt_mail.Name = "txt_mail";
             this.txt_mail.Size = new System.Drawing.Size(180, 20);
-            this.txt_mail.TabIndex = 33;
+            this.txt_mail.TabIndex = 4;
             // 
             // label4
             // 
@@ -309,21 +329,21 @@
             this.txt_apellido.Location = new System.Drawing.Point(85, 53);
             this.txt_apellido.Name = "txt_apellido";
             this.txt_apellido.Size = new System.Drawing.Size(180, 20);
-            this.txt_apellido.TabIndex = 30;
+            this.txt_apellido.TabIndex = 1;
             // 
             // txt_nombre
             // 
             this.txt_nombre.Location = new System.Drawing.Point(85, 27);
             this.txt_nombre.Name = "txt_nombre";
             this.txt_nombre.Size = new System.Drawing.Size(180, 20);
-            this.txt_nombre.TabIndex = 29;
+            this.txt_nombre.TabIndex = 0;
             // 
             // btn_alta
             // 
             this.btn_alta.Location = new System.Drawing.Point(559, 173);
             this.btn_alta.Name = "btn_alta";
             this.btn_alta.Size = new System.Drawing.Size(75, 23);
-            this.btn_alta.TabIndex = 0;
+            this.btn_alta.TabIndex = 7;
             this.btn_alta.Text = "Alta";
             this.btn_alta.UseVisualStyleBackColor = true;
             this.btn_alta.Click += new System.EventHandler(this.btn_alta_Click);
@@ -333,7 +353,7 @@
             this.btn_baja.Location = new System.Drawing.Point(559, 202);
             this.btn_baja.Name = "btn_baja";
             this.btn_baja.Size = new System.Drawing.Size(75, 23);
-            this.btn_baja.TabIndex = 25;
+            this.btn_baja.TabIndex = 8;
             this.btn_baja.Text = "Baja";
             this.btn_baja.UseVisualStyleBackColor = true;
             this.btn_baja.Click += new System.EventHandler(this.btn_baja_Click);
@@ -343,30 +363,10 @@
             this.btn_Modificacion.Location = new System.Drawing.Point(559, 231);
             this.btn_Modificacion.Name = "btn_Modificacion";
             this.btn_Modificacion.Size = new System.Drawing.Size(75, 23);
-            this.btn_Modificacion.TabIndex = 26;
+            this.btn_Modificacion.TabIndex = 9;
             this.btn_Modificacion.Text = "Modificación";
             this.btn_Modificacion.UseVisualStyleBackColor = true;
             this.btn_Modificacion.Click += new System.EventHandler(this.btn_Modificacion_Click);
-            // 
-            // btn_buscar
-            // 
-            this.btn_buscar.Location = new System.Drawing.Point(534, 21);
-            this.btn_buscar.Name = "btn_buscar";
-            this.btn_buscar.Size = new System.Drawing.Size(75, 23);
-            this.btn_buscar.TabIndex = 27;
-            this.btn_buscar.Text = "Buscar";
-            this.btn_buscar.UseVisualStyleBackColor = true;
-            this.btn_buscar.Click += new System.EventHandler(this.button4_Click);
-            // 
-            // btn_limpiar
-            // 
-            this.btn_limpiar.Location = new System.Drawing.Point(534, 51);
-            this.btn_limpiar.Name = "btn_limpiar";
-            this.btn_limpiar.Size = new System.Drawing.Size(75, 23);
-            this.btn_limpiar.TabIndex = 28;
-            this.btn_limpiar.Text = "Limpiar";
-            this.btn_limpiar.UseVisualStyleBackColor = true;
-            this.btn_limpiar.Click += new System.EventHandler(this.button5_Click);
             // 
             // ABMCliente01
             // 

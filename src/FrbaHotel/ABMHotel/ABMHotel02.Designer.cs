@@ -37,8 +37,10 @@
             this.l_estado = new System.Windows.Forms.Label();
             this.txt_estado = new System.Windows.Forms.TextBox();
             this.groupBox1 = new System.Windows.Forms.GroupBox();
+            this.dt_fecha_cre = new System.Windows.Forms.DateTimePicker();
             this.cb_estrellas = new System.Windows.Forms.ComboBox();
             this.label5 = new System.Windows.Forms.Label();
+            this.label12 = new System.Windows.Forms.Label();
             this.label8 = new System.Windows.Forms.Label();
             this.label2 = new System.Windows.Forms.Label();
             this.label6 = new System.Windows.Forms.Label();
@@ -46,6 +48,7 @@
             this.label9 = new System.Windows.Forms.Label();
             this.label4 = new System.Windows.Forms.Label();
             this.label10 = new System.Windows.Forms.Label();
+            this.l_codigo = new System.Windows.Forms.Label();
             this.label7 = new System.Windows.Forms.Label();
             this.txt_nroCalle = new System.Windows.Forms.TextBox();
             this.txt_calle = new System.Windows.Forms.TextBox();
@@ -54,11 +57,8 @@
             this.txt_ciudad = new System.Windows.Forms.TextBox();
             this.txt_telefono = new System.Windows.Forms.TextBox();
             this.txt_recargaEstrella = new System.Windows.Forms.TextBox();
-            this.txt_nombre = new System.Windows.Forms.TextBox();
-            this.dt_fecha_cre = new System.Windows.Forms.DateTimePicker();
-            this.label12 = new System.Windows.Forms.Label();
-            this.l_codigo = new System.Windows.Forms.Label();
             this.txt_codigo = new System.Windows.Forms.TextBox();
+            this.txt_nombre = new System.Windows.Forms.TextBox();
             this.groupBox1.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -97,7 +97,7 @@
             this.boton_volver.Location = new System.Drawing.Point(522, 252);
             this.boton_volver.Name = "boton_volver";
             this.boton_volver.Size = new System.Drawing.Size(75, 23);
-            this.boton_volver.TabIndex = 25;
+            this.boton_volver.TabIndex = 15;
             this.boton_volver.Text = "Volver";
             this.boton_volver.UseVisualStyleBackColor = true;
             this.boton_volver.Click += new System.EventHandler(this.boton_volver_Click);
@@ -107,7 +107,7 @@
             this.btn_aceptar_nuevo.Location = new System.Drawing.Point(103, 252);
             this.btn_aceptar_nuevo.Name = "btn_aceptar_nuevo";
             this.btn_aceptar_nuevo.Size = new System.Drawing.Size(108, 23);
-            this.btn_aceptar_nuevo.TabIndex = 26;
+            this.btn_aceptar_nuevo.TabIndex = 14;
             this.btn_aceptar_nuevo.Text = "Aceptar y Nuevo";
             this.btn_aceptar_nuevo.UseVisualStyleBackColor = true;
             this.btn_aceptar_nuevo.Click += new System.EventHandler(this.btn_aceptar_nuevo_Click);
@@ -117,7 +117,7 @@
             this.boton_aceptar.Location = new System.Drawing.Point(22, 252);
             this.boton_aceptar.Name = "boton_aceptar";
             this.boton_aceptar.Size = new System.Drawing.Size(75, 23);
-            this.boton_aceptar.TabIndex = 27;
+            this.boton_aceptar.TabIndex = 13;
             this.boton_aceptar.Text = "Aceptar";
             this.boton_aceptar.UseVisualStyleBackColor = true;
             this.boton_aceptar.Click += new System.EventHandler(this.boton_aceptar_Click);
@@ -137,7 +137,7 @@
             this.txt_estado.Location = new System.Drawing.Point(376, 14);
             this.txt_estado.Name = "txt_estado";
             this.txt_estado.Size = new System.Drawing.Size(121, 20);
-            this.txt_estado.TabIndex = 11;
+            this.txt_estado.TabIndex = 1;
             this.txt_estado.TextChanged += new System.EventHandler(this.txt_estado_TextChanged);
             // 
             // groupBox1
@@ -172,13 +172,21 @@
             this.groupBox1.TabIndex = 32;
             this.groupBox1.TabStop = false;
             // 
+            // dt_fecha_cre
+            // 
+            this.dt_fecha_cre.Location = new System.Drawing.Point(376, 152);
+            this.dt_fecha_cre.Name = "dt_fecha_cre";
+            this.dt_fecha_cre.Size = new System.Drawing.Size(121, 20);
+            this.dt_fecha_cre.TabIndex = 12;
+            this.dt_fecha_cre.Value = new System.DateTime(2018, 6, 3, 0, 0, 0, 0);
+            // 
             // cb_estrellas
             // 
             this.cb_estrellas.FormattingEnabled = true;
             this.cb_estrellas.Location = new System.Drawing.Point(376, 46);
             this.cb_estrellas.Name = "cb_estrellas";
             this.cb_estrellas.Size = new System.Drawing.Size(78, 21);
-            this.cb_estrellas.TabIndex = 6;
+            this.cb_estrellas.TabIndex = 4;
             // 
             // label5
             // 
@@ -188,6 +196,15 @@
             this.label5.Size = new System.Drawing.Size(49, 13);
             this.label5.TabIndex = 27;
             this.label5.Text = "Teléfono";
+            // 
+            // label12
+            // 
+            this.label12.AutoSize = true;
+            this.label12.Location = new System.Drawing.Point(288, 154);
+            this.label12.Name = "label12";
+            this.label12.Size = new System.Drawing.Size(82, 13);
+            this.label12.TabIndex = 43;
+            this.label12.Text = "Fecha Creación";
             // 
             // label8
             // 
@@ -252,6 +269,15 @@
             this.label10.TabIndex = 34;
             this.label10.Text = "Estrellas";
             // 
+            // l_codigo
+            // 
+            this.l_codigo.AutoSize = true;
+            this.l_codigo.Location = new System.Drawing.Point(17, 21);
+            this.l_codigo.Name = "l_codigo";
+            this.l_codigo.Size = new System.Drawing.Size(40, 13);
+            this.l_codigo.TabIndex = 35;
+            this.l_codigo.Text = "Código";
+            // 
             // label7
             // 
             this.label7.AutoSize = true;
@@ -266,28 +292,28 @@
             this.txt_nroCalle.Location = new System.Drawing.Point(63, 151);
             this.txt_nroCalle.Name = "txt_nroCalle";
             this.txt_nroCalle.Size = new System.Drawing.Size(48, 20);
-            this.txt_nroCalle.TabIndex = 5;
+            this.txt_nroCalle.TabIndex = 11;
             // 
             // txt_calle
             // 
             this.txt_calle.Location = new System.Drawing.Point(63, 125);
             this.txt_calle.Name = "txt_calle";
             this.txt_calle.Size = new System.Drawing.Size(139, 20);
-            this.txt_calle.TabIndex = 4;
+            this.txt_calle.TabIndex = 9;
             // 
             // txt_mail
             // 
             this.txt_mail.Location = new System.Drawing.Point(63, 73);
             this.txt_mail.Name = "txt_mail";
             this.txt_mail.Size = new System.Drawing.Size(139, 20);
-            this.txt_mail.TabIndex = 2;
+            this.txt_mail.TabIndex = 5;
             // 
             // txt_pais
             // 
             this.txt_pais.Location = new System.Drawing.Point(376, 126);
             this.txt_pais.Name = "txt_pais";
             this.txt_pais.Size = new System.Drawing.Size(191, 20);
-            this.txt_pais.TabIndex = 9;
+            this.txt_pais.TabIndex = 10;
             // 
             // txt_ciudad
             // 
@@ -301,47 +327,14 @@
             this.txt_telefono.Location = new System.Drawing.Point(63, 99);
             this.txt_telefono.Name = "txt_telefono";
             this.txt_telefono.Size = new System.Drawing.Size(191, 20);
-            this.txt_telefono.TabIndex = 3;
+            this.txt_telefono.TabIndex = 7;
             // 
             // txt_recargaEstrella
             // 
             this.txt_recargaEstrella.Location = new System.Drawing.Point(376, 73);
             this.txt_recargaEstrella.Name = "txt_recargaEstrella";
             this.txt_recargaEstrella.Size = new System.Drawing.Size(139, 20);
-            this.txt_recargaEstrella.TabIndex = 7;
-            // 
-            // txt_nombre
-            // 
-            this.txt_nombre.Location = new System.Drawing.Point(63, 47);
-            this.txt_nombre.Name = "txt_nombre";
-            this.txt_nombre.Size = new System.Drawing.Size(191, 20);
-            this.txt_nombre.TabIndex = 1;
-            // 
-            // dt_fecha_cre
-            // 
-            this.dt_fecha_cre.Location = new System.Drawing.Point(376, 152);
-            this.dt_fecha_cre.Name = "dt_fecha_cre";
-            this.dt_fecha_cre.Size = new System.Drawing.Size(121, 20);
-            this.dt_fecha_cre.TabIndex = 10;
-            this.dt_fecha_cre.Value = new System.DateTime(2018, 6, 3, 0, 0, 0, 0);
-            // 
-            // label12
-            // 
-            this.label12.AutoSize = true;
-            this.label12.Location = new System.Drawing.Point(288, 154);
-            this.label12.Name = "label12";
-            this.label12.Size = new System.Drawing.Size(82, 13);
-            this.label12.TabIndex = 43;
-            this.label12.Text = "Fecha Creación";
-            // 
-            // l_codigo
-            // 
-            this.l_codigo.AutoSize = true;
-            this.l_codigo.Location = new System.Drawing.Point(17, 21);
-            this.l_codigo.Name = "l_codigo";
-            this.l_codigo.Size = new System.Drawing.Size(40, 13);
-            this.l_codigo.TabIndex = 35;
-            this.l_codigo.Text = "Código";
+            this.txt_recargaEstrella.TabIndex = 6;
             // 
             // txt_codigo
             // 
@@ -349,6 +342,13 @@
             this.txt_codigo.Name = "txt_codigo";
             this.txt_codigo.Size = new System.Drawing.Size(48, 20);
             this.txt_codigo.TabIndex = 0;
+            // 
+            // txt_nombre
+            // 
+            this.txt_nombre.Location = new System.Drawing.Point(63, 47);
+            this.txt_nombre.Name = "txt_nombre";
+            this.txt_nombre.Size = new System.Drawing.Size(191, 20);
+            this.txt_nombre.TabIndex = 3;
             // 
             // ABMHotel02
             // 

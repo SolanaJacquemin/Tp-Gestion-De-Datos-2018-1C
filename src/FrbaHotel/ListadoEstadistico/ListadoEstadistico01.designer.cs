@@ -35,8 +35,8 @@
             this.label3 = new System.Windows.Forms.Label();
             this.label7 = new System.Windows.Forms.Label();
             this.label2 = new System.Windows.Forms.Label();
-            this.btn_buscar = new System.Windows.Forms.Button();
             this.txt_Anio = new System.Windows.Forms.TextBox();
+            this.btn_buscar = new System.Windows.Forms.Button();
             this.btn_salir = new System.Windows.Forms.Button();
             this.label4 = new System.Windows.Forms.Label();
             ((System.ComponentModel.ISupportInitialize)(this.dgv_Listado)).BeginInit();
@@ -73,7 +73,7 @@
             this.cb_Trimestre.Location = new System.Drawing.Point(176, 56);
             this.cb_Trimestre.Name = "cb_Trimestre";
             this.cb_Trimestre.Size = new System.Drawing.Size(64, 21);
-            this.cb_Trimestre.TabIndex = 3;
+            this.cb_Trimestre.TabIndex = 2;
             // 
             // cb_TipoListado
             // 
@@ -81,7 +81,7 @@
             this.cb_TipoListado.Location = new System.Drawing.Point(46, 25);
             this.cb_TipoListado.Name = "cb_TipoListado";
             this.cb_TipoListado.Size = new System.Drawing.Size(353, 21);
-            this.cb_TipoListado.TabIndex = 3;
+            this.cb_TipoListado.TabIndex = 0;
             // 
             // label3
             // 
@@ -110,29 +110,29 @@
             this.label2.TabIndex = 2;
             this.label2.Text = "Trimestre";
             // 
-            // btn_buscar
-            // 
-            this.btn_buscar.Location = new System.Drawing.Point(39, 427);
-            this.btn_buscar.Name = "btn_buscar";
-            this.btn_buscar.Size = new System.Drawing.Size(89, 23);
-            this.btn_buscar.TabIndex = 6;
-            this.btn_buscar.Text = "Buscar";
-            this.btn_buscar.UseVisualStyleBackColor = true;
-            this.btn_buscar.Click += new System.EventHandler(this.btn_buscar_Click);
-            // 
             // txt_Anio
             // 
             this.txt_Anio.Location = new System.Drawing.Point(46, 56);
             this.txt_Anio.Name = "txt_Anio";
             this.txt_Anio.Size = new System.Drawing.Size(64, 20);
-            this.txt_Anio.TabIndex = 0;
+            this.txt_Anio.TabIndex = 1;
+            // 
+            // btn_buscar
+            // 
+            this.btn_buscar.Location = new System.Drawing.Point(39, 427);
+            this.btn_buscar.Name = "btn_buscar";
+            this.btn_buscar.Size = new System.Drawing.Size(89, 23);
+            this.btn_buscar.TabIndex = 3;
+            this.btn_buscar.Text = "Buscar";
+            this.btn_buscar.UseVisualStyleBackColor = true;
+            this.btn_buscar.Click += new System.EventHandler(this.btn_buscar_Click);
             // 
             // btn_salir
             // 
             this.btn_salir.Location = new System.Drawing.Point(310, 427);
             this.btn_salir.Name = "btn_salir";
             this.btn_salir.Size = new System.Drawing.Size(89, 23);
-            this.btn_salir.TabIndex = 7;
+            this.btn_salir.TabIndex = 4;
             this.btn_salir.Text = "Salir";
             this.btn_salir.UseVisualStyleBackColor = true;
             this.btn_salir.Click += new System.EventHandler(this.btn_salir_Click);

@@ -31,6 +31,8 @@ namespace FrbaHotel.GestionReservas
             modoABM = modo;
             txt_reservaID.Text = reservaID.ToString();
 
+            cb_tipoHabitacion.DropDownStyle = ComboBoxStyle.DropDownList;
+
             switch (modoABM)
             {
                 case "DLT":

@@ -23,10 +23,10 @@ namespace FrbaHotel.AbmCliente
             InitializeComponent();
             this.StartPosition = FormStartPosition.CenterScreen;
 
-       
+            cb_tipo_doc.DropDownStyle = ComboBoxStyle.DropDownList;
 
-        dgv_Clientes.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
-        dgv_Clientes.Rows.Clear();
+            dgv_Clientes.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
+            dgv_Clientes.Rows.Clear();
        
             Conexion con = new Conexion();
             con.strQuery = "SELECT TOP 100 Cliente_Codigo, Cliente_Nombre, Cliente_Apellido, " +

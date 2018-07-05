@@ -125,27 +125,39 @@ namespace FrbaHotel.ABMRol
 
         private void boton_baja_Click(object sender, EventArgs e)
         {
-            string modo = "DLT";
-            this.Hide();
-            ABMRol02 formABMRol02 = new ABMRol02(modo, dgv_Roles_Id);
-            formABMRol02.ShowDialog();
-            this.Show();
-            this.buscar();
-            this.refrescarGrid();
+            if (dgv_Roles.SelectedRows.Count > 0)
+            {
+                string modo = "DLT";
+                this.Hide();
+                ABMRol02 formABMRol02 = new ABMRol02(modo, dgv_Roles_Id);
+                formABMRol02.ShowDialog();
+                this.Show();
+                this.buscar();
+                this.refrescarGrid();
+            }
+            else
+            {
+                MessageBox.Show("Debe seleccionar un usuario de la grilla", "FOUR SIZONS - FRBA Hoteles", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
         }
 
         private void boton_modificacion_Click(object sender, EventArgs e)
         {
-            string modo = "UPD";
-            this.Hide();
-            ABMRol02 formABMRol02 = new ABMRol02(modo, dgv_Roles_Id);
-            formABMRol02.ShowDialog();
-            this.Show();
-            this.buscar();
-            this.refrescarGrid();
+            if (dgv_Roles.SelectedRows.Count > 0)
+            {
+                string modo = "UPD";
+                this.Hide();
+                ABMRol02 formABMRol02 = new ABMRol02(modo, dgv_Roles_Id);
+                formABMRol02.ShowDialog();
+                this.Show();
+                this.buscar();
+                this.refrescarGrid();
+            }
+            else
+            {
+                MessageBox.Show("Debe seleccionar un usuario de la grilla", "FOUR SIZONS - FRBA Hoteles", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
         }
-
-
 
     }
 }

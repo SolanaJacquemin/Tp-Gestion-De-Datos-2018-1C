@@ -22,7 +22,8 @@ namespace FrbaHotel.ABMHabitacion
             this.StartPosition = FormStartPosition.CenterScreen;
 
             dgv_Habitaciones.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
-            //txt_Id.ReadOnly = true;
+            cb_tipoFrente.DropDownStyle = ComboBoxStyle.DropDownList;
+            cb_tipohab.DropDownStyle = ComboBoxStyle.DropDownList;
             dgv_Habitaciones.Rows.Clear();
 
             Conexion con = new Conexion();

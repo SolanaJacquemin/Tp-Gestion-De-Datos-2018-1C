@@ -100,7 +100,7 @@
             this.boton_aceptar.Location = new System.Drawing.Point(25, 564);
             this.boton_aceptar.Name = "boton_aceptar";
             this.boton_aceptar.Size = new System.Drawing.Size(75, 23);
-            this.boton_aceptar.TabIndex = 21;
+            this.boton_aceptar.TabIndex = 18;
             this.boton_aceptar.Text = "Aceptar";
             this.boton_aceptar.UseVisualStyleBackColor = true;
             this.boton_aceptar.Click += new System.EventHandler(this.boton_aceptar_Click);
@@ -111,7 +111,7 @@
             this.cb_tipoHabitacion.Location = new System.Drawing.Point(142, 89);
             this.cb_tipoHabitacion.Name = "cb_tipoHabitacion";
             this.cb_tipoHabitacion.Size = new System.Drawing.Size(120, 21);
-            this.cb_tipoHabitacion.TabIndex = 7;
+            this.cb_tipoHabitacion.TabIndex = 0;
             // 
             // label8
             // 
@@ -190,21 +190,21 @@
             this.txt_pais.Location = new System.Drawing.Point(137, 315);
             this.txt_pais.Name = "txt_pais";
             this.txt_pais.Size = new System.Drawing.Size(200, 20);
-            this.txt_pais.TabIndex = 13;
+            this.txt_pais.TabIndex = 17;
             // 
             // txt_mail
             // 
             this.txt_mail.Location = new System.Drawing.Point(140, 87);
             this.txt_mail.Name = "txt_mail";
             this.txt_mail.Size = new System.Drawing.Size(197, 20);
-            this.txt_mail.TabIndex = 12;
+            this.txt_mail.TabIndex = 10;
             // 
             // boton_volver
             // 
             this.boton_volver.Location = new System.Drawing.Point(425, 564);
             this.boton_volver.Name = "boton_volver";
             this.boton_volver.Size = new System.Drawing.Size(75, 23);
-            this.boton_volver.TabIndex = 20;
+            this.boton_volver.TabIndex = 19;
             this.boton_volver.Text = "Volver";
             this.boton_volver.UseVisualStyleBackColor = true;
             this.boton_volver.Click += new System.EventHandler(this.boton_volver_Click);
@@ -223,7 +223,7 @@
             this.txt_direccion.Location = new System.Drawing.Point(137, 254);
             this.txt_direccion.Name = "txt_direccion";
             this.txt_direccion.Size = new System.Drawing.Size(200, 20);
-            this.txt_direccion.TabIndex = 10;
+            this.txt_direccion.TabIndex = 15;
             // 
             // label10
             // 
@@ -248,14 +248,14 @@
             this.txt_telefono.Location = new System.Drawing.Point(137, 224);
             this.txt_telefono.Name = "txt_telefono";
             this.txt_telefono.Size = new System.Drawing.Size(200, 20);
-            this.txt_telefono.TabIndex = 9;
+            this.txt_telefono.TabIndex = 14;
             // 
             // txt_nro_documento
             // 
             this.txt_nro_documento.Location = new System.Drawing.Point(140, 56);
             this.txt_nro_documento.Name = "txt_nro_documento";
             this.txt_nro_documento.Size = new System.Drawing.Size(121, 20);
-            this.txt_nro_documento.TabIndex = 8;
+            this.txt_nro_documento.TabIndex = 9;
             // 
             // groupBox1
             // 
@@ -291,14 +291,14 @@
             this.cb_tipoDocumento.Location = new System.Drawing.Point(140, 25);
             this.cb_tipoDocumento.Name = "cb_tipoDocumento";
             this.cb_tipoDocumento.Size = new System.Drawing.Size(95, 21);
-            this.cb_tipoDocumento.TabIndex = 27;
+            this.cb_tipoDocumento.TabIndex = 8;
             // 
             // btn_buscarCliente
             // 
             this.btn_buscarCliente.Location = new System.Drawing.Point(362, 80);
             this.btn_buscarCliente.Name = "btn_buscarCliente";
             this.btn_buscarCliente.Size = new System.Drawing.Size(96, 27);
-            this.btn_buscarCliente.TabIndex = 21;
+            this.btn_buscarCliente.TabIndex = 11;
             this.btn_buscarCliente.Text = "Buscar Cliente";
             this.btn_buscarCliente.UseVisualStyleBackColor = true;
             this.btn_buscarCliente.Click += new System.EventHandler(this.btn_buscarCliente_Click);
@@ -317,21 +317,21 @@
             this.txt_ciudad.Location = new System.Drawing.Point(137, 283);
             this.txt_ciudad.Name = "txt_ciudad";
             this.txt_ciudad.Size = new System.Drawing.Size(200, 20);
-            this.txt_ciudad.TabIndex = 13;
+            this.txt_ciudad.TabIndex = 16;
             // 
             // txt_apellido
             // 
             this.txt_apellido.Location = new System.Drawing.Point(137, 191);
             this.txt_apellido.Name = "txt_apellido";
             this.txt_apellido.Size = new System.Drawing.Size(200, 20);
-            this.txt_apellido.TabIndex = 6;
+            this.txt_apellido.TabIndex = 13;
             // 
             // txt_nombre
             // 
             this.txt_nombre.Location = new System.Drawing.Point(137, 159);
             this.txt_nombre.Name = "txt_nombre";
             this.txt_nombre.Size = new System.Drawing.Size(200, 20);
-            this.txt_nombre.TabIndex = 5;
+            this.txt_nombre.TabIndex = 12;
             // 
             // labelTitulo
             // 
@@ -348,7 +348,7 @@
             this.dt_fechaDesde.Location = new System.Drawing.Point(142, 120);
             this.dt_fechaDesde.Name = "dt_fechaDesde";
             this.dt_fechaDesde.Size = new System.Drawing.Size(94, 20);
-            this.dt_fechaDesde.TabIndex = 25;
+            this.dt_fechaDesde.TabIndex = 2;
             // 
             // label15
             // 
@@ -364,7 +364,7 @@
             this.dt_fechaHasta.Location = new System.Drawing.Point(365, 120);
             this.dt_fechaHasta.Name = "dt_fechaHasta";
             this.dt_fechaHasta.Size = new System.Drawing.Size(94, 20);
-            this.dt_fechaHasta.TabIndex = 25;
+            this.dt_fechaHasta.TabIndex = 3;
             // 
             // label12
             // 
@@ -380,7 +380,7 @@
             this.txt_regimen.Location = new System.Drawing.Point(141, 149);
             this.txt_regimen.Name = "txt_regimen";
             this.txt_regimen.Size = new System.Drawing.Size(94, 20);
-            this.txt_regimen.TabIndex = 19;
+            this.txt_regimen.TabIndex = 4;
             // 
             // label16
             // 
@@ -396,14 +396,14 @@
             this.txt_costoTotal.Location = new System.Drawing.Point(366, 149);
             this.txt_costoTotal.Name = "txt_costoTotal";
             this.txt_costoTotal.Size = new System.Drawing.Size(94, 20);
-            this.txt_costoTotal.TabIndex = 19;
+            this.txt_costoTotal.TabIndex = 5;
             // 
             // txt_fechaCreacion
             // 
             this.txt_fechaCreacion.Location = new System.Drawing.Point(142, 61);
             this.txt_fechaCreacion.Name = "txt_fechaCreacion";
             this.txt_fechaCreacion.Size = new System.Drawing.Size(93, 20);
-            this.txt_fechaCreacion.TabIndex = 19;
+            this.txt_fechaCreacion.TabIndex = 0;
             // 
             // label18
             // 
@@ -419,7 +419,7 @@
             this.txt_hotel.Location = new System.Drawing.Point(141, 178);
             this.txt_hotel.Name = "txt_hotel";
             this.txt_hotel.Size = new System.Drawing.Size(94, 20);
-            this.txt_hotel.TabIndex = 19;
+            this.txt_hotel.TabIndex = 6;
             // 
             // btn_hotel
             // 
@@ -455,14 +455,14 @@
             this.txt_cantHab.Location = new System.Drawing.Point(366, 90);
             this.txt_cantHab.Name = "txt_cantHab";
             this.txt_cantHab.Size = new System.Drawing.Size(94, 20);
-            this.txt_cantHab.TabIndex = 19;
+            this.txt_cantHab.TabIndex = 1;
             // 
             // txt_disponibilidad
             // 
             this.txt_disponibilidad.Location = new System.Drawing.Point(309, 185);
             this.txt_disponibilidad.Name = "txt_disponibilidad";
             this.txt_disponibilidad.Size = new System.Drawing.Size(175, 23);
-            this.txt_disponibilidad.TabIndex = 27;
+            this.txt_disponibilidad.TabIndex = 7;
             this.txt_disponibilidad.Text = "Verificar Disponibilidad";
             this.txt_disponibilidad.UseVisualStyleBackColor = true;
             this.txt_disponibilidad.Click += new System.EventHandler(this.txt_disponibilidad_Click);
