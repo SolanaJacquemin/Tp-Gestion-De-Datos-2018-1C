@@ -27,38 +27,11 @@ namespace FrbaHotel.AbmCliente
 
             dgv_Clientes.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
             dgv_Clientes.Rows.Clear();
-       
-            Conexion con = new Conexion();
-            con.strQuery = "SELECT TOP 100 Cliente_Codigo, Cliente_Nombre, Cliente_Apellido, " +
-                                "Cliente_TipoDoc, Cliente_NumDoc, Cliente_Dom_Calle, Cliente_Nro_Calle, Cliente_Piso, Cliente_Depto, " +
-                                " Cliente_Mail, Cliente_Nacionalidad, Cliente_Fecha_Nac, Cliente_Puntos, " +
-                                "Cliente_Estado, Cliente_Consistente " +
-                                "FROM FOUR_SIZONS.Cliente ORDER BY Cliente_Codigo";
-              con.executeQuery();
-               if (!con.reader())
-                {
-                  MessageBox.Show("No se han encontrado usuarios. Revise los criterios de búsqueda", "FOUR SIZONS - FRBA Hoteles", MessageBoxButtons.OK, MessageBoxIcon.Information);
-                  con.strQuery = "";
-                  con.closeConection();
-                  return;
-                }
 
-               dgv_Clientes.Rows.Add(new Object[] { con.lector.GetDecimal(0), con.lector.GetString(1),
-            con.lector.GetString(2), con.lector.GetString(3), con.lector.GetDecimal(4), con.lector.GetString(5),
-            con.lector.GetDecimal(6), con.lector.GetDecimal(7), con.lector.GetString(8), con.lector.GetString(9),
-            con.lector.GetString(10), con.lector.GetDateTime(11), con.lector.GetDecimal(12), con.lector.GetBoolean(13), con.lector.GetBoolean(14)});
-
-               while (con.reader())
-               {
-                   dgv_Clientes.Rows.Add(new Object[] { con.lector.GetDecimal(0), con.lector.GetString(1),
-            con.lector.GetString(2), con.lector.GetString(3), con.lector.GetDecimal(4), con.lector.GetString(5),
-            con.lector.GetDecimal(6), con.lector.GetDecimal(7), con.lector.GetString(8), con.lector.GetString(9),
-            con.lector.GetString(10), con.lector.GetDateTime(11), con.lector.GetDecimal(12), con.lector.GetBoolean(13), con.lector.GetBoolean(14)});
-               }
-               con.closeConection();        
+            iniciarGrilla();
+            refrescarGrid();
 
             /*
-
                 con.strQuery = "SELECT Parametro_Descripcion FROM FOUR_SIZONS.Parametros WHERE Parametro_Codigo = 'DOCUMENTO'";
                 con.executeQuery();
                 while (con.reader())
@@ -67,7 +40,51 @@ namespace FrbaHotel.AbmCliente
                 }
                 con.closeConection();
              */
+        }
 
+        public void iniciarGrilla() 
+        {
+            Conexion con = new Conexion();
+            con.strQuery = "SELECT TOP 100 Cliente_Codigo, Cliente_Nombre, Cliente_Apellido, " +
+                                "Cliente_TipoDoc, Cliente_NumDoc, Cliente_Dom_Calle, Cliente_Nro_Calle, Cliente_Piso, Cliente_Depto, " +
+                                " Cliente_Mail, Cliente_Nacionalidad, Cliente_Fecha_Nac, Cliente_Puntos, " +
+                                "Cliente_Estado, Cliente_Consistente " +
+                                "FROM FOUR_SIZONS.Cliente ORDER BY Cliente_Codigo";
+            con.executeQuery();
+            if (!con.reader())
+            {
+                MessageBox.Show("No se han encontrado clientes. Revise los criterios de búsqueda", "FOUR SIZONS - FRBA Hoteles", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                con.strQuery = "";
+                con.closeConection();
+                return;
+            }
+
+            dgv_Clientes.Rows.Add(new Object[] { con.lector.GetDecimal(0), con.lector.GetString(1),
+            con.lector.GetString(2), con.lector.GetString(3), con.lector.GetDecimal(4), con.lector.GetString(5),
+            con.lector.GetDecimal(6), con.lector.GetDecimal(7), con.lector.GetString(8), con.lector.GetString(9),
+            con.lector.GetString(10), con.lector.GetDateTime(11), con.lector.GetDecimal(12), con.lector.GetBoolean(13), con.lector.GetBoolean(14)});
+
+            while (con.reader())
+            {
+                dgv_Clientes.Rows.Add(new Object[] { con.lector.GetDecimal(0), con.lector.GetString(1),
+            con.lector.GetString(2), con.lector.GetString(3), con.lector.GetDecimal(4), con.lector.GetString(5),
+            con.lector.GetDecimal(6), con.lector.GetDecimal(7), con.lector.GetString(8), con.lector.GetString(9),
+            con.lector.GetString(10), con.lector.GetDateTime(11), con.lector.GetDecimal(12), con.lector.GetBoolean(13), con.lector.GetBoolean(14)});
+            }
+            con.closeConection();
+        }
+
+        public void limpiar()
+        {
+            dgv_Clientes.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
+            dgv_Clientes.Rows.Clear();
+            txt_nombre.Text = "";
+            txt_apellido.Text = "";
+            txt_mail.Text = "";
+            cb_tipo_doc.Items.Clear();
+            dgv_Clientes.Rows.Clear();
+            iniciarGrilla();
+            refrescarGrid();
         }
 
         private void buscar()
@@ -90,7 +107,7 @@ namespace FrbaHotel.AbmCliente
                 con.executeQuery();
             if (!con.reader())
             {
-                MessageBox.Show("No se han encontrado usuarios. Revise los criterios de búsqueda", "FOUR SIZONS - FRBA Hoteles", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                MessageBox.Show("No se han encontrado clientes. Revise los criterios de búsqueda", "FOUR SIZONS - FRBA Hoteles", MessageBoxButtons.OK, MessageBoxIcon.Information);
                 con.strQuery = "";
                 con.closeConection();
                 return;
@@ -103,7 +120,7 @@ namespace FrbaHotel.AbmCliente
             con.lector.GetString(14), con.lector.GetDateTime(15), con.lector.GetDecimal(16), con.lector.GetBoolean(17),
             con.lector.GetBoolean(18)});
 
-            while (con.reader())
+            while (con.reader() && contador<=100)
             {
                 dgv_Clientes.Rows.Add(new Object[] { con.lector.GetDecimal(0), con.lector.GetString(1),
                 con.lector.GetString(2), con.lector.GetString(3), con.lector.GetDecimal(4), con.lector.GetString(5),
@@ -112,46 +129,37 @@ namespace FrbaHotel.AbmCliente
                 con.lector.GetString(14), con.lector.GetDateTime(15), con.lector.GetDecimal(16), con.lector.GetBoolean(17),
                 con.lector.GetBoolean(18)});
             }
+            contador = 0;
             con.closeConection();
         } 
           
-        private void button2_Click(object sender, EventArgs e)
+        private void btn_volver_Click(object sender, EventArgs e)
         {
             this.Close();
         }
 
-        private void button4_Click(object sender, EventArgs e)
+        private void btn_buscar_Click(object sender, EventArgs e)
         {
             this.buscar();
         }
 
-        private void button5_Click(object sender, EventArgs e)
+        private void btn_limpiar_Click(object sender, EventArgs e)
         {
-            txt_nombre.Text = "";
-            txt_apellido.Text = "";
-            txt_mail.Text = "";
-            dgv_Clientes.Rows.Clear();
-            
-        }
-
-        private void comboBox1_SelectedIndexChanged(object sender, EventArgs e)
-        {
-
+            limpiar();    
         }
 
         private void btn_alta_Click(object sender, EventArgs e)
-        {
-            
+        {         
             string modo = "INS";
             this.Hide();
             ABMCliente02 formABMCliente02 = new ABMCliente02(modo, dgv_cliente_ID);
             formABMCliente02.ShowDialog();
             this.Show();
             this.buscar();
-           // this.refrescarGrid();
+            //this.refrescarGrid();
              
         }
-
+        
         private void btn_baja_Click(object sender, EventArgs e)
         {
             
@@ -163,7 +171,7 @@ namespace FrbaHotel.AbmCliente
                 formABMCliente02.ShowDialog();
                 this.Show();
                 this.buscar();
-                // this.refrescarGrid();
+                //this.refrescarGrid();
             }
             else
             {
@@ -189,6 +197,11 @@ namespace FrbaHotel.AbmCliente
                 MessageBox.Show("Debe seleccionar un cliente de la grilla", "FOUR SIZONS - FRBA Hoteles", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
+        
+        private void comboBox1_SelectedIndexChanged(object sender, EventArgs e)
+        {
+
+        }
 
         private void ABMCliente01_Load(object sender, EventArgs e)
         {
@@ -211,7 +224,5 @@ namespace FrbaHotel.AbmCliente
             DataGridViewRow selectedRow = dgv_Clientes.Rows[index];
             dgv_cliente_ID = Convert.ToDecimal(selectedRow.Cells[0].Value.ToString());
         }
-       
-
     }
 }

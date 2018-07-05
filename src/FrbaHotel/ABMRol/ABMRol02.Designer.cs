@@ -44,6 +44,7 @@
             this.txt_estado = new System.Windows.Forms.TextBox();
             this.lEstado = new System.Windows.Forms.Label();
             this.lb_func_usrbaja = new System.Windows.Forms.ListBox();
+            this.lbl_obligacion = new System.Windows.Forms.Label();
             this.SuspendLayout();
             // 
             // label1
@@ -192,11 +193,21 @@
             this.lb_func_usrbaja.Size = new System.Drawing.Size(189, 186);
             this.lb_func_usrbaja.TabIndex = 16;
             // 
+            // lbl_obligacion
+            // 
+            this.lbl_obligacion.AutoSize = true;
+            this.lbl_obligacion.Location = new System.Drawing.Point(25, 300);
+            this.lbl_obligacion.Name = "lbl_obligacion";
+            this.lbl_obligacion.Size = new System.Drawing.Size(169, 13);
+            this.lbl_obligacion.TabIndex = 46;
+            this.lbl_obligacion.Text = "Todos los campos son obligatorios";
+            // 
             // ABMRol02
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(457, 357);
+            this.Controls.Add(this.lbl_obligacion);
             this.Controls.Add(this.boton_volver);
             this.Controls.Add(this.boton_aceptar);
             this.Controls.Add(this.btn_eliminarTodo);
@@ -239,5 +250,6 @@
         private System.Windows.Forms.TextBox txt_estado;
         private System.Windows.Forms.Label lEstado;
         private System.Windows.Forms.ListBox lb_func_usrbaja;
+        private System.Windows.Forms.Label lbl_obligacion;
     }
 }

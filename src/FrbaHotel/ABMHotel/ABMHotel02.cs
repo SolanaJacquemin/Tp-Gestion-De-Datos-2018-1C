@@ -13,6 +13,7 @@ namespace FrbaHotel.ABMHotel
     public partial class ABMHotel02 : Form
     {
         public static string modoABM;
+        public bool abm_valido;
         public string nombreSP;
         public string hotel;
         public int error;
@@ -207,9 +208,57 @@ namespace FrbaHotel.ABMHotel
             }
         }
 
+        public bool verificarObligatorios()
+        {
+            abm_valido = true;
+
+            if (txt_nombre.Text == "") abm_valido = false;
+            if (txt_codigo.Text == "") abm_valido = false;
+            if (txt_pais.Text == "") abm_valido = false;
+            if (txt_nroCalle.Text == "") abm_valido = false;
+            if (txt_telefono.Text == "") abm_valido = false;
+            if (txt_calle.Text == "") abm_valido = false;
+            if (txt_ciudad.Text == "") abm_valido = false;
+            if (txt_mail.Text == "") abm_valido = false;
+
+            return abm_valido;
+        }
+
+        bool IsNumber(string s)
+        {
+            foreach (char c in s)
+            {
+                if (!Char.IsDigit(c))
+                    return false;
+            }
+            return true;
+        }
+
         private void boton_aceptar_Click(object sender, EventArgs e)
         {
             error = 0;
+            if (verificarObligatorios() == false)
+            {
+                error = 1;
+                MessageBox.Show("Por favor, complete los campos obligatorios", "FOUR SIZONS - FRBA Hoteles", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            };
+
+            if (IsNumber(cb_estrellas.Text) == false)
+            {
+                error = 1;
+                MessageBox.Show("Por favor, el número de documento debe ser un dato numérico", "FOUR SIZONS - FRBA Hoteles", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            };
+            if (IsNumber(txt_recargaEstrella.Text) == false)
+            {
+                error = 1;
+                MessageBox.Show("Por favor, el piso debe ser un dato numérico", "FOUR SIZONS - FRBA Hoteles", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            };
+            if (IsNumber(txt_nroCalle.Text) == false)
+            {
+                error = 1;
+                MessageBox.Show("Por favor, el número de calle debe ser un dato numérico", "FOUR SIZONS - FRBA Hoteles", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            };
+
             switch (modoABM)
             {
                 case "INS":
@@ -225,9 +274,10 @@ namespace FrbaHotel.ABMHotel
                     nombreSP = "FOUR_SIZONS.ModificarHotel";
                     break;
             }
-            ejecutarABMHotel(nombreSP);
+            
             if (error == 0)
-            {
+            {   
+                ejecutarABMHotel(nombreSP);
                 this.Close();
             }
 
@@ -236,20 +286,28 @@ namespace FrbaHotel.ABMHotel
         private void btn_aceptar_nuevo_Click(object sender, EventArgs e)
         {
             error = 0;
+            if (verificarObligatorios() == false)
+            {
+                error = 1;
+                MessageBox.Show("Por favor, complete los campos obligatorios", "FOUR SIZONS - FRBA Hoteles", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            };
             nombreSP = "FOUR_SIZONS.AltaHotel";
-            ejecutarABMHotel(nombreSP);
-            txt_codigo.Text = "";
-            txt_nombre.Text = "";
-            txt_mail.Text = "";
-            txt_telefono.Text = "";
-            txt_calle.Text = "";
-            txt_nroCalle.Text = "";
-            txt_ciudad.Text = "";
-            txt_pais.Text = "";
-            txt_recargaEstrella.Text = "";
-            dt_fecha_cre.Text = "";
-            cb_estrellas.Items.Clear();
-            //levantarCombos();
+            if (error == 0)
+            {
+                ejecutarABMHotel(nombreSP);
+                txt_codigo.Text = "";
+                txt_nombre.Text = "";
+                txt_mail.Text = "";
+                txt_telefono.Text = "";
+                txt_calle.Text = "";
+                txt_nroCalle.Text = "";
+                txt_ciudad.Text = "";
+                txt_pais.Text = "";
+                txt_recargaEstrella.Text = "";
+                dt_fecha_cre.Text = "";
+                cb_estrellas.Items.Clear();
+                //levantarCombos();
+            }
         }
     }
 }

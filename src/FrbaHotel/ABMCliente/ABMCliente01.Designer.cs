@@ -206,7 +206,7 @@
             this.btn_volver.TabIndex = 10;
             this.btn_volver.Text = "Volver";
             this.btn_volver.UseVisualStyleBackColor = true;
-            this.btn_volver.Click += new System.EventHandler(this.button2_Click);
+            this.btn_volver.Click += new System.EventHandler(this.btn_volver_Click);
             // 
             // groupBox1
             // 
@@ -237,7 +237,7 @@
             this.btn_limpiar.TabIndex = 6;
             this.btn_limpiar.Text = "Limpiar";
             this.btn_limpiar.UseVisualStyleBackColor = true;
-            this.btn_limpiar.Click += new System.EventHandler(this.button5_Click);
+            this.btn_limpiar.Click += new System.EventHandler(this.btn_limpiar_Click);
             // 
             // cb_tipo_doc
             // 
@@ -263,7 +263,7 @@
             this.btn_buscar.TabIndex = 5;
             this.btn_buscar.Text = "Buscar";
             this.btn_buscar.UseVisualStyleBackColor = true;
-            this.btn_buscar.Click += new System.EventHandler(this.button4_Click);
+            this.btn_buscar.Click += new System.EventHandler(this.btn_buscar_Click);
             // 
             // txt_nro_doc
             // 

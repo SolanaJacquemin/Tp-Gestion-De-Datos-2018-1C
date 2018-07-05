@@ -25,7 +25,12 @@ namespace FrbaHotel.ABMRol
             dgv_Roles.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
             
             dgv_Roles.Rows.Clear();
+            iniciarGrilla();
 
+        }
+
+        public void iniciarGrilla()
+        {
             Conexion con = new Conexion();
             con.strQuery = "SELECT * FROM FOUR_SIZONS.Rol ORDER BY Rol_Codigo";
             con.executeQuery();
@@ -56,7 +61,7 @@ namespace FrbaHotel.ABMRol
             Conexion con = new Conexion();
             con.strQuery = "SELECT * FROM FOUR_SIZONS.Rol WHERE 1=1 ";
             if (txt_codigo.Text != "")
-                con.strQuery = con.strQuery + "AND Rol_Codigo like '%" + txt_codigo.Text + "%' ";
+                con.strQuery = con.strQuery + "AND Rol_Codigo = " + txt_codigo.Text;
             if (txt_nombre.Text != "")
                 con.strQuery = con.strQuery + "AND Rol_Nombre like '%" + txt_nombre.Text + "%' ";
             con.strQuery = con.strQuery + "ORDER BY Rol_Codigo";
@@ -157,6 +162,19 @@ namespace FrbaHotel.ABMRol
             {
                 MessageBox.Show("Debe seleccionar un usuario de la grilla", "FOUR SIZONS - FRBA Hoteles", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
+        }
+
+        private void btn_limpiar_Click(object sender, EventArgs e)
+        {
+            limpiar();
+        }
+
+        public void limpiar()
+        {
+            txt_codigo.Text = "";
+            txt_nombre.Text = "";
+            dgv_Roles.Rows.Clear();
+            iniciarGrilla();
         }
 
     }

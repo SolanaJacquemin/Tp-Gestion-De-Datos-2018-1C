@@ -19,6 +19,7 @@ namespace FrbaHotel.ABMCliente
         public string nombre_sp;
         public int error;
         public decimal cliente;
+        public bool abm_valido;
 
         public ABMCliente02(string modo, decimal clie)
         {
@@ -35,10 +36,14 @@ namespace FrbaHotel.ABMCliente
                     labelTitulo.Text = "Alta de Cliente";
                     txt_puntos.Visible = false;
                     lpuntos.Visible = false;
+                    lbl_estado.Visible = false;
+                    txt_estado.Visible = false;
+                    lbl_obligacion.ForeColor = Color.Red;
                     break;
 
                 case "DLT":
                     labelTitulo.Text = "Baja de Cliente";
+                    btn_aceptar_nuevo.Visible = false;
                     txt_nombre.Enabled = false;
                     txt_apellido.Enabled = false;
                     cb_tipo_doc.Enabled = false;
@@ -55,19 +60,20 @@ namespace FrbaHotel.ABMCliente
                     txt_nacionalidad.Enabled = false;
                     dt_fecha_nac.Enabled = false;
                     txt_puntos.Enabled = false;
+                    txt_estado.Enabled = false;
+                    lbl_obligacion.Visible = false;
                     break;
 
                 case "UPD":
                     labelTitulo.Text = "Modificación de Cliente";
                     btn_aceptar_nuevo.Visible = false;
+                    lbl_estado.Enabled = false;
+                    lbl_obligacion.Visible = false;
                     break;
             }
 
             dt_fecha_nac.Format = DateTimePickerFormat.Custom;
             dt_fecha_nac.CustomFormat = "dd/MM/yyyy";
-
-            //levantarCombos();
-
         }
 
         private void ABMCliente02_Load(object sender, EventArgs e)
@@ -82,9 +88,9 @@ namespace FrbaHotel.ABMCliente
             }
             con.closeConection();
             
-            if (modoABM == "INS")
+            if (modoABM == "INS")               //sacar el if de ins
             {
-                //levantarCombos();
+
             }
             else
             {
@@ -108,8 +114,9 @@ namespace FrbaHotel.ABMCliente
                     txt_ciudad.Text = con.lector.GetString(13);
                     txt_nacionalidad.Text = con.lector.GetString(14);
                     dt_fecha_nac.Value = con.lector.GetDateTime(15);
-                    txt_puntos.Text = con.lector.GetDecimal(16).ToString();
-                    /*if (con.lector.GetBoolean(10))
+                    txt_estado.Text = con.lector.GetBoolean(17).ToString();
+                    
+                    if (con.lector.GetBoolean(17))
                     {
                         txt_estado.Text = "ACTIVO";
                         txt_estado.BackColor = Color.WhiteSmoke;
@@ -122,14 +129,11 @@ namespace FrbaHotel.ABMCliente
                         txt_estado.BackColor = Color.WhiteSmoke;
                         txt_estado.ForeColor = Color.Red;
                     }
-                    txt_intentoslog.Text = con.lector.GetDecimal(11).ToString();*/
+             //       txt_intentoslog.Text = con.lector.GetDecimal(11).ToString();
                 }
 
                 con.closeConection();
-
-            }
-
-             
+            }     
         }
 
         private void dateTimePicker1_ValueChanged(object sender, EventArgs e)
@@ -144,15 +148,60 @@ namespace FrbaHotel.ABMCliente
 
         private void btn_Aceptar_Click(object sender, EventArgs e)
         {
- 
-            error = 0;
+
             switch (modoABM)
             {
                 case "INS":
+            error = 0;
+            if (verificarObligatorios() == false)
+            {
+                error = 1;
+                MessageBox.Show("Por favor, complete los campos obligatorios", "FOUR SIZONS - FRBA Hoteles", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            };
+
+            if (IsNumber(txt_nro_doc.Text)==false)
+            {
+                error = 1;
+                MessageBox.Show("Por favor, el número de documento debe ser un dato numérico", "FOUR SIZONS - FRBA Hoteles", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            };
+            if (IsNumber(txt_piso.Text) == false)
+            {
+                error = 1;
+                MessageBox.Show("Por favor, el piso debe ser un dato numérico", "FOUR SIZONS - FRBA Hoteles", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            };
+            if (IsNumber(txt_nro_calle.Text) == false)
+            {
+                error = 1;
+                MessageBox.Show("Por favor, el número de calle debe ser un dato numérico", "FOUR SIZONS - FRBA Hoteles", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            };
+
                     nombre_sp = "FOUR_SIZONS.AltaCliente";
                     break;
 
                 case "UPD":
+                    error = 0;
+            if (verificarObligatorios() == false)
+            {
+                error = 1;
+                MessageBox.Show("Por favor, complete los campos obligatorios", "FOUR SIZONS - FRBA Hoteles", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            };
+
+            if (IsNumber(txt_nro_doc.Text)==false)
+            {
+                error = 1;
+                MessageBox.Show("Por favor, el número de documento debe ser un dato numérico", "FOUR SIZONS - FRBA Hoteles", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            };
+            if (IsNumber(txt_piso.Text) == false)
+            {
+                error = 1;
+                MessageBox.Show("Por favor, el piso debe ser un dato numérico", "FOUR SIZONS - FRBA Hoteles", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            };
+            if (IsNumber(txt_nro_calle.Text) == false)
+            {
+                error = 1;
+                MessageBox.Show("Por favor, el número de calle debe ser un dato numérico", "FOUR SIZONS - FRBA Hoteles", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            };
+
                     nombre_sp = "FOUR_SIZONS.ModificacionCliente";
                     break;
 
@@ -161,33 +210,67 @@ namespace FrbaHotel.ABMCliente
                     nombre_sp = "FOUR_SIZONS.ModificacionCliente";
                     break;
             }
-              
-            ejecutarABMCliente(nombre_sp);
 
             if (error == 0)
             {
+                ejecutarABMCliente(nombre_sp);
                 this.Close();
             }
-
         }
-             
 
         private void btn_aceptar_nuevo_Click(object sender, EventArgs e)
         {
             error = 0;
-            nombre_sp = "FOUR_SIZONS.AltaCliente";
-            ejecutarABMCliente(nombre_sp);
-            cb_tipo_doc.Text = "";
-            txt_nro_doc.Text = "";
-            txt_direccion.Text = "";
-            txt_telefono.Text = "";
-            txt_mail.Text = "";
-            txt_nombre.Text = "";
-            txt_apellido.Text = "";
-            txt_nacionalidad.Text = "";
-            cb_tipo_doc.Items.Clear();
+            if (verificarObligatorios() == false)
+            {
+                error = 1;
+                MessageBox.Show("Por favor, complete los campos obligatorios", "FOUR SIZONS - FRBA Hoteles", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            };
+            if (error == 0)
+            {
+                nombre_sp = "FOUR_SIZONS.AltaCliente";
+                ejecutarABMCliente(nombre_sp);
+                cb_tipo_doc.Text = "";
+                txt_nro_doc.Text = "";
+                txt_direccion.Text = "";
+                txt_telefono.Text = "";
+                txt_mail.Text = "";
+                txt_nombre.Text = "";
+                txt_apellido.Text = "";
+                txt_nacionalidad.Text = "";
+                txt_pais.Text = "";
+                txt_ciudad.Text = "";
 
-            //levantarCombos();
+                cb_tipo_doc.Items.Clear();
+                //levantarCombos();
+            }
+        }
+
+        public bool verificarObligatorios()
+        {
+            abm_valido = true;
+
+            if (txt_nombre.Text == "") abm_valido = false;
+            if (txt_apellido.Text == "") abm_valido = false;
+            if (cb_tipo_doc.Text == "") abm_valido= false;
+            if (txt_nro_doc.Text == "") abm_valido = false;
+            if (txt_telefono.Text == "") abm_valido = false;
+            if (txt_direccion.Text == "") abm_valido = false;
+            if (dt_fecha_nac.Text == "") abm_valido = false;
+            if (txt_mail.Text == "") abm_valido = false;
+            if (txt_nacionalidad.Text == "") abm_valido = false;
+
+            return abm_valido;
+        }
+
+        bool IsNumber(string s)
+        {
+            foreach (char c in s)
+            {
+                if (!Char.IsDigit(c))
+                    return false;
+            }
+            return true;
         }
 
         private void levantarCombos()
@@ -201,13 +284,11 @@ namespace FrbaHotel.ABMCliente
             }
             con.closeConection();
         }
-        
-          
+             
          public void ejecutarABMCliente(string nombreStored)
          {
             if (MessageBox.Show("Está seguro que desea continuar con la operación?", "FOUR SIZONS - FRBA Hoteles", MessageBoxButtons.YesNo, MessageBoxIcon.Question) == DialogResult.Yes)
             {
-
                         try
                         {
                             Conexion con = new Conexion();
@@ -254,7 +335,6 @@ namespace FrbaHotel.ABMCliente
                             error = 1;
                             MessageBox.Show("Error al completar la operación. " + ex.Message, "FOUR SIZONS - FRBA Hoteles", MessageBoxButtons.OK, MessageBoxIcon.Error);
                         }
-
             } 
              
         }

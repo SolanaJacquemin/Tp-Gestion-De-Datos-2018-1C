@@ -67,6 +67,9 @@
             this.label5 = new System.Windows.Forms.Label();
             this.label4 = new System.Windows.Forms.Label();
             this.label3 = new System.Windows.Forms.Label();
+            this.txt_estado = new System.Windows.Forms.TextBox();
+            this.lbl_estado = new System.Windows.Forms.Label();
+            this.lbl_obligacion = new System.Windows.Forms.Label();
             this.groupBox1.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -92,7 +95,7 @@
             // 
             // btn_volver
             // 
-            this.btn_volver.Location = new System.Drawing.Point(368, 501);
+            this.btn_volver.Location = new System.Drawing.Point(356, 528);
             this.btn_volver.Name = "btn_volver";
             this.btn_volver.Size = new System.Drawing.Size(75, 23);
             this.btn_volver.TabIndex = 19;
@@ -102,7 +105,7 @@
             // 
             // btn_Aceptar
             // 
-            this.btn_Aceptar.Location = new System.Drawing.Point(25, 501);
+            this.btn_Aceptar.Location = new System.Drawing.Point(13, 528);
             this.btn_Aceptar.Name = "btn_Aceptar";
             this.btn_Aceptar.Size = new System.Drawing.Size(75, 23);
             this.btn_Aceptar.TabIndex = 17;
@@ -112,7 +115,7 @@
             // 
             // btn_aceptar_nuevo
             // 
-            this.btn_aceptar_nuevo.Location = new System.Drawing.Point(103, 501);
+            this.btn_aceptar_nuevo.Location = new System.Drawing.Point(91, 528);
             this.btn_aceptar_nuevo.Name = "btn_aceptar_nuevo";
             this.btn_aceptar_nuevo.Size = new System.Drawing.Size(112, 23);
             this.btn_aceptar_nuevo.TabIndex = 18;
@@ -132,6 +135,8 @@
             // 
             // groupBox1
             // 
+            this.groupBox1.Controls.Add(this.txt_estado);
+            this.groupBox1.Controls.Add(this.lbl_estado);
             this.groupBox1.Controls.Add(this.dt_fecha_nac);
             this.groupBox1.Controls.Add(this.label16);
             this.groupBox1.Controls.Add(this.label12);
@@ -174,7 +179,7 @@
             // 
             this.dt_fecha_nac.Location = new System.Drawing.Point(89, 371);
             this.dt_fecha_nac.Name = "dt_fecha_nac";
-            this.dt_fecha_nac.Size = new System.Drawing.Size(213, 20);
+            this.dt_fecha_nac.Size = new System.Drawing.Size(235, 20);
             this.dt_fecha_nac.TabIndex = 52;
             // 
             // label16
@@ -245,14 +250,14 @@
             // 
             this.txt_piso.Location = new System.Drawing.Point(89, 272);
             this.txt_piso.Name = "txt_piso";
-            this.txt_piso.Size = new System.Drawing.Size(61, 20);
+            this.txt_piso.Size = new System.Drawing.Size(121, 20);
             this.txt_piso.TabIndex = 48;
             // 
             // txt_nro_calle
             // 
             this.txt_nro_calle.Location = new System.Drawing.Point(89, 239);
             this.txt_nro_calle.Name = "txt_nro_calle";
-            this.txt_nro_calle.Size = new System.Drawing.Size(61, 20);
+            this.txt_nro_calle.Size = new System.Drawing.Size(121, 20);
             this.txt_nro_calle.TabIndex = 47;
             // 
             // txt_direccion
@@ -264,14 +269,14 @@
             // 
             // txt_telefono
             // 
-            this.txt_telefono.Location = new System.Drawing.Point(285, 100);
+            this.txt_telefono.Location = new System.Drawing.Point(284, 96);
             this.txt_telefono.Name = "txt_telefono";
             this.txt_telefono.Size = new System.Drawing.Size(121, 20);
             this.txt_telefono.TabIndex = 43;
             // 
             // txt_departamento
             // 
-            this.txt_departamento.Location = new System.Drawing.Point(225, 272);
+            this.txt_departamento.Location = new System.Drawing.Point(285, 275);
             this.txt_departamento.Name = "txt_departamento";
             this.txt_departamento.Size = new System.Drawing.Size(121, 20);
             this.txt_departamento.TabIndex = 49;
@@ -341,7 +346,7 @@
             // label8
             // 
             this.label8.AutoSize = true;
-            this.label8.Location = new System.Drawing.Point(183, 275);
+            this.label8.Location = new System.Drawing.Point(231, 278);
             this.label8.Name = "label8";
             this.label8.Size = new System.Drawing.Size(36, 13);
             this.label8.TabIndex = 63;
@@ -427,11 +432,37 @@
             this.label3.TabIndex = 54;
             this.label3.Text = "Nombre";
             // 
+            // txt_estado
+            // 
+            this.txt_estado.Location = new System.Drawing.Point(285, 310);
+            this.txt_estado.Name = "txt_estado";
+            this.txt_estado.Size = new System.Drawing.Size(121, 20);
+            this.txt_estado.TabIndex = 70;
+            // 
+            // lbl_estado
+            // 
+            this.lbl_estado.AutoSize = true;
+            this.lbl_estado.Location = new System.Drawing.Point(231, 313);
+            this.lbl_estado.Name = "lbl_estado";
+            this.lbl_estado.Size = new System.Drawing.Size(40, 13);
+            this.lbl_estado.TabIndex = 71;
+            this.lbl_estado.Text = "Estado";
+            // 
+            // lbl_obligacion
+            // 
+            this.lbl_obligacion.AutoSize = true;
+            this.lbl_obligacion.Location = new System.Drawing.Point(22, 498);
+            this.lbl_obligacion.Name = "lbl_obligacion";
+            this.lbl_obligacion.Size = new System.Drawing.Size(169, 13);
+            this.lbl_obligacion.TabIndex = 45;
+            this.lbl_obligacion.Text = "Todos los campos son obligatorios";
+            // 
             // ABMCliente02
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(454, 536);
+            this.ClientSize = new System.Drawing.Size(454, 566);
+            this.Controls.Add(this.lbl_obligacion);
             this.Controls.Add(this.groupBox1);
             this.Controls.Add(this.labelTitulo);
             this.Controls.Add(this.btn_aceptar_nuevo);
@@ -490,5 +521,8 @@
         private System.Windows.Forms.Label label5;
         private System.Windows.Forms.Label label4;
         private System.Windows.Forms.Label label3;
+        private System.Windows.Forms.TextBox txt_estado;
+        private System.Windows.Forms.Label lbl_estado;
+        private System.Windows.Forms.Label lbl_obligacion;
     }
 }

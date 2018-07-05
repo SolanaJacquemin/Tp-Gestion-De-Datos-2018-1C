@@ -59,6 +59,7 @@
             this.txt_recargaEstrella = new System.Windows.Forms.TextBox();
             this.txt_codigo = new System.Windows.Forms.TextBox();
             this.txt_nombre = new System.Windows.Forms.TextBox();
+            this.lbl_obligacion = new System.Windows.Forms.Label();
             this.groupBox1.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -94,7 +95,7 @@
             // 
             // boton_volver
             // 
-            this.boton_volver.Location = new System.Drawing.Point(522, 252);
+            this.boton_volver.Location = new System.Drawing.Point(526, 284);
             this.boton_volver.Name = "boton_volver";
             this.boton_volver.Size = new System.Drawing.Size(75, 23);
             this.boton_volver.TabIndex = 15;
@@ -104,7 +105,7 @@
             // 
             // btn_aceptar_nuevo
             // 
-            this.btn_aceptar_nuevo.Location = new System.Drawing.Point(103, 252);
+            this.btn_aceptar_nuevo.Location = new System.Drawing.Point(107, 284);
             this.btn_aceptar_nuevo.Name = "btn_aceptar_nuevo";
             this.btn_aceptar_nuevo.Size = new System.Drawing.Size(108, 23);
             this.btn_aceptar_nuevo.TabIndex = 14;
@@ -114,7 +115,7 @@
             // 
             // boton_aceptar
             // 
-            this.boton_aceptar.Location = new System.Drawing.Point(22, 252);
+            this.boton_aceptar.Location = new System.Drawing.Point(26, 284);
             this.boton_aceptar.Name = "boton_aceptar";
             this.boton_aceptar.Size = new System.Drawing.Size(75, 23);
             this.boton_aceptar.TabIndex = 13;
@@ -350,11 +351,21 @@
             this.txt_nombre.Size = new System.Drawing.Size(191, 20);
             this.txt_nombre.TabIndex = 3;
             // 
+            // lbl_obligacion
+            // 
+            this.lbl_obligacion.AutoSize = true;
+            this.lbl_obligacion.Location = new System.Drawing.Point(32, 249);
+            this.lbl_obligacion.Name = "lbl_obligacion";
+            this.lbl_obligacion.Size = new System.Drawing.Size(169, 13);
+            this.lbl_obligacion.TabIndex = 46;
+            this.lbl_obligacion.Text = "Todos los campos son obligatorios";
+            // 
             // ABMHotel02
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(609, 292);
+            this.ClientSize = new System.Drawing.Size(609, 319);
+            this.Controls.Add(this.lbl_obligacion);
             this.Controls.Add(this.groupBox1);
             this.Controls.Add(this.boton_volver);
             this.Controls.Add(this.btn_aceptar_nuevo);
@@ -405,5 +416,6 @@
         private System.Windows.Forms.Label label12;
         private System.Windows.Forms.Label l_codigo;
         private System.Windows.Forms.TextBox txt_codigo;
+        private System.Windows.Forms.Label lbl_obligacion;
     }
 }

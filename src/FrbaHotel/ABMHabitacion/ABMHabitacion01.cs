@@ -21,15 +21,37 @@ namespace FrbaHotel.ABMHabitacion
             InitializeComponent();
             this.StartPosition = FormStartPosition.CenterScreen;
 
+            cb_tipoFrente.DropDownStyle = ComboBoxStyle.DropDownList;
+            cb_tipohab.DropDownStyle = ComboBoxStyle.DropDownList;
+
+            iniciarGrilla();
+            refrescarGrid();
+
+            Conexion con = new Conexion();
+            con.strQuery = "SELECT Habitacion_Tipo_Descripcion FROM FOUR_SIZONS.Habitacion_Tipo";
+            con.executeQuery();
+            while (con.reader())
+            {
+                cb_tipohab.Items.Add(con.lector.GetString(0));
+            }
+            con.closeConection();
+
+            cb_tipoFrente.Items.Add("S");
+            cb_tipoFrente.Items.Add("N");
+        }
+
+
+        public void iniciarGrilla()
+        {
             dgv_Habitaciones.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
             cb_tipoFrente.DropDownStyle = ComboBoxStyle.DropDownList;
             cb_tipohab.DropDownStyle = ComboBoxStyle.DropDownList;
             dgv_Habitaciones.Rows.Clear();
 
             Conexion con = new Conexion();
-            con.strQuery = "select Ho.Hotel_Nombre, Ha.Hotel_Codigo, Ha.Habitacion_Numero, Ha.Habitacion_Piso, HT.Habitacion_Tipo_Descripcion, " + 
-            "Ha.Habitacion_Frente, Ha.Habitacion_Estado from FOUR_SIZONS.Habitacion as Ha JOIN FOUR_SIZONS.Hotel " + 
-            "as Ho on Ho.Hotel_Codigo = Ha.Hotel_Codigo JOIN FOUR_SIZONS.Habitacion_Tipo as HT on " + 
+            con.strQuery = "select Ho.Hotel_Nombre, Ha.Hotel_Codigo, Ha.Habitacion_Numero, Ha.Habitacion_Piso, HT.Habitacion_Tipo_Descripcion, " +
+            "Ha.Habitacion_Frente, Ha.Habitacion_Estado from FOUR_SIZONS.Habitacion as Ha JOIN FOUR_SIZONS.Hotel " +
+            "as Ho on Ho.Hotel_Codigo = Ha.Hotel_Codigo JOIN FOUR_SIZONS.Habitacion_Tipo as HT on " +
             "HT.Habitacion_Tipo_Codigo = Ha.Habitacion_Tipo_Codigo ORDER BY Ho.Hotel_Codigo, Ha.Habitacion_Numero";
             con.executeQuery();
             if (!con.reader())
@@ -51,45 +73,42 @@ namespace FrbaHotel.ABMHabitacion
                 con.lector.GetBoolean(6)});
             }
             con.closeConection();
+        }
 
-            con.strQuery = "SELECT Habitacion_Tipo_Descripcion FROM FOUR_SIZONS.Habitacion_Tipo";
-            con.executeQuery();
-            while (con.reader())
-            {
-                cb_tipohab.Items.Add(con.lector.GetString(0));
-            }
-            con.closeConection();
-
-            cb_tipoFrente.Items.Add("S");
-            cb_tipoFrente.Items.Add("N");
+        public void limpiar()
+        {
+            dgv_Habitaciones.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
+            dgv_Habitaciones.Rows.Clear();
+            txt_nombre_hotel.Text = "";
+            txt_piso.Text = "";
+            txt_nro_hab.Text = "";
+            cb_tipohab.Items.Clear();
+            cb_tipoFrente.Items.Clear();
+            iniciarGrilla();
+            refrescarGrid();
         }
 
         private void buscar()
         {
             dgv_Habitaciones.Rows.Clear();
+
             Conexion con = new Conexion();
             con.strQuery = "select Ho.Hotel_Nombre, Ha.Hotel_Codigo, Ha.Habitacion_Numero, Ha.Habitacion_Piso, HT.Habitacion_Tipo_Descripcion, " +
             "Ha.Habitacion_Frente, Ha.Habitacion_Estado from FOUR_SIZONS.Habitacion as Ha JOIN FOUR_SIZONS.Hotel " +
             "as Ho on Ho.Hotel_Codigo = Ha.Hotel_Codigo JOIN FOUR_SIZONS.Habitacion_Tipo as HT on " +
             "HT.Habitacion_Tipo_Codigo = Ha.Habitacion_Tipo_Codigo" +
                             " WHERE 1=1";
-            //if (txt_.Text != "")
-            //    con.strQuery = con.strQuery + "AND Usuario_ID like '%" + txt_Id.Text + "%' ";
+            
             if (txt_nro_hab.Text != "")
                 con.strQuery = con.strQuery + "AND Habitacion_Numero = " + txt_nro_hab.Text + " ";
             if (txt_piso.Text != "")
                 con.strQuery = con.strQuery + "AND Ha.Habitacion_Piso = " + txt_piso.Text + " ";
-            /*if (cb_tipodoc.Text != "")
-                con.strQuery = con.strQuery + "AND Usuario_TipoDoc like '%" + cb_tipodoc.Text + "%' ";
-            if (txt_nrodoc.Text != "")
-                con.strQuery = con.strQuery + "AND Usuario_NroDoc like '%" + txt_nrodoc.Text + "%' ";
-            if (txt_mail.Text != "")
-                con.strQuery = con.strQuery + "AND Usuario_Mail like '%" + txt_mail.Text + "%' ";*/
+            
             con.strQuery = con.strQuery + "ORDER BY Ho.Hotel_Codigo, Ha.Habitacion_Numero";
             con.executeQuery();
             if (!con.reader())
             {
-                MessageBox.Show("No se han encontrado usuarios. Revise los criterios de búsqueda", "FOUR SIZONS - FRBA Hoteles", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                MessageBox.Show("No se han encontrado habitaciones. Revise los criterios de búsqueda", "FOUR SIZONS - FRBA Hoteles", MessageBoxButtons.OK, MessageBoxIcon.Information);
                 con.strQuery = "";
                 con.closeConection();
                 return;
@@ -119,7 +138,27 @@ namespace FrbaHotel.ABMHabitacion
             this.refrescarGrid();
         }
 
+        private void boton_baja_Click(object sender, EventArgs e)
+        {
+            string modo = "DLT";
+            this.Hide();
+            ABMHabitacion02 formABMHabitacion02 = new ABMHabitacion02(modo, dgv_hotel_ID, dgv_habitacion_ID);
+            formABMHabitacion02.ShowDialog();
+            this.Show();
+            this.buscar();
+            this.refrescarGrid();
+        }
 
+        private void boton_modificacion_Click(object sender, EventArgs e)
+        {
+            string modo = "UPD";
+            this.Hide();
+            ABMHabitacion02 formABMHabitacion02 = new ABMHabitacion02(modo, dgv_hotel_ID, dgv_habitacion_ID);
+            formABMHabitacion02.ShowDialog();
+            this.Show();
+            this.buscar();
+            this.refrescarGrid();
+        }
 
         private void refrescarGrid()
         {
@@ -153,29 +192,7 @@ namespace FrbaHotel.ABMHabitacion
 
         private void btn_limpiar_Click(object sender, EventArgs e)
         {
-
-        }
-
-        private void boton_baja_Click(object sender, EventArgs e)
-        {
-            string modo = "DLT";
-            this.Hide();
-            ABMHabitacion02 formABMHabitacion02 = new ABMHabitacion02(modo, dgv_hotel_ID, dgv_habitacion_ID);
-            formABMHabitacion02.ShowDialog();
-            this.Show();
-            this.buscar();
-            this.refrescarGrid();
-        }
-
-        private void boton_modificacion_Click(object sender, EventArgs e)
-        {
-            string modo = "UPD";
-            this.Hide();
-            ABMHabitacion02 formABMHabitacion02 = new ABMHabitacion02(modo, dgv_hotel_ID, dgv_habitacion_ID);
-            formABMHabitacion02.ShowDialog();
-            this.Show();
-            this.buscar();
-            this.refrescarGrid();
+            limpiar();
         }
 
         public void dgv_Habitaciones_CellClick(object sender, DataGridViewCellEventArgs e)

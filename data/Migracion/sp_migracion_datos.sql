@@ -820,6 +820,14 @@ end
 	SET Factura_Consistencia = 0
 	WHERE Factura_Nro IN (select facturaI from @facturaInc)
 
+	declare @h1 nvarchar(2) = 1
+while (@h1<16)
+begin
+update FOUR_SIZONS.Hotel 
+set Hotel_Nombre = 'four sizons '+@h1
+where Hotel_Codigo=@h1
+set @h1 = @h1+1
+end
 END
 
 -------------------------------------------------------Comienzo de procedures--------------------------------------------------------------
@@ -1036,9 +1044,91 @@ BEGIN
     DROP proc FOUR_SIZONS.clieMayorPuntaje
 END;
 
+IF (OBJECT_ID('FOUR_SIZONS.altaUserxRol', 'P') IS NOT NULL)
+BEGIN
+    DROP proc FOUR_SIZONS.altaUserxRol
+END;
+
+IF (OBJECT_ID('FOUR_SIZONS.bajaUserxRol', 'P') IS NOT NULL)
+BEGIN
+    DROP proc FOUR_SIZONS.bajaUserxRol
+END;
+
 GO
 
 --------------------------------------------------------ABM USUARIO------------------------------
+create procedure four_sizons.altaUserxRol
+@userID nvarchar(50),
+@rolId numeric(18)
+as begin
+begin try
+	if(exists (select UsuarioXRol_Estado from FOUR_SIZONS.UsuarioXRol where Usuario_ID=@userID and Rol_Codigo=@rolId))
+	begin
+		update FOUR_SIZONS.UsuarioXRol
+			set UsuarioXRol_Estado=1
+			where  Usuario_ID=@userID and Rol_Codigo=@rolId
+	end
+	else 
+	begin
+		insert into FOUR_SIZONS.UsuarioXRol(Rol_Codigo,Usuario_ID,UsuarioXRol_Estado) 
+									values (@rolID,@userID,1)
+	end
+	commit tran 
+	end try
+	begin catch
+	declare @mensaje_de_error nvarchar(255)
+	set @mensaje_de_error = ERROR_MESSAGE()
+	RAISERROR(@mensaje_de_error,11,1)
+	rollback tran  
+	end catch 
+end
+go
+
+
+create procedure four_sizons.bajaUserxRol
+@userID nvarchar(50),
+@rolId numeric(18)
+as begin
+begin try
+declare @nombre nvarchar(50)
+set @nombre=(select Rol_Nombre from FOUR_SIZONS.Rol where Rol_Codigo=@rolId)
+	if(not exists (select UsuarioXRol_Estado from FOUR_SIZONS.UsuarioXRol where Usuario_ID=@userID and Rol_Codigo=@rolId))
+	begin
+		raiserror ('No se puede dar de baja ya que no existe ese usarioxRol',13,1)
+			rollback tran
+	end
+
+	if((select UsuarioXRol_Estado from FOUR_SIZONS.UsuarioXRol where Usuario_ID=@userID and Rol_Codigo=@rolId)=1)
+	begin
+		if (@nombre='Super Admin' and (select count(Usuario_ID)  from FOUR_SIZONS.UsuarioXRol where Rol_Codigo=@rolId)<=1)
+		begin 
+			raiserror ('No se puede dar de baja super admin, ya que no se puede quedar sin super admin el sistema',13,1)
+			rollback tran
+		end
+		update FOUR_SIZONS.UsuarioXRol
+			set UsuarioXRol_Estado=0
+			where  Usuario_ID=@userID and Rol_Codigo=@rolId
+	end
+	else 
+	begin
+		raiserror ('No se puedo dar de baja ya que no esta activo',13,1)
+			rollback tran
+	end
+commit tran 
+end try
+begin catch
+	declare @mensaje_de_error nvarchar(255)
+	set @mensaje_de_error = ERROR_MESSAGE()
+	RAISERROR(@mensaje_de_error,11,1)
+	rollback tran 
+end catch
+END
+GO
+
+
+
+
+
 create procedure FOUR_SIZONS.ValidarUsuario
 @usuario nvarchar(15), 
 @password nvarchar(100),
@@ -1055,7 +1145,6 @@ begin try
 		if @estado = 1
 		begin
 
-
 			if @fallalog <> 3
 			begin
 
@@ -1071,8 +1160,6 @@ begin try
 					if @fallalog = 2
 					begin
 
-
-
 						update FOUR_SIZONS.Usuario set Usuario_FallaLog = Usuario_FallaLog + 1, Usuario_Estado = 0
 						set @loginok = 0
 						set @errorMsg = 'Contraseña incorrecta. El usuario está deshabilitado'
@@ -1081,7 +1168,6 @@ begin try
 					if @fallalog < 2
 					begin
 
-
 						update FOUR_SIZONS.Usuario set Usuario_FallaLog = Usuario_FallaLog + 1
 						set @loginok = 0
 						set @errorMsg = 'Contraseña incorrecta.'
@@ -1089,20 +1175,11 @@ begin try
 						if @fallalog = 1
 						begin
 
-
-
-
-
 							set @errorMsg = 'Contraseña incorrecta. El usuario se deshabilitará ante el próximo inicio de sesión inválido'
 
 						end
 					end
 				end
-
-
-
-
-
 			end
 			else
 			begin
@@ -1290,7 +1367,7 @@ insert into four_sizons.Cliente(Cliente_Nombre ,cliente_Apellido,cliente_TipoDoc
 								@pais,@ciudad,@nacionalidad,@fechaNac,0,1,1)
 else 
 RAISERROR('el mail ingresado ya figura en el sistema, ingrese otro por favor',1,1)
-		ROLLBACK TRANSACTION
+
 commit tran 
 end try
 begin catch
@@ -1628,7 +1705,7 @@ declare @TipoHabID numeric(18)
 					else 
 						begin
 						RAISERROR('el numero de habitacion ya figura en ese hotel, ingrese otro por favor',1,1)
-						ROLLBACK TRANSACTION
+
 						end
 commit tran 
 end try
@@ -2416,7 +2493,8 @@ declare @inicio datetime
 set @inicio = FOUR_SIZONS.InicioTRi(@tri,@anio)
 set @fin = FOUR_SIZONS.finTri(@tri,@anio)
 
-if(not exists (select *  from four_sizons.Reserva where Reserva_Codigo!=1 and Reserva_Codigo!=2 and Reserva_Codigo!=6))
+if(not exists (select *  from four_sizons.Reserva r join FOUR_SIZONS.ReservaMod m on r.Reserva_Codigo=m.Reserva_Codigo 
+			 where r.Reserva_Codigo!=1 and r.Reserva_Codigo!=2 and r.Reserva_Codigo!=6 and m.ResMod_Fecha between @inicio and @fin))
 	begin
 		raiserror('No hay datos reservas canceladas',13,1)
 		rollback tran
@@ -2447,12 +2525,14 @@ set @fin = CONVERT(datetime,FOUR_SIZONS.finTri(@tri,@anio),121)
 select top 5 h.Hotel_Codigo
 
 
-from FOUR_SIZONS.Hotel h, FOUR_SIZONS.Estadia e
-where h.Hotel_Codigo=e.Hotel_Codigo and e.Estadia_FechaInicio between @inicio and @fin
+from FOUR_SIZONS.Hotel h, FOUR_SIZONS.Estadia e, FOUR_SIZONS.Factura f
+where h.Hotel_Codigo=e.Hotel_Codigo and f.Estadia_Codigo=e.Estadia_Codigo and f.Factura_Estado=1 and f.Factura_Fecha between @inicio and @fin
 group by h.Hotel_Codigo
 order by sum(FOUR_SIZONS.calcConsumible(e.Estadia_Codigo,0))
 end 
 go
+
+
 
 create procedure four_sizons.hotelMasCerrado
 @anio numeric(18),
@@ -2464,7 +2544,7 @@ declare @inicio datetime
 
 set @inicio =CONVERT(datetime, FOUR_SIZONS.InicioTRi(@tri,@anio),121)
 set @fin = CONVERT(datetime,FOUR_SIZONS.finTri(@tri,@anio),121)
-if(not exists (select * from four_sizons.Hotel_Cerrado))
+if(not exists (select * from four_sizons.Hotel_Cerrado where  (Cerrado_FechaI between @inicio and @fin) or (Cerrado_FechaF between @inicio and @fin)))
 	begin
 		raiserror('No hay datos de hoteles que cerraron',13,1)
 		rollback
@@ -2545,12 +2625,10 @@ as begin
 	set @inicio = convert(datetime,FOUR_SIZONS.InicioTRi(@tri,@anio),121)
 	set @fin = convert(datetime,FOUR_SIZONS.finTri(@tri,@anio),121)
 
-
-
 	select top 5 c.Cliente_Codigo, c.cliente_numdoc , c.cliente_nombre , c.cliente_apellido, sum(FOUR_SIZONS.calcPuntaje(f.Estadia_Codigo))puntos
 
 		from Cliente c JOIN Factura f on c.Cliente_Codigo=f.Cliente_Codigo
-		where f.Factura_Fecha between @inicio and @fin
+		where f.Factura_Estado=1 and f.Factura_Fecha between @inicio and @fin
 		group by c.Cliente_Codigo, c.cliente_numdoc , c.cliente_nombre , c.cliente_apellido
 
 		order by sum(FOUR_SIZONS.calcPuntaje(f.Estadia_Codigo)) desc

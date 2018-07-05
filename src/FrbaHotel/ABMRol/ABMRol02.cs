@@ -18,6 +18,7 @@ namespace FrbaHotel.ABMRol
         public int error;
         public string func_nombre;
         public decimal func_codigo;
+        public bool altaValida;
 
         public ABMRol02(string modo, string rolId)
         {
@@ -34,6 +35,7 @@ namespace FrbaHotel.ABMRol
                     labelTitulo.Text = "Alta de Rol";
                     lEstado.Visible = false;
                     txt_estado.Visible = false;
+                    lbl_obligacion.ForeColor = Color.Red;
                     break;
                 case "DLT":
                     labelTitulo.Text = "Baja de Rol";
@@ -177,9 +179,39 @@ namespace FrbaHotel.ABMRol
             this.Close();
         }
 
+        public bool verificarObligatorios()
+        {
+            altaValida = true;
+
+            if (txt_nombreRol.Text == "") altaValida = false;
+            return altaValida;
+        }
+
+        bool IsNumber(string s)
+        {
+            foreach (char c in s)
+            {
+                if (!Char.IsDigit(c))
+                    return false;
+            }
+            return true;
+        }
+
         private void boton_aceptar_Click(object sender, EventArgs e)
         {
+
             error = 0;
+            if (verificarObligatorios() == false)
+            {
+                error = 1;
+                MessageBox.Show("Por favor, complete los campos obligatorios", "FOUR SIZONS - FRBA Hoteles", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            }
+
+            if (IsNumber(txt_nombreRol.Text))
+            {
+                error = 1;
+                MessageBox.Show("Por favor, el nombre del rol no debe contener números", "FOUR SIZONS - FRBA Hoteles", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            };
             switch (modoABM)
             {
                 case "INS":
@@ -195,9 +227,10 @@ namespace FrbaHotel.ABMRol
                     nombreSP = "FOUR_SIZONS.ModificacionRol";
                     break;
             }
-            ejecutarABMRol(nombreSP);
+            
             if (error == 0)
             {
+                ejecutarABMRol(nombreSP);
                 this.Close();
             }
         }

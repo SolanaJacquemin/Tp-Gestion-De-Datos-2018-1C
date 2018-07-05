@@ -25,6 +25,30 @@ namespace FrbaHotel.ABMHotel
 
             cb_estrellas.DropDownStyle = ComboBoxStyle.DropDownList;
 
+            iniciarGrilla();
+
+            cb_estrellas.Items.Add("");
+            cb_estrellas.Items.Add("1");
+            cb_estrellas.Items.Add("2");
+            cb_estrellas.Items.Add("3");
+            cb_estrellas.Items.Add("4");
+            cb_estrellas.Items.Add("5");
+        }
+
+
+
+        private void refrescarGrid()
+        {
+            dgv_Hoteles.ClearSelection();
+            foreach (DataGridViewRow row in dgv_Hoteles.Rows)
+                if (Convert.ToBoolean(row.Cells[11].Value) == false)
+                {
+                    row.DefaultCellStyle.BackColor = Color.Red;
+                }
+        }
+
+        public void iniciarGrilla()
+        {
             Conexion con = new Conexion();
             con.strQuery = "SELECT * FROM FOUR_SIZONS.Hotel ORDER BY Hotel_Codigo";
             con.executeQuery();
@@ -49,25 +73,6 @@ namespace FrbaHotel.ABMHotel
                 con.lector.GetDateTime(10), con.lector.GetBoolean(11)});
             }
             con.closeConection();
-
-            cb_estrellas.Items.Add("");
-            cb_estrellas.Items.Add("1");
-            cb_estrellas.Items.Add("2");
-            cb_estrellas.Items.Add("3");
-            cb_estrellas.Items.Add("4");
-            cb_estrellas.Items.Add("5");
-        }
-
-
-
-        private void refrescarGrid()
-        {
-            dgv_Hoteles.ClearSelection();
-            foreach (DataGridViewRow row in dgv_Hoteles.Rows)
-                if (Convert.ToBoolean(row.Cells[11].Value) == false)
-                {
-                    row.DefaultCellStyle.BackColor = Color.Red;
-                }
         }
 
         private void buscar()
@@ -77,7 +82,7 @@ namespace FrbaHotel.ABMHotel
             Conexion con = new Conexion();
             con.strQuery = "SELECT * FROM FOUR_SIZONS.Hotel WHERE 1=1";
             if (txt_codigo.Text != "")
-                con.strQuery = con.strQuery + "AND Hotel_Codigo like '%" + txt_codigo.Text + "%' ";
+                con.strQuery = con.strQuery + "AND Hotel_Codigo =" + txt_codigo.Text;
             if (txt_nombre.Text != "")
                 con.strQuery = con.strQuery + "AND Hotel_Nombre like '%" + txt_nombre.Text + "%' ";
             if (txt_mail.Text != "")
@@ -152,6 +157,8 @@ namespace FrbaHotel.ABMHotel
             cb_estrellas.Text = "";
             txt_ciudad.Text = "";
             txt_pais.Text = "";
+            iniciarGrilla();
+            refrescarGrid();
         }
 
         private void btn_volver_Click(object sender, EventArgs e)

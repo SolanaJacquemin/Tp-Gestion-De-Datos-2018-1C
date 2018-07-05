@@ -15,6 +15,7 @@ namespace FrbaHotel.RegistrarEstadia
 
         public decimal dgv_CodReserva;
         public int index;
+        public decimal reserva;
 
         public GestionEstadias()
         {
@@ -160,6 +161,19 @@ namespace FrbaHotel.RegistrarEstadia
             int index = e.RowIndex;
             DataGridViewRow selectedRow = dgv_Reserva.Rows[index];
             dgv_CodReserva = Convert.ToDecimal(selectedRow.Cells[0].Value.ToString());
+        }
+
+        private void lbl_RegConsumible_Click(object sender, EventArgs e)
+        {
+            this.Hide();
+          //  Consumibles formConsumible = new Consumibles();
+          //  formConsumible.ShowDialog();
+            this.Show();
+        }
+
+        private void button1_Click(object sender, EventArgs e)
+        {
+
         }
 
     }

@@ -217,6 +217,12 @@
     <Compile Include="RegistrarConsumible\Form1.Designer.cs">
       <DependentUpon>Form1.cs</DependentUpon>
     </Compile>
+    <Compile Include="RegistrarEstadia\AgregarTarjeta.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="RegistrarEstadia\AgregarTarjeta.Designer.cs">
+      <DependentUpon>AgregarTarjeta.cs</DependentUpon>
+    </Compile>
     <Compile Include="RegistrarEstadia\GestionEstadia.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -319,6 +325,9 @@
       <AutoGen>True</AutoGen>
       <DependentUpon>Resources.resx</DependentUpon>
     </Compile>
+    <EmbeddedResource Include="RegistrarEstadia\AgregarTarjeta.resx">
+      <DependentUpon>AgregarTarjeta.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="RegistrarEstadia\GestionEstadia.resx">
       <DependentUpon>GestionEstadia.cs</DependentUpon>
     </EmbeddedResource>

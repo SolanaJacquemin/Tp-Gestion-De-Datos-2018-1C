@@ -51,6 +51,7 @@
             this.txt_nro_hab = new System.Windows.Forms.TextBox();
             this.txt_piso = new System.Windows.Forms.TextBox();
             this.txt_hotel_nombre = new System.Windows.Forms.TextBox();
+            this.lbl_obligacion = new System.Windows.Forms.Label();
             this.groupBox1.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -76,7 +77,7 @@
             // 
             // boton_aceptar
             // 
-            this.boton_aceptar.Location = new System.Drawing.Point(29, 287);
+            this.boton_aceptar.Location = new System.Drawing.Point(29, 315);
             this.boton_aceptar.Name = "boton_aceptar";
             this.boton_aceptar.Size = new System.Drawing.Size(75, 23);
             this.boton_aceptar.TabIndex = 8;
@@ -86,7 +87,7 @@
             // 
             // boton_volver
             // 
-            this.boton_volver.Location = new System.Drawing.Point(397, 287);
+            this.boton_volver.Location = new System.Drawing.Point(397, 315);
             this.boton_volver.Name = "boton_volver";
             this.boton_volver.Size = new System.Drawing.Size(75, 23);
             this.boton_volver.TabIndex = 10;
@@ -96,7 +97,7 @@
             // 
             // btn_aceptar_nuevo
             // 
-            this.btn_aceptar_nuevo.Location = new System.Drawing.Point(110, 287);
+            this.btn_aceptar_nuevo.Location = new System.Drawing.Point(110, 315);
             this.btn_aceptar_nuevo.Name = "btn_aceptar_nuevo";
             this.btn_aceptar_nuevo.Size = new System.Drawing.Size(108, 23);
             this.btn_aceptar_nuevo.TabIndex = 9;
@@ -269,11 +270,21 @@
             this.txt_hotel_nombre.Size = new System.Drawing.Size(238, 20);
             this.txt_hotel_nombre.TabIndex = 1;
             // 
+            // lbl_obligacion
+            // 
+            this.lbl_obligacion.AutoSize = true;
+            this.lbl_obligacion.Location = new System.Drawing.Point(39, 284);
+            this.lbl_obligacion.Name = "lbl_obligacion";
+            this.lbl_obligacion.Size = new System.Drawing.Size(169, 13);
+            this.lbl_obligacion.TabIndex = 46;
+            this.lbl_obligacion.Text = "Todos los campos son obligatorios";
+            // 
             // ABMHabitacion02
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(490, 320);
+            this.ClientSize = new System.Drawing.Size(490, 350);
+            this.Controls.Add(this.lbl_obligacion);
             this.Controls.Add(this.groupBox1);
             this.Controls.Add(this.label1);
             this.Controls.Add(this.label11);
@@ -316,5 +327,6 @@
         private System.Windows.Forms.Label label6;
         private System.Windows.Forms.TextBox txt_descripcion;
         private System.Windows.Forms.TextBox txt_hotel_codigo;
+        private System.Windows.Forms.Label lbl_obligacion;
     }
 }
