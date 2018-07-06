@@ -32,11 +32,13 @@ namespace FrbaHotel.GestionReservas
             txt_reservaID.Text = reservaID.ToString();
 
             cb_tipoHabitacion.DropDownStyle = ComboBoxStyle.DropDownList;
+            boton_aceptar.Enabled = false;
 
             switch (modoABM)
             {
                 case "DLT":
                     labelTitulo.Text = "Cancelar Reserva";
+                    txt_reservaID.Enabled = false;
                     dt_fechaDesde.Enabled = false;
                     dt_fechaHasta.Enabled = false;
                     cb_tipoHabitacion.Enabled = false;
@@ -47,6 +49,7 @@ namespace FrbaHotel.GestionReservas
                     break;
                 case "UPD":
                     labelTitulo.Text = "Modificación de Reserva";
+                    txt_reservaID.Enabled = false;
                     dt_fechaDesde.Enabled = true;
                     dt_fechaHasta.Enabled = true;
                     cb_tipoHabitacion.Enabled = true;
@@ -75,10 +78,12 @@ namespace FrbaHotel.GestionReservas
             }
             con.closeConection();
 
-            con.strQuery = "SELECT HT.Habitacion_Tipo_Descripcion, R.Reserva_Fecha_Inicio, R.Reserva_Fecha_Fin, H.Hotel_Codigo, H.Hotel_Nombre, R.Regimen_Codigo, REG.Regimen_Descripcion" +
+            con.strQuery = "SELECT HT.Habitacion_Tipo_Descripcion, R.Reserva_Fecha_Inicio, R.Reserva_Fecha_Fin, H.Hotel_Codigo," +
+                           " H.Hotel_Nombre, R.Regimen_Codigo, REG.Regimen_Descripcion, R.Reserva_Cant_Hab, R.Reserva_Precio" +
                            " FROM FOUR_SIZONS.Reserva R" +
-                           " JOIN FOUR_SIZONS.Habitacion_TipoXReser HTR ON HTR.Reserva_Codigo = R.Reserva_Codigo" +
-                           " JOIN FOUR_SIZONS.Habitacion_Tipo HT ON HT.Habitacion_Tipo_Codigo = HTR.Habitacion_Tipo_Codigo" +
+                           //" JOIN FOUR_SIZONS.Habitacion_TipoXReser HTR ON HTR.Reserva_Codigo = R.Reserva_Codigo" +
+                           //" JOIN FOUR_SIZONS.Habitacion_Tipo HT ON HT.Habitacion_Tipo_Codigo = HTR.Habitacion_Tipo_Codigo" +
+                           " JOIN FOUR_SIZONS.Habitacion_Tipo HT ON HT.Habitacion_Tipo_Codigo = R.Habitacion_Tipo_Codigo" +
                            " JOIN FOUR_SIZONS.Hotel H ON H.Hotel_Codigo = R.Hotel_Codigo" +
                            " JOIN FOUR_SIZONS.Regimen REG ON REG.Regimen_Codigo = R.Regimen_Codigo" +
                            " WHERE R.Reserva_Codigo = " + txt_reservaID.Text;
@@ -92,7 +97,9 @@ namespace FrbaHotel.GestionReservas
                 hotelID = Convert.ToDecimal(con.lector.GetDecimal(3).ToString());
                 txt_hotel.Text = con.lector.GetString(4);
                 regimenID = Convert.ToDecimal(con.lector.GetDecimal(5).ToString());
-                txt_regimen.Text = con.lector.GetString(6); 
+                txt_regimen.Text = con.lector.GetString(6);
+                txt_cantHab.Text = con.lector.GetDecimal(7).ToString();
+                txt_costoTotal.Text = con.lector.GetDecimal(8).ToString();
             }
             con.closeConection();
 
@@ -144,14 +151,12 @@ namespace FrbaHotel.GestionReservas
                 con.strQuery = "four_sizons.ModificarReserva";
                 con.execute();
                 con.command.CommandType = CommandType.StoredProcedure;
-                
-                //MessageBox.Show((Convert.ToDecimal(txt_cantHab.Text)).ToString());
                 con.command.Parameters.Add("@codigoReserva", SqlDbType.Decimal).Value = Convert.ToDecimal(txt_reservaID.Text);
                 con.command.Parameters.Add("@fechaInicio", SqlDbType.DateTime).Value = dt_fechaDesde.Value.ToString();
                 con.command.Parameters.Add("@fechaFin", SqlDbType.DateTime).Value = dt_fechaHasta.Value.ToString();
                 con.command.Parameters.Add("@userId", SqlDbType.NVarChar).Value = usuario;
                 con.command.Parameters.Add("@hotid", SqlDbType.Decimal).Value = hotelID;
-                con.command.Parameters.Add("@tipoHab", SqlDbType.NVarChar).Value = cb_tipoHabitacion.Text;
+                con.command.Parameters.Add("@tipoHabDesc", SqlDbType.NVarChar).Value = cb_tipoHabitacion.Text;
                 con.command.Parameters.Add("@detalle", SqlDbType.NVarChar).Value = txt_detalle.Text;
                 con.command.Parameters.Add("@regId", SqlDbType.Decimal).Value = regimenID;
                 
@@ -164,6 +169,8 @@ namespace FrbaHotel.GestionReservas
                     con.command.Parameters.Add("@estado", SqlDbType.Bit).Value = 1;
                 }
 
+                con.command.Parameters.Add("@canthab", SqlDbType.Decimal).Value = Convert.ToDecimal(txt_cantHab.Text);
+
                 con.openConection();
                 con.command.ExecuteNonQuery();
                 con.closeConection();
@@ -175,6 +182,43 @@ namespace FrbaHotel.GestionReservas
             {
                 error = 1;
                 MessageBox.Show("Error al completar la operación. " + ex.Message, "FOUR SIZONS - FRBA Hoteles", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+        }
+
+        private void btn_disponibilidad_Click(object sender, EventArgs e)
+        {
+            error = 0;
+            //verificarCampos();
+            if (error == 0)
+            {
+                try
+                {
+                    Conexion con = new Conexion();
+                    con.strQuery = "four_sizons.DisponbilidadyPrecio";
+                    con.execute();
+                    con.command.CommandType = CommandType.StoredProcedure;
+
+                    con.command.Parameters.Add("@fechaInicio", SqlDbType.DateTime).Value = dt_fechaDesde.Value.ToString();
+                    con.command.Parameters.Add("@fechaFin", SqlDbType.DateTime).Value = dt_fechaHasta.Value.ToString();
+                    con.command.Parameters.Add("@hotId", SqlDbType.Decimal).Value = hotelID;
+                    con.command.Parameters.Add("@regId", SqlDbType.Decimal).Value = regimenID;
+                    con.command.Parameters.Add("@canthab", SqlDbType.Decimal).Value = txt_cantHab.Text;
+                    con.command.Parameters.Add("@tipoHabDesc", SqlDbType.NVarChar).Value = cb_tipoHabitacion.Text;
+                    con.command.Parameters.Add("@precio", SqlDbType.Decimal).Direction = ParameterDirection.Output;
+
+                    con.openConection();
+                    con.command.ExecuteNonQuery();
+                    con.closeConection();
+
+                    txt_costoTotal.Text = con.command.Parameters["@precio"].Value.ToString();
+                    MessageBox.Show("Existe disponbilidad y el precio es de: " + txt_costoTotal.Text, "FOUR SIZONS - FRBA Hoteles", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                    boton_aceptar.Enabled = true;
+                }
+                catch (Exception ex)
+                {
+                    error = 1;
+                    MessageBox.Show("Error al completar la operación. " + ex.Message, "FOUR SIZONS - FRBA Hoteles", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                }
             }
         }
     }

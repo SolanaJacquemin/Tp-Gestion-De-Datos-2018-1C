@@ -168,11 +168,17 @@ namespace FrbaHotel.GestionReservas
 
         private void btn_buscar_Click(object sender, EventArgs e)
         {
-            if (dt_fechaHasta.Value < dt_fechaDesde.Value)
+            decimal error = 0;
+            if (chk_conFecha.Checked)
             {
-                MessageBox.Show("El campo Fecha Hasta no puede ser posterior a Fecha Desde", "FOUR SIZONS - FRBA Hoteles", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                if (dt_fechaHasta.Value < dt_fechaDesde.Value)
+                {
+                    error = 1;
+                    MessageBox.Show("El campo Fecha Hasta no puede ser posterior a Fecha Desde", "FOUR SIZONS - FRBA Hoteles", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                }
             }
-            else
+
+            if(error == 0)
             {
                 buscar();
             }

@@ -196,8 +196,6 @@ namespace FrbaHotel.ListadoEstadistico
                 {
                     dgv_Listado.Rows.Add(new Object[] { (dataset.Tables[0].Rows[i][0]).ToString(), (dataset.Tables[0].Rows[i][1]).ToString() });
                 }*/
-
-                MessageBox.Show("Consulta correcta", "FOUR SIZONS - FRBA Hoteles", MessageBoxButtons.OK, MessageBoxIcon.Information);
             }
             catch (Exception ex)
             {

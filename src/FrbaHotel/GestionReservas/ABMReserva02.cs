@@ -50,7 +50,7 @@ namespace FrbaHotel.GestionReservas
             txt_nombre.ReadOnly = true;
             txt_apellido.ReadOnly = true;
             txt_telefono.ReadOnly = true;
-            txt_direccion.ReadOnly = true;
+            txt_calle.ReadOnly = true;
             txt_pais.ReadOnly = true;
             txt_ciudad.ReadOnly = true;
             txt_costoTotal.ReadOnly = true;
@@ -106,7 +106,7 @@ namespace FrbaHotel.GestionReservas
                         txt_nombre.ReadOnly = false;
                         txt_apellido.ReadOnly = false;
                         txt_telefono.ReadOnly = false;
-                        txt_direccion.ReadOnly = false;
+                        txt_calle.ReadOnly = false;
                         txt_pais.ReadOnly = false;
                         txt_ciudad.ReadOnly = false;
                     }else if(dr == DialogResult.No){
@@ -117,7 +117,7 @@ namespace FrbaHotel.GestionReservas
                         txt_nombre.Text = con.lector.GetString(1);
                         txt_apellido.Text = con.lector.GetString(2);
                         txt_telefono.Text = con.lector.GetString(3);
-                        txt_direccion.Text = con.lector.GetString(4);
+                        txt_calle.Text = con.lector.GetString(4);
                         txt_ciudad.Text = con.lector.GetString(5);
                         txt_pais.Text = con.lector.GetString(6);
                         esCliente = true;
@@ -156,15 +156,6 @@ namespace FrbaHotel.GestionReservas
                     {
                         case "INS":
                             nombreSP = "FOUR_SIZONS.GenerarReserva";
-                            break;
-
-                        case "UPD":
-                            nombreSP = "FOUR_SIZONS.ModificacionUsuario";
-                            break;
-
-                        case "DLT":
-                            // Baja lógica - Se pone estado en 0
-                            nombreSP = "FOUR_SIZONS.ModificacionUsuario";
                             break;
                     }
                     ejecutarAltaReserva(nombreSP);
@@ -211,7 +202,17 @@ namespace FrbaHotel.GestionReservas
 
                         //ejecutarAltaTipoHab();
 
-                        MessageBox.Show("Operación exitosa", "FOUR SIZONS - FRBA Hoteles", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                        con.strQuery = "SELECT TOP 1 Reserva_Codigo FROM FOUR_SIZONS.Reserva WHERE Cliente_Codigo = " + clienteID + " ORDER BY Reserva_Codigo DESC";
+                        con.executeQuery();
+
+                        if (con.reader())
+                        {
+                            reservaID = Convert.ToDecimal(con.lector.GetDecimal(0).ToString());
+                        }
+
+                        con.closeConection();
+
+                        MessageBox.Show("Operación exitosa. El código de reserva es " + reservaID.ToString() , "FOUR SIZONS - FRBA Hoteles", MessageBoxButtons.OK, MessageBoxIcon.Information);
                     }
                     catch (Exception ex)
                     {
@@ -263,10 +264,10 @@ namespace FrbaHotel.GestionReservas
                 con2.command.Parameters.Add("@telefono", SqlDbType.NVarChar).Value = txt_telefono.Text;
                 con2.command.Parameters.Add("@pais", SqlDbType.NVarChar).Value = txt_pais.Text;
                 con2.command.Parameters.Add("@ciudad", SqlDbType.NVarChar).Value = txt_ciudad.Text;
-                con2.command.Parameters.Add("@calle", SqlDbType.NVarChar).Value = " ";
-                con2.command.Parameters.Add("@numCalle", SqlDbType.Decimal).Value = 0;
-                con2.command.Parameters.Add("@piso", SqlDbType.Decimal).Value = 0;
-                con2.command.Parameters.Add("@depto", SqlDbType.NVarChar).Value = " ";
+                con2.command.Parameters.Add("@calle", SqlDbType.NVarChar).Value = txt_calle.Text;
+                con2.command.Parameters.Add("@numCalle", SqlDbType.Decimal).Value = txt_calle.Text;
+                con2.command.Parameters.Add("@piso", SqlDbType.Decimal).Value = txt_pais.Text;
+                con2.command.Parameters.Add("@depto", SqlDbType.NVarChar).Value = txt_depto.Text;
                 con2.command.Parameters.Add("@localidad", SqlDbType.NVarChar).Value = " ";
                 con2.command.Parameters.Add("@nacionalidad", SqlDbType.NVarChar).Value = " ";
                 con2.command.Parameters.Add("@fechaNac", SqlDbType.DateTime).Value = "01-01-1990";
@@ -402,12 +403,7 @@ namespace FrbaHotel.GestionReservas
             if (dt_fechaHasta.Value < dt_fechaDesde.Value)
             {
                 error = 1;
-                MessageBox.Show("El campo Fecha Hasta no puede ser posterior a Fecha Desde", "FOUR SIZONS - FRBA Hoteles", MessageBoxButtons.OK, MessageBoxIcon.Information);
-            }
-            if (dt_fechaHasta.Value == dt_fechaDesde.Value)
-            {
-                error = 1;
-                MessageBox.Show("Los campos Fecha Desde y Fecha Hasta no pueden ser iguales", "FOUR SIZONS - FRBA Hoteles", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                MessageBox.Show("El campo Fecha Hasta no puede ser igual o posterior a Fecha Desde", "FOUR SIZONS - FRBA Hoteles", MessageBoxButtons.OK, MessageBoxIcon.Information);
             }
             if (regimenID == 0)
             {
@@ -421,7 +417,7 @@ namespace FrbaHotel.GestionReservas
             }
         }
 
-        private void txt_disponibilidad_Click(object sender, EventArgs e)
+        private void btn_disponibilidad_Click(object sender, EventArgs e)
         {
             error = 0;
             verificarCampos();

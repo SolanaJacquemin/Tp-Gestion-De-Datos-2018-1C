@@ -47,9 +47,9 @@
             // 
             this.dgv_Listado.AllowUserToAddRows = false;
             this.dgv_Listado.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            this.dgv_Listado.Location = new System.Drawing.Point(39, 173);
+            this.dgv_Listado.Location = new System.Drawing.Point(12, 173);
             this.dgv_Listado.Name = "dgv_Listado";
-            this.dgv_Listado.Size = new System.Drawing.Size(360, 248);
+            this.dgv_Listado.Size = new System.Drawing.Size(408, 248);
             this.dgv_Listado.TabIndex = 4;
             // 
             // groupBox1
@@ -119,7 +119,7 @@
             // 
             // btn_buscar
             // 
-            this.btn_buscar.Location = new System.Drawing.Point(39, 427);
+            this.btn_buscar.Location = new System.Drawing.Point(12, 427);
             this.btn_buscar.Name = "btn_buscar";
             this.btn_buscar.Size = new System.Drawing.Size(89, 23);
             this.btn_buscar.TabIndex = 3;
@@ -129,7 +129,7 @@
             // 
             // btn_salir
             // 
-            this.btn_salir.Location = new System.Drawing.Point(310, 427);
+            this.btn_salir.Location = new System.Drawing.Point(331, 427);
             this.btn_salir.Name = "btn_salir";
             this.btn_salir.Size = new System.Drawing.Size(89, 23);
             this.btn_salir.TabIndex = 4;

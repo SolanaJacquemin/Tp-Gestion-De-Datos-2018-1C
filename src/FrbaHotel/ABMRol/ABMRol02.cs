@@ -39,16 +39,18 @@ namespace FrbaHotel.ABMRol
                     break;
                 case "DLT":
                     labelTitulo.Text = "Baja de Rol";
-                    txt_nombreRol.ReadOnly = true;
+                    txt_nombreRol.Enabled = false;
                     lb_func.Enabled = false;
                     lb_func_usralta.Enabled = false;
                     btn_agregar.Enabled = false;
                     btn_agregarTodo.Enabled = false;
                     btn_eliminar.Enabled = false;
                     btn_eliminarTodo.Enabled = false;
+                    txt_estado.Enabled = false;
                     break;
                 case "UPD":
                     labelTitulo.Text = "Modificación de Rol";
+                    txt_estado.Enabled = false;
                     break;
             }
         }

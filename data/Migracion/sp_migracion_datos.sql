@@ -292,11 +292,11 @@ BEGIN
 			CONSTRAINT PK_RegXHotel PRIMARY KEY (Hotel_Codigo, Regimen_Codigo)
 		)
 	END
-
+	
 	IF NOT EXISTS (SELECT * FROM sys.tables WHERE name = 'Hotel_Cerrado')
 	BEGIN
 		CREATE TABLE FOUR_SIZONS.Hotel_Cerrado (
-			Cerrado_codigo numeric(18),
+			Cerrado_codigo numeric(18) IDENTITY(1,1),
 			Cerrado_FechaI datetime,
 			Cerrado_FechaF datetime,
 			Cerrado_Detalle nvarchar(255),
@@ -1864,13 +1864,13 @@ rollback tran
 end catch
 
 go
-create procedure four_sizons.ModificarReserva
+alter procedure four_sizons.ModificarReserva
 	@codigoReserva numeric(18),
 	@fechaInicio datetime,
 	@fechaFin datetime,
 	@userId nvarchar(15),
 	@hotid numeric (18),
-	@tipoHab numeric(18),
+	@tipoHabDesc nvarchar(50),
 	@detalle nvarchar (255),
 	@regId numeric(18),
 	@estado numeric(1),
@@ -1881,7 +1881,7 @@ create procedure four_sizons.ModificarReserva
 	begin try 
 
 	declare @cantidadNoches numeric(2)
-
+	declare @tipoHab numeric(18) = (select Habitacion_Tipo_Codigo from FOUR_SIZONS.Habitacion_Tipo where Habitacion_Tipo_Descripcion=@tipoHabDesc)
 
 	declare @fechaCambio datetime
 	set @fechaCambio = GETDATE()

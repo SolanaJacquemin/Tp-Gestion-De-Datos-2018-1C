@@ -205,5 +205,16 @@ namespace FrbaHotel.ABMHotel
             DataGridViewRow selectedRow = dgv_Hoteles.Rows[index];
             dgv_hotel_codigo = selectedRow.Cells[0].Value.ToString();
         }
+
+        private void btn_cerrar_Click(object sender, EventArgs e)
+        {
+            string modo = "CLS";
+            this.Hide();
+            ABMHotel03 formABMHotel03 = new ABMHotel03(Convert.ToDecimal(dgv_hotel_codigo));
+            formABMHotel03.ShowDialog();
+            this.Show();
+            this.buscar();
+            this.refrescarGrid();
+        }
     }
 }

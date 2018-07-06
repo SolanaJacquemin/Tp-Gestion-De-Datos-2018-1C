@@ -109,3 +109,5 @@ C:\Users\Janice\TP GESTION ACTUALIZADO\Tp-Gestion-De-Datos-2018-1C\src\FrbaHotel
 C:\Users\Janice\TP GESTION ACTUALIZADO\Tp-Gestion-De-Datos-2018-1C\src\FrbaHotel\obj\Debug\FrbaHotel.RegistrarEstadia.RegistrarEstadia.resources
 C:\Users\Janice\TP GESTION ACTUALIZADO\Tp-Gestion-De-Datos-2018-1C\src\FrbaHotel\obj\Debug\FrbaHotel.csproj.GenerateResource.Cache
 C:\Users\Janice\TP GESTION ACTUALIZADO\Tp-Gestion-De-Datos-2018-1C\src\FrbaHotel\obj\Debug\FrbaHotel.RegistrarEstadia.AgregarTarjeta.resources
+C:\Users\Nicolas\Desktop\Gestion de Datos\Tp-Gestion-De-Datos-2018-1C\src\FrbaHotel\obj\Debug\FrbaHotel.ABMHotel.ABMHotel03.resources
+C:\Users\Nicolas\Desktop\Gestion de Datos\Tp-Gestion-De-Datos-2018-1C\src\FrbaHotel\obj\Debug\FrbaHotel.RegistrarEstadia.AgregarTarjeta.resources
