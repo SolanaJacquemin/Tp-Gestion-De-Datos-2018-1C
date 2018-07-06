@@ -29,9 +29,9 @@ namespace FrbaHotel.ABMHotel
 
             cb_estrellas.DropDownStyle = ComboBoxStyle.DropDownList;
 
+            limpiar();
             refrescarGrid();
 
-            cb_estrellas.Items.Add("");
             cb_estrellas.Items.Add("1");
             cb_estrellas.Items.Add("2");
             cb_estrellas.Items.Add("3");
@@ -40,6 +40,16 @@ namespace FrbaHotel.ABMHotel
         }
 
         private void refrescarGrid()
+        {
+            dgv_Hoteles.ClearSelection();
+            foreach (DataGridViewRow row in dgv_Hoteles.Rows)
+            if (Convert.ToBoolean(row.Cells[11].Value) == false)
+            {
+                row.DefaultCellStyle.BackColor = Color.Red;
+            }
+        }
+
+        public void iniciarGrilla()
         {
             Conexion con = new Conexion();
             con.strQuery = "SELECT * FROM FOUR_SIZONS.Hotel ";
@@ -51,7 +61,7 @@ namespace FrbaHotel.ABMHotel
             con.executeQuery();
             if (!con.reader())
             {
-                MessageBox.Show("No se han encontrado usuarios. Revise los criterios de búsqueda", "FOUR SIZONS - FRBA Hoteles", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                MessageBox.Show("No se han encontrado hoteles. Revise los criterios de búsqueda", "FOUR SIZONS - FRBA Hoteles", MessageBoxButtons.OK, MessageBoxIcon.Information);
                 con.strQuery = "";
                 con.closeConection();
                 return;
@@ -70,13 +80,6 @@ namespace FrbaHotel.ABMHotel
                 con.lector.GetDateTime(10), con.lector.GetBoolean(11)});
             }
             con.closeConection();
-
-            dgv_Hoteles.ClearSelection();
-            foreach (DataGridViewRow row in dgv_Hoteles.Rows)
-            if (Convert.ToBoolean(row.Cells[11].Value) == false)
-            {
-                row.DefaultCellStyle.BackColor = Color.Red;
-            }
         }
 
         private void buscar()
@@ -105,7 +108,7 @@ namespace FrbaHotel.ABMHotel
             con.executeQuery();
             if (!con.reader())
             {
-                MessageBox.Show("No se han encontrado usuarios. Revise los criterios de búsqueda", "FOUR SIZONS - FRBA Hoteles", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                MessageBox.Show("No se han encontrado hoteles. Revise los criterios de búsqueda", "FOUR SIZONS - FRBA Hoteles", MessageBoxButtons.OK, MessageBoxIcon.Information);
                 con.strQuery = "";
                 con.closeConection();
                 return;
@@ -133,6 +136,21 @@ namespace FrbaHotel.ABMHotel
                 }
         }
 
+        public void limpiar()
+        {
+            iniciarGrilla();
+
+            txt_codigo.Text = "";
+            txt_nombre.Text = "";
+            txt_mail.Text = "";
+            txt_telefono.Text = "";
+            txt_calle.Text = "";
+            cb_estrellas.Text = "";
+            txt_ciudad.Text = "";
+            txt_pais.Text = "";
+            refrescarGrid();
+        }
+
         private void ABMHotel_Load(object sender, EventArgs e)
         {
             if (hotel != 0)
@@ -147,6 +165,7 @@ namespace FrbaHotel.ABMHotel
                 }
                 txt_codigo.Enabled = false;
                 btn_promptHotel.Enabled = false;
+                txt_codigo.Enabled = false;
             }
             dgv_Hoteles.ClearSelection();
         }
@@ -173,15 +192,7 @@ namespace FrbaHotel.ABMHotel
 
         private void btn_limpiar_Click(object sender, EventArgs e)
         {
-            txt_codigo.Text = "";
-            txt_nombre.Text = "";
-            txt_mail.Text = "";
-            txt_telefono.Text = "";
-            txt_calle.Text = "";
-            cb_estrellas.Text = "";
-            txt_ciudad.Text = "";
-            txt_pais.Text = "";
-            //refrescarGrid();
+            limpiar();
         }
 
         private void btn_volver_Click(object sender, EventArgs e)
@@ -197,7 +208,7 @@ namespace FrbaHotel.ABMHotel
             formABMUsuario02.ShowDialog();
             this.Show();
             this.buscar();
-            //this.refrescarGrid();
+            this.refrescarGrid();
         }
 
         private void boton_baja_Click(object sender, EventArgs e)
@@ -208,7 +219,7 @@ namespace FrbaHotel.ABMHotel
             formABMUsuario02.ShowDialog();
             this.Show();
             this.buscar();
-            //this.refrescarGrid();
+            this.refrescarGrid();
         }
 
         private void boton_modificacion_Click(object sender, EventArgs e)
@@ -219,7 +230,7 @@ namespace FrbaHotel.ABMHotel
             formABMUsuario02.ShowDialog();
             this.Show();
             this.buscar();
-            //this.refrescarGrid();
+            this.refrescarGrid();
         }
 
         public void dgv_Hoteles_CellClick(object sender, DataGridViewCellEventArgs e)
@@ -236,7 +247,7 @@ namespace FrbaHotel.ABMHotel
             formABMHotel03.ShowDialog();
             this.Show();
             this.buscar();
-            //this.refrescarGrid();
+            this.refrescarGrid();
         }
 
         private void btn_promptHotel_Click(object sender, EventArgs e)

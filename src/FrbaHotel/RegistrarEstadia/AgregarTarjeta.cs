@@ -16,6 +16,8 @@ namespace FrbaHotel.RegistrarEstadia
         public decimal error;
         public bool valido;
         public decimal estadia;
+        public decimal cliente;
+
         public AgregarTarjeta(decimal est)
         {
             InitializeComponent();
@@ -31,8 +33,18 @@ namespace FrbaHotel.RegistrarEstadia
             dt_fecha_venc.Format = DateTimePickerFormat.Custom;
             dt_fecha_venc.CustomFormat = "dd/MM/yyyy";
 
+            Conexion con = new Conexion();
+            con.strQuery="select Cliente_Codigo from FOUR_SIZONS.EstadiaXCliente where Estadia_Codigo = " + estadia;
+            con.executeQuery();
+            if(con.reader())
+            {
+             cliente = con.lector.GetDecimal(0);
+            }
+            con.closeConection();
+
             txt_estadiaId.Text = estadia.ToString();
             txt_estadiaId.Enabled = false;
+            txt_codigoCli.Text = cliente.ToString();
             
         }
         public bool verificarObligatorios()

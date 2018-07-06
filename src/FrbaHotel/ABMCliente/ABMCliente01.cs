@@ -31,15 +31,6 @@ namespace FrbaHotel.AbmCliente
             iniciarGrilla();
             refrescarGrid();
 
-            /*
-                con.strQuery = "SELECT Parametro_Descripcion FROM FOUR_SIZONS.Parametros WHERE Parametro_Codigo = 'DOCUMENTO'";
-                con.executeQuery();
-                while (con.reader())
-                {
-                    cb_tipodoc.Items.Add(con.lector.GetString(0));
-                }
-                con.closeConection();
-             */
         }
 
         public void iniciarGrilla() 
@@ -131,6 +122,8 @@ namespace FrbaHotel.AbmCliente
             }
             contador = 0;
             con.closeConection();
+            dgv_Clientes.Rows.Clear();
+            refrescarGrid();
         } 
           
         private void btn_volver_Click(object sender, EventArgs e)
@@ -155,8 +148,8 @@ namespace FrbaHotel.AbmCliente
             ABMCliente02 formABMCliente02 = new ABMCliente02(modo, dgv_cliente_ID);
             formABMCliente02.ShowDialog();
             this.Show();
-            this.buscar();
-            //this.refrescarGrid();
+            limpiar();
+            this.refrescarGrid();
              
         }
         
@@ -170,8 +163,8 @@ namespace FrbaHotel.AbmCliente
                 ABMCliente02 formABMCliente02 = new ABMCliente02(modo, dgv_cliente_ID);
                 formABMCliente02.ShowDialog();
                 this.Show();
-                this.buscar();
-                //this.refrescarGrid();
+                this.limpiar();
+                this.refrescarGrid();
             }
             else
             {
@@ -189,8 +182,8 @@ namespace FrbaHotel.AbmCliente
                 ABMCliente02 formABMCliente02 = new ABMCliente02(modo, dgv_cliente_ID);
                 formABMCliente02.ShowDialog();
                 this.Show();
-                this.buscar();
-                //this.refrescarGrid();
+                limpiar();
+                this.refrescarGrid();
             }
             else
             {

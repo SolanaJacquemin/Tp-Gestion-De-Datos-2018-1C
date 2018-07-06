@@ -69,7 +69,6 @@ namespace FrbaHotel.ABMHotel
                     break;
             }
 
-            cb_estrellas.Items.Add("");
             cb_estrellas.Items.Add("1");
             cb_estrellas.Items.Add("2");
             cb_estrellas.Items.Add("3");
@@ -96,11 +95,7 @@ namespace FrbaHotel.ABMHotel
                 txt_nombre_hotel.Enabled = false;
             }
 
-            if (modoABM == "INS")
-            {
-                //levantarCombos();
-            }
-            else
+            if (modoABM != "INS")
             {
                 //txt_codigo.Text = hotel;
                 Conexion con = new Conexion();
@@ -210,7 +205,6 @@ namespace FrbaHotel.ABMHotel
                     MessageBox.Show("Error al completar la operación. " + ex.Message, "FOUR SIZONS - FRBA Hoteles", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 }
 
-
             }
             else
             {
@@ -318,7 +312,6 @@ namespace FrbaHotel.ABMHotel
                 txt_recargaEstrella.Text = "";
                 dt_fecha_cre.Text = "";
                 cb_estrellas.Items.Clear();
-                //levantarCombos();
             }
         }
 

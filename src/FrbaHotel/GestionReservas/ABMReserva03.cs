@@ -33,6 +33,7 @@ namespace FrbaHotel.GestionReservas
 
             cb_tipoHabitacion.DropDownStyle = ComboBoxStyle.DropDownList;
             boton_aceptar.Enabled = false;
+            txt_costoTotal.Enabled = false;
 
             switch (modoABM)
             {

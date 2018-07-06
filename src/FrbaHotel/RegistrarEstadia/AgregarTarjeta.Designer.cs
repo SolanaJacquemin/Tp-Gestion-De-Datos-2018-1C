@@ -149,6 +149,9 @@
             // cb_marcaTarj
             // 
             this.cb_marcaTarj.FormattingEnabled = true;
+            this.cb_marcaTarj.Items.AddRange(new object[] {
+            "Visa",
+            "Master Card"});
             this.cb_marcaTarj.Location = new System.Drawing.Point(116, 131);
             this.cb_marcaTarj.Name = "cb_marcaTarj";
             this.cb_marcaTarj.Size = new System.Drawing.Size(181, 21);
