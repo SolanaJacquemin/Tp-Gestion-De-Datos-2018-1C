@@ -18,6 +18,8 @@ namespace FrbaHotel.RegistrarEstadia
         public string modoCheck;
         public int error;
         public string nombreSp;
+        public bool generarFactura;
+        public bool facturaGenerada;
 
         public RegistrarEstadia(string modo, decimal res)
         {
@@ -27,6 +29,11 @@ namespace FrbaHotel.RegistrarEstadia
             modoCheck = modo;
             reserva = res;
 
+            txt_estadia.Enabled = false;
+
+            generarFactura = false;
+            facturaGenerada = false;
+
             switch (modoCheck)
             {
                 case "IN":
@@ -34,6 +41,8 @@ namespace FrbaHotel.RegistrarEstadia
                     gb_Titulo.Text = "Check-in";
                     lbl_Fecha.Text = "Fecha de ingreso";
                     //     txt_CodReserva.ReadOnly = true;
+                    txt_estadia.Visible = false;
+                    lbl_estadia.Visible = false;
 
                     break;
 
@@ -107,7 +116,7 @@ namespace FrbaHotel.RegistrarEstadia
                 if (con.reader())
                 {
                     txt_estadia.Text = con.lector.GetDecimal(0).ToString();
-                    txt_CodReserva.Text = con.lector.GetDecimal(0).ToString();
+                    txt_CodReserva.Text = con.lector.GetDecimal(1).ToString();
                     dt_Fecha.Value = con.lector.GetDateTime(2);
                     txt_hotel.Text = con.lector.GetDecimal(10).ToString();
                     txt_hab.Text = con.lector.GetDecimal(9).ToString();
@@ -184,37 +193,54 @@ namespace FrbaHotel.RegistrarEstadia
 
         private void btn_Aceptar_Click(object sender, System.EventArgs e)
         {
-
-            error = 0;
-            if (verificarObligatorios() == false)
+            if((generarFactura == false) && (facturaGenerada == false))
             {
-                error = 1;
-                MessageBox.Show("Por favor, complete los campos obligatorios", "FOUR SIZONS - FRBA Hoteles", MessageBoxButtons.OK, MessageBoxIcon.Information);
-            };
+                error = 0;
+                if (verificarObligatorios() == false)
+                {
+                    error = 1;
+                    MessageBox.Show("Por favor, complete los campos obligatorios", "FOUR SIZONS - FRBA Hoteles", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                };
 
-            //FALTA VERIFICAR EL CB_MEDIO DE PAGO
+                if (error == 0)
+                {
+                    //FALTA VERIFICAR EL CB_MEDIO DE PAGO
 
-            switch (modoCheck)
-            {
-                case "IN":
-                    nombreSp = "FOUR_SIZONS.RegistrarCheckIn";
-                    this.Hide();
-                    AgregarTarjeta formFacturar = new AgregarTarjeta();
-                    formFacturar.ShowDialog();
-                    this.Show();
-                    //   COMO HAGO PARA QUE ENTRE A NUEVOCLIENTE?? 
+                    switch (modoCheck)
+                    {
+                        case "IN":
+                            nombreSp = "FOUR_SIZONS.RegistrarCheckIn";
+                            this.Hide();
+                            AgregarTarjeta formFacturar = new AgregarTarjeta();
+                            formFacturar.ShowDialog();
+                            this.Show();
+                            //   COMO HAGO PARA QUE ENTRE A NUEVOCLIENTE?? 
 
-                    break;
+                            break;
 
-                case "OUT":
-                    // SE EFCTIVIZA / CIERRA LA ESTADIA
-                    nombreSp = "FOUR_SIZONS.RegistrarCheckOut";
-                    break;
+                        case "OUT":
+                            // SE EFCTIVIZA / CIERRA LA ESTADIA
+                            nombreSp = "FOUR_SIZONS.RegistrarCheckOut";
+                            break;
+                    }
+
+                    if (error == 0)
+                    {
+                        ejecutarRegistrarEstadia(nombreSp);
+                        generarFactura = true;
+                        //this.Close();
+                    }
+                }
+
             }
 
-            if (error == 0)
+            if ((generarFactura == true) && (facturaGenerada == false))
             {
-                ejecutarRegistrarEstadia(nombreSp);
+                MessageBox.Show("Por favor, genere la factura", "FOUR SIZONS - FRBA Hoteles", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            }
+
+            if ((generarFactura == true) && (facturaGenerada == false))
+            {
                 this.Close();
             }
 
@@ -242,7 +268,7 @@ namespace FrbaHotel.RegistrarEstadia
                 con.openConection();
                 con.command.ExecuteNonQuery();
                 con.closeConection();
-
+                facturaGenerada = true;
                 MessageBox.Show("Operación exitosa", "FOUR SIZONS - FRBA Hoteles", MessageBoxButtons.OK, MessageBoxIcon.Information);
             }
             catch (Exception ex)

@@ -51,9 +51,15 @@
             this.txt_nro_documento = new System.Windows.Forms.TextBox();
             this.groupBox1 = new System.Windows.Forms.GroupBox();
             this.cb_tipoDocumento = new System.Windows.Forms.ComboBox();
+            this.label22 = new System.Windows.Forms.Label();
+            this.label20 = new System.Windows.Forms.Label();
+            this.label21 = new System.Windows.Forms.Label();
             this.btn_buscarCliente = new System.Windows.Forms.Button();
             this.label17 = new System.Windows.Forms.Label();
             this.txt_ciudad = new System.Windows.Forms.TextBox();
+            this.txt_depto = new System.Windows.Forms.TextBox();
+            this.txt_piso = new System.Windows.Forms.TextBox();
+            this.txt_nroCalle = new System.Windows.Forms.TextBox();
             this.txt_apellido = new System.Windows.Forms.TextBox();
             this.txt_nombre = new System.Windows.Forms.TextBox();
             this.labelTitulo = new System.Windows.Forms.Label();
@@ -72,12 +78,6 @@
             this.label19 = new System.Windows.Forms.Label();
             this.txt_cantHab = new System.Windows.Forms.TextBox();
             this.btn_disponibilidad = new System.Windows.Forms.Button();
-            this.label20 = new System.Windows.Forms.Label();
-            this.txt_nroCalle = new System.Windows.Forms.TextBox();
-            this.txt_piso = new System.Windows.Forms.TextBox();
-            this.txt_depto = new System.Windows.Forms.TextBox();
-            this.label21 = new System.Windows.Forms.Label();
-            this.label22 = new System.Windows.Forms.Label();
             this.groupBox1.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -106,7 +106,7 @@
             this.boton_aceptar.Location = new System.Drawing.Point(25, 607);
             this.boton_aceptar.Name = "boton_aceptar";
             this.boton_aceptar.Size = new System.Drawing.Size(75, 23);
-            this.boton_aceptar.TabIndex = 18;
+            this.boton_aceptar.TabIndex = 21;
             this.boton_aceptar.Text = "Aceptar";
             this.boton_aceptar.UseVisualStyleBackColor = true;
             this.boton_aceptar.Click += new System.EventHandler(this.boton_aceptar_Click);
@@ -196,7 +196,7 @@
             this.txt_pais.Location = new System.Drawing.Point(140, 357);
             this.txt_pais.Name = "txt_pais";
             this.txt_pais.Size = new System.Drawing.Size(200, 20);
-            this.txt_pais.TabIndex = 17;
+            this.txt_pais.TabIndex = 20;
             // 
             // txt_mail
             // 
@@ -210,7 +210,7 @@
             this.boton_volver.Location = new System.Drawing.Point(425, 607);
             this.boton_volver.Name = "boton_volver";
             this.boton_volver.Size = new System.Drawing.Size(75, 23);
-            this.boton_volver.TabIndex = 19;
+            this.boton_volver.TabIndex = 22;
             this.boton_volver.Text = "Volver";
             this.boton_volver.UseVisualStyleBackColor = true;
             this.boton_volver.Click += new System.EventHandler(this.boton_volver_Click);
@@ -305,6 +305,33 @@
             this.cb_tipoDocumento.Size = new System.Drawing.Size(95, 21);
             this.cb_tipoDocumento.TabIndex = 8;
             // 
+            // label22
+            // 
+            this.label22.AutoSize = true;
+            this.label22.Location = new System.Drawing.Point(41, 301);
+            this.label22.Name = "label22";
+            this.label22.Size = new System.Drawing.Size(74, 13);
+            this.label22.TabIndex = 3;
+            this.label22.Text = "Departamento";
+            // 
+            // label20
+            // 
+            this.label20.AutoSize = true;
+            this.label20.Location = new System.Drawing.Point(63, 244);
+            this.label20.Name = "label20";
+            this.label20.Size = new System.Drawing.Size(53, 13);
+            this.label20.TabIndex = 3;
+            this.label20.Text = "Nro. Calle";
+            // 
+            // label21
+            // 
+            this.label21.AutoSize = true;
+            this.label21.Location = new System.Drawing.Point(82, 272);
+            this.label21.Name = "label21";
+            this.label21.Size = new System.Drawing.Size(27, 13);
+            this.label21.TabIndex = 3;
+            this.label21.Text = "Piso";
+            // 
             // btn_buscarCliente
             // 
             this.btn_buscarCliente.Location = new System.Drawing.Point(362, 80);
@@ -329,7 +356,28 @@
             this.txt_ciudad.Location = new System.Drawing.Point(140, 325);
             this.txt_ciudad.Name = "txt_ciudad";
             this.txt_ciudad.Size = new System.Drawing.Size(200, 20);
-            this.txt_ciudad.TabIndex = 16;
+            this.txt_ciudad.TabIndex = 19;
+            // 
+            // txt_depto
+            // 
+            this.txt_depto.Location = new System.Drawing.Point(140, 298);
+            this.txt_depto.Name = "txt_depto";
+            this.txt_depto.Size = new System.Drawing.Size(72, 20);
+            this.txt_depto.TabIndex = 18;
+            // 
+            // txt_piso
+            // 
+            this.txt_piso.Location = new System.Drawing.Point(140, 269);
+            this.txt_piso.Name = "txt_piso";
+            this.txt_piso.Size = new System.Drawing.Size(199, 20);
+            this.txt_piso.TabIndex = 17;
+            // 
+            // txt_nroCalle
+            // 
+            this.txt_nroCalle.Location = new System.Drawing.Point(140, 241);
+            this.txt_nroCalle.Name = "txt_nroCalle";
+            this.txt_nroCalle.Size = new System.Drawing.Size(72, 20);
+            this.txt_nroCalle.TabIndex = 16;
             // 
             // txt_apellido
             // 
@@ -478,54 +526,6 @@
             this.btn_disponibilidad.Text = "Verificar Disponibilidad";
             this.btn_disponibilidad.UseVisualStyleBackColor = true;
             this.btn_disponibilidad.Click += new System.EventHandler(this.btn_disponibilidad_Click);
-            // 
-            // label20
-            // 
-            this.label20.AutoSize = true;
-            this.label20.Location = new System.Drawing.Point(63, 244);
-            this.label20.Name = "label20";
-            this.label20.Size = new System.Drawing.Size(53, 13);
-            this.label20.TabIndex = 3;
-            this.label20.Text = "Nro. Calle";
-            // 
-            // txt_nroCalle
-            // 
-            this.txt_nroCalle.Location = new System.Drawing.Point(140, 241);
-            this.txt_nroCalle.Name = "txt_nroCalle";
-            this.txt_nroCalle.Size = new System.Drawing.Size(72, 20);
-            this.txt_nroCalle.TabIndex = 15;
-            // 
-            // txt_piso
-            // 
-            this.txt_piso.Location = new System.Drawing.Point(140, 269);
-            this.txt_piso.Name = "txt_piso";
-            this.txt_piso.Size = new System.Drawing.Size(199, 20);
-            this.txt_piso.TabIndex = 15;
-            // 
-            // txt_depto
-            // 
-            this.txt_depto.Location = new System.Drawing.Point(140, 298);
-            this.txt_depto.Name = "txt_depto";
-            this.txt_depto.Size = new System.Drawing.Size(72, 20);
-            this.txt_depto.TabIndex = 15;
-            // 
-            // label21
-            // 
-            this.label21.AutoSize = true;
-            this.label21.Location = new System.Drawing.Point(82, 272);
-            this.label21.Name = "label21";
-            this.label21.Size = new System.Drawing.Size(27, 13);
-            this.label21.TabIndex = 3;
-            this.label21.Text = "Piso";
-            // 
-            // label22
-            // 
-            this.label22.AutoSize = true;
-            this.label22.Location = new System.Drawing.Point(41, 301);
-            this.label22.Name = "label22";
-            this.label22.Size = new System.Drawing.Size(74, 13);
-            this.label22.TabIndex = 3;
-            this.label22.Text = "Departamento";
             // 
             // ABMReserva02
             // 

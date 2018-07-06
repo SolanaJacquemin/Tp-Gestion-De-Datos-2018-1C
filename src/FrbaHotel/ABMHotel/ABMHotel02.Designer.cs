@@ -37,6 +37,7 @@
             this.l_estado = new System.Windows.Forms.Label();
             this.txt_estado = new System.Windows.Forms.TextBox();
             this.groupBox1 = new System.Windows.Forms.GroupBox();
+            this.txt_nombre_hotel = new System.Windows.Forms.TextBox();
             this.dt_fecha_cre = new System.Windows.Forms.DateTimePicker();
             this.cb_estrellas = new System.Windows.Forms.ComboBox();
             this.label5 = new System.Windows.Forms.Label();
@@ -48,7 +49,6 @@
             this.label9 = new System.Windows.Forms.Label();
             this.label4 = new System.Windows.Forms.Label();
             this.label10 = new System.Windows.Forms.Label();
-            this.l_codigo = new System.Windows.Forms.Label();
             this.label7 = new System.Windows.Forms.Label();
             this.txt_nroCalle = new System.Windows.Forms.TextBox();
             this.txt_calle = new System.Windows.Forms.TextBox();
@@ -57,8 +57,6 @@
             this.txt_ciudad = new System.Windows.Forms.TextBox();
             this.txt_telefono = new System.Windows.Forms.TextBox();
             this.txt_recargaEstrella = new System.Windows.Forms.TextBox();
-            this.txt_codigo = new System.Windows.Forms.TextBox();
-            this.txt_nombre = new System.Windows.Forms.TextBox();
             this.lbl_obligacion = new System.Windows.Forms.Label();
             this.groupBox1.SuspendLayout();
             this.SuspendLayout();
@@ -126,7 +124,7 @@
             // l_estado
             // 
             this.l_estado.AutoSize = true;
-            this.l_estado.Location = new System.Drawing.Point(330, 16);
+            this.l_estado.Location = new System.Drawing.Point(17, 21);
             this.l_estado.Name = "l_estado";
             this.l_estado.Size = new System.Drawing.Size(40, 13);
             this.l_estado.TabIndex = 29;
@@ -135,7 +133,7 @@
             // 
             // txt_estado
             // 
-            this.txt_estado.Location = new System.Drawing.Point(376, 14);
+            this.txt_estado.Location = new System.Drawing.Point(63, 19);
             this.txt_estado.Name = "txt_estado";
             this.txt_estado.Size = new System.Drawing.Size(121, 20);
             this.txt_estado.TabIndex = 1;
@@ -143,6 +141,7 @@
             // 
             // groupBox1
             // 
+            this.groupBox1.Controls.Add(this.txt_nombre_hotel);
             this.groupBox1.Controls.Add(this.dt_fecha_cre);
             this.groupBox1.Controls.Add(this.l_estado);
             this.groupBox1.Controls.Add(this.txt_estado);
@@ -156,7 +155,6 @@
             this.groupBox1.Controls.Add(this.label9);
             this.groupBox1.Controls.Add(this.label4);
             this.groupBox1.Controls.Add(this.label10);
-            this.groupBox1.Controls.Add(this.l_codigo);
             this.groupBox1.Controls.Add(this.label7);
             this.groupBox1.Controls.Add(this.txt_nroCalle);
             this.groupBox1.Controls.Add(this.txt_calle);
@@ -165,13 +163,18 @@
             this.groupBox1.Controls.Add(this.txt_ciudad);
             this.groupBox1.Controls.Add(this.txt_telefono);
             this.groupBox1.Controls.Add(this.txt_recargaEstrella);
-            this.groupBox1.Controls.Add(this.txt_codigo);
-            this.groupBox1.Controls.Add(this.txt_nombre);
             this.groupBox1.Location = new System.Drawing.Point(26, 60);
             this.groupBox1.Name = "groupBox1";
             this.groupBox1.Size = new System.Drawing.Size(571, 186);
             this.groupBox1.TabIndex = 32;
             this.groupBox1.TabStop = false;
+            // 
+            // txt_nombre_hotel
+            // 
+            this.txt_nombre_hotel.Location = new System.Drawing.Point(63, 46);
+            this.txt_nombre_hotel.Name = "txt_nombre_hotel";
+            this.txt_nombre_hotel.Size = new System.Drawing.Size(191, 20);
+            this.txt_nombre_hotel.TabIndex = 44;
             // 
             // dt_fecha_cre
             // 
@@ -270,19 +273,10 @@
             this.label10.TabIndex = 34;
             this.label10.Text = "Estrellas";
             // 
-            // l_codigo
-            // 
-            this.l_codigo.AutoSize = true;
-            this.l_codigo.Location = new System.Drawing.Point(17, 21);
-            this.l_codigo.Name = "l_codigo";
-            this.l_codigo.Size = new System.Drawing.Size(40, 13);
-            this.l_codigo.TabIndex = 35;
-            this.l_codigo.Text = "Código";
-            // 
             // label7
             // 
             this.label7.AutoSize = true;
-            this.label7.Location = new System.Drawing.Point(13, 47);
+            this.label7.Location = new System.Drawing.Point(13, 49);
             this.label7.Name = "label7";
             this.label7.Size = new System.Drawing.Size(44, 13);
             this.label7.TabIndex = 35;
@@ -306,7 +300,7 @@
             // 
             this.txt_mail.Location = new System.Drawing.Point(63, 73);
             this.txt_mail.Name = "txt_mail";
-            this.txt_mail.Size = new System.Drawing.Size(139, 20);
+            this.txt_mail.Size = new System.Drawing.Size(191, 20);
             this.txt_mail.TabIndex = 5;
             // 
             // txt_pais
@@ -336,20 +330,6 @@
             this.txt_recargaEstrella.Name = "txt_recargaEstrella";
             this.txt_recargaEstrella.Size = new System.Drawing.Size(139, 20);
             this.txt_recargaEstrella.TabIndex = 6;
-            // 
-            // txt_codigo
-            // 
-            this.txt_codigo.Location = new System.Drawing.Point(63, 18);
-            this.txt_codigo.Name = "txt_codigo";
-            this.txt_codigo.Size = new System.Drawing.Size(48, 20);
-            this.txt_codigo.TabIndex = 0;
-            // 
-            // txt_nombre
-            // 
-            this.txt_nombre.Location = new System.Drawing.Point(63, 47);
-            this.txt_nombre.Name = "txt_nombre";
-            this.txt_nombre.Size = new System.Drawing.Size(191, 20);
-            this.txt_nombre.TabIndex = 3;
             // 
             // lbl_obligacion
             // 
@@ -411,11 +391,9 @@
         private System.Windows.Forms.TextBox txt_ciudad;
         private System.Windows.Forms.TextBox txt_telefono;
         private System.Windows.Forms.TextBox txt_recargaEstrella;
-        private System.Windows.Forms.TextBox txt_nombre;
         private System.Windows.Forms.DateTimePicker dt_fecha_cre;
         private System.Windows.Forms.Label label12;
-        private System.Windows.Forms.Label l_codigo;
-        private System.Windows.Forms.TextBox txt_codigo;
         private System.Windows.Forms.Label lbl_obligacion;
+        private System.Windows.Forms.TextBox txt_nombre_hotel;
     }
 }

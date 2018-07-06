@@ -12,10 +12,10 @@ namespace FrbaHotel.ABMUsuario
 {
     public partial class ABMUsuario05 : Form
     {
-        public decimal hotel_id;
+        public decimal rol_id;
         public string nombreSP;
         public string usuario;
-        public decimal dgv_Hoteles_ID;
+        public decimal dgv_rol_ID;
 
         public ABMUsuario05(string user)
         {
@@ -27,15 +27,6 @@ namespace FrbaHotel.ABMUsuario
             buscar();
         }
 
-        private void btn_agregar_Click(object sender, EventArgs e)
-        {
-            string modo = "INS";
-            this.Hide();
-            ABMUsuario06 formABMUsuario06 = new ABMUsuario06(modo, usuario, 0);
-            formABMUsuario06.ShowDialog();
-            this.Show();
-            this.buscar();
-        }
 
         private void buscar()
         {
@@ -69,26 +60,43 @@ namespace FrbaHotel.ABMUsuario
 
         private void btn_eliminar_Click(object sender, EventArgs e)
         {
-            string modo = "DLT";
-            this.Hide();
-            ABMUsuario04 formABMUsuario04 = new ABMUsuario04(modo, usuario, dgv_Hoteles_ID);
-            formABMUsuario04.ShowDialog();
-            this.Show();
 
-            this.buscar();
         }
 
 
-        private void dgv_Hoteles_CellClick(object sender, DataGridViewCellEventArgs e)
+        private void dgv_Roles_CellClick(object sender, DataGridViewCellEventArgs e)
         {
             int index = e.RowIndex;
             DataGridViewRow selectedRow = dgv_Roles.Rows[index];
-            dgv_Hoteles_ID = Convert.ToDecimal(selectedRow.Cells[0].Value.ToString());
+            dgv_rol_ID = Convert.ToDecimal(selectedRow.Cells[0].Value.ToString());
+            MessageBox.Show(selectedRow.Cells[0].Value.ToString());
         }
 
-        private void btn_eliminar_Click_1(object sender, EventArgs e)
+
+
+        private void button2_Click_1(object sender, EventArgs e)
+        {
+            this.Close();
+        }
+
+        private void ABMUsuario05_Load(object sender, EventArgs e)
+        {
+
+        }
+
+        private void button1_Click(object sender, EventArgs e)
         {
             string modo = "DLT";
+            this.Hide();
+            ABMUsuario06 formABMUsuario06 = new ABMUsuario06(modo, usuario, dgv_rol_ID);
+            formABMUsuario06.ShowDialog();
+            this.Show();
+            this.buscar();
+        }
+
+        private void btn_agregar_Click(object sender, EventArgs e)
+        {
+            string modo = "INS";
             this.Hide();
             ABMUsuario06 formABMUsuario06 = new ABMUsuario06(modo, usuario, 0);
             formABMUsuario06.ShowDialog();
@@ -96,9 +104,5 @@ namespace FrbaHotel.ABMUsuario
             this.buscar();
         }
 
-        private void button2_Click_1(object sender, EventArgs e)
-        {
-            this.Close();
-        }
     }
 }

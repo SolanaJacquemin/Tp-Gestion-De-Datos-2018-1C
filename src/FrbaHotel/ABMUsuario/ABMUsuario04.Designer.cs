@@ -28,7 +28,7 @@
         /// </summary>
         private void InitializeComponent()
         {
-            this.btn_promptUsu = new System.Windows.Forms.Button();
+            this.btn_promptHotel = new System.Windows.Forms.Button();
             this.label14 = new System.Windows.Forms.Label();
             this.txt_hotel = new System.Windows.Forms.TextBox();
             this.label8 = new System.Windows.Forms.Label();
@@ -38,20 +38,20 @@
             this.btn_aceptar = new System.Windows.Forms.Button();
             this.SuspendLayout();
             // 
-            // btn_promptUsu
+            // btn_promptHotel
             // 
-            this.btn_promptUsu.Location = new System.Drawing.Point(323, 56);
-            this.btn_promptUsu.Name = "btn_promptUsu";
-            this.btn_promptUsu.Size = new System.Drawing.Size(26, 23);
-            this.btn_promptUsu.TabIndex = 20;
-            this.btn_promptUsu.Text = "...";
-            this.btn_promptUsu.UseVisualStyleBackColor = true;
-            this.btn_promptUsu.Click += new System.EventHandler(this.btn_promptUsu_Click);
+            this.btn_promptHotel.Location = new System.Drawing.Point(323, 56);
+            this.btn_promptHotel.Name = "btn_promptHotel";
+            this.btn_promptHotel.Size = new System.Drawing.Size(26, 23);
+            this.btn_promptHotel.TabIndex = 20;
+            this.btn_promptHotel.Text = "...";
+            this.btn_promptHotel.UseVisualStyleBackColor = true;
+            this.btn_promptHotel.Click += new System.EventHandler(this.btn_promptHotel_Click);
             // 
             // label14
             // 
             this.label14.AutoSize = true;
-            this.label14.Location = new System.Drawing.Point(16, 58);
+            this.label14.Location = new System.Drawing.Point(16, 61);
             this.label14.Name = "label14";
             this.label14.Size = new System.Drawing.Size(32, 13);
             this.label14.TabIndex = 18;
@@ -124,7 +124,7 @@
             this.Controls.Add(this.label8);
             this.Controls.Add(this.label9);
             this.Controls.Add(this.labelTitulo);
-            this.Controls.Add(this.btn_promptUsu);
+            this.Controls.Add(this.btn_promptHotel);
             this.Controls.Add(this.label14);
             this.Controls.Add(this.txt_hotel);
             this.Name = "ABMUsuario04";
@@ -137,7 +137,7 @@
 
         #endregion
 
-        private System.Windows.Forms.Button btn_promptUsu;
+        private System.Windows.Forms.Button btn_promptHotel;
         private System.Windows.Forms.Label label14;
         private System.Windows.Forms.TextBox txt_hotel;
         private System.Windows.Forms.Label label8;

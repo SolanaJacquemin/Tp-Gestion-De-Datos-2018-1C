@@ -45,18 +45,22 @@ namespace FrbaHotel.GestionReservas
             dt_fechaHasta.CustomFormat = "dd/MM/yyyy";
 
             txt_fechaCreacion.Text = (DateTime.Today).ToShortDateString();
-            txt_fechaCreacion.ReadOnly = true;
+            txt_fechaCreacion.Enabled = false;
 
-            txt_nombre.ReadOnly = true;
-            txt_apellido.ReadOnly = true;
-            txt_telefono.ReadOnly = true;
-            txt_calle.ReadOnly = true;
-            txt_pais.ReadOnly = true;
-            txt_ciudad.ReadOnly = true;
-            txt_costoTotal.ReadOnly = true;
+            txt_nombre.Enabled = false;
+            txt_apellido.Enabled = false;
+            txt_telefono.Enabled = false;
+            txt_calle.Enabled = false;
+            txt_pais.Enabled = false;
+            txt_ciudad.Enabled = false;
+            txt_costoTotal.Enabled = false;
             cb_tipoDocumento.Enabled = false;
             txt_nro_documento.Enabled = false;
             txt_mail.Enabled = false;
+            txt_calle.Enabled = false;
+            txt_nroCalle.Enabled = false;
+            txt_piso.Enabled = false;
+            txt_depto.Enabled = false;
             btn_buscarCliente.Enabled = false;
 
             buscoCliente = false;
@@ -103,12 +107,12 @@ namespace FrbaHotel.GestionReservas
                     if (dr == DialogResult.Yes)
                     {
                         con.strQuery = "";
-                        txt_nombre.ReadOnly = false;
-                        txt_apellido.ReadOnly = false;
-                        txt_telefono.ReadOnly = false;
-                        txt_calle.ReadOnly = false;
-                        txt_pais.ReadOnly = false;
-                        txt_ciudad.ReadOnly = false;
+                        txt_nombre.Enabled = true;
+                        txt_apellido.Enabled = true;
+                        txt_telefono.Enabled = true;
+                        txt_calle.Enabled = true;
+                        txt_pais.Enabled = true;
+                        txt_ciudad.Enabled = true;
                     }else if(dr == DialogResult.No){
                         MessageBox.Show("Por favor revise sus datos y vuelva a intentar", "FOUR SIZONS - FRBA Hoteles", MessageBoxButtons.OK, MessageBoxIcon.Information);
                     }

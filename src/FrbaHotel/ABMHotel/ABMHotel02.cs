@@ -7,6 +7,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using FrbaHotel.Prompts;
 
 namespace FrbaHotel.ABMHotel
 {
@@ -15,10 +16,10 @@ namespace FrbaHotel.ABMHotel
         public static string modoABM;
         public bool abm_valido;
         public string nombreSP;
-        public string hotel;
+        public decimal hotel;
         public int error;
 
-        public ABMHotel02(string modo, string hotelId)
+        public ABMHotel02(string modo, decimal hotelId)
         {
             InitializeComponent();
             this.StartPosition = FormStartPosition.CenterScreen;
@@ -33,30 +34,27 @@ namespace FrbaHotel.ABMHotel
             {
                 case "INS":
                     labelTitulo.Text = "Alta de Hotel";
-                    l_codigo.Visible = false;
+                    //l_codigo.Visible = false;
                     l_estado.Visible = false;
-                    txt_codigo.Visible = false;
                     txt_estado.Visible = false;
                     break;
                 case "DLT":
                     labelTitulo.Text = "Baja de Hotel";
-                    txt_codigo.ReadOnly = true;
-                    txt_nombre.ReadOnly = true;
-                    txt_mail.ReadOnly = true;
-                    txt_telefono.ReadOnly = true;
-                    txt_calle.ReadOnly = true;
-                    txt_nroCalle.ReadOnly = true;
-                    txt_ciudad.ReadOnly = true;
-                    txt_pais.ReadOnly = true;
-                    txt_recargaEstrella.ReadOnly = true;
+                    txt_nombre_hotel.Enabled = false;
+                    txt_mail.Enabled = false;
+                    txt_telefono.Enabled = false;
+                    txt_calle.Enabled = false;
+                    txt_nroCalle.Enabled = false;
+                    txt_ciudad.Enabled = false;
+                    txt_pais.Enabled = false;
+                    txt_recargaEstrella.Enabled = false;
                     dt_fecha_cre.Enabled = false;
                     cb_estrellas.Enabled = false;
                     btn_aceptar_nuevo.Visible = false;
                     break;
                 case "UPD":
                     labelTitulo.Text = "Modificación de Hotel";
-                    txt_codigo.ReadOnly = true;
-                    txt_nombre.ReadOnly = false;
+                    txt_nombre_hotel.Enabled = false;
                     txt_mail.ReadOnly = false;
                     txt_telefono.ReadOnly = false;
                     txt_calle.ReadOnly = false;
@@ -85,20 +83,33 @@ namespace FrbaHotel.ABMHotel
 
         private void ABMHotel02_Load(object sender, EventArgs e)
         {
+            if (hotel != 0)
+            {
+                Conexion con = new Conexion();
+                con.strQuery = "SELECT H.Hotel_Nombre FROM FOUR_SIZONS.Hotel H WHERE H.Hotel_Codigo = " + hotel;
+                con.executeQuery();
+
+                if (con.reader())
+                {
+                    txt_nombre_hotel.Text = con.lector.GetString(0);
+                }
+                txt_nombre_hotel.Enabled = false;
+            }
+
             if (modoABM == "INS")
             {
                 //levantarCombos();
             }
             else
             {
-                txt_codigo.Text = hotel;
+                //txt_codigo.Text = hotel;
                 Conexion con = new Conexion();
                 con.strQuery = "SELECT * FROM FOUR_SIZONS.Hotel WHERE Hotel_Codigo = '" + hotel + "'";
                 con.executeQuery();
 
                 while (con.reader())
                 {
-                    txt_nombre.Text = con.lector.GetString(1);
+                    txt_nombre_hotel.Text = con.lector.GetString(1);
                     txt_mail.Text = con.lector.GetString(2);
                     txt_telefono.Text = con.lector.GetString(3);
                     txt_calle.Text = con.lector.GetString(4);
@@ -167,9 +178,9 @@ namespace FrbaHotel.ABMHotel
                     
                     if (modoABM != "INS")
                     {
-                        con.command.Parameters.Add("@codigo", SqlDbType.Decimal).Value = txt_codigo.Text;
+                        con.command.Parameters.Add("@codigo", SqlDbType.Decimal).Value = hotel;
                     }
-                    con.command.Parameters.Add("@nombre", SqlDbType.NVarChar).Value = txt_nombre.Text;
+                    con.command.Parameters.Add("@nombre", SqlDbType.NVarChar).Value = txt_nombre_hotel.Text;
                     con.command.Parameters.Add("@mail", SqlDbType.NVarChar).Value = txt_mail.Text;
                     con.command.Parameters.Add("@telefono", SqlDbType.NVarChar).Value = txt_telefono.Text;
                     con.command.Parameters.Add("@calle", SqlDbType.NVarChar).Value = txt_calle.Text;
@@ -212,8 +223,7 @@ namespace FrbaHotel.ABMHotel
         {
             abm_valido = true;
 
-            if (txt_nombre.Text == "") abm_valido = false;
-            if (txt_codigo.Text == "") abm_valido = false;
+            if (txt_nombre_hotel.Text == "") abm_valido = false;
             if (txt_pais.Text == "") abm_valido = false;
             if (txt_nroCalle.Text == "") abm_valido = false;
             if (txt_telefono.Text == "") abm_valido = false;
@@ -237,27 +247,30 @@ namespace FrbaHotel.ABMHotel
         private void boton_aceptar_Click(object sender, EventArgs e)
         {
             error = 0;
-            if (verificarObligatorios() == false)
+            if (modoABM != "DLT") 
             {
-                error = 1;
-                MessageBox.Show("Por favor, complete los campos obligatorios", "FOUR SIZONS - FRBA Hoteles", MessageBoxButtons.OK, MessageBoxIcon.Information);
-            };
+                if (verificarObligatorios() == false)
+                {
+                    error = 1;
+                    MessageBox.Show("Por favor, complete los campos obligatorios", "FOUR SIZONS - FRBA Hoteles", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                };
 
-            if (IsNumber(cb_estrellas.Text) == false)
-            {
-                error = 1;
-                MessageBox.Show("Por favor, el número de documento debe ser un dato numérico", "FOUR SIZONS - FRBA Hoteles", MessageBoxButtons.OK, MessageBoxIcon.Information);
-            };
-            if (IsNumber(txt_recargaEstrella.Text) == false)
-            {
-                error = 1;
-                MessageBox.Show("Por favor, el piso debe ser un dato numérico", "FOUR SIZONS - FRBA Hoteles", MessageBoxButtons.OK, MessageBoxIcon.Information);
-            };
-            if (IsNumber(txt_nroCalle.Text) == false)
-            {
-                error = 1;
-                MessageBox.Show("Por favor, el número de calle debe ser un dato numérico", "FOUR SIZONS - FRBA Hoteles", MessageBoxButtons.OK, MessageBoxIcon.Information);
-            };
+                if (IsNumber(cb_estrellas.Text) == false)
+                {
+                    error = 1;
+                    MessageBox.Show("Por favor, el número de documento debe ser un dato numérico", "FOUR SIZONS - FRBA Hoteles", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                };
+                if (IsNumber(txt_recargaEstrella.Text) == false)
+                {
+                    error = 1;
+                    MessageBox.Show("Por favor, el piso debe ser un dato numérico", "FOUR SIZONS - FRBA Hoteles", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                };
+                if (IsNumber(txt_nroCalle.Text) == false)
+                {
+                    error = 1;
+                    MessageBox.Show("Por favor, el número de calle debe ser un dato numérico", "FOUR SIZONS - FRBA Hoteles", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                };
+            }
 
             switch (modoABM)
             {
@@ -295,8 +308,7 @@ namespace FrbaHotel.ABMHotel
             if (error == 0)
             {
                 ejecutarABMHotel(nombreSP);
-                txt_codigo.Text = "";
-                txt_nombre.Text = "";
+                txt_nombre_hotel.Text = "";
                 txt_mail.Text = "";
                 txt_telefono.Text = "";
                 txt_calle.Text = "";
@@ -308,6 +320,20 @@ namespace FrbaHotel.ABMHotel
                 cb_estrellas.Items.Clear();
                 //levantarCombos();
             }
+        }
+
+        private void btn_promptUsu_Click(object sender, EventArgs e)
+        {
+            using (PromptHoteles prompt = new PromptHoteles())
+            {
+                prompt.ShowDialog();
+
+                hotel = Convert.ToDecimal(prompt.TextBox1.Text);
+                txt_nombre_hotel.Text = prompt.TextBox2.Text;
+
+                prompt.Close();
+            }
+            this.Show();
         }
     }
 }

@@ -35,9 +35,7 @@
             this.boton_baja = new System.Windows.Forms.Button();
             this.boton_alta = new System.Windows.Forms.Button();
             this.groupBox1 = new System.Windows.Forms.GroupBox();
-            this.button2 = new System.Windows.Forms.Button();
-            this.button1 = new System.Windows.Forms.Button();
-            this.btn_promptUsu = new System.Windows.Forms.Button();
+            this.btn_promptHotel = new System.Windows.Forms.Button();
             this.cb_estrellas = new System.Windows.Forms.ComboBox();
             this.label5 = new System.Windows.Forms.Label();
             this.label11 = new System.Windows.Forms.Label();
@@ -137,9 +135,7 @@
             // 
             // groupBox1
             // 
-            this.groupBox1.Controls.Add(this.button2);
-            this.groupBox1.Controls.Add(this.button1);
-            this.groupBox1.Controls.Add(this.btn_promptUsu);
+            this.groupBox1.Controls.Add(this.btn_promptHotel);
             this.groupBox1.Controls.Add(this.cb_estrellas);
             this.groupBox1.Controls.Add(this.label5);
             this.groupBox1.Controls.Add(this.label11);
@@ -165,37 +161,20 @@
             this.groupBox1.TabStop = false;
             this.groupBox1.Text = "Filtros de Búsqueda";
             // 
-            // button2
+            // btn_promptHotel
             // 
-            this.button2.Location = new System.Drawing.Point(493, 105);
-            this.button2.Name = "button2";
-            this.button2.Size = new System.Drawing.Size(26, 23);
-            this.button2.TabIndex = 0;
-            this.button2.Text = "...";
-            this.button2.UseVisualStyleBackColor = true;
-            // 
-            // button1
-            // 
-            this.button1.Location = new System.Drawing.Point(205, 102);
-            this.button1.Name = "button1";
-            this.button1.Size = new System.Drawing.Size(26, 23);
-            this.button1.TabIndex = 0;
-            this.button1.Text = "...";
-            this.button1.UseVisualStyleBackColor = true;
-            // 
-            // btn_promptUsu
-            // 
-            this.btn_promptUsu.Location = new System.Drawing.Point(173, 16);
-            this.btn_promptUsu.Name = "btn_promptUsu";
-            this.btn_promptUsu.Size = new System.Drawing.Size(26, 23);
-            this.btn_promptUsu.TabIndex = 0;
-            this.btn_promptUsu.Text = "...";
-            this.btn_promptUsu.UseVisualStyleBackColor = true;
+            this.btn_promptHotel.Location = new System.Drawing.Point(202, 18);
+            this.btn_promptHotel.Name = "btn_promptHotel";
+            this.btn_promptHotel.Size = new System.Drawing.Size(26, 23);
+            this.btn_promptHotel.TabIndex = 0;
+            this.btn_promptHotel.Text = "...";
+            this.btn_promptHotel.UseVisualStyleBackColor = true;
+            this.btn_promptHotel.Click += new System.EventHandler(this.btn_promptHotel_Click);
             // 
             // cb_estrellas
             // 
             this.cb_estrellas.FormattingEnabled = true;
-            this.cb_estrellas.Location = new System.Drawing.Point(296, 78);
+            this.cb_estrellas.Location = new System.Drawing.Point(296, 77);
             this.cb_estrellas.Name = "cb_estrellas";
             this.cb_estrellas.Size = new System.Drawing.Size(78, 21);
             this.cb_estrellas.TabIndex = 5;
@@ -213,7 +192,7 @@
             // label11
             // 
             this.label11.AutoSize = true;
-            this.label11.Location = new System.Drawing.Point(28, 78);
+            this.label11.Location = new System.Drawing.Point(24, 78);
             this.label11.Name = "label11";
             this.label11.Size = new System.Drawing.Size(30, 13);
             this.label11.TabIndex = 2;
@@ -240,7 +219,7 @@
             // label10
             // 
             this.label10.AutoSize = true;
-            this.label10.Location = new System.Drawing.Point(241, 81);
+            this.label10.Location = new System.Drawing.Point(241, 80);
             this.label10.Name = "label10";
             this.label10.Size = new System.Drawing.Size(46, 13);
             this.label10.TabIndex = 2;
@@ -258,11 +237,11 @@
             // label7
             // 
             this.label7.AutoSize = true;
-            this.label7.Location = new System.Drawing.Point(14, 21);
+            this.label7.Location = new System.Drawing.Point(23, 22);
             this.label7.Name = "label7";
-            this.label7.Size = new System.Drawing.Size(40, 13);
+            this.label7.Size = new System.Drawing.Size(32, 13);
             this.label7.TabIndex = 2;
-            this.label7.Text = "Código";
+            this.label7.Text = "Hotel";
             // 
             // label2
             // 
@@ -333,7 +312,7 @@
             // 
             this.txt_codigo.Location = new System.Drawing.Point(60, 19);
             this.txt_codigo.Name = "txt_codigo";
-            this.txt_codigo.Size = new System.Drawing.Size(107, 20);
+            this.txt_codigo.Size = new System.Drawing.Size(139, 20);
             this.txt_codigo.TabIndex = 0;
             // 
             // txt_nombre
@@ -505,7 +484,7 @@
         private System.Windows.Forms.Button boton_baja;
         private System.Windows.Forms.Button boton_alta;
         private System.Windows.Forms.GroupBox groupBox1;
-        private System.Windows.Forms.Button btn_promptUsu;
+        private System.Windows.Forms.Button btn_promptHotel;
         private System.Windows.Forms.ComboBox cb_estrellas;
         private System.Windows.Forms.Label label5;
         private System.Windows.Forms.Label label6;
@@ -522,8 +501,6 @@
         private System.Windows.Forms.TextBox txt_nombre;
         private System.Windows.Forms.Label label1;
         private System.Windows.Forms.DataGridView dgv_Hoteles;
-        private System.Windows.Forms.Button button2;
-        private System.Windows.Forms.Button button1;
         private System.Windows.Forms.Label label10;
         private System.Windows.Forms.TextBox txt_ciudad;
         private System.Windows.Forms.DataGridViewTextBoxColumn Hotel_Codigo;

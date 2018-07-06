@@ -7,6 +7,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using FrbaHotel.Prompts;
 
 namespace FrbaHotel.ABMHotel
 {
@@ -14,18 +15,21 @@ namespace FrbaHotel.ABMHotel
     {
         public string dgv_hotel_codigo;
         public int index;
+        public decimal hotel;
 
-        public ABMHotel01()
+        public ABMHotel01(decimal hotelID)
         {
             InitializeComponent();
             this.StartPosition = FormStartPosition.CenterScreen;
+
+            hotel = hotelID;
 
             dgv_Hoteles.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
             dgv_Hoteles.Rows.Clear();
 
             cb_estrellas.DropDownStyle = ComboBoxStyle.DropDownList;
 
-            iniciarGrilla();
+            refrescarGrid();
 
             cb_estrellas.Items.Add("");
             cb_estrellas.Items.Add("1");
@@ -35,22 +39,15 @@ namespace FrbaHotel.ABMHotel
             cb_estrellas.Items.Add("5");
         }
 
-
-
         private void refrescarGrid()
         {
-            dgv_Hoteles.ClearSelection();
-            foreach (DataGridViewRow row in dgv_Hoteles.Rows)
-                if (Convert.ToBoolean(row.Cells[11].Value) == false)
-                {
-                    row.DefaultCellStyle.BackColor = Color.Red;
-                }
-        }
-
-        public void iniciarGrilla()
-        {
             Conexion con = new Conexion();
-            con.strQuery = "SELECT * FROM FOUR_SIZONS.Hotel ORDER BY Hotel_Codigo";
+            con.strQuery = "SELECT * FROM FOUR_SIZONS.Hotel ";
+            if (hotel != 0)
+            {
+                con.strQuery = con.strQuery + " WHERE Hotel_Codigo = " + hotel;
+            }
+            con.strQuery = con.strQuery + " ORDER BY Hotel_Codigo";
             con.executeQuery();
             if (!con.reader())
             {
@@ -73,6 +70,13 @@ namespace FrbaHotel.ABMHotel
                 con.lector.GetDateTime(10), con.lector.GetBoolean(11)});
             }
             con.closeConection();
+
+            dgv_Hoteles.ClearSelection();
+            foreach (DataGridViewRow row in dgv_Hoteles.Rows)
+            if (Convert.ToBoolean(row.Cells[11].Value) == false)
+            {
+                row.DefaultCellStyle.BackColor = Color.Red;
+            }
         }
 
         private void buscar()
@@ -82,7 +86,7 @@ namespace FrbaHotel.ABMHotel
             Conexion con = new Conexion();
             con.strQuery = "SELECT * FROM FOUR_SIZONS.Hotel WHERE 1=1";
             if (txt_codigo.Text != "")
-                con.strQuery = con.strQuery + "AND Hotel_Codigo =" + txt_codigo.Text;
+                con.strQuery = con.strQuery + "AND Hotel_Codigo =" + hotel;
             if (txt_nombre.Text != "")
                 con.strQuery = con.strQuery + "AND Hotel_Nombre like '%" + txt_nombre.Text + "%' ";
             if (txt_mail.Text != "")
@@ -120,11 +124,31 @@ namespace FrbaHotel.ABMHotel
                 con.lector.GetDateTime(10), con.lector.GetBoolean(11)});
             }
             con.closeConection();
+
+            dgv_Hoteles.ClearSelection();
+            foreach (DataGridViewRow row in dgv_Hoteles.Rows)
+                if (Convert.ToBoolean(row.Cells[11].Value) == false)
+                {
+                    row.DefaultCellStyle.BackColor = Color.Red;
+                }
         }
 
         private void ABMHotel_Load(object sender, EventArgs e)
         {
-            //refrescarGrid();
+            if (hotel != 0)
+            {
+                Conexion con = new Conexion();
+                con.strQuery = "SELECT H.Hotel_Nombre FROM FOUR_SIZONS.Hotel H WHERE H.Hotel_Codigo = " + hotel;
+                con.executeQuery();
+
+                if (con.reader())
+                {
+                    txt_codigo.Text = con.lector.GetString(0);
+                }
+                txt_codigo.Enabled = false;
+                btn_promptHotel.Enabled = false;
+            }
+            dgv_Hoteles.ClearSelection();
         }
 
         private void btn_buscar_Click(object sender, EventArgs e)
@@ -157,8 +181,7 @@ namespace FrbaHotel.ABMHotel
             cb_estrellas.Text = "";
             txt_ciudad.Text = "";
             txt_pais.Text = "";
-            iniciarGrilla();
-            refrescarGrid();
+            //refrescarGrid();
         }
 
         private void btn_volver_Click(object sender, EventArgs e)
@@ -170,33 +193,33 @@ namespace FrbaHotel.ABMHotel
         {
             string modo = "INS";
             this.Hide();
-            ABMHotel02 formABMUsuario02 = new ABMHotel02(modo, txt_codigo.Text);
+            ABMHotel02 formABMUsuario02 = new ABMHotel02(modo, hotel);
             formABMUsuario02.ShowDialog();
             this.Show();
             this.buscar();
-            this.refrescarGrid();
+            //this.refrescarGrid();
         }
 
         private void boton_baja_Click(object sender, EventArgs e)
         {
             string modo = "DLT";
             this.Hide();
-            ABMHotel02 formABMUsuario02 = new ABMHotel02(modo, dgv_hotel_codigo);
+            ABMHotel02 formABMUsuario02 = new ABMHotel02(modo, Convert.ToDecimal(dgv_hotel_codigo));
             formABMUsuario02.ShowDialog();
             this.Show();
             this.buscar();
-            this.refrescarGrid();
+            //this.refrescarGrid();
         }
 
         private void boton_modificacion_Click(object sender, EventArgs e)
         {
             string modo = "UPD";
             this.Hide();
-            ABMHotel02 formABMUsuario02 = new ABMHotel02(modo, dgv_hotel_codigo);
+            ABMHotel02 formABMUsuario02 = new ABMHotel02(modo, Convert.ToDecimal(dgv_hotel_codigo));
             formABMUsuario02.ShowDialog();
             this.Show();
             this.buscar();
-            this.refrescarGrid();
+            //this.refrescarGrid();
         }
 
         public void dgv_Hoteles_CellClick(object sender, DataGridViewCellEventArgs e)
@@ -208,13 +231,26 @@ namespace FrbaHotel.ABMHotel
 
         private void btn_cerrar_Click(object sender, EventArgs e)
         {
-            string modo = "CLS";
             this.Hide();
             ABMHotel03 formABMHotel03 = new ABMHotel03(Convert.ToDecimal(dgv_hotel_codigo));
             formABMHotel03.ShowDialog();
             this.Show();
             this.buscar();
-            this.refrescarGrid();
+            //this.refrescarGrid();
+        }
+
+        private void btn_promptHotel_Click(object sender, EventArgs e)
+        {
+            using (PromptHoteles prompt = new PromptHoteles())
+            {
+                prompt.ShowDialog();
+
+                hotel = Convert.ToDecimal(prompt.TextBox1.Text);
+                txt_codigo.Text = prompt.TextBox2.Text;
+
+                prompt.Close();
+            }
+            this.Show();
         }
     }
 }

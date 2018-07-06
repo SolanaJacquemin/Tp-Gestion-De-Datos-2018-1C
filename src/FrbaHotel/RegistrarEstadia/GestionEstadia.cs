@@ -7,6 +7,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using FrbaHotel.RegistrarConsumible;
 
 namespace FrbaHotel.RegistrarEstadia
 {
@@ -17,10 +18,13 @@ namespace FrbaHotel.RegistrarEstadia
         public int index;
         public decimal reserva;
 
-        public GestionEstadias()
+        public decimal hotel;
+
+        public GestionEstadias(decimal hotelID)
         {
             InitializeComponent();
             this.StartPosition = FormStartPosition.CenterScreen;
+            hotel = hotelID;
 
             dgv_Reserva.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
             dgv_Reserva.Rows.Clear();
@@ -56,7 +60,10 @@ namespace FrbaHotel.RegistrarEstadia
 
             if (txt_CodReserva.Text != "")
                 con.strQuery = con.strQuery + " AND Reserva_Codigo = " + txt_CodReserva.Text;
-
+            if (hotel != 0)
+            {
+                con.strQuery = con.strQuery + " AND Hotel_Codigo = " + hotel;
+            }
             con.executeQuery();
 
             if (!con.reader())
@@ -93,6 +100,10 @@ namespace FrbaHotel.RegistrarEstadia
             con.strQuery = "SELECT TOP 100 Reserva_Codigo, Reserva_FechaCreacion, Reserva_Fecha_Inicio, Reserva_Fecha_Fin, Reserva_Cant_Noches," +
                 "Reserva_Precio, Usuario_ID, Hotel_Codigo, Cliente_Codigo, Regimen_Codigo, Reserva_Estado FROM FOUR_SIZONS.Reserva " +
                             " WHERE 1=1";
+            if (hotel != 0)
+            {
+                con.strQuery = con.strQuery + " AND Hotel_Codigo = " + hotel;
+            }
             con.executeQuery();
 
             if (!con.reader())
@@ -163,17 +174,12 @@ namespace FrbaHotel.RegistrarEstadia
             dgv_CodReserva = Convert.ToDecimal(selectedRow.Cells[0].Value.ToString());
         }
 
-        private void lbl_RegConsumible_Click(object sender, EventArgs e)
+        private void btn_consumibles_Click(object sender, EventArgs e)
         {
             this.Hide();
-          //  Consumibles formConsumible = new Consumibles();
-          //  formConsumible.ShowDialog();
+            Form1 formConsumibles = new Form1();
+            formConsumibles.ShowDialog();
             this.Show();
-        }
-
-        private void button1_Click(object sender, EventArgs e)
-        {
-
         }
 
     }

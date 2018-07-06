@@ -16,12 +16,13 @@ namespace FrbaHotel.ABMUsuario
     {
         public string dgv_usuario_ID;
         public int index;
+        public decimal hotel_id;
 
-        public ABMUsuario01()
+        public ABMUsuario01(decimal HotelID)
         {
             InitializeComponent();
             this.StartPosition = FormStartPosition.CenterScreen;
-
+            hotel_id = HotelID;
             dgv_Usuarios.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
             txt_Id.ReadOnly = true;
             cb_tipodoc.DropDownStyle = ComboBoxStyle.DropDownList;
@@ -80,7 +81,7 @@ namespace FrbaHotel.ABMUsuario
             if (dgv_Usuarios.SelectedRows.Count > 0)
             {
                 this.Hide();
-                ABMUsuario03 formABMUsuario03 = new ABMUsuario03(dgv_usuario_ID);
+                ABMUsuario03 formABMUsuario03 = new ABMUsuario03(dgv_usuario_ID, hotel_id);
                 formABMUsuario03.ShowDialog();
                 this.Show();
                 this.buscar();

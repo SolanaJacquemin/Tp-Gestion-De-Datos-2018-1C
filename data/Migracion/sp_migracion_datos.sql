@@ -459,10 +459,10 @@ BEGIN
 			Estadia_Codigo numeric(18) IDENTITY(1,1),
 			Reserva_Codigo numeric(18), 
 			Estadia_FechaInicio datetime,
-			Estadia_FechaFin datetime,
+			Estadia_FechaFin datetime default GETDATE(),
 			Estadia_CantNoches numeric(18),
-			Estadia_DiasRest numeric(18),
-			Estadia_PreXNoche numeric(18),
+			Estadia_DiasRest numeric(18) default 0,
+			Estadia_PreXNoche numeric(18) ,
 			Usuario_ID nvarchar(15),
 			Usuario_OUT nvarchar(15),
 			Habitacion_Numero numeric(18),
@@ -679,6 +679,19 @@ BEGIN
 	Cliente_Consistente = 0
 	WHERE Cliente_Codigo IN (select clienteD from @updateDupli)
 
+	DECLARE @updateDupli2 TABLE(
+		clienteD numeric(18)
+	)
+	INSERT INTO @updateDupli2 (clienteD)
+	SELECT C1.Cliente_Codigo
+	FROM FOUR_SIZONS.Cliente C1 , FOUR_SIZONS.Cliente C2 
+	where c1.Cliente_mail = c2.Cliente_mail  and c1.Cliente_Codigo > c2.Cliente_Codigo  
+
+	UPDATE FOUR_SIZONS.Cliente
+	SET Cliente_mail = 'mail repetido',
+	Cliente_Consistente = 0
+	WHERE Cliente_Codigo IN (select clienteD from @updateDupli2)
+
 	-- Usuario
 	-- Inserta usuario administrador
 	INSERT INTO FOUR_SIZONS.Usuario
@@ -755,11 +768,13 @@ end
 
 	-- Estadia
 	INSERT INTO FOUR_SIZONS.Estadia (Reserva_Codigo, Estadia_FechaInicio, Estadia_FechaFin, Estadia_CantNoches, Usuario_ID,
-	Habitacion_Numero, Hotel_Codigo, Estadia_Estado)
-	SELECT DISTINCT M.Reserva_Codigo, M.Estadia_Fecha_Inicio, NULL, M.Estadia_Cant_Noches, 'SYSADM', M.Habitacion_Numero, H.Hotel_Codigo, 1
+	Habitacion_Numero, Hotel_Codigo, Estadia_Estado,Estadia_PreXNoche,usuario_out)
+	SELECT DISTINCT M.Reserva_Codigo, M.Estadia_Fecha_Inicio, dateadd(day, M.Estadia_Cant_Noches,M.Estadia_Fecha_Inicio), M.Estadia_Cant_Noches, 'SYSADM', M.Habitacion_Numero, H.Hotel_Codigo, 1,r.regimen_precio*ht.Habitacion_Tipo_Porcentual+h.Hotel_Recarga_Estrella*h.Hotel_CantEstrella,'SYSADM'
 	FROM GD1C2018.gd_esquema.Maestra AS M
 	JOIN FOUR_SIZONS.Hotel AS H ON H.Hotel_Nro_Calle = M.Hotel_Nro_Calle
 	JOIN FOUR_SIZONS.Cliente AS C ON C.Cliente_NumDoc = M.Cliente_Pasaporte_Nro
+	JOIN FOUR_SIZONS.Regimen AS R ON R.Regimen_Descripcion = M.Regimen_Descripcion
+	JOIN FOUR_SIZONS.habitacion_tipo AS HT ON ht.habitacion_tipo_codigo = M.habitacion_tipo_codigo
 	WHERE M.Estadia_Fecha_Inicio IS NOT NULL AND M.Estadia_Cant_Noches IS NOT NULL
 	ORDER BY M.Reserva_Codigo
 
@@ -1057,10 +1072,10 @@ END;
 GO
 
 --------------------------------------------------------ABM USUARIO------------------------------
-create procedure four_sizons.altaUserxRol
+alter procedure four_sizons.altaUserxRol
 @userID nvarchar(50),
 @rolId numeric(18)
-as begin
+as begin tran
 begin try
 	if(exists (select UsuarioXRol_Estado from FOUR_SIZONS.UsuarioXRol where Usuario_ID=@userID and Rol_Codigo=@rolId))
 	begin
@@ -1079,23 +1094,22 @@ begin try
 	declare @mensaje_de_error nvarchar(255)
 	set @mensaje_de_error = ERROR_MESSAGE()
 	RAISERROR(@mensaje_de_error,11,1)
-	rollback tran  
+	--rollback tran  
 	end catch 
-end
 go
 
 
-create procedure four_sizons.bajaUserxRol
+alter procedure four_sizons.bajaUserxRol
 @userID nvarchar(50),
 @rolId numeric(18)
-as begin
+as begin tran
 begin try
 declare @nombre nvarchar(50)
 set @nombre=(select Rol_Nombre from FOUR_SIZONS.Rol where Rol_Codigo=@rolId)
 	if(not exists (select UsuarioXRol_Estado from FOUR_SIZONS.UsuarioXRol where Usuario_ID=@userID and Rol_Codigo=@rolId))
 	begin
 		raiserror ('No se puede dar de baja ya que no existe ese usarioxRol',13,1)
-			rollback tran
+			--rollback tran
 	end
 
 	if((select UsuarioXRol_Estado from FOUR_SIZONS.UsuarioXRol where Usuario_ID=@userID and Rol_Codigo=@rolId)=1)
@@ -1103,7 +1117,7 @@ set @nombre=(select Rol_Nombre from FOUR_SIZONS.Rol where Rol_Codigo=@rolId)
 		if (@nombre='Super Admin' and (select count(Usuario_ID)  from FOUR_SIZONS.UsuarioXRol where Rol_Codigo=@rolId)<=1)
 		begin 
 			raiserror ('No se puede dar de baja super admin, ya que no se puede quedar sin super admin el sistema',13,1)
-			rollback tran
+			--rollback tran
 		end
 		update FOUR_SIZONS.UsuarioXRol
 			set UsuarioXRol_Estado=0
@@ -1112,7 +1126,7 @@ set @nombre=(select Rol_Nombre from FOUR_SIZONS.Rol where Rol_Codigo=@rolId)
 	else 
 	begin
 		raiserror ('No se puedo dar de baja ya que no esta activo',13,1)
-			rollback tran
+			--rollback tran
 	end
 commit tran 
 end try
@@ -1120,9 +1134,8 @@ begin catch
 	declare @mensaje_de_error nvarchar(255)
 	set @mensaje_de_error = ERROR_MESSAGE()
 	RAISERROR(@mensaje_de_error,11,1)
-	rollback tran 
+	--rollback tran 
 end catch
-END
 GO
 
 
@@ -1721,7 +1734,6 @@ go
 create procedure four_sizons.modificarHabitacion
 @numero numeric(18),
 @hotId numeric(18),
-
 @piso numeric(18),
 @ubicacion nvarchar(50), 
 @descripcion nvarchar(255),

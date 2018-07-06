@@ -7,6 +7,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using FrbaHotel.Prompts;
 
 namespace FrbaHotel.ABMHabitacion
 {
@@ -18,13 +19,13 @@ namespace FrbaHotel.ABMHabitacion
         public decimal hotel;
         public int error;
 
-        public ABMHabitacion02(string modo, decimal hot, decimal hab)
+        public ABMHabitacion02(string modo, decimal hotelID, decimal hab)
         {
             InitializeComponent();
             this.StartPosition = FormStartPosition.CenterScreen;
             labelTitulo.AutoSize = false;
 
-            hotel = hot;
+            hotel = hotelID;
             habitacion = hab;
 
             modoABM = modo;
@@ -36,13 +37,14 @@ namespace FrbaHotel.ABMHabitacion
             {
                 case "INS":
                     labelTitulo.Text = "Alta de Habitación";
+                    txt_estado.Visible = false;
+                    l_estado.Visible = false;
                     break;
                 case "DLT":
                     labelTitulo.Text = "Baja de Habitación";
-                    txt_hotel_codigo.Text = hotel.ToString();
+                    txt_hotel.Text = hotel.ToString();
                     txt_nro_hab.Text = habitacion.ToString();
-                    txt_hotel_codigo.ReadOnly = true;
-                    txt_hotel_nombre.ReadOnly = true;
+                    txt_hotel.ReadOnly = true;
                     txt_estado.ReadOnly = true;
                     txt_nro_hab.ReadOnly = true;
                     txt_piso.ReadOnly = true;
@@ -53,10 +55,9 @@ namespace FrbaHotel.ABMHabitacion
                     break;
                 case "UPD":
                     labelTitulo.Text = "Modificación de Habitación";
-                    txt_hotel_codigo.Text = hotel.ToString();
+                    txt_hotel.Text = hotel.ToString();
                     txt_nro_hab.Text = habitacion.ToString();
-                    txt_hotel_codigo.ReadOnly = true;
-                    txt_hotel_nombre.ReadOnly = true;
+                    txt_hotel.ReadOnly = true;
                     txt_estado.ReadOnly = true;
                     txt_nro_hab.ReadOnly = true;
                     txt_piso.ReadOnly = true;
@@ -90,6 +91,19 @@ namespace FrbaHotel.ABMHabitacion
 
         private void ABMHabitacion02_Load(object sender, EventArgs e)
         {
+            if (hotel != 0)
+            {
+                Conexion con = new Conexion();
+                con.strQuery = "SELECT H.Hotel_Nombre FROM FOUR_SIZONS.Hotel H WHERE H.Hotel_Codigo = " + hotel;
+                con.executeQuery();
+
+                if (con.reader())
+                {
+                    txt_hotel.Text = con.lector.GetString(0);
+                }
+                txt_hotel.Enabled = false;
+                btn_promptHotel.Enabled = false;
+            }
 
             if (modoABM == "INS")
             {
@@ -108,7 +122,7 @@ namespace FrbaHotel.ABMHabitacion
 
                 while (con.reader())
                 {
-                    txt_hotel_nombre.Text = con.lector.GetString(0);
+                    txt_hotel.Text = con.lector.GetString(0);
                     cb_tipohab.Text = con.lector.GetString(1);
                     cb_tipoFrente.Text = con.lector.GetString(2);
                     txt_piso.Text = con.lector.GetDecimal(3).ToString();
@@ -179,7 +193,6 @@ namespace FrbaHotel.ABMHabitacion
                 try
                 {
                     Conexion con = new Conexion();
-                    Encriptor encriptor = new Encriptor();
                     con.strQuery = nombreStored;
                     con.execute();
                     con.command.CommandType = CommandType.StoredProcedure;
@@ -189,13 +202,15 @@ namespace FrbaHotel.ABMHabitacion
                         con.command.Parameters.Add("@numero", SqlDbType.Decimal).Value = txt_nro_hab.Text;
                         con.command.Parameters.Add("@piso", SqlDbType.Decimal).Value = txt_piso.Text;
                         con.command.Parameters.Add("@frente", SqlDbType.NVarChar).Value = cb_tipoFrente.Text;
-                        con.command.Parameters.Add("@HotelId", SqlDbType.Decimal).Value = txt_hotel_codigo.Text;
+                        con.command.Parameters.Add("@HotelId", SqlDbType.Decimal).Value = hotel;
                         con.command.Parameters.Add("@TipoHab", SqlDbType.NVarChar).Value = cb_tipohab.Text;
                         con.command.Parameters.Add("@descripcion", SqlDbType.NVarChar).Value = txt_descripcion.Text;
 
                     }else{
                         con.command.Parameters.Add("@numero", SqlDbType.Decimal).Value = txt_nro_hab.Text;
-                        con.command.Parameters.Add("@HotId", SqlDbType.Decimal).Value = txt_hotel_codigo.Text;
+                        con.command.Parameters.Add("@HotId", SqlDbType.Decimal).Value = hotel;
+                        con.command.Parameters.Add("@piso", SqlDbType.Decimal).Value = txt_piso.Text;
+                        con.command.Parameters.Add("@ubicacion", SqlDbType.NVarChar).Value = cb_tipoFrente.Text;
                         con.command.Parameters.Add("@descripcion", SqlDbType.NVarChar).Value = txt_descripcion.Text;
                         if (modoABM == "UPD")
                         {
@@ -228,6 +243,20 @@ namespace FrbaHotel.ABMHabitacion
         private void boton_volver_Click(object sender, EventArgs e)
         {
             this.Close();
+        }
+
+        private void btn_promptHotel_Click(object sender, EventArgs e)
+        {
+            using (PromptHoteles prompt = new PromptHoteles())
+            {
+                prompt.ShowDialog();
+
+                hotel = Convert.ToDecimal(prompt.TextBox1.Text);
+                txt_hotel.Text = prompt.TextBox2.Text;
+
+                prompt.Close();
+            }
+            this.Show();
         }
 
     }

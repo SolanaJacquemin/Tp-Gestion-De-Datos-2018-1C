@@ -56,6 +56,7 @@
             this.btn_aceptar.TabIndex = 34;
             this.btn_aceptar.Text = "Aceptar";
             this.btn_aceptar.UseVisualStyleBackColor = true;
+            this.btn_aceptar.Click += new System.EventHandler(this.btn_aceptar_Click);
             // 
             // label8
             // 
@@ -128,6 +129,7 @@
             this.Controls.Add(this.txt_rol);
             this.Name = "ABMUsuario06";
             this.Text = "ABMUsuario06";
+            this.Load += new System.EventHandler(this.ABMUsuario06_Load);
             this.ResumeLayout(false);
             this.PerformLayout();
 

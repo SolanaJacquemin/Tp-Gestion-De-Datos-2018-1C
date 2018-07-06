@@ -18,12 +18,13 @@ namespace FrbaHotel.ABMUsuario
         public string usuario;
         public decimal dgv_Hoteles_ID;
 
-        public ABMUsuario03(string user)
+        public ABMUsuario03(string user, decimal HotelID)
         {
             InitializeComponent();
             this.StartPosition = FormStartPosition.CenterScreen;
 
             usuario = user;
+            hotel_id = HotelID;
 
             buscar();
         }
@@ -35,23 +36,9 @@ namespace FrbaHotel.ABMUsuario
 
         private void btn_agregar_Click(object sender, EventArgs e)
         {
-            /*Conexion con = new Conexion();
-            con.strQuery = "FOUR_SIZONS.altaUserXHot";
-            con.execute();
-            con.command.CommandType = CommandType.StoredProcedure;
-            con.command.Parameters.Add("@hotId", SqlDbType.Decimal).Value = hotel_id;
-            con.command.Parameters.Add("@usuario", SqlDbType.NVarChar).Value = usuario;
-            con.command.Parameters.Add("@estado", SqlDbType.Bit).Value = 1;
-            con.openConection();
-            con.command.ExecuteNonQuery();
-            con.closeConection();
-
-            MessageBox.Show("Operación exitosa", "FOUR SIZONS - FRBA Hoteles", MessageBoxButtons.OK, MessageBoxIcon.Information);
-
-            buscar();*/
             string modo = "INS";
             this.Hide();
-            ABMUsuario04 formABMUsuario04 = new ABMUsuario04(modo, usuario, 0);
+            ABMUsuario04 formABMUsuario04 = new ABMUsuario04(modo, usuario, hotel_id);
             formABMUsuario04.ShowDialog();
             this.Show();
             this.buscar();
@@ -64,6 +51,10 @@ namespace FrbaHotel.ABMUsuario
             con.strQuery = "SELECT H.Hotel_Codigo, H.Hotel_Nombre FROM FOUR_SIZONS.UsuarioXHotel AS UH " +
                            "JOIN FOUR_SIZONS.Hotel AS H ON H.Hotel_Codigo = UH.Hotel_Codigo " +
                            "WHERE UH.UsuarioXHotel_Estado = 1 AND UH.Usuario_ID = '" + usuario + "'";
+                            if (hotel_id != 0)
+                            {
+                                con.strQuery = con.strQuery + " AND H.Hotel_Codigo = " + hotel_id;
+                            }
             con.executeQuery();
             if (!con.reader())
             {

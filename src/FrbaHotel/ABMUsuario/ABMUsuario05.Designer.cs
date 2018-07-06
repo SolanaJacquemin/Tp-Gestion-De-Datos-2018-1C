@@ -30,13 +30,13 @@
         {
             this.dgv_Roles = new System.Windows.Forms.DataGridView();
             this.Roles_Codigo = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.Hotel_Nombre = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.btn_eliminar = new System.Windows.Forms.Button();
-            this.button2 = new System.Windows.Forms.Button();
+            this.Rol_Nombre = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.btn_volver = new System.Windows.Forms.Button();
             this.btn_agregar = new System.Windows.Forms.Button();
             this.label8 = new System.Windows.Forms.Label();
             this.label9 = new System.Windows.Forms.Label();
             this.label1 = new System.Windows.Forms.Label();
+            this.btn_eliminar = new System.Windows.Forms.Button();
             ((System.ComponentModel.ISupportInitialize)(this.dgv_Roles)).BeginInit();
             this.SuspendLayout();
             // 
@@ -46,13 +46,13 @@
             this.dgv_Roles.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             this.dgv_Roles.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
             this.Roles_Codigo,
-            this.Hotel_Nombre});
+            this.Rol_Nombre});
             this.dgv_Roles.Location = new System.Drawing.Point(19, 63);
             this.dgv_Roles.Name = "dgv_Roles";
             this.dgv_Roles.RowHeadersWidthSizeMode = System.Windows.Forms.DataGridViewRowHeadersWidthSizeMode.AutoSizeToAllHeaders;
             this.dgv_Roles.Size = new System.Drawing.Size(292, 167);
             this.dgv_Roles.TabIndex = 24;
-            this.dgv_Roles.CellClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dgv_Hoteles_CellClick);
+            this.dgv_Roles.CellClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dgv_Roles_CellClick);
             // 
             // Roles_Codigo
             // 
@@ -60,31 +60,21 @@
             this.Roles_Codigo.Name = "Roles_Codigo";
             this.Roles_Codigo.ReadOnly = true;
             // 
-            // Hotel_Nombre
+            // Rol_Nombre
             // 
-            this.Hotel_Nombre.HeaderText = "Nombre";
-            this.Hotel_Nombre.Name = "Hotel_Nombre";
-            this.Hotel_Nombre.ReadOnly = true;
+            this.Rol_Nombre.HeaderText = "Nombre";
+            this.Rol_Nombre.Name = "Rol_Nombre";
+            this.Rol_Nombre.ReadOnly = true;
             // 
-            // btn_eliminar
+            // btn_volver
             // 
-            this.btn_eliminar.Location = new System.Drawing.Point(317, 92);
-            this.btn_eliminar.Name = "btn_eliminar";
-            this.btn_eliminar.Size = new System.Drawing.Size(75, 23);
-            this.btn_eliminar.TabIndex = 30;
-            this.btn_eliminar.Text = "Eliminar";
-            this.btn_eliminar.UseVisualStyleBackColor = true;
-            this.btn_eliminar.Click += new System.EventHandler(this.btn_eliminar_Click_1);
-            // 
-            // button2
-            // 
-            this.button2.Location = new System.Drawing.Point(317, 207);
-            this.button2.Name = "button2";
-            this.button2.Size = new System.Drawing.Size(75, 23);
-            this.button2.TabIndex = 28;
-            this.button2.Text = "Volver";
-            this.button2.UseVisualStyleBackColor = true;
-            this.button2.Click += new System.EventHandler(this.button2_Click_1);
+            this.btn_volver.Location = new System.Drawing.Point(317, 207);
+            this.btn_volver.Name = "btn_volver";
+            this.btn_volver.Size = new System.Drawing.Size(75, 23);
+            this.btn_volver.TabIndex = 28;
+            this.btn_volver.Text = "Volver";
+            this.btn_volver.UseVisualStyleBackColor = true;
+            this.btn_volver.Click += new System.EventHandler(this.button2_Click);
             // 
             // btn_agregar
             // 
@@ -126,20 +116,31 @@
             this.label1.TabIndex = 25;
             this.label1.Text = "Roles del Usuario";
             // 
+            // btn_eliminar
+            // 
+            this.btn_eliminar.Location = new System.Drawing.Point(318, 93);
+            this.btn_eliminar.Name = "btn_eliminar";
+            this.btn_eliminar.Size = new System.Drawing.Size(75, 23);
+            this.btn_eliminar.TabIndex = 30;
+            this.btn_eliminar.Text = "Eliminar";
+            this.btn_eliminar.UseVisualStyleBackColor = true;
+            this.btn_eliminar.Click += new System.EventHandler(this.button1_Click);
+            // 
             // ABMUsuario05
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(401, 236);
-            this.Controls.Add(this.dgv_Roles);
             this.Controls.Add(this.btn_eliminar);
-            this.Controls.Add(this.button2);
+            this.Controls.Add(this.dgv_Roles);
+            this.Controls.Add(this.btn_volver);
             this.Controls.Add(this.btn_agregar);
             this.Controls.Add(this.label8);
             this.Controls.Add(this.label9);
             this.Controls.Add(this.label1);
             this.Name = "ABMUsuario05";
             this.Text = "ABMUsuario05";
+            this.Load += new System.EventHandler(this.ABMUsuario05_Load);
             ((System.ComponentModel.ISupportInitialize)(this.dgv_Roles)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
@@ -149,13 +150,13 @@
         #endregion
 
         private System.Windows.Forms.DataGridView dgv_Roles;
-        private System.Windows.Forms.Button btn_eliminar;
-        private System.Windows.Forms.Button button2;
+        private System.Windows.Forms.Button btn_volver;
         private System.Windows.Forms.Button btn_agregar;
         private System.Windows.Forms.Label label8;
         private System.Windows.Forms.Label label9;
         private System.Windows.Forms.Label label1;
         private System.Windows.Forms.DataGridViewTextBoxColumn Roles_Codigo;
-        private System.Windows.Forms.DataGridViewTextBoxColumn Hotel_Nombre;
+        private System.Windows.Forms.DataGridViewTextBoxColumn Rol_Nombre;
+        private System.Windows.Forms.Button btn_eliminar;
     }
 }

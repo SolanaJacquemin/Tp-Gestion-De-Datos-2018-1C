@@ -34,7 +34,7 @@ namespace FrbaHotel.ABMUsuario
                 case "DLT":
                     labelTitulo.Text = "Eliminar Hotel";
                     txt_hotel.Enabled = false;
-                    btn_promptUsu.Visible = false;
+                    btn_promptHotel.Visible = false;
                     break;
             }
         }
@@ -68,7 +68,7 @@ namespace FrbaHotel.ABMUsuario
             this.Close();
         }
 
-        private void btn_promptUsu_Click(object sender, EventArgs e)
+        private void btn_promptHotel_Click(object sender, EventArgs e)
         {
             using (PromptHoteles prompt = new PromptHoteles())
             {
@@ -84,6 +84,10 @@ namespace FrbaHotel.ABMUsuario
 
         private void ABMUsuario04_Load(object sender, EventArgs e)
         {
+            if (hotel != 0)
+            {
+                btn_promptHotel.Enabled = false;
+            }
             Conexion con = new Conexion();
             con.strQuery = "SELECT H.Hotel_Nombre FROM FOUR_SIZONS.UsuarioXHotel UH " +
                            "JOIN FOUR_SIZONS.Hotel H ON H.Hotel_Codigo = UH.Hotel_Codigo " +

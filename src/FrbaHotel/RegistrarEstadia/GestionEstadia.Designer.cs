@@ -51,7 +51,7 @@
             this.Cliente_Codigo = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.Regimen_Codigo = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.Reserva_Estado = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.button1 = new System.Windows.Forms.Button();
+            this.btn_consumibles = new System.Windows.Forms.Button();
             this.groupBox1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dgv_Reserva)).BeginInit();
             this.SuspendLayout();
@@ -167,6 +167,8 @@
             // 
             // dgv_Reserva
             // 
+            this.dgv_Reserva.AllowUserToAddRows = false;
+            this.dgv_Reserva.AllowUserToDeleteRows = false;
             this.dgv_Reserva.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             this.dgv_Reserva.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
             this.Reserva_Codigo,
@@ -241,15 +243,15 @@
             this.Reserva_Estado.HeaderText = "Estado";
             this.Reserva_Estado.Name = "Reserva_Estado";
             // 
-            // button1
+            // btn_consumibles
             // 
-            this.button1.Location = new System.Drawing.Point(385, 160);
-            this.button1.Name = "button1";
-            this.button1.Size = new System.Drawing.Size(125, 23);
-            this.button1.TabIndex = 13;
-            this.button1.Text = "Registrar Consumible";
-            this.button1.UseVisualStyleBackColor = true;
-            this.button1.Click += new System.EventHandler(this.button1_Click);
+            this.btn_consumibles.Location = new System.Drawing.Point(385, 160);
+            this.btn_consumibles.Name = "btn_consumibles";
+            this.btn_consumibles.Size = new System.Drawing.Size(125, 23);
+            this.btn_consumibles.TabIndex = 13;
+            this.btn_consumibles.Text = "Registrar Consumible";
+            this.btn_consumibles.UseVisualStyleBackColor = true;
+            this.btn_consumibles.Click += new System.EventHandler(this.btn_consumibles_Click);
             // 
             // GestionEstadias
             // 
@@ -258,7 +260,7 @@
             this.ClientSize = new System.Drawing.Size(589, 426);
             this.Controls.Add(this.dgv_Reserva);
             this.Controls.Add(this.btn_volver);
-            this.Controls.Add(this.button1);
+            this.Controls.Add(this.btn_consumibles);
             this.Controls.Add(this.btn_Cerrar);
             this.Controls.Add(this.btn_Abrir);
             this.Controls.Add(this.groupBox1);
@@ -290,7 +292,7 @@
         private System.Windows.Forms.DataGridView dgv_Reserva;
         private System.Windows.Forms.TextBox txt_CodReserva;
         private System.Windows.Forms.Label lbl_codReserva;
-        private System.Windows.Forms.Button button1;
+        private System.Windows.Forms.Button btn_consumibles;
         private System.Windows.Forms.DataGridViewTextBoxColumn Reserva_Codigo;
         private System.Windows.Forms.DataGridViewTextBoxColumn Reserva_Fecha_Creacion;
         private System.Windows.Forms.DataGridViewTextBoxColumn Reserva_Fecha_Inicio;

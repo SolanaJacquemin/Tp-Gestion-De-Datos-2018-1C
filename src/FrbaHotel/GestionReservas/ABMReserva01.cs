@@ -81,6 +81,8 @@ namespace FrbaHotel.GestionReservas
                 con.lector.GetDateTime(2), con.lector.GetDecimal(3), con.lector.GetString(4),
                 con.lector.GetString(5), con.lector.GetDecimal(6)});
             }
+
+            dgv_Reservas.ClearSelection();
         }
 
         private void btn_volver_Click(object sender, EventArgs e)

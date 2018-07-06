@@ -61,7 +61,7 @@ namespace FrbaHotel.PantallaPrincipal
         private void btn_usuarios_Click(object sender, EventArgs e)
         {
             this.Hide();
-            ABMUsuario01 formABMUsuario01 = new ABMUsuario01();
+            ABMUsuario01 formABMUsuario01 = new ABMUsuario01(hotel);
             formABMUsuario01.ShowDialog();
             this.Show();
         }
@@ -77,7 +77,7 @@ namespace FrbaHotel.PantallaPrincipal
         private void btn_hoteles_Click(object sender, EventArgs e)
         {
             this.Hide();
-            ABMHotel01 formABMHotel01 = new ABMHotel01();
+            ABMHotel01 formABMHotel01 = new ABMHotel01(hotel);
             formABMHotel01.ShowDialog();
             this.Show();
         }
@@ -85,7 +85,7 @@ namespace FrbaHotel.PantallaPrincipal
         private void btn_habitaciones_Click(object sender, EventArgs e)
         {
             this.Hide();
-            ABMHabitacion01 formABMHabitacion01 = new ABMHabitacion01();
+            ABMHabitacion01 formABMHabitacion01 = new ABMHabitacion01(hotel);
             formABMHabitacion01.ShowDialog();
             this.Show();
         }
@@ -230,7 +230,7 @@ namespace FrbaHotel.PantallaPrincipal
         private void btn_estadias_Click(object sender, EventArgs e)
         {
             this.Hide();
-            GestionEstadias formGestionEstadia01 = new GestionEstadias();
+            GestionEstadias formGestionEstadia01 = new GestionEstadias(hotel);
             formGestionEstadia01.ShowDialog();
             this.Show();
         }

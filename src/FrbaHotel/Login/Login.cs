@@ -83,6 +83,8 @@ namespace FrbaHotel
                     FrbaHotel.PantallaPrincipal.PantallaPrincipal01 pantallaPrincipal = new PantallaPrincipal01(txt_usuario.Text);
                     pantallaPrincipal.ShowDialog();
                     this.Show();
+                    txt_usuario.Clear();
+                    txt_password.Clear();                    
                 }
             }
         }
