@@ -24,18 +24,36 @@ namespace FrbaHotel.RegistrarEstadia
         {
             InitializeComponent();
             this.StartPosition = FormStartPosition.CenterScreen;
-            hotel = hotelID;
 
             dgv_Reserva.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
             dgv_Reserva.Rows.Clear();
 
             limpiar();
+            refrescarGrid();
 
+        }
+
+        private void refrescarGrid()
+        {
+            dgv_Reserva.ClearSelection();
+            foreach (DataGridViewRow row in dgv_Reserva.Rows)
+            {
+                if (Convert.ToDecimal(row.Cells[10].Value) == 6)
+                {
+                    row.DefaultCellStyle.BackColor = Color.Green;
+                }
+                if (Convert.ToDecimal(row.Cells[10].Value) == 3||Convert.ToDecimal(row.Cells[10].Value) == 4||Convert.ToDecimal(row.Cells[10].Value) == 5)
+                {
+                    row.DefaultCellStyle.BackColor = Color.Red;
+                }
+            }
         }
 
         private void GestionEstadia_Load(object sender, EventArgs e)
         {
-
+            dgv_Reserva.Rows.Clear();
+            limpiar();
+            refrescarGrid();
         }
 
         private void btn_volver_Click(object sender, EventArgs e)
@@ -60,10 +78,7 @@ namespace FrbaHotel.RegistrarEstadia
 
             if (txt_CodReserva.Text != "")
                 con.strQuery = con.strQuery + " AND Reserva_Codigo = " + txt_CodReserva.Text;
-            if (hotel != 0)
-            {
-                con.strQuery = con.strQuery + " AND Hotel_Codigo = " + hotel;
-            }
+
             con.executeQuery();
 
             if (!con.reader())
@@ -100,10 +115,7 @@ namespace FrbaHotel.RegistrarEstadia
             con.strQuery = "SELECT TOP 100 Reserva_Codigo, Reserva_FechaCreacion, Reserva_Fecha_Inicio, Reserva_Fecha_Fin, Reserva_Cant_Noches," +
                 "Reserva_Precio, Usuario_ID, Hotel_Codigo, Cliente_Codigo, Regimen_Codigo, Reserva_Estado FROM FOUR_SIZONS.Reserva " +
                             " WHERE 1=1";
-            if (hotel != 0)
-            {
-                con.strQuery = con.strQuery + " AND Hotel_Codigo = " + hotel;
-            }
+
             con.executeQuery();
 
             if (!con.reader())
@@ -131,15 +143,17 @@ namespace FrbaHotel.RegistrarEstadia
 
         private void btn_Abrir_Click(object sender, EventArgs e)
         {
-
-            string modo = "IN";
-            this.Hide();
-            RegistrarEstadia formRegistrarEstadia = new RegistrarEstadia(modo, dgv_CodReserva);
-            formRegistrarEstadia.ShowDialog();
-            this.Show();
-            //  this.buscar();
-            //  this.refrescarGrid();
-
+            if (dgv_Reserva.SelectedRows.Count == 1)
+            {
+                string modo = "IN";
+                this.Hide();
+                RegistrarEstadia formRegistrarEstadia = new RegistrarEstadia(modo, dgv_CodReserva);
+                formRegistrarEstadia.ShowDialog();
+                this.Show();
+                //  this.buscar();
+                //  this.refrescarGrid();
+            }
+            else MessageBox.Show("Debe seleccionar una reserva de la grilla primero", "FOUR SIZONS - FRBA Hoteles", MessageBoxButtons.OK, MessageBoxIcon.Error);
         }
 
         public void dgv_Reserva_CellClick(object sender, DataGridViewCellEventArgs e)
@@ -151,7 +165,7 @@ namespace FrbaHotel.RegistrarEstadia
 
         private void btn_Cerrar_Click(object sender, EventArgs e)
         {
-            if (dgv_Reserva.SelectedRows.Count > 0)
+            if (dgv_Reserva.SelectedRows.Count == 1)
             {
                 string modo = "OUT";
                 this.Hide();
@@ -163,7 +177,7 @@ namespace FrbaHotel.RegistrarEstadia
             }
             else
             {
-                MessageBox.Show("Debe seleccionar una reserva de la grilla", "FOUR SIZONS - FRBA Hoteles", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                MessageBox.Show("Debe seleccionar una reserva de la grilla primero", "FOUR SIZONS - FRBA Hoteles", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
 
@@ -177,7 +191,7 @@ namespace FrbaHotel.RegistrarEstadia
         private void btn_consumibles_Click(object sender, EventArgs e)
         {
             this.Hide();
-            Form1 formConsumibles = new Form1();
+            Consumible formConsumibles = new Consumible(dgv_CodReserva);
             formConsumibles.ShowDialog();
             this.Show();
         }

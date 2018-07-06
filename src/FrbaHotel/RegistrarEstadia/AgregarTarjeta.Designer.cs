@@ -48,6 +48,7 @@
             this.txt_titular = new System.Windows.Forms.TextBox();
             this.txt_codigoTarj = new System.Windows.Forms.TextBox();
             this.txt_numero = new System.Windows.Forms.TextBox();
+            this.label3 = new System.Windows.Forms.Label();
             this.groupBox1.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -235,11 +236,21 @@
             this.txt_numero.Size = new System.Drawing.Size(181, 20);
             this.txt_numero.TabIndex = 43;
             // 
+            // label3
+            // 
+            this.label3.AutoSize = true;
+            this.label3.Location = new System.Drawing.Point(47, 345);
+            this.label3.Name = "label3";
+            this.label3.Size = new System.Drawing.Size(172, 13);
+            this.label3.TabIndex = 52;
+            this.label3.Text = "Todos los campos son obligatorios.";
+            // 
             // AgregarTarjeta
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(400, 410);
+            this.Controls.Add(this.label3);
             this.Controls.Add(this.groupBox1);
             this.Controls.Add(this.btn_volver);
             this.Controls.Add(this.boton_confirmar);
@@ -280,5 +291,6 @@
         private System.Windows.Forms.TextBox txt_titular;
         private System.Windows.Forms.TextBox txt_codigoTarj;
         private System.Windows.Forms.TextBox txt_numero;
+        private System.Windows.Forms.Label label3;
     }
 }

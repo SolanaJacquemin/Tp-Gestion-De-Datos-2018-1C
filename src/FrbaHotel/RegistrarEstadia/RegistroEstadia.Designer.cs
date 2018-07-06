@@ -31,7 +31,6 @@
             this.btn_Aceptar = new System.Windows.Forms.Button();
             this.button2 = new System.Windows.Forms.Button();
             this.gb_Titulo = new System.Windows.Forms.GroupBox();
-            this.cb_medio = new System.Windows.Forms.ComboBox();
             this.dt_Fecha = new System.Windows.Forms.DateTimePicker();
             this.txt_Usuario = new System.Windows.Forms.TextBox();
             this.txt_hab = new System.Windows.Forms.TextBox();
@@ -51,6 +50,7 @@
             this.lbl_camposObligatorios = new System.Windows.Forms.Label();
             this.btn_factura = new System.Windows.Forms.Button();
             this.btn_tarjeta = new System.Windows.Forms.Button();
+            this.cb_medioPago = new System.Windows.Forms.ComboBox();
             this.gb_Titulo.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -76,7 +76,7 @@
             // 
             // gb_Titulo
             // 
-            this.gb_Titulo.Controls.Add(this.cb_medio);
+            this.gb_Titulo.Controls.Add(this.cb_medioPago);
             this.gb_Titulo.Controls.Add(this.dt_Fecha);
             this.gb_Titulo.Controls.Add(this.txt_Usuario);
             this.gb_Titulo.Controls.Add(this.txt_hab);
@@ -95,17 +95,6 @@
             this.gb_Titulo.Size = new System.Drawing.Size(385, 300);
             this.gb_Titulo.TabIndex = 1;
             this.gb_Titulo.TabStop = false;
-            // 
-            // cb_medio
-            // 
-            this.cb_medio.FormattingEnabled = true;
-            this.cb_medio.Items.AddRange(new object[] {
-            "Efectivo",
-            "Tarjeta"});
-            this.cb_medio.Location = new System.Drawing.Point(146, 247);
-            this.cb_medio.Name = "cb_medio";
-            this.cb_medio.Size = new System.Drawing.Size(121, 21);
-            this.cb_medio.TabIndex = 5;
             // 
             // dt_Fecha
             // 
@@ -271,6 +260,14 @@
             this.btn_tarjeta.UseVisualStyleBackColor = true;
             this.btn_tarjeta.Click += new System.EventHandler(this.btn_tarjeta_Click);
             // 
+            // cb_medioPago
+            // 
+            this.cb_medioPago.FormattingEnabled = true;
+            this.cb_medioPago.Location = new System.Drawing.Point(146, 247);
+            this.cb_medioPago.Name = "cb_medioPago";
+            this.cb_medioPago.Size = new System.Drawing.Size(121, 21);
+            this.cb_medioPago.TabIndex = 30;
+            // 
             // RegistrarEstadia
             // 
             this.ClientSize = new System.Drawing.Size(530, 419);
@@ -306,7 +303,6 @@
         private System.Windows.Forms.Label label8;
         private System.Windows.Forms.Label label9;
         private System.Windows.Forms.Label lbl_Titulo;
-        private System.Windows.Forms.ComboBox cb_medio;
         private System.Windows.Forms.Label label1;
         private System.Windows.Forms.Label lbl_camposObligatorios;
         private System.Windows.Forms.Button btn_factura;
@@ -317,5 +313,6 @@
         private System.Windows.Forms.Label label5;
         private System.Windows.Forms.Label label3;
         private System.Windows.Forms.Label lbl_estadia;
+        private System.Windows.Forms.ComboBox cb_medioPago;
     }
 }

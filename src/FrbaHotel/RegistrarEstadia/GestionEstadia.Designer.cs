@@ -186,7 +186,7 @@
             this.dgv_Reserva.Name = "dgv_Reserva";
             this.dgv_Reserva.Size = new System.Drawing.Size(531, 150);
             this.dgv_Reserva.TabIndex = 14;
-            this.dgv_Reserva.CellContentClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dgv_Reserva_CellContentClick);
+            this.dgv_Reserva.CellClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dgv_Reserva_CellClick);
             // 
             // Reserva_Codigo
             // 
