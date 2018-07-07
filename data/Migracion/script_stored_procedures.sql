@@ -456,7 +456,6 @@ create procedure FOUR_SIZONS.ModificacionUsuario
 	@mail nvarchar(50),
 	@telefono nvarchar(18),
 	@direccion nvarchar(255),
-
 	@fechaNac datetime,
 	@estado bit
 
@@ -509,7 +508,7 @@ end catch
 go
 
 ------------------------------------------------ABM CLIENTE------------------------------------------------------------
-create procedure four_sizons.AltaCliente
+alter procedure four_sizons.AltaCliente
 @nombre nvarchar(50),
 @apellido nvarchar(50),
 @numDoc numeric (18),
@@ -848,7 +847,7 @@ as begin
 	end
 go
 
-create procedure four_sizons.AltaHabitacion
+alter procedure four_sizons.AltaHabitacion
 @numero numeric(18),
 @piso numeric(18),
 @frente nvarchar(50),
@@ -864,7 +863,7 @@ declare @TipoHabID numeric(18)
 
 
 		set @TipoHabID = (select Habitacion_Tipo_Codigo from FOUR_SIZONS.Habitacion_Tipo where @TipoHab = Habitacion_Tipo_Descripcion)
-
+		
 		--Valida que no haya dos hab con el mismo numero en el mismo hotel		
 
 		if (not exists (select Habitacion_Numero from Habitacion where Hotel_Codigo=@HotelId and Habitacion_Numero= @numero))
@@ -879,14 +878,14 @@ declare @TipoHabID numeric(18)
 						declare @fin datetime= convert(datetime, '01-01-2021' ,121)
 
 
-					if(exists (select * from FOUR_SIZONS.Disponibilidad where Hotel_Codigo=@HotelId and Habitacion_Tipo_Codigo=@TipoHab))
+					if(exists (select * from FOUR_SIZONS.Disponibilidad where Hotel_Codigo=@HotelId and Habitacion_Tipo_Codigo=@TipoHabID))
 					begin
 					while (@aux != @fin)
 						begin
 							set @aux2= @aux 
 							update FOUR_SIZONS.Disponibilidad
 							set Disp_HabDisponibles= Disp_HabDisponibles+1
-							where @TipoHab=Habitacion_Tipo_Codigo and @aux= Disp_Fecha and Hotel_Codigo =@HotelId
+							where @TipoHabID=Habitacion_Tipo_Codigo and @aux= Disp_Fecha and Hotel_Codigo =@HotelId
 							set @aux = DATEADD(day, 1, @aux2)
 						end
 					end
@@ -895,7 +894,7 @@ declare @TipoHabID numeric(18)
 							while (@aux != @fin)
 							begin
 							set @aux2= @aux 
-							insert into FOUR_SIZONS.Disponibilidad	(Disp_HabDisponibles,Habitacion_Tipo_Codigo,Disp_Fecha,Hotel_Codigo) values(1,@TipoHab,@aux,@HotelId)
+							insert into FOUR_SIZONS.Disponibilidad	(Disp_HabDisponibles,Habitacion_Tipo_Codigo,Disp_Fecha,Hotel_Codigo) values(1,@TipoHabID,@aux,@HotelId)
 							set @aux = DATEADD(day, 1, @aux2)
 							end
 						end
@@ -914,7 +913,6 @@ begin catch
 	rollback tran 
 end catch
 go
-
 
 create procedure four_sizons.modificarHabitacion
 @numero numeric(18),

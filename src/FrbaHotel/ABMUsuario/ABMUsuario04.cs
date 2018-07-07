@@ -16,6 +16,7 @@ namespace FrbaHotel.ABMUsuario
         public static string modoABM;
         public decimal hotel;
         public string usuario;
+        public decimal hotelCant;
 
         public ABMUsuario04(string modo, string user, decimal hotelID)
         {
@@ -85,14 +86,22 @@ namespace FrbaHotel.ABMUsuario
 
         private void ABMUsuario04_Load(object sender, EventArgs e)
         {
-            if (hotel != 0)
+            Conexion con = new Conexion();
+
+            if ((modoABM == "INS") && (hotel != 0))
             {
                 btn_promptHotel.Enabled = false;
+                con.strQuery = "SELECT H.Hotel_Nombre FROM FOUR_SIZONS.Hotel H WHERE H.Hotel_Codigo = " + hotel;
             }
-            Conexion con = new Conexion();
-            con.strQuery = "SELECT H.Hotel_Nombre FROM FOUR_SIZONS.UsuarioXHotel UH " +
-                           "JOIN FOUR_SIZONS.Hotel H ON H.Hotel_Codigo = UH.Hotel_Codigo " +
-                           "WHERE UH.Usuario_ID = '" + usuario + "' AND H.Hotel_Codigo = " + hotel;
+
+            if (modoABM == "DLT")
+            {
+                btn_promptHotel.Enabled = false;
+                con.strQuery = "SELECT H.Hotel_Nombre FROM FOUR_SIZONS.UsuarioXHotel UH " +
+                               "JOIN FOUR_SIZONS.Hotel H ON H.Hotel_Codigo = UH.Hotel_Codigo " +
+                               "WHERE UH.Usuario_ID = '" + usuario + "' AND H.Hotel_Codigo = " + hotel;
+            }
+
             con.executeQuery();
 
             if(con.reader())

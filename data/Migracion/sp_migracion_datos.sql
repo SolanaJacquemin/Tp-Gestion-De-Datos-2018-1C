@@ -697,16 +697,18 @@ BEGIN
 	WHERE Cliente_Codigo IN (select clienteD from @updateDupli2)
 	 
 	-- Usuario
-	-- Inserta usuario administrador
+	-- Inserta usuarios
 	INSERT INTO FOUR_SIZONS.Usuario
 	VALUES ('SYSADM', '3GGQyLOZ4EO537rLsNN/KiZF4z+ZOEkdJLJOApjZzRc=', 'Administrador', '', '', 0, '', '', GETDATE(), '',1,0)
 	INSERT INTO FOUR_SIZONS.Usuario
 	VALUES ('GUEST', '3GGQyLOZ4EO537rLsNN/KiZF4z+ZOEkdJLJOApjZzRc=', 'Guest', '', '', 0, '', '', GETDATE(), '',1,0)
+	INSERT INTO FOUR_SIZONS.Usuario
+	VALUES ('admin', '5rhwUL/LgUP8uNsBcKTcntANkE3dPipK0bHo3A/cm+c=', 'Administrador', '', '', 0, '', '', GETDATE(), '',1,0)
 
 	--UsuarioXRol
 	INSERT INTO FOUR_SIZONS.UsuarioXRol VALUES ('SYSADM', 1, 1)
 	INSERT INTO FOUR_SIZONS.UsuarioXRol VALUES ('GUEST', 3, 1)
-
+	INSERT INTO FOUR_SIZONS.UsuarioXRol VALUES ('admin', 1, 1)
 
 	-- disponibilidad
 

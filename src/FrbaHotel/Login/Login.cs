@@ -20,7 +20,7 @@ namespace FrbaHotel
         {
             InitializeComponent();
             this.StartPosition = FormStartPosition.CenterScreen;
-            txt_usuario.CharacterCasing = CharacterCasing.Upper;
+            //txt_usuario.CharacterCasing = CharacterCasing.Upper;
 
             txt_password.PasswordChar = '●';
         }

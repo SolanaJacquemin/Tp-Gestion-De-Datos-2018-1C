@@ -92,11 +92,8 @@ namespace FrbaHotel.ABMUsuario
 
         private void ABMUsuario_Load(object sender, EventArgs e)
         {
-            if (modoABM == "INS")
-            {
-                levantarCombos();
-            }
-            else
+            levantarCombos();
+            if (modoABM != "INS")
             {
                 Conexion con = new Conexion();
                 con.strQuery = "SELECT * FROM FOUR_SIZONS.Usuario WHERE Usuario_ID = '" + usuario + "'";
