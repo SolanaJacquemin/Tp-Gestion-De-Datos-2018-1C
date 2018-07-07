@@ -65,6 +65,8 @@ namespace FrbaHotel.ABMCliente
                     break;
 
                 case "UPD":
+                    txt_estado.Visible = false;
+                    lbl_estado.Visible = false;
                     labelTitulo.Text = "Modificación de Cliente";
                     btn_aceptar_nuevo.Visible = false;
                     lbl_obligacion.Visible = false;
@@ -144,7 +146,7 @@ namespace FrbaHotel.ABMCliente
         private void btn_Aceptar_Click(object sender, EventArgs e)
         {
 
-            if (modoABM != "INS")
+            if (modoABM != "DLT")
             {
                 error = 0;
                 if (verificarObligatorios() == false)
@@ -241,12 +243,16 @@ namespace FrbaHotel.ABMCliente
 
         bool IsNumber(string s)
         {
-            foreach (char c in s)
+            if (s != "")
             {
-                if (!Char.IsDigit(c))
-                    return false;
+                foreach (char c in s)
+                {
+                    if (!Char.IsDigit(c))
+                        return false;
+                }
+                return true;
             }
-            return true;
+            else return false;
         }
 
         private void levantarCombos()
@@ -318,4 +324,3 @@ namespace FrbaHotel.ABMCliente
     }
 
 }
-

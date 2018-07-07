@@ -19,6 +19,7 @@ namespace FrbaHotel.ABMUsuario
         public string nombreSP;
         public string usuario;
         public int error;
+        public bool abm_valido;
 
 
         public ABMUsuario02(string modo, string user)
@@ -46,19 +47,23 @@ namespace FrbaHotel.ABMUsuario
                 case "DLT":
                     labelTitulo.Text = "Baja de Usuario";
                     txt_usuario.Text = usuario;
-                    txt_apellido.ReadOnly = true;
-                    txt_direccion.ReadOnly = true;
-                    txt_nombre.ReadOnly = true;
-                    txt_nro_documento.ReadOnly = true;
-                    txt_password.ReadOnly = true;
-                    txt_telefono.ReadOnly = true;
-                    txt_usuario.ReadOnly = true;
+                    txt_apellido.Enabled = false;
+                    txt_direccion.Enabled = false;;
+                    txt_nombre.Enabled = false;
+                    txt_nro_documento.Enabled = false;
+                    txt_password.Enabled = false;
+                    txt_telefono.Enabled = false;
+                    txt_usuario.Enabled = false;
                     cb_tipo_documento.Enabled = false;
                     dt_fecha_nac.Enabled = false;
                     cb_rol.Enabled = false;
                     txt_intentoslog.ReadOnly = true;
-                    txt_mail.ReadOnly = true;
+                    txt_estado.Enabled = false;
+                    l_estado.Enabled = false;
+                    txt_mail.Enabled = false;
                     btn_aceptar_nuevo.Visible = false;
+                    l_log.Visible = false;
+                    txt_intentoslog.Visible = false;
                     break;
                 case "UPD":
                     labelTitulo.Text = "Modificación de Usuario";
@@ -66,6 +71,10 @@ namespace FrbaHotel.ABMUsuario
                     txt_usuario.ReadOnly = true;
                     txt_estado.ReadOnly = true;
                     btn_aceptar_nuevo.Visible = false;
+                    txt_estado.Visible = false;
+                    l_estado.Visible = false;
+                    l_log.Visible = false;
+                    txt_intentoslog.Visible = false;
                     break;
             }
             dt_fecha_nac.Format = DateTimePickerFormat.Custom;
@@ -200,7 +209,16 @@ namespace FrbaHotel.ABMUsuario
         public void boton_aceptar_nuevo_Click(object sender, EventArgs e) 
         {
             error = 0;
-            verificarCampos();
+            if (IsNumber(txt_nro_documento.Text) == false)
+            {
+                error = 1;
+                MessageBox.Show("El campo Nro de Documento debe ser un dato numérico", "FOUR SIZONS - FRBA Hoteles", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            }
+            if (IsNumber(txt_telefono.Text) == false)
+            {
+                error = 1;
+                MessageBox.Show("El campo Teléfono debe ser un dato numérico", "FOUR SIZONS - FRBA Hoteles", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            }
             if (error == 0)
             {
                 nombreSP = "FOUR_SIZONS.AltaUsuario";
@@ -242,80 +260,61 @@ namespace FrbaHotel.ABMUsuario
             con.closeConection();
         }
 
-        private void verificarCampos()
+        public bool verificarObligatorios()
         {
-            if(txt_usuario.Text == "")
-            {
-                error = 1;
-                MessageBox.Show("El campo Usuario no puede estar vacío", "FOUR SIZONS - FRBA Hoteles", MessageBoxButtons.OK, MessageBoxIcon.Information);
-            }
-            if (cb_rol.Text == "")
-            {
-                error = 1;
-                MessageBox.Show("El campo Rol no puede estar vacío", "FOUR SIZONS - FRBA Hoteles", MessageBoxButtons.OK, MessageBoxIcon.Information);
-            }
-            if (txt_password.Text == "")
-            {
-                error = 1;
-                MessageBox.Show("El campo Contraseña no puede estar vacío", "FOUR SIZONS - FRBA Hoteles", MessageBoxButtons.OK, MessageBoxIcon.Information);
-            }
-            if (txt_nombre.Text == "")
-            {
-                error = 1;
-                MessageBox.Show("El campo Nombre no puede estar vacío", "FOUR SIZONS - FRBA Hoteles", MessageBoxButtons.OK, MessageBoxIcon.Information);
-            }
-            if (txt_apellido.Text == "")
-            {
-                error = 1;
-                MessageBox.Show("El campo Apellido no puede estar vacío", "FOUR SIZONS - FRBA Hoteles", MessageBoxButtons.OK, MessageBoxIcon.Information);
-            }
-            if (cb_tipo_documento.Text == "")
-            {
-                error = 1;
-                MessageBox.Show("El campo Tipo de Documento no puede estar vacío", "FOUR SIZONS - FRBA Hoteles", MessageBoxButtons.OK, MessageBoxIcon.Information);
-            }
-            if (txt_nro_documento.Text == "")
-            {
-                error = 1;
-                MessageBox.Show("El campo Nro de Documento no puede estar vacío", "FOUR SIZONS - FRBA Hoteles", MessageBoxButtons.OK, MessageBoxIcon.Information);
-            }
-            if (IsNumber(txt_nro_documento.Text) == false)
-            {
-                error = 1;
-                MessageBox.Show("El campo Nro de Documento no puede contener carácteres", "FOUR SIZONS - FRBA Hoteles", MessageBoxButtons.OK, MessageBoxIcon.Information);
-            }
-            if (txt_telefono.Text == "")
-            {
-                error = 1;
-                MessageBox.Show("El campo Teléfono no puede estar vacío", "FOUR SIZONS - FRBA Hoteles", MessageBoxButtons.OK, MessageBoxIcon.Information);
-            }
-            if (txt_direccion.Text == "")
-            {
-                error = 1;
-                MessageBox.Show("El campo Dirección no puede estar vacío", "FOUR SIZONS - FRBA Hoteles", MessageBoxButtons.OK, MessageBoxIcon.Information);
-            }
-            if (txt_mail.Text == "")
-            {
-                error = 1;
-                MessageBox.Show("El campo Mail no puede estar vacío", "FOUR SIZONS - FRBA Hoteles", MessageBoxButtons.OK, MessageBoxIcon.Information);
-            }
+            abm_valido = true;
+
+            if (txt_nombre.Text == "") abm_valido = false;
+            if (cb_tipo_documento.Text == "") abm_valido = false;
+            if (txt_nro_documento.Text == "") abm_valido = false;
+            if (txt_apellido.Text == "") abm_valido = false;
+            if (txt_usuario.Text == "") abm_valido = false;
+            if (txt_telefono.Text == "") abm_valido = false;
+            if (txt_direccion.Text == "") abm_valido = false;
+            if (dt_fecha_nac.Text == "") abm_valido = false;
+            if (txt_mail.Text == "") abm_valido = false;
+            if (cb_rol.Text == "") abm_valido = false;
+            if (txt_password.Text == "") abm_valido = false;
+
+            return abm_valido;
         }
 
         bool IsNumber(string s)
         {
-            foreach (char c in s)
+            if (s != "")
             {
-                if (!Char.IsDigit(c))
-                    return false;
+                foreach (char c in s)
+                {
+                    if (!Char.IsDigit(c))
+                        return false;
+                }
+                return true;
             }
-            return true;
+            else return false;
         }
 
         public void boton_aceptar_Click(object sender, EventArgs e)
         {
-            error = 0;
-            verificarCampos();
-            if (error == 0)
+            if (modoABM != "DLT")
+            {
+                error = 0;
+                if (verificarObligatorios() == false)
+                {
+                    error = 1;
+                    MessageBox.Show("Por favor, complete los campos obligatorios", "FOUR SIZONS - FRBA Hoteles", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                };
+
+                if (IsNumber(txt_nro_documento.Text) == false)
+                {
+                    error = 1;
+                    MessageBox.Show("El campo Nro de Documento debe ser un dato numérico", "FOUR SIZONS - FRBA Hoteles", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                }
+                if (IsNumber(txt_telefono.Text) == false)
+                {
+                    error = 1;
+                    MessageBox.Show("El campo Teléfono debe ser un dato numérico", "FOUR SIZONS - FRBA Hoteles", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                }
+            }
             {
                 switch (modoABM)
                 {

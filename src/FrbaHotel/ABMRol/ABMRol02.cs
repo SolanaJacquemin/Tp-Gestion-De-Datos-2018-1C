@@ -35,7 +35,6 @@ namespace FrbaHotel.ABMRol
                     labelTitulo.Text = "Alta de Rol";
                     lEstado.Visible = false;
                     txt_estado.Visible = false;
-                    lbl_obligacion.ForeColor = Color.Red;
                     break;
                 case "DLT":
                     labelTitulo.Text = "Baja de Rol";
@@ -191,29 +190,37 @@ namespace FrbaHotel.ABMRol
 
         bool IsNumber(string s)
         {
-            foreach (char c in s)
+            if (s != "")
             {
-                if (!Char.IsDigit(c))
-                    return false;
+                foreach (char c in s)
+                {
+                    if (!Char.IsDigit(c))
+                        return false;
+                }
+                return true;
             }
-            return true;
+            else return false;
         }
 
         private void boton_aceptar_Click(object sender, EventArgs e)
         {
 
-            error = 0;
-            if (verificarObligatorios() == false)
+            if (modoABM != "DLT")
             {
-                error = 1;
-                MessageBox.Show("Por favor, complete los campos obligatorios", "FOUR SIZONS - FRBA Hoteles", MessageBoxButtons.OK, MessageBoxIcon.Information);
-            }
+                error = 0;
+                if (verificarObligatorios() == false)
+                {
+                    error = 1;
+                    MessageBox.Show("Por favor, complete los campos obligatorios", "FOUR SIZONS - FRBA Hoteles", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                }
 
-            if (IsNumber(txt_nombreRol.Text))
-            {
-                error = 1;
-                MessageBox.Show("Por favor, el nombre del rol no debe contener números", "FOUR SIZONS - FRBA Hoteles", MessageBoxButtons.OK, MessageBoxIcon.Information);
-            };
+                if (IsNumber(txt_nombreRol.Text))
+                {
+                    error = 1;
+                    MessageBox.Show("Por favor, el nombre del rol no debe contener números", "FOUR SIZONS - FRBA Hoteles", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                }
+            }
+            
             switch (modoABM)
             {
                 case "INS":

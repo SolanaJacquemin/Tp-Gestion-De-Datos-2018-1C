@@ -36,7 +36,7 @@ namespace FrbaHotel.ABMRol
             con.executeQuery();
             if (!con.reader())
             {
-                MessageBox.Show("No se han encontrado usuarios. Revise los criterios de búsqueda", "FOUR SIZONS - FRBA Hoteles", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                MessageBox.Show("No se han encontrado roles. Revise los criterios de búsqueda", "FOUR SIZONS - FRBA Hoteles", MessageBoxButtons.OK, MessageBoxIcon.Information);
                 con.strQuery = "";
                 con.closeConection();
                 return;
@@ -55,8 +55,7 @@ namespace FrbaHotel.ABMRol
 
         private void buscar()
         {
-            dgv_Roles.Rows.Clear();
-            
+            dgv_Roles.Rows.Clear();            
 
             Conexion con = new Conexion();
             con.strQuery = "SELECT * FROM FOUR_SIZONS.Rol WHERE 1=1 ";
@@ -68,7 +67,7 @@ namespace FrbaHotel.ABMRol
             con.executeQuery();
             if (!con.reader())
             {
-                MessageBox.Show("No se han encontrado usuarios. Revise los criterios de búsqueda", "FOUR SIZONS - FRBA Hoteles", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                MessageBox.Show("No se han encontrado roles. Revise los criterios de búsqueda", "FOUR SIZONS - FRBA Hoteles", MessageBoxButtons.OK, MessageBoxIcon.Information);
                 con.strQuery = "";
                 con.closeConection();
                 return;
@@ -142,7 +141,7 @@ namespace FrbaHotel.ABMRol
             }
             else
             {
-                MessageBox.Show("Debe seleccionar un usuario de la grilla", "FOUR SIZONS - FRBA Hoteles", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                MessageBox.Show("Debe seleccionar un rol de la grilla", "FOUR SIZONS - FRBA Hoteles", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
 
@@ -160,7 +159,7 @@ namespace FrbaHotel.ABMRol
             }
             else
             {
-                MessageBox.Show("Debe seleccionar un usuario de la grilla", "FOUR SIZONS - FRBA Hoteles", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                MessageBox.Show("Debe seleccionar un rol de la grilla", "FOUR SIZONS - FRBA Hoteles", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
 

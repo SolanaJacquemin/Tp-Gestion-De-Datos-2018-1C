@@ -17,6 +17,7 @@ namespace FrbaHotel.ABMHotel
         public bool abm_valido;
         public string nombreSP;
         public decimal hotel;
+        public string nombreHotel;
         public int error;
 
         public ABMHotel02(string modo, decimal hotelId)
@@ -34,7 +35,6 @@ namespace FrbaHotel.ABMHotel
             {
                 case "INS":
                     labelTitulo.Text = "Alta de Hotel";
-                    //l_codigo.Visible = false;
                     l_estado.Visible = false;
                     txt_estado.Visible = false;
                     break;
@@ -50,6 +50,8 @@ namespace FrbaHotel.ABMHotel
                     txt_recargaEstrella.Enabled = false;
                     dt_fecha_cre.Enabled = false;
                     cb_estrellas.Enabled = false;
+                    txt_estado.Visible = false;
+                    l_estado.Visible = false;
                     btn_aceptar_nuevo.Visible = false;
                     break;
                 case "UPD":
@@ -64,7 +66,8 @@ namespace FrbaHotel.ABMHotel
                     txt_recargaEstrella.ReadOnly = false;
                     dt_fecha_cre.Enabled = true;
                     cb_estrellas.Enabled = true;
-                    txt_estado.Enabled = false;
+                    txt_estado.Visible = false;
+                    l_estado.Visible = false;
                     btn_aceptar_nuevo.Visible = false;
                     break;
             }
@@ -92,12 +95,10 @@ namespace FrbaHotel.ABMHotel
                 {
                     txt_nombre_hotel.Text = con.lector.GetString(0);
                 }
-                txt_nombre_hotel.Enabled = false;
             }
 
             if (modoABM != "INS")
             {
-                //txt_codigo.Text = hotel;
                 Conexion con = new Conexion();
                 con.strQuery = "SELECT * FROM FOUR_SIZONS.Hotel WHERE Hotel_Codigo = '" + hotel + "'";
                 con.executeQuery();
@@ -121,8 +122,10 @@ namespace FrbaHotel.ABMHotel
                         txt_estado.ForeColor = Color.Green;
 
                     }
-                    else
+                    if (modoABM == "INS")
                     {
+                        txt_nombre_hotel.Enabled = true;
+                        txt_nombre_hotel.Text = "";
                         txt_estado.Text = "INACTIVO";
                         txt_estado.BackColor = Color.WhiteSmoke;
                         txt_estado.ForeColor = Color.Red;
@@ -224,18 +227,25 @@ namespace FrbaHotel.ABMHotel
             if (txt_calle.Text == "") abm_valido = false;
             if (txt_ciudad.Text == "") abm_valido = false;
             if (txt_mail.Text == "") abm_valido = false;
+            if (txt_recargaEstrella.Text == "") abm_valido = false;
+            if (cb_estrellas.Text == "") abm_valido = false;
+            if (dt_fecha_cre.Text == "") abm_valido = false;
 
             return abm_valido;
         }
 
         bool IsNumber(string s)
         {
-            foreach (char c in s)
+            if (s != "")
             {
-                if (!Char.IsDigit(c))
-                    return false;
+                foreach (char c in s)
+                {
+                    if (!Char.IsDigit(c))
+                        return false;
+                }
+                return true;
             }
-            return true;
+            else return false;
         }
 
         private void boton_aceptar_Click(object sender, EventArgs e)

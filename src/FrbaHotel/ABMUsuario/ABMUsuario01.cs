@@ -29,6 +29,18 @@ namespace FrbaHotel.ABMUsuario
             dgv_Usuarios.Rows.Clear();
 
             Conexion con = new Conexion();
+            con.strQuery = "SELECT Parametro_Descripcion FROM FOUR_SIZONS.Parametros WHERE Parametro_Codigo = 'DOCUMENTO'";
+            con.executeQuery();
+            while (con.reader())
+            {
+                cb_tipodoc.Items.Add(con.lector.GetString(0));
+            }
+            con.closeConection();
+        }
+
+        public void iniciarGrilla()
+        {
+            Conexion con = new Conexion();
             con.strQuery = "SELECT Usuario_ID, Usuario_Nombre, Usuario_Apellido, " +
                             "Usuario_TipoDoc, Usuario_NroDoc, Usuario_Telefono, Usuario_Direccion, " +
                             "Usuario_Fec_Nac, Usuario_Mail, Usuario_Estado, Usuario_FallaLog " +
@@ -53,14 +65,6 @@ namespace FrbaHotel.ABMUsuario
                 con.lector.GetString(2), con.lector.GetString(3), con.lector.GetDecimal(4), con.lector.GetString(5),
                 con.lector.GetString(6), con.lector.GetDateTime(7), con.lector.GetString(8), con.lector.GetBoolean(9),
                 con.lector.GetDecimal(10)});
-            }
-            con.closeConection();
-
-            con.strQuery = "SELECT Parametro_Descripcion FROM FOUR_SIZONS.Parametros WHERE Parametro_Codigo = 'DOCUMENTO'";
-            con.executeQuery();
-            while (con.reader())
-            {
-                cb_tipodoc.Items.Add(con.lector.GetString(0));
             }
             con.closeConection();
         }
@@ -132,12 +136,7 @@ namespace FrbaHotel.ABMUsuario
 
         private void btn_limpiar_Click(object sender, EventArgs e)
         {
-            txt_Id.Text = "";
-            txt_nombre.Text = "";
-            txt_apellido.Text = "";
-            cb_tipodoc.Text = "";
-            txt_nrodoc.Text = "";
-            txt_mail.Text = "";
+            limpiar();
         }
 
         private void buscar()
@@ -228,9 +227,22 @@ namespace FrbaHotel.ABMUsuario
                 }
         }
 
+        public void limpiar()
+        {
+            txt_Id.Text = "";
+            txt_nombre.Text = "";
+            txt_apellido.Text = "";
+            cb_tipodoc.Text = "";
+            txt_nrodoc.Text = "";
+            txt_mail.Text = "";
+            iniciarGrilla();
+        }
+
         private void ABMUsuario01_Load(object sender, EventArgs e)
         {
+            limpiar();
             refrescarGrid();
+
         }
 
         private void groupBox1_Enter(object sender, EventArgs e)

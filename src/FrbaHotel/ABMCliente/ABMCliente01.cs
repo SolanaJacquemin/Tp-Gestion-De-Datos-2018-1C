@@ -62,12 +62,7 @@ namespace FrbaHotel.AbmCliente
                 con.lector.GetString(10), con.lector.GetDateTime(11), con.lector.GetDecimal(12), con.lector.GetBoolean(13), 
                 con.lector.GetBoolean(14)});
             }
-            dgv_Clientes.ClearSelection();
-            foreach (DataGridViewRow row in dgv_Clientes.Rows)
-                if (Convert.ToBoolean(row.Cells[13].Value) == false)
-                {
-                    row.DefaultCellStyle.BackColor = Color.Red;
-                }
+            
             con.closeConection();
         }
 
@@ -215,7 +210,12 @@ namespace FrbaHotel.AbmCliente
 
         private void refrescarGrid()
         {
-
+            dgv_Clientes.ClearSelection();
+            foreach (DataGridViewRow row in dgv_Clientes.Rows)
+                if (Convert.ToBoolean(row.Cells[13].Value) == false)
+                {
+                    row.DefaultCellStyle.BackColor = Color.Red;
+                }
         }
 
         private void dgv_Clientes_CellClick(object sender, DataGridViewCellEventArgs e)

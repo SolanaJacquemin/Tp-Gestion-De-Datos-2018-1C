@@ -67,6 +67,12 @@ namespace FrbaHotel.ABMHotel
                txt_hotelNombre.Text = con.lector.GetString(0);
             }
             con.closeConection();
+            txt_hotelNombre.Enabled = false;
+        }
+
+        private void boton_volver_Click(object sender, EventArgs e)
+        {
+            this.Close();
         }
     }
 }

@@ -29,14 +29,12 @@ namespace FrbaHotel.ABMHotel
 
             cb_estrellas.DropDownStyle = ComboBoxStyle.DropDownList;
 
-            limpiar();
-            refrescarGrid();
-
             cb_estrellas.Items.Add("1");
             cb_estrellas.Items.Add("2");
             cb_estrellas.Items.Add("3");
             cb_estrellas.Items.Add("4");
             cb_estrellas.Items.Add("5");
+            txt_codigo.Enabled = false;
         }
 
         private void refrescarGrid()
@@ -106,6 +104,7 @@ namespace FrbaHotel.ABMHotel
                 con.strQuery = con.strQuery + "AND Hotel_Pais like '%" + txt_pais.Text + "%' ";
             con.strQuery = con.strQuery + "ORDER BY Hotel_Codigo";
             con.executeQuery();
+
             if (!con.reader())
             {
                 MessageBox.Show("No se han encontrado hoteles. Revise los criterios de búsqueda", "FOUR SIZONS - FRBA Hoteles", MessageBoxButtons.OK, MessageBoxIcon.Information);
@@ -127,17 +126,10 @@ namespace FrbaHotel.ABMHotel
                 con.lector.GetDateTime(10), con.lector.GetBoolean(11)});
             }
             con.closeConection();
-
-            dgv_Hoteles.ClearSelection();
-            foreach (DataGridViewRow row in dgv_Hoteles.Rows)
-                if (Convert.ToBoolean(row.Cells[11].Value) == false)
-                {
-                    row.DefaultCellStyle.BackColor = Color.Red;
-                }
         }
 
-        public void limpiar()
-        {
+          public void limpiar()
+          {
             iniciarGrilla();
 
             txt_codigo.Text = "";
@@ -148,8 +140,9 @@ namespace FrbaHotel.ABMHotel
             cb_estrellas.Text = "";
             txt_ciudad.Text = "";
             txt_pais.Text = "";
+            iniciarGrilla();
             refrescarGrid();
-        }
+        }         
 
         private void ABMHotel_Load(object sender, EventArgs e)
         {
@@ -168,6 +161,7 @@ namespace FrbaHotel.ABMHotel
                 txt_codigo.Enabled = false;
             }
             dgv_Hoteles.ClearSelection();
+            limpiar();
         }
 
         private void btn_buscar_Click(object sender, EventArgs e)
@@ -213,6 +207,8 @@ namespace FrbaHotel.ABMHotel
 
         private void boton_baja_Click(object sender, EventArgs e)
         {
+            if (dgv_Hoteles.SelectedRows.Count > 0)
+            {
             string modo = "DLT";
             this.Hide();
             ABMHotel02 formABMUsuario02 = new ABMHotel02(modo, Convert.ToDecimal(dgv_hotel_codigo));
@@ -220,10 +216,17 @@ namespace FrbaHotel.ABMHotel
             this.Show();
             this.buscar();
             this.refrescarGrid();
+            }
+            else
+            {
+                MessageBox.Show("Debe seleccionar un hotel de la grilla", "FOUR SIZONS - FRBA Hoteles", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
         }
 
         private void boton_modificacion_Click(object sender, EventArgs e)
         {
+            if (dgv_Hoteles.SelectedRows.Count > 0)
+            {
             string modo = "UPD";
             this.Hide();
             ABMHotel02 formABMUsuario02 = new ABMHotel02(modo, Convert.ToDecimal(dgv_hotel_codigo));
@@ -231,6 +234,11 @@ namespace FrbaHotel.ABMHotel
             this.Show();
             this.buscar();
             this.refrescarGrid();
+            }
+            else
+            {
+                MessageBox.Show("Debe seleccionar un hotel de la grilla", "FOUR SIZONS - FRBA Hoteles", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
         }
 
         public void dgv_Hoteles_CellClick(object sender, DataGridViewCellEventArgs e)
@@ -242,12 +250,19 @@ namespace FrbaHotel.ABMHotel
 
         private void btn_cerrar_Click(object sender, EventArgs e)
         {
-            this.Hide();
+            if (dgv_Hoteles.SelectedRows.Count > 0)
+            {
+                this.Hide();
             ABMHotel03 formABMHotel03 = new ABMHotel03(Convert.ToDecimal(dgv_hotel_codigo));
             formABMHotel03.ShowDialog();
             this.Show();
             this.buscar();
             this.refrescarGrid();
+            }
+            else
+            {
+                MessageBox.Show("Debe seleccionar un hotel de la grilla", "FOUR SIZONS - FRBA Hoteles", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
         }
 
         private void btn_promptHotel_Click(object sender, EventArgs e)
