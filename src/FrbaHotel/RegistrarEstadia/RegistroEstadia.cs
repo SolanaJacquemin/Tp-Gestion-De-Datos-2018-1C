@@ -8,6 +8,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using FrbaHotel.RegistrarEstadia;
+using System.Data.SqlClient;
 
 namespace FrbaHotel.RegistrarEstadia
 {
@@ -22,6 +23,10 @@ namespace FrbaHotel.RegistrarEstadia
         public bool generarFactura;
         public bool facturaGenerada;
         public decimal estadoReserva;
+        public decimal hotel;
+        public decimal cantHab;
+        public decimal tipoHab;
+        public string mensajeHab;
 
         public RegistrarEstadia(string modo, decimal res)
         {
@@ -84,6 +89,8 @@ namespace FrbaHotel.RegistrarEstadia
                     con.command.ExecuteNonQuery();
                     con.closeConection();
 
+
+
                     MessageBox.Show("Operación exitosa", "FOUR SIZONS - FRBA Hoteles", MessageBoxButtons.OK, MessageBoxIcon.Information);
 
                     con.strQuery="SELECT Estadia_Codigo From FOUR_SIZONS.Estadia where Reserva_Codigo = " + reserva;
@@ -93,6 +100,39 @@ namespace FrbaHotel.RegistrarEstadia
                     {
                         estadia = con.lector.GetDecimal(0);
                     }
+                    con.closeConection();
+
+                    con.strQuery = "SELECT Hotel_Codigo, Reserva_cant_hab, habitacion_tipo_codigo FROM FOUR_SIZONS.Reserva WHERE Reserva_Codigo = " + reserva;
+                    con.executeQuery();
+
+                    if (con.reader())
+                    {
+                        hotel = con.lector.GetDecimal(0);
+                        cantHab = con.lector.GetDecimal(1);
+                        tipoHab = con.lector.GetDecimal(2);
+                    }
+                    con.closeConection();
+
+                    DataSet dataset = new DataSet();
+                    con.strQuery = "four_sizons.asignarHab";
+                    con.execute();
+                    con.command.CommandType = CommandType.StoredProcedure;
+
+                    con.command.Parameters.Add("@hotel", SqlDbType.Decimal).Value = hotel;
+                    con.command.Parameters.Add("@cant", SqlDbType.Decimal).Value = cantHab;
+                    con.command.Parameters.Add("@tipo_Hab", SqlDbType.Decimal).Value = tipoHab;
+
+                    con.openConection();
+
+                    SqlDataAdapter da = new SqlDataAdapter(con.command);
+
+                    da.Fill(dataset);
+
+                    for (int i = 0; i < dataset.Tables[0].Rows.Count; i++)
+                    {
+                        mensajeHab = mensajeHab + (dataset.Tables[0].Rows[i][0]).ToString() + " ";
+                    }
+                    MessageBox.Show("Las habitaciones que corresponden: " + mensajeHab, "FOUR SIZONS - FRBA Hoteles", MessageBoxButtons.OK, MessageBoxIcon.Information);
                     con.closeConection();
 
                 }

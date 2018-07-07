@@ -25,7 +25,6 @@ namespace FrbaHotel.GestionReservas
         public bool buscoCliente;
         public bool tieneDisponibilidad;
         public decimal reservaID;
-        public string mensajeHab;
 
         public ABMReserva02(string modo, string user)
         {
@@ -215,28 +214,6 @@ namespace FrbaHotel.GestionReservas
                             reservaID = Convert.ToDecimal(con.lector.GetDecimal(0).ToString());
                         }
 
-                        con.closeConection();
-
-                        DataSet dataset = new DataSet();
-                        con.strQuery = "four_sizons.asignarHab";
-                        con.execute();
-                        con.command.CommandType = CommandType.StoredProcedure;
-
-                        con.command.Parameters.Add("@hotel", SqlDbType.Decimal).Value = hotelID;
-                        con.command.Parameters.Add("@cant", SqlDbType.Decimal).Value = Convert.ToDecimal(txt_cantHab.Text);
-                        con.command.Parameters.Add("@tipoHabDesc", SqlDbType.NVarChar).Value = cb_tipoHabitacion.Text;
-
-                        con.openConection();
-
-                        SqlDataAdapter da = new SqlDataAdapter(con.command);
-
-                        da.Fill(dataset);
-
-                        for (int i = 0; i < dataset.Tables[0].Rows.Count; i++)
-                        {
-                            mensajeHab = mensajeHab + (dataset.Tables[0].Rows[i][0]).ToString() + " ";
-                        }
-                        MessageBox.Show("Las habitaciones que corresponden: " + mensajeHab, "FOUR SIZONS - FRBA Hoteles", MessageBoxButtons.OK, MessageBoxIcon.Information);
                         con.closeConection();
 
                         MessageBox.Show("Operación exitosa. El código de reserva es " + reservaID.ToString() , "FOUR SIZONS - FRBA Hoteles", MessageBoxButtons.OK, MessageBoxIcon.Information);

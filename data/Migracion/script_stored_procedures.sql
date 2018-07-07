@@ -1449,13 +1449,14 @@ end catch
 end
 GO
 ----------------------------------------------------------------------------------
-create proc FOUR_SIZONS.registrarCheckIn
+alter proc FOUR_SIZONS.registrarCheckIn
 @reserva numeric(18),
-@usuario nvarchar(15),
-@fecha datetime
+@usuario nvarchar(15)
+--@fecha datetime
 
 as begin
 --verifica que el momento del checkin sea el mismo que el dia de ingreso que dice la reserva
+declare @fecha datetime = GETDATE()
 if (not exists (select Reserva_Codigo from Reserva where Reserva_Codigo=@reserva and Reserva_Fecha_Inicio= @fecha))	
 	IF(EXISTS (select Reserva_Codigo from Reserva where Reserva_Codigo=@reserva and Reserva_Fecha_Inicio< @fecha))
 		update FOUR_SIZONS.Reserva set Reserva_Estado=5 where Reserva_Codigo = @reserva--SE CANCELA LA RESERVA POR NO-SHOW CUANDO ES TARDE
@@ -1798,4 +1799,26 @@ as begin
 
 		order by sum(FOUR_SIZONS.calcPuntaje(f.Estadia_Codigo)) desc
 end 
+go
+
+alter procedure four_sizons.asignarHab
+@hotel numeric(18),
+@cant numeric(18),
+@tipo_Hab numeric(18)
+as begin
+	declare @hab_asign table  (hab_codigo numeric(18))
+	while((select isnull(count(hab_codigo),0)from @hab_asign)<@cant)
+	begin
+	INSERT INTO @hab_asign (hab_codigo)
+	SELECT top 1 h.Habitacion_Numero
+	FROM  four_sizons.Habitacion h 
+	where h.Habitacion_Tipo_Codigo=@tipo_Hab and @hotel=h.Hotel_Codigo and h.Habitacion_Estado=1 and h.Habitacion_Numero not in(select hab_codigo from @hab_asign)
+	order by h.Habitacion_Numero asc
+	end
+	select * from @hab_asign
+	update FOUR_SIZONS.Habitacion 
+	set Habitacion_Estado=0
+	where Habitacion_Numero in (select hab_codigo from @hab_asign)
+	return
+	end
 go
