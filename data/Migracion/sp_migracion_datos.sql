@@ -576,7 +576,7 @@ BEGIN
 	INSERT INTO FOUR_SIZONS.Parametros VALUES ('DOCUMENTO', 'PASSP')
 
 	-- Roles
-	INSERT INTO FOUR_SIZONS.Rol VALUES ('Super Admin', 1)
+	INSERT INTO FOUR_SIZONS.Rol VALUES ('Administrador General', 1)
 	INSERT INTO FOUR_SIZONS.Rol VALUES ('Administrador', 1)
 	INSERT INTO FOUR_SIZONS.Rol VALUES ('Recepcionista', 1)
 	INSERT INTO FOUR_SIZONS.Rol VALUES ('Guest', 1)
@@ -598,7 +598,7 @@ BEGIN
 	--ROLXFUNC
 	insert into FOUR_SIZONS.RolXFunc (Rol_Codigo,Func_Codigo, RolXFunc_Estado)
 		select distinct R.Rol_Codigo, F.Func_Codigo, 1 from FOUR_SIZONS.Rol R,FOUR_SIZONS.Funcionalidad F
-		where R.Rol_Nombre =  'Super Admin' and
+		where R.Rol_Nombre =  'Administrador General' and
 				F.Func_Nombre in ('ABM Rol', 'ABM Hotel','ABM Habitacion','ABM Regimen','ABM Usuario',
 				'ABM Cliente','Generar/Modificar Reserva','Cancelar Reserva','Registrar Estadia',
 				'Registrar Consumibles', 'Listado Estadistico');

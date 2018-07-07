@@ -271,9 +271,9 @@ set @nombre=(select Rol_Nombre from FOUR_SIZONS.Rol where Rol_Codigo=@rolId)
 
 	if((select UsuarioXRol_Estado from FOUR_SIZONS.UsuarioXRol where Usuario_ID=@userID and Rol_Codigo=@rolId)=1)
 	begin
-		if (@nombre='Super Admin' and (select count(Usuario_ID)  from FOUR_SIZONS.UsuarioXRol where Rol_Codigo=@rolId)<=1)
+		if (@nombre='Administrador General' and (select count(Usuario_ID)  from FOUR_SIZONS.UsuarioXRol where Rol_Codigo=@rolId)<=1)
 		begin 
-			raiserror ('No se puede dar de baja super admin, ya que no se puede quedar sin super admin el sistema',13,1)
+			raiserror ('No se puede dar de baja Administrador General, ya que no se puede quedar sin Administrador General el sistema',13,1)
 	
 		end
 		update FOUR_SIZONS.UsuarioXRol
@@ -720,9 +720,9 @@ create procedure FOUR_SIZONS.ModificacionRol
 	begin try
 	declare @nombre nvarchar(50)
 	set @nombre=(select Rol_Nombre from Rol where Rol_Codigo=@codigo)
-	if (@nombre='Super Admin')
+	if (@nombre='Administrador General')
 	begin 
-		raiserror ('No se puede modificar el rol de super admin',13,1)
+		raiserror ('No se puede modificar el rol de Administrador General',13,1)
 	
 	end
 	update FOUR_SIZONS.Rol
@@ -790,9 +790,9 @@ begin try
 	set @rolID = (select Rol_Codigo  from four_sizons.Rol where Rol_Nombre = @rolname)	
 	set @funcID = (select Func_Codigo from FOUR_SIZONS.Funcionalidad where Func_Nombre = @func)
 	set @nombre=(select Rol_Nombre from Rol where Rol_Codigo=@rolID)
-	if (@nombre='Super Admin')
+	if (@nombre='Administrador General')
 		begin 
-			raiserror ('No se puede modificar la funcion asignada de super admin',13,1)
+			raiserror ('No se puede modificar la funcion asignada de Administrador General',13,1)
 			
 		end
 	if exists(select * from FOUR_SIZONS.RolXFunc where Rol_Codigo=@rolID and Func_Codigo=@funcID)
