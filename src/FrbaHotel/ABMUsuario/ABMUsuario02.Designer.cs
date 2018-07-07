@@ -60,7 +60,9 @@
             this.txt_estado = new System.Windows.Forms.TextBox();
             this.l_estado = new System.Windows.Forms.Label();
             this.l_log = new System.Windows.Forms.Label();
-            this.btn_aceptar_nuevo = new System.Windows.Forms.Button();
+            this.btn_promptHotel = new System.Windows.Forms.Button();
+            this.lhotel = new System.Windows.Forms.Label();
+            this.txt_hotel = new System.Windows.Forms.TextBox();
             this.groupBox1.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -307,7 +309,7 @@
             // label12
             // 
             this.label12.AutoSize = true;
-            this.label12.Location = new System.Drawing.Point(261, 63);
+            this.label12.Location = new System.Drawing.Point(236, 63);
             this.label12.Name = "label12";
             this.label12.Size = new System.Drawing.Size(23, 13);
             this.label12.TabIndex = 3;
@@ -316,7 +318,7 @@
             // cb_rol
             // 
             this.cb_rol.FormattingEnabled = true;
-            this.cb_rol.Location = new System.Drawing.Point(290, 60);
+            this.cb_rol.Location = new System.Drawing.Point(264, 60);
             this.cb_rol.Name = "cb_rol";
             this.cb_rol.Size = new System.Drawing.Size(121, 21);
             this.cb_rol.TabIndex = 2;
@@ -330,7 +332,7 @@
             // 
             // txt_estado
             // 
-            this.txt_estado.Location = new System.Drawing.Point(290, 93);
+            this.txt_estado.Location = new System.Drawing.Point(264, 122);
             this.txt_estado.Name = "txt_estado";
             this.txt_estado.Size = new System.Drawing.Size(121, 20);
             this.txt_estado.TabIndex = 3;
@@ -338,7 +340,7 @@
             // l_estado
             // 
             this.l_estado.AutoSize = true;
-            this.l_estado.Location = new System.Drawing.Point(244, 96);
+            this.l_estado.Location = new System.Drawing.Point(218, 125);
             this.l_estado.Name = "l_estado";
             this.l_estado.Size = new System.Drawing.Size(40, 13);
             this.l_estado.TabIndex = 3;
@@ -353,26 +355,44 @@
             this.l_log.TabIndex = 3;
             this.l_log.Text = "Intentos de log";
             // 
-            // btn_aceptar_nuevo
+            // btn_promptHotel
             // 
-            this.btn_aceptar_nuevo.Location = new System.Drawing.Point(101, 429);
-            this.btn_aceptar_nuevo.Name = "btn_aceptar_nuevo";
-            this.btn_aceptar_nuevo.Size = new System.Drawing.Size(108, 23);
-            this.btn_aceptar_nuevo.TabIndex = 14;
-            this.btn_aceptar_nuevo.Text = "Aceptar y Nuevo";
-            this.btn_aceptar_nuevo.UseVisualStyleBackColor = true;
-            this.btn_aceptar_nuevo.Click += new System.EventHandler(this.boton_aceptar_nuevo_Click);
+            this.btn_promptHotel.Location = new System.Drawing.Point(387, 91);
+            this.btn_promptHotel.Name = "btn_promptHotel";
+            this.btn_promptHotel.Size = new System.Drawing.Size(26, 23);
+            this.btn_promptHotel.TabIndex = 16;
+            this.btn_promptHotel.Text = "...";
+            this.btn_promptHotel.UseVisualStyleBackColor = true;
+            this.btn_promptHotel.Click += new System.EventHandler(this.btn_promptHotel_Click);
+            // 
+            // lhotel
+            // 
+            this.lhotel.AutoSize = true;
+            this.lhotel.Location = new System.Drawing.Point(227, 95);
+            this.lhotel.Name = "lhotel";
+            this.lhotel.Size = new System.Drawing.Size(32, 13);
+            this.lhotel.TabIndex = 18;
+            this.lhotel.Text = "Hotel";
+            // 
+            // txt_hotel
+            // 
+            this.txt_hotel.Location = new System.Drawing.Point(264, 92);
+            this.txt_hotel.Name = "txt_hotel";
+            this.txt_hotel.Size = new System.Drawing.Size(121, 20);
+            this.txt_hotel.TabIndex = 17;
             // 
             // ABMUsuario02
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(437, 458);
+            this.Controls.Add(this.btn_promptHotel);
+            this.Controls.Add(this.lhotel);
+            this.Controls.Add(this.txt_hotel);
             this.Controls.Add(this.cb_rol);
             this.Controls.Add(this.label1);
             this.Controls.Add(this.label11);
             this.Controls.Add(this.boton_volver);
-            this.Controls.Add(this.btn_aceptar_nuevo);
             this.Controls.Add(this.boton_aceptar);
             this.Controls.Add(this.groupBox1);
             this.Controls.Add(this.labelTitulo);
@@ -429,6 +449,8 @@
         private System.Windows.Forms.TextBox txt_estado;
         private System.Windows.Forms.Label l_estado;
         private System.Windows.Forms.Label l_log;
-        private System.Windows.Forms.Button btn_aceptar_nuevo;
+        private System.Windows.Forms.Button btn_promptHotel;
+        private System.Windows.Forms.Label lhotel;
+        private System.Windows.Forms.TextBox txt_hotel;
     }
 }

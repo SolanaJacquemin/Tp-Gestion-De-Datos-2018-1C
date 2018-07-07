@@ -59,6 +59,7 @@ namespace FrbaHotel
                 con.command.CommandType = CommandType.StoredProcedure;
 
                 con.command.Parameters.Add("@usuario", SqlDbType.NVarChar).Value = txt_usuario.Text;
+                string msg = encriptor.Encrypt(txt_password.Text);
                 con.command.Parameters.Add("@password", SqlDbType.NVarChar).Value = encriptor.Encrypt(txt_password.Text);
                 con.command.Parameters.Add("@loginok", SqlDbType.Decimal).Direction = ParameterDirection.Output;
 

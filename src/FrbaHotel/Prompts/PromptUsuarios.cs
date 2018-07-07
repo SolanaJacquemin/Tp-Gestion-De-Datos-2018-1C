@@ -12,18 +12,43 @@ namespace FrbaHotel.Prompts
 {
     public partial class PromptUsuarios : Form
     {
-        public PromptUsuarios()
+        public decimal hotel;
+        public PromptUsuarios(decimal hotelID)
         {
             InitializeComponent();
             this.StartPosition = FormStartPosition.CenterScreen;
             txt_aux_hotelid.Visible = false;
             dgvUsuariosPrompt.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
-
+            hotel = hotelID;
             dgvUsuariosPrompt.Rows.Clear();
 
             Conexion con = new Conexion();
             con.strQuery = "SELECT Usuario_ID, Usuario_Apellido " +
                            "FROM FOUR_SIZONS.Usuario ORDER BY Usuario_ID";
+
+            if (hotel == 0)
+            {
+
+                con.strQuery = "SELECT Usuario_ID, Usuario_Nombre, Usuario_Apellido, " +
+                                "Usuario_TipoDoc, Usuario_NroDoc, Usuario_Telefono, Usuario_Direccion, " +
+                                "Usuario_Fec_Nac, Usuario_Mail, Usuario_Estado, Usuario_FallaLog " +
+                                "FROM FOUR_SIZONS.Usuario ORDER BY Usuario_ID";
+            }
+            else
+            {
+                con.strQuery = "SELECT U.Usuario_ID, U.Usuario_Nombre, U.Usuario_Apellido, U.Usuario_TipoDoc, U.Usuario_NroDoc, U.Usuario_Telefono, U.Usuario_Direccion, U.Usuario_Fec_Nac, U.Usuario_Mail, U.Usuario_Estado, U.Usuario_FallaLog " +
+                "FROM FOUR_SIZONS.Usuario U JOIN FOUR_SIZONS.UsuarioXHotel UH ON UH.Usuario_ID = U.Usuario_ID";
+                if (hotel != 0)
+                {
+                    con.strQuery = con.strQuery + " WHERE Hotel_Codigo = " + hotel;
+                }
+                con.strQuery = con.strQuery + " ORDER BY U.Usuario_ID ";
+            }
+
+
+
+
+
             con.executeQuery();
             if (!con.reader())
             {

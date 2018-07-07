@@ -12,17 +12,18 @@ using FrbaHotel.Prompts;
 
 namespace FrbaHotel.ABMUsuario
 {
-
     public partial class ABMUsuario02 : Form
     {
         public static string modoABM;
         public string nombreSP;
         public string usuario;
         public int error;
+        public decimal hotel;
+        public decimal hotelppal;
+        public bool esAdminGral;
         public bool abm_valido;
 
-
-        public ABMUsuario02(string modo, string user)
+        public ABMUsuario02(string modo, string user, decimal hotelID)
         {
             InitializeComponent();
             this.StartPosition = FormStartPosition.CenterScreen;
@@ -30,6 +31,8 @@ namespace FrbaHotel.ABMUsuario
 
             usuario = user;
             modoABM = modo;
+            hotelppal = hotelID;
+            esAdminGral = false;
 
             txt_password.PasswordChar = '●';
 
@@ -48,7 +51,7 @@ namespace FrbaHotel.ABMUsuario
                     labelTitulo.Text = "Baja de Usuario";
                     txt_usuario.Text = usuario;
                     txt_apellido.Enabled = false;
-                    txt_direccion.Enabled = false;;
+                    txt_direccion.Enabled = false;
                     txt_nombre.Enabled = false;
                     txt_nro_documento.Enabled = false;
                     txt_password.Enabled = false;
@@ -57,24 +60,20 @@ namespace FrbaHotel.ABMUsuario
                     cb_tipo_documento.Enabled = false;
                     dt_fecha_nac.Enabled = false;
                     cb_rol.Enabled = false;
-                    txt_intentoslog.ReadOnly = true;
-                    txt_estado.Enabled = false;
-                    l_estado.Enabled = false;
+                    txt_intentoslog.Enabled = false;
                     txt_mail.Enabled = false;
-                    btn_aceptar_nuevo.Visible = false;
-                    l_log.Visible = false;
-                    txt_intentoslog.Visible = false;
+                    lhotel.Visible = false;
+                    txt_hotel.Visible = false;
+                    btn_promptHotel.Visible = false;
                     break;
                 case "UPD":
                     labelTitulo.Text = "Modificación de Usuario";
                     txt_usuario.Text = usuario;
                     txt_usuario.ReadOnly = true;
                     txt_estado.ReadOnly = true;
-                    btn_aceptar_nuevo.Visible = false;
-                    txt_estado.Visible = false;
-                    l_estado.Visible = false;
-                    l_log.Visible = false;
-                    txt_intentoslog.Visible = false;
+                    lhotel.Visible = false;
+                    txt_hotel.Visible = false;
+                    btn_promptHotel.Visible = false;
                     break;
             }
             dt_fecha_nac.Format = DateTimePickerFormat.Custom;
@@ -147,7 +146,31 @@ namespace FrbaHotel.ABMUsuario
                     cb_rol.Text = con.lector.GetString(0);
                 }
                 con.closeConection();
+            }else{
+                Conexion con = new Conexion();
 
+                if ((modoABM == "INS") && (hotelppal != 0))
+                {
+                    btn_promptHotel.Enabled = false;
+                    con.strQuery = "SELECT H.Hotel_Nombre FROM FOUR_SIZONS.Hotel H WHERE H.Hotel_Codigo = " + hotelppal;
+                }
+
+                if (modoABM == "DLT")
+                {
+                    btn_promptHotel.Enabled = false;
+                    con.strQuery = "SELECT H.Hotel_Nombre FROM FOUR_SIZONS.UsuarioXHotel UH " +
+                                   "JOIN FOUR_SIZONS.Hotel H ON H.Hotel_Codigo = UH.Hotel_Codigo " +
+                                   "WHERE UH.Usuario_ID = '" + usuario + "' AND H.Hotel_Codigo = " + hotelppal;
+                }
+
+                con.executeQuery();
+
+                if (con.reader())
+                {
+                    txt_hotel.Text = con.lector.GetString(0);
+                }
+
+                con.closeConection();
             }
 
         }
@@ -166,6 +189,7 @@ namespace FrbaHotel.ABMUsuario
                             con.command.CommandType = CommandType.StoredProcedure;
                             
                             con.command.Parameters.Add("@username", SqlDbType.NVarChar).Value = txt_usuario.Text;
+                            string msg = encriptor.Encrypt(txt_password.Text);
                             con.command.Parameters.Add("@password", SqlDbType.NVarChar).Value = encriptor.Encrypt(txt_password.Text);
                             con.command.Parameters.Add("@rolNombre", SqlDbType.NVarChar).Value = cb_rol.Text;
                             con.command.Parameters.Add("@nombre", SqlDbType.NVarChar).Value = txt_nombre.Text;
@@ -189,6 +213,29 @@ namespace FrbaHotel.ABMUsuario
                             con.command.ExecuteNonQuery();
                             con.closeConection();
 
+                            if (modoABM == "INS") 
+                            {
+                                con.strQuery = "FOUR_SIZONS.altaUserXHot";
+                                con.execute();
+                                con.command.CommandType = CommandType.StoredProcedure;
+                                if (hotel == 0) 
+                                {
+                                    hotel = hotelppal;
+                                }
+                                con.command.Parameters.Add("@hotId", SqlDbType.Decimal).Value = hotel;
+                                con.command.Parameters.Add("@usuario", SqlDbType.NVarChar).Value = txt_usuario.Text;
+                                if (modoABM == "DLT")
+                                {
+                                    con.command.Parameters.Add("@estado", SqlDbType.Bit).Value = 0;
+                                }
+                                else
+                                {
+                                    con.command.Parameters.Add("@estado", SqlDbType.Bit).Value = 1;
+                                }
+                                con.openConection();
+                                con.command.ExecuteNonQuery();
+                                con.closeConection();
+                            }
                             MessageBox.Show("Operación exitosa", "FOUR SIZONS - FRBA Hoteles", MessageBoxButtons.OK, MessageBoxIcon.Information);
                         }
                         catch (Exception ex)
@@ -209,16 +256,7 @@ namespace FrbaHotel.ABMUsuario
         public void boton_aceptar_nuevo_Click(object sender, EventArgs e) 
         {
             error = 0;
-            if (IsNumber(txt_nro_documento.Text) == false)
-            {
-                error = 1;
-                MessageBox.Show("El campo Nro de Documento debe ser un dato numérico", "FOUR SIZONS - FRBA Hoteles", MessageBoxButtons.OK, MessageBoxIcon.Information);
-            }
-            if (IsNumber(txt_telefono.Text) == false)
-            {
-                error = 1;
-                MessageBox.Show("El campo Teléfono debe ser un dato numérico", "FOUR SIZONS - FRBA Hoteles", MessageBoxButtons.OK, MessageBoxIcon.Information);
-            }
+            verificarCampos();
             if (error == 0)
             {
                 nombreSP = "FOUR_SIZONS.AltaUsuario";
@@ -242,11 +280,34 @@ namespace FrbaHotel.ABMUsuario
         private void levantarCombos() 
         {
             Conexion con = new Conexion();
+
+            con.strQuery = "SELECT R.Rol_Codigo FROM FOUR_SIZONS.UsuarioXRol AS UR" +
+            " JOIN FOUR_SIZONS.Rol AS R ON UR.Rol_Codigo= R.Rol_Codigo" +
+            " WHERE UR.Usuario_ID = '" + usuario + "'";
+            con.executeQuery();
+
+            if (con.reader())
+            {
+                if(Convert.ToDecimal(con.lector.GetDecimal(0)) == 1)
+                {
+                    esAdminGral = true;
+                }     
+            }
+            con.closeConection();
+
             con.strQuery = "SELECT Rol_Nombre FROM FOUR_SIZONS.Rol";
             con.executeQuery();
             while (con.reader())
             {
-                cb_rol.Items.Add(con.lector.GetString(0));
+                if (con.lector.GetString(0) == "Administrador General")
+                {
+                    if (esAdminGral)
+                    {
+                        cb_rol.Items.Add(con.lector.GetString(0));
+                    }
+                }else{
+                    cb_rol.Items.Add(con.lector.GetString(0));
+                }
             }
             con.closeConection();
 
@@ -260,23 +321,63 @@ namespace FrbaHotel.ABMUsuario
             con.closeConection();
         }
 
-        public bool verificarObligatorios()
+        private void verificarCampos()
         {
-            abm_valido = true;
-
-            if (txt_nombre.Text == "") abm_valido = false;
-            if (cb_tipo_documento.Text == "") abm_valido = false;
-            if (txt_nro_documento.Text == "") abm_valido = false;
-            if (txt_apellido.Text == "") abm_valido = false;
-            if (txt_usuario.Text == "") abm_valido = false;
-            if (txt_telefono.Text == "") abm_valido = false;
-            if (txt_direccion.Text == "") abm_valido = false;
-            if (dt_fecha_nac.Text == "") abm_valido = false;
-            if (txt_mail.Text == "") abm_valido = false;
-            if (cb_rol.Text == "") abm_valido = false;
-            if (txt_password.Text == "") abm_valido = false;
-
-            return abm_valido;
+            if(txt_usuario.Text == "")
+            {
+                error = 1;
+                MessageBox.Show("El campo Usuario no puede estar vacío", "FOUR SIZONS - FRBA Hoteles", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            }
+            if (cb_rol.Text == "")
+            {
+                error = 1;
+                MessageBox.Show("El campo Rol no puede estar vacío", "FOUR SIZONS - FRBA Hoteles", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            }
+            if (txt_password.Text == "")
+            {
+                error = 1;
+                MessageBox.Show("El campo Contraseña no puede estar vacío", "FOUR SIZONS - FRBA Hoteles", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            }
+            if (txt_nombre.Text == "")
+            {
+                error = 1;
+                MessageBox.Show("El campo Nombre no puede estar vacío", "FOUR SIZONS - FRBA Hoteles", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            }
+            if (txt_apellido.Text == "")
+            {
+                error = 1;
+                MessageBox.Show("El campo Apellido no puede estar vacío", "FOUR SIZONS - FRBA Hoteles", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            }
+            if (cb_tipo_documento.Text == "")
+            {
+                error = 1;
+                MessageBox.Show("El campo Tipo de Documento no puede estar vacío", "FOUR SIZONS - FRBA Hoteles", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            }
+            if (txt_nro_documento.Text == "")
+            {
+                error = 1;
+                MessageBox.Show("El campo Nro de Documento no puede estar vacío", "FOUR SIZONS - FRBA Hoteles", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            }
+            if (IsNumber(txt_nro_documento.Text) == false)
+            {
+                error = 1;
+                MessageBox.Show("El campo Nro de Documento no puede contener carácteres", "FOUR SIZONS - FRBA Hoteles", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            }
+            if (IsNumber(txt_telefono.Text) == false)
+            {
+                error = 1;
+                MessageBox.Show("El campo Teléfono debe ser un dato numérico", "FOUR SIZONS - FRBA Hoteles", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            }
+            if (txt_direccion.Text == "")
+            {
+                error = 1;
+                MessageBox.Show("El campo Dirección no puede estar vacío", "FOUR SIZONS - FRBA Hoteles", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            }
+            if (txt_mail.Text == "")
+            {
+                error = 1;
+                MessageBox.Show("El campo Mail no puede estar vacío", "FOUR SIZONS - FRBA Hoteles", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            }
         }
 
         bool IsNumber(string s)
@@ -289,32 +390,17 @@ namespace FrbaHotel.ABMUsuario
                         return false;
                 }
                 return true;
+
             }
             else return false;
+
         }
 
         public void boton_aceptar_Click(object sender, EventArgs e)
         {
-            if (modoABM != "DLT")
-            {
-                error = 0;
-                if (verificarObligatorios() == false)
-                {
-                    error = 1;
-                    MessageBox.Show("Por favor, complete los campos obligatorios", "FOUR SIZONS - FRBA Hoteles", MessageBoxButtons.OK, MessageBoxIcon.Information);
-                };
-
-                if (IsNumber(txt_nro_documento.Text) == false)
-                {
-                    error = 1;
-                    MessageBox.Show("El campo Nro de Documento debe ser un dato numérico", "FOUR SIZONS - FRBA Hoteles", MessageBoxButtons.OK, MessageBoxIcon.Information);
-                }
-                if (IsNumber(txt_telefono.Text) == false)
-                {
-                    error = 1;
-                    MessageBox.Show("El campo Teléfono debe ser un dato numérico", "FOUR SIZONS - FRBA Hoteles", MessageBoxButtons.OK, MessageBoxIcon.Information);
-                }
-            }
+            error = 0;
+            verificarCampos();
+            if (error == 0)
             {
                 switch (modoABM)
                 {
@@ -356,6 +442,41 @@ namespace FrbaHotel.ABMUsuario
                 prompt.Close();
             }
             this.Show();*/
+        }
+
+        private void btn_promptHotel_Click(object sender, EventArgs e)
+        {
+            using (PromptHoteles prompt = new PromptHoteles())
+            {
+                prompt.ShowDialog();
+
+                if (prompt.TextBox1.Text != "")
+                {
+                    hotel = Convert.ToDecimal(prompt.TextBox1.Text);
+                    txt_hotel.Text = prompt.TextBox2.Text;
+                }
+                prompt.Close();
+                }
+            this.Show();
+        }
+
+        public bool verificarObligatorios()
+        {
+            abm_valido = true;
+
+            if (txt_nombre.Text == "") abm_valido = false;
+            if (cb_tipo_documento.Text == "") abm_valido = false;
+            if (txt_nro_documento.Text == "") abm_valido = false;
+            if (txt_apellido.Text == "") abm_valido = false;
+            if (txt_usuario.Text == "") abm_valido = false;
+            if (txt_telefono.Text == "") abm_valido = false;
+            if (txt_direccion.Text == "") abm_valido = false;
+            if (dt_fecha_nac.Text == "") abm_valido = false;
+            if (txt_mail.Text == "") abm_valido = false;
+            if (cb_rol.Text == "") abm_valido = false;
+            if (txt_password.Text == "") abm_valido = false;
+
+            return abm_valido;
         }
 
     }

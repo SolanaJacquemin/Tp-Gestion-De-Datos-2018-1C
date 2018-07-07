@@ -299,7 +299,7 @@ GO
 
 
 
-create procedure FOUR_SIZONS.ValidarUsuario
+alter procedure FOUR_SIZONS.ValidarUsuario
 @usuario nvarchar(15), 
 @password nvarchar(100),
 @loginok decimal(1) output,
@@ -323,14 +323,14 @@ begin try
 
 					set @loginok = 1
 					if @fallalog <> 0
-						update FOUR_SIZONS.Usuario set Usuario_FallaLog = 0
+						update FOUR_SIZONS.Usuario set Usuario_FallaLog = 0 where Usuario_ID = @usuario
 				end
 				else
 				begin
 					if @fallalog = 2
 					begin
 
-						update FOUR_SIZONS.Usuario set Usuario_FallaLog = Usuario_FallaLog + 1, Usuario_Estado = 0
+						update FOUR_SIZONS.Usuario set Usuario_FallaLog = Usuario_FallaLog + 1, Usuario_Estado = 0 where Usuario_ID = @usuario
 						set @loginok = 0
 						set @errorMsg = 'Contraseña incorrecta. El usuario está deshabilitado'
 					end
@@ -338,7 +338,7 @@ begin try
 					if @fallalog < 2
 					begin
 
-						update FOUR_SIZONS.Usuario set Usuario_FallaLog = Usuario_FallaLog + 1
+						update FOUR_SIZONS.Usuario set Usuario_FallaLog = Usuario_FallaLog + 1 where Usuario_ID = @usuario
 						set @loginok = 0
 						set @errorMsg = 'Contraseña incorrecta.'
 
@@ -445,7 +445,7 @@ create procedure four_sizons.altaUserXHot
 
 go
 
-create procedure FOUR_SIZONS.ModificacionUsuario
+alter procedure FOUR_SIZONS.ModificacionUsuario
 	@username nvarchar(15),
 	@password nvarchar(100),
 	@rolNombre nvarchar(50),
@@ -469,7 +469,7 @@ create procedure FOUR_SIZONS.ModificacionUsuario
 	--set @hotelId = (select hotel_codigo from FOUR_SIZONS.hotel where @hotelNombre = hotel_nombre)
 
 	--si estado se modifica a activo se resetea el campo falla_log
-	if(@estado = 1)
+	/*if(@estado = 1)
 	begin
 
 		update FOUR_SIZONS.usuario
@@ -481,19 +481,20 @@ create procedure FOUR_SIZONS.ModificacionUsuario
 				where Usuario_ID=@username
 	end
 	else
-	begin
+	begin*/
 
 			update FOUR_SIZONS.usuario
-				set Usuario_Password = @username,Usuario_Nombre =@nombre,Usuario_Apellido = @apellido ,
+				set Usuario_Password = @password,Usuario_Nombre =@nombre,Usuario_Apellido = @apellido ,
 				Usuario_TipoDoc =@tipoDoc,Usuario_NroDoc =@numDoc,Usuario_Telefono =@telefono,
-				Usuario_Direccion= @direccion,Usuario_Fec_Nac = @fechaNac,Usuario_Mail =@mail,Usuario_Estado=@estado
+				Usuario_Direccion= @direccion,Usuario_Fec_Nac = @fechaNac,Usuario_Mail =@mail,Usuario_Estado=@estado,
+				Usuario_FallaLog = 0
 
 				where Usuario_ID=@username
-	end
+	--end
 
-	update FOUR_SIZONS.UsuarioXRol 
+	/*update FOUR_SIZONS.UsuarioXRol 
 				set Rol_Codigo = @rolId    
-				where Usuario_ID=@username   
+				where Usuario_ID=@username   */
 	
 	-- me faltaria hacer la modificacion de hotel, pero ahi deberia poder agregarle un hotel o cambiarselo (ya que los users pueden estar en muchos hoteles)
 	-- creo que deberia ser en un proc aparte

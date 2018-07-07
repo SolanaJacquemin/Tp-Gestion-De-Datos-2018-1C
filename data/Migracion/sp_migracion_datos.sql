@@ -316,7 +316,7 @@ BEGIN
 	BEGIN
 		CREATE TABLE FOUR_SIZONS.Habitacion_Tipo (
 			   Habitacion_Tipo_Codigo numeric(18),
-			   Habitacion_Tipo_Descripcion nvarchar(255),
+			   Habitacion_Tipo_Descripcion nvarchar(255) default ' ',
 			   Habitacion_Tipo_Porcentual numeric(18,2),
 			   CONSTRAINT PK_Habitacion_Tipo PRIMARY KEY (Habitacion_Tipo_Codigo)
 		)
@@ -340,7 +340,7 @@ BEGIN
 			Habitacion_Piso numeric(18),
 			Habitacion_Frente nvarchar(50),
 			Habitacion_Tipo_Codigo numeric(18),  
-			Habitacion_Descripcion nvarchar(255),
+			Habitacion_Descripcion nvarchar(255) default ' ',
 			Habitacion_Estado bit,
 
 			CONSTRAINT FK_Habitacion_1 FOREIGN KEY (Hotel_Codigo) REFERENCES FOUR_SIZONS.Hotel(Hotel_Codigo),

@@ -29,6 +29,7 @@ namespace FrbaHotel.PantallaPrincipal
         public decimal rol;
         public string rolNombre;
         public decimal rolCant;
+        public bool esAdminGral;
 
         public PantallaPrincipal01(string userSession)
         {
@@ -61,7 +62,7 @@ namespace FrbaHotel.PantallaPrincipal
         private void btn_usuarios_Click(object sender, EventArgs e)
         {
             this.Hide();
-            ABMUsuario01 formABMUsuario01 = new ABMUsuario01(hotel);
+            ABMUsuario01 formABMUsuario01 = new ABMUsuario01(usuario, hotel);
             formABMUsuario01.ShowDialog();
             this.Show();
         }
@@ -142,14 +143,32 @@ namespace FrbaHotel.PantallaPrincipal
             }
 
             txt_nombreHotel.Text = rolNombre;
-            if (usuario != "SYSADM")
+
+            con.strQuery = "SELECT U.Usuario_ID, U.Usuario_Nombre, U.Usuario_Apellido, U.Usuario_TipoDoc, U.Usuario_NroDoc, U.Usuario_Telefono, U.Usuario_Direccion, U.Usuario_Fec_Nac, U.Usuario_Mail, U.Usuario_Estado, U.Usuario_FallaLog" +
+                           " FROM FOUR_SIZONS.Usuario U" +
+                           " JOIN FOUR_SIZONS.UsuarioXRol UR ON UR.Usuario_ID = U.Usuario_ID" +
+                           " WHERE UR.Rol_Codigo = 1 AND U.Usuario_ID = '" + usuario + "'";
+
+            con.executeQuery();
+
+            esAdminGral = false;
+            if (con.reader())
             {
-                con.strQuery = "SELECT Hotel_Codigo FROM FOUR_SIZONS.UsuarioXHotel WHERE UsuarioXHotel_Estado = 1 AND Usuario_ID = '" + usuario + "'";
+                esAdminGral = true;
+            }
+
+            con.closeConection();
+
+            if (!esAdminGral)
+            {
+                con.strQuery = "SELECT H.Hotel_Codigo, H.Hotel_Nombre FROM FOUR_SIZONS.UsuarioXHotel UH JOIN FOUR_SIZONS.Hotel H ON H.Hotel_Codigo = UH.Hotel_Codigo" +
+                               " WHERE UsuarioXHotel_Estado = 1 AND Usuario_ID = '" + usuario + "'";
                 con.executeQuery();
 
                 while (con.reader())
                 {
                     hotel = con.lector.GetDecimal(0);
+                    hotelNombre = con.lector.GetString(1);
                     hotelCant = hotelCant + 1;
                 }
                 con.closeConection();
@@ -165,6 +184,17 @@ namespace FrbaHotel.PantallaPrincipal
                 }
 
                 txt_nombreHotel.Text = hotelNombre + " - " + rolNombre;
+            }else{
+                /*con.strQuery = "SELECT Hotel_Codigo, Hotel_Nombre FROM FOUR_SIZONS.UsuarioXHotel WHERE UsuarioXHotel_Estado = 1 AND Usuario_ID = '" + usuario + "'";
+                con.executeQuery();
+
+                while (con.reader())
+                {
+                    hotel = con.lector.GetDecimal(0);
+                    hotelNombre = con.lector.GetString(1);
+                }
+                con.closeConection();
+                txt_nombreHotel.Text = hotelNombre + " - " + rolNombre;*/
             }
 
             con.strQuery = "SELECT F.Func_Codigo FROM FOUR_SIZONS.UsuarioXRol UR" +
