@@ -100,6 +100,8 @@
             // 
             // dgv_Clientes
             // 
+            this.dgv_Clientes.AllowUserToAddRows = false;
+            this.dgv_Clientes.AllowUserToDeleteRows = false;
             this.dgv_Clientes.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             this.dgv_Clientes.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
             this.Cliente_Codigo,

@@ -113,6 +113,9 @@ namespace FrbaHotel.GestionReservas
                         txt_calle.Enabled = true;
                         txt_pais.Enabled = true;
                         txt_ciudad.Enabled = true;
+                        txt_nroCalle.Enabled = true;
+                        txt_piso.Enabled = true;
+                        txt_depto.Enabled = true;
                     }else if(dr == DialogResult.No){
                         MessageBox.Show("Por favor revise sus datos y vuelva a intentar", "FOUR SIZONS - FRBA Hoteles", MessageBoxButtons.OK, MessageBoxIcon.Information);
                     }
@@ -262,15 +265,15 @@ namespace FrbaHotel.GestionReservas
                 con2.command.CommandType = CommandType.StoredProcedure;
                 con2.command.Parameters.Add("@nombre", SqlDbType.NVarChar).Value = txt_nombre.Text;
                 con2.command.Parameters.Add("@apellido", SqlDbType.NVarChar).Value = txt_apellido.Text;
-                con2.command.Parameters.Add("@numDoc", SqlDbType.Decimal).Value = txt_nro_documento.Text;
+                con2.command.Parameters.Add("@numDoc", SqlDbType.Decimal).Value = Convert.ToDecimal(txt_nro_documento.Text);
                 con2.command.Parameters.Add("@tipoDoc", SqlDbType.NVarChar).Value = cb_tipoDocumento.Text;
                 con2.command.Parameters.Add("@mail", SqlDbType.NVarChar).Value = txt_mail.Text;
                 con2.command.Parameters.Add("@telefono", SqlDbType.NVarChar).Value = txt_telefono.Text;
                 con2.command.Parameters.Add("@pais", SqlDbType.NVarChar).Value = txt_pais.Text;
                 con2.command.Parameters.Add("@ciudad", SqlDbType.NVarChar).Value = txt_ciudad.Text;
                 con2.command.Parameters.Add("@calle", SqlDbType.NVarChar).Value = txt_calle.Text;
-                con2.command.Parameters.Add("@numCalle", SqlDbType.Decimal).Value = txt_calle.Text;
-                con2.command.Parameters.Add("@piso", SqlDbType.Decimal).Value = txt_pais.Text;
+                con2.command.Parameters.Add("@numCalle", SqlDbType.Decimal).Value = Convert.ToDecimal(txt_nroCalle.Text);
+                con2.command.Parameters.Add("@piso", SqlDbType.Decimal).Value = Convert.ToDecimal(txt_piso.Text);
                 con2.command.Parameters.Add("@depto", SqlDbType.NVarChar).Value = txt_depto.Text;
                 con2.command.Parameters.Add("@localidad", SqlDbType.NVarChar).Value = " ";
                 con2.command.Parameters.Add("@nacionalidad", SqlDbType.NVarChar).Value = " ";

@@ -17,12 +17,13 @@ namespace FrbaHotel.ABMHabitacion
         public decimal dgv_habitacion_ID;
         public int index;
         public decimal hotel;
+        public decimal error;
 
         public ABMHabitacion01(decimal hotelID)
         {
             InitializeComponent();
             this.StartPosition = FormStartPosition.CenterScreen;
-
+            error = 0;
             hotel = hotelID;
 
             cb_tipoFrente.DropDownStyle = ComboBoxStyle.DropDownList;
@@ -112,15 +113,21 @@ namespace FrbaHotel.ABMHabitacion
 
         private void boton_alta_Click(object sender, EventArgs e)
         {
-            string modo = "INS";
-            this.Hide();
-            ABMHabitacion02 formABMHabitacion02 = new ABMHabitacion02(modo, hotel, dgv_habitacion_ID);
-            formABMHabitacion02.ShowDialog();
-            this.Show();
-            this.buscar();
-            this.iniciarGrilla();
+            if (error == 0)
+            {
+                string modo = "INS";
+                this.Hide();
+                ABMHabitacion02 formABMHabitacion02 = new ABMHabitacion02(modo, hotel, dgv_habitacion_ID);
+                formABMHabitacion02.ShowDialog();
+                this.Show();
+                this.buscar();
+                this.iniciarGrilla();
+            }
+            else
+            {
+                MessageBox.Show("Seleccione un solo registro de la grilla", "FOUR SIZONS - FRBA Hoteles", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            }
         }
-
         private void boton_baja_Click(object sender, EventArgs e)
         {
             string modo = "DLT";
@@ -227,9 +234,15 @@ namespace FrbaHotel.ABMHabitacion
         public void dgv_Habitaciones_CellClick(object sender, DataGridViewCellEventArgs e)
         {
             int index = e.RowIndex;
-            DataGridViewRow selectedRow = dgv_Habitaciones.Rows[index];
-            dgv_hotel_ID = Convert.ToDecimal(selectedRow.Cells[1].Value.ToString());
-            dgv_habitacion_ID = Convert.ToDecimal(selectedRow.Cells[2].Value.ToString());
+            if (index > -1) 
+            {
+                error = 0;
+                DataGridViewRow selectedRow = dgv_Habitaciones.Rows[index];
+                dgv_hotel_ID = Convert.ToDecimal(selectedRow.Cells[1].Value.ToString());
+                dgv_habitacion_ID = Convert.ToDecimal(selectedRow.Cells[2].Value.ToString());
+            }else{
+                error = 1;
+            }
         }
 
         private void btn_promptUsu_Click(object sender, EventArgs e)
