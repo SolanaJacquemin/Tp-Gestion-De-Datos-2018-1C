@@ -1494,7 +1494,7 @@ end catch
 end
 GO
 ----------------------------------------------------------------------------------
-create proc FOUR_SIZONS.registrarCheckIn
+alter proc FOUR_SIZONS.registrarCheckIn
 @reserva numeric(18),
 @usuario nvarchar(10)
 
@@ -1507,7 +1507,7 @@ declare @estado decimal = 0
 
 if(not exists (select Reserva_Codigo from Reserva where Reserva_Codigo=@reserva ))
 	begin 
-	raiserror('no existe el codigo de reserva',1,1)
+	raiserror('no existe el codigo de reserva',16,1)
 	end
 else 
 
@@ -1545,29 +1545,29 @@ declare @fechaInicio datetime = (select convert(datetime,Reserva_Fecha_Inicio,12
 
 	if(@Estado= 3)
 	begin
-			RAISERROR('la reserva fue cancelada por recepcionista',1,1)
+			RAISERROR('la reserva fue cancelada por recepcionista',16,1)
 	end
 	
 	if(@Estado= 4)
 	begin
-	RAISERROR('la reserva fue cancelada por cliente',1,1)
+	RAISERROR('la reserva fue cancelada por cliente',16,1)
 	end
 
 
 
 	if(@Estado= 5)
 	begin
-				RAISERROR('Reserva cancelada por No-Show',1,1)
+				RAISERROR('Reserva cancelada por No-Show',16,1)
 	end
 
 	if(@estado=7)
 	begin
-	RAISERROR('todavia no es la fecha de ingreso de la reserva',1,1)
+	RAISERROR('todavia no es la fecha de ingreso de la reserva',16,1)
 	end
 
 	if(@estado=6)
 	begin
-	RAISERROR('Reserva ya efectivizada',1,1)
+	RAISERROR('Reserva ya efectivizada',16,1)
 	end
 
 	if (@Estado = 1 or @Estado =2)
@@ -1575,8 +1575,8 @@ declare @fechaInicio datetime = (select convert(datetime,Reserva_Fecha_Inicio,12
 	set @estado= 6			
 	set @cantNoches = (select Reserva_Cant_Noches from FOUR_SIZONS.Reserva   where Reserva_Codigo = @reserva)
 	set @precioXNoche = (select Reserva_Precio from FOUR_SIZONS.Reserva res where res.Reserva_Codigo = @reserva)/@cantNoches
-	insert into FOUR_SIZONS.Estadia(Reserva_Codigo,Estadia_FechaInicio,Usuario_ID,Estadia_PreXNoche,Estadia_CantNoches,Estadia_FechaFin,Usuario_OUT,Estadia_DiasRest,Estadia_Codigo,Hotel_Codigo) 
-							values(@reserva,@fechaInicio,@usuario,@precioXNoche,@cantNoches,@fechaFin,@usuario,0,1,@hotel)
+	insert into FOUR_SIZONS.Estadia(Reserva_Codigo,Estadia_FechaInicio,Usuario_ID,Estadia_PreXNoche,Estadia_CantNoches,Estadia_FechaFin,Usuario_OUT,Estadia_DiasRest,Hotel_Codigo,Estadia_Estado) 
+							values(@reserva,@fechaInicio,@usuario,@precioXNoche,@cantNoches,@fechaFin,@usuario,0,@hotel,1)
 	
 	update FOUR_SIZONS.Reserva set Reserva_Estado=@estado where Reserva_Codigo = @reserva
 	end
@@ -1586,7 +1586,7 @@ end try
 begin catch
 declare @mensaje_de_error nvarchar(255)
 	set @mensaje_de_error = ERROR_MESSAGE()
-	RAISERROR(@mensaje_de_error,11,1)
+	RAISERROR(@mensaje_de_error,16,1)
 rollback tran
 end catch
 

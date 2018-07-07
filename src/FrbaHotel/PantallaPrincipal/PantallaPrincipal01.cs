@@ -230,7 +230,7 @@ namespace FrbaHotel.PantallaPrincipal
         private void btn_estadias_Click(object sender, EventArgs e)
         {
             this.Hide();
-            GestionEstadias formGestionEstadia01 = new GestionEstadias(hotel);
+            GestionEstadias formGestionEstadia01 = new GestionEstadias(hotel, usuario);
             formGestionEstadia01.ShowDialog();
             this.Show();
         }

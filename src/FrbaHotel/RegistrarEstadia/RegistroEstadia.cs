@@ -27,14 +27,16 @@ namespace FrbaHotel.RegistrarEstadia
         public decimal cantHab;
         public decimal tipoHab;
         public string mensajeHab;
+        public string usuario;
 
-        public RegistrarEstadia(string modo, decimal res)
+        public RegistrarEstadia(string modo, decimal res, string user)
         {
             InitializeComponent();
             this.StartPosition = FormStartPosition.CenterScreen;
 
             modoCheck = modo;
             reserva = res;
+            usuario = user;
 
             txt_estadia.Enabled = false;
 
@@ -49,7 +51,6 @@ namespace FrbaHotel.RegistrarEstadia
                 case "IN":
                     lbl_Titulo.Text = "Abrir Estadía";
                     gb_Titulo.Text = "Check-in";
-                    lbl_Fecha.Text = "Fecha de ingreso";
                     txt_CodReserva.ReadOnly = true;
                     txt_estadia.Visible = false;
                     lbl_estadia.Visible = false;
@@ -59,82 +60,72 @@ namespace FrbaHotel.RegistrarEstadia
                 case "OUT":
                     lbl_Titulo.Text = "Cerrar Estadía";
                     gb_Titulo.Text = "Check-out";
-                    lbl_Fecha.Text = "Fecha de egreso";
                     txt_CodReserva.ReadOnly = true;
 
                     break;
 
             }
-            dt_Fecha.Format = DateTimePickerFormat.Custom;
-            dt_Fecha.CustomFormat = "dd/MM/yyyy";
         }
 
         public void ejecutarRegistrarEstadia(string nombreStored)
         {
             if (MessageBox.Show("Está seguro que desea continuar con la operación?", "FOUR SIZONS - FRBA Hoteles", MessageBoxButtons.YesNo, MessageBoxIcon.Question) == DialogResult.Yes)
             {
-
+                Conexion con = new Conexion();
                 try
                 {
-                    Conexion con = new Conexion();
+
                     con.strQuery = nombreStored;
                     con.execute();
                     con.command.CommandType = CommandType.StoredProcedure;
 
                     con.command.Parameters.Add("@reserva", SqlDbType.Decimal).Value = Convert.ToDecimal(txt_CodReserva.Text);
-                    con.command.Parameters.Add("@usuario", SqlDbType.NVarChar).Value = txt_Usuario.Text;
+                    con.command.Parameters.Add("@usuario", SqlDbType.NVarChar).Value = usuario;
                   //  con.command.Parameters.Add("@fecha", SqlDbType.DateTime).Value = dt_Fecha.Value;
 
                     con.openConection();
                     con.command.ExecuteNonQuery();
                     con.closeConection();
 
-
-
                     MessageBox.Show("Operación exitosa", "FOUR SIZONS - FRBA Hoteles", MessageBoxButtons.OK, MessageBoxIcon.Information);
 
-                    con.strQuery="SELECT Estadia_Codigo From FOUR_SIZONS.Estadia where Reserva_Codigo = " + reserva;
-                    con.executeQuery();
-
-                    if (con.reader())
+                    try
                     {
-                        estadia = con.lector.GetDecimal(0);
+                        con.strQuery = "SELECT Estadia_Codigo From FOUR_SIZONS.Estadia where Reserva_Codigo = " + reserva;
+                        con.executeQuery();
+
+                        if (con.reader())
+                        {
+                            estadia = con.lector.GetDecimal(0);
+                            txt_estadia.Text = estadia.ToString();
+                        }
+                        con.closeConection();
+
+                        DataSet dataset = new DataSet();
+                        con.strQuery = "four_sizons.asignarHab";
+                        con.execute();
+                        con.command.CommandType = CommandType.StoredProcedure;
+
+                        con.command.Parameters.Add("@estadia", SqlDbType.Decimal).Value = estadia;
+
+                        con.openConection();
+
+                        SqlDataAdapter da = new SqlDataAdapter(con.command);
+
+                        da.Fill(dataset);
+
+                        for (int i = 0; i < dataset.Tables[0].Rows.Count; i++)
+                        {
+                            mensajeHab = mensajeHab + (dataset.Tables[0].Rows[i][0]).ToString() + " ";
+                        }
+                        MessageBox.Show("Las habitaciones que corresponden: " + mensajeHab, "FOUR SIZONS - FRBA Hoteles", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                        con.closeConection();
                     }
-                    con.closeConection();
-
-                    con.strQuery = "SELECT Hotel_Codigo, Reserva_cant_hab, habitacion_tipo_codigo FROM FOUR_SIZONS.Reserva WHERE Reserva_Codigo = " + reserva;
-                    con.executeQuery();
-
-                    if (con.reader())
+                    catch (Exception ex)
                     {
-                        hotel = con.lector.GetDecimal(0);
-                        cantHab = con.lector.GetDecimal(1);
-                        tipoHab = con.lector.GetDecimal(2);
+                        error = 1;
+                        MessageBox.Show("Error al completar la operación. " + ex.Message, "FOUR SIZONS - FRBA Hoteles", MessageBoxButtons.OK, MessageBoxIcon.Error);
                     }
-                    con.closeConection();
-
-                    DataSet dataset = new DataSet();
-                    con.strQuery = "four_sizons.asignarHab";
-                    con.execute();
-                    con.command.CommandType = CommandType.StoredProcedure;
-
-                    con.command.Parameters.Add("@hotel", SqlDbType.Decimal).Value = hotel;
-                    con.command.Parameters.Add("@cant", SqlDbType.Decimal).Value = cantHab;
-                    con.command.Parameters.Add("@tipo_Hab", SqlDbType.Decimal).Value = tipoHab;
-
-                    con.openConection();
-
-                    SqlDataAdapter da = new SqlDataAdapter(con.command);
-
-                    da.Fill(dataset);
-
-                    for (int i = 0; i < dataset.Tables[0].Rows.Count; i++)
-                    {
-                        mensajeHab = mensajeHab + (dataset.Tables[0].Rows[i][0]).ToString() + " ";
-                    }
-                    MessageBox.Show("Las habitaciones que corresponden: " + mensajeHab, "FOUR SIZONS - FRBA Hoteles", MessageBoxButtons.OK, MessageBoxIcon.Information);
-                    con.closeConection();
-
                 }
                 catch (Exception ex)
                 {
@@ -149,7 +140,6 @@ namespace FrbaHotel.RegistrarEstadia
                 MessageBox.Show("No se ha completado la operación", "FOUR SIZONS - FRBA Hoteles", MessageBoxButtons.OK, MessageBoxIcon.Information);
             }
 
-
         }
 
         private void RegistrarEstadia_Load_1(object sender, System.EventArgs e)
@@ -163,7 +153,7 @@ namespace FrbaHotel.RegistrarEstadia
                 if (con.reader())
                 {
                     txt_CodReserva.Text = con.lector.GetDecimal(0).ToString();
-                    dt_Fecha.Value = con.lector.GetDateTime(2);
+                    //dt_Fecha.Value = con.lector.GetDateTime(2);
                     txt_hotel.Text = con.lector.GetDecimal(7).ToString();
                     estadoReserva = con.lector.GetDecimal(10);
 
@@ -184,10 +174,10 @@ namespace FrbaHotel.RegistrarEstadia
                 {
                     txt_estadia.Text = con.lector.GetDecimal(0).ToString();
                     txt_CodReserva.Text = con.lector.GetDecimal(1).ToString();
-                    dt_Fecha.Value = con.lector.GetDateTime(3);
+                    //dt_Fecha.Value = con.lector.GetDateTime(3);
                     txt_hotel.Text = con.lector.GetDecimal(10).ToString();
-                    txt_hab.Text = con.lector.GetDecimal(9).ToString();
-                    txt_Usuario.Text = con.lector.GetDecimal(8).ToString();
+                    //txt_hab.Text = con.lector.GetDecimal(9).ToString();
+                    //txt_Usuario.Text = con.lector.GetDecimal(8).ToString();
 
                     con.closeConection();
                 }
@@ -200,13 +190,13 @@ namespace FrbaHotel.RegistrarEstadia
 
                 if (txt_hotel.Text == "") altaValida = false;
                 if (txt_CodReserva.Text == "") altaValida = false;
-                if (dt_Fecha.Text == "") altaValida = false;
-                if (txt_Usuario.Text == "") altaValida = false;
+                //if (dt_Fecha.Text == "") altaValida = false;
+                //if (txt_Usuario.Text == "") altaValida = false;
                 if (cb_medioPago.Text == "") altaValida = false;
 
             if (modoCheck == "INS")
             {
-                if (txt_hab.Text == "") altaValida = false;
+                //if (txt_hab.Text == "") altaValida = false;
                 if (txt_estadia.Text == "") altaValida = false;
             }
 
@@ -229,11 +219,11 @@ namespace FrbaHotel.RegistrarEstadia
             if((generarFactura == false) && (facturaGenerada == false))
             {
                 error = 0;
-                if (verificarObligatorios() == false)
+                /*if (verificarObligatorios() == false)
                 {
                     error = 1;
                     MessageBox.Show("Por favor, complete los campos obligatorios", "FOUR SIZONS - FRBA Hoteles", MessageBoxButtons.OK, MessageBoxIcon.Information);
-                };
+                };*/
 
                 if (error == 0)
                 {
@@ -264,15 +254,20 @@ namespace FrbaHotel.RegistrarEstadia
 
             }
 
-            if ((generarFactura == true) && (facturaGenerada == false))
+            if ((generarFactura == true) && (facturaGenerada == false) && (error == 0))
             {
                 MessageBox.Show("Por favor, genere la factura", "FOUR SIZONS - FRBA Hoteles", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            }
+
+            if ((generarFactura) && (facturaGenerada))
+            {
+                this.Close();
             }
         }
 
         private void btn_Volver_Click(object sender, System.EventArgs e)
         {
-            if (generarFactura == true && facturaGenerada==true || generarFactura==false && facturaGenerada==false)
+            if (generarFactura == true && facturaGenerada==true || generarFactura==false && facturaGenerada==false || error == 1)
             {
                 this.Close();
             }

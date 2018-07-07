@@ -199,8 +199,9 @@ namespace FrbaHotel.ABMHabitacion
 
                     if (modoABM == "INS")
                     {
-                        con.command.Parameters.Add("@numero", SqlDbType.Decimal).Value = txt_nro_hab.Text;
-                        con.command.Parameters.Add("@piso", SqlDbType.Decimal).Value = txt_piso.Text;
+                        string newS = "EXEC " + nombreStored + " " + txt_nro_hab.Text + "," + txt_piso.Text + "," + cb_tipoFrente.Text + "," + hotel.ToString() + "," + cb_tipohab.Text + "," + txt_descripcion.Text;
+                        con.command.Parameters.Add("@numero", SqlDbType.Decimal).Value = Convert.ToDecimal(txt_nro_hab.Text);
+                        con.command.Parameters.Add("@piso", SqlDbType.Decimal).Value = Convert.ToDecimal(txt_piso.Text);
                         con.command.Parameters.Add("@frente", SqlDbType.NVarChar).Value = cb_tipoFrente.Text;
                         con.command.Parameters.Add("@HotelId", SqlDbType.Decimal).Value = hotel;
                         con.command.Parameters.Add("@TipoHab", SqlDbType.NVarChar).Value = cb_tipohab.Text;

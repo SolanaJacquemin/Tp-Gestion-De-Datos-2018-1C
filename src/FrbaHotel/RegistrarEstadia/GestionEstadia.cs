@@ -17,16 +17,17 @@ namespace FrbaHotel.RegistrarEstadia
         public decimal dgv_CodReserva;
         public int index;
         public decimal reserva;
-
+        public string user;
         public decimal hotel;
 
-        public GestionEstadias(decimal hotelID)
+        public GestionEstadias(decimal hotelID, string userID)
         {
             InitializeComponent();
             this.StartPosition = FormStartPosition.CenterScreen;
 
             dgv_Reserva.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
             dgv_Reserva.Rows.Clear();
+            user = userID;
 
             limpiar();
             refrescarGrid();
@@ -147,7 +148,7 @@ namespace FrbaHotel.RegistrarEstadia
             {
                 string modo = "IN";
                 this.Hide();
-                RegistrarEstadia formRegistrarEstadia = new RegistrarEstadia(modo, dgv_CodReserva);
+                RegistrarEstadia formRegistrarEstadia = new RegistrarEstadia(modo, dgv_CodReserva, user);
                 formRegistrarEstadia.ShowDialog();
                 this.Show();
                 //  this.buscar();
@@ -169,7 +170,7 @@ namespace FrbaHotel.RegistrarEstadia
             {
                 string modo = "OUT";
                 this.Hide();
-                RegistrarEstadia formRegistrarEstadia = new RegistrarEstadia(modo, dgv_CodReserva);
+                RegistrarEstadia formRegistrarEstadia = new RegistrarEstadia(modo, dgv_CodReserva, user);
                 formRegistrarEstadia.ShowDialog();
                 this.Show();
                 //  this.buscar();
