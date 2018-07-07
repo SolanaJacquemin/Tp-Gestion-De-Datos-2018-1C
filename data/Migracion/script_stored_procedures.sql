@@ -1,11 +1,15 @@
 -------------------------------------------------------Comienzo de procedures--------------------------------------------------------------
-go
--- Borrado de procedures en la base
+go 
+-- Borrado de procedures en la base 
 IF (OBJECT_ID('FOUR_SIZONS.ValidarUsuario', 'P') IS NOT NULL)
 BEGIN
     DROP PROCEDURE FOUR_SIZONS.ValidarUsuario
 END;
 
+IF (OBJECT_ID('FOUR_SIZONS.asignarHab', 'P') IS NOT NULL)
+BEGIN
+    DROP PROCEDURE FOUR_SIZONS.asignarHab
+END;
 
 IF (OBJECT_ID('FOUR_SIZONS.AltaUsuario', 'P') IS NOT NULL)
 BEGIN
@@ -231,7 +235,7 @@ create procedure four_sizons.altaUserxRol
 as begin tran
 begin try
 	if(exists (select UsuarioXRol_Estado from FOUR_SIZONS.UsuarioXRol where Usuario_ID=@userID and Rol_Codigo=@rolId))
-	begin
+	begin 
 		update FOUR_SIZONS.UsuarioXRol
 			set UsuarioXRol_Estado=1
 			where  Usuario_ID=@userID and Rol_Codigo=@rolId
@@ -247,7 +251,7 @@ begin try
 	declare @mensaje_de_error nvarchar(255)
 	set @mensaje_de_error = ERROR_MESSAGE()
 	RAISERROR(@mensaje_de_error,11,1)
-	--rollback tran  
+	rollback tran  
 	end catch 
 go
 
@@ -262,7 +266,7 @@ set @nombre=(select Rol_Nombre from FOUR_SIZONS.Rol where Rol_Codigo=@rolId)
 	if(not exists (select UsuarioXRol_Estado from FOUR_SIZONS.UsuarioXRol where Usuario_ID=@userID and Rol_Codigo=@rolId))
 	begin
 		raiserror ('No se puede dar de baja ya que no existe ese usarioxRol',13,1)
-			--rollback tran
+			
 	end
 
 	if((select UsuarioXRol_Estado from FOUR_SIZONS.UsuarioXRol where Usuario_ID=@userID and Rol_Codigo=@rolId)=1)
@@ -270,7 +274,7 @@ set @nombre=(select Rol_Nombre from FOUR_SIZONS.Rol where Rol_Codigo=@rolId)
 		if (@nombre='Super Admin' and (select count(Usuario_ID)  from FOUR_SIZONS.UsuarioXRol where Rol_Codigo=@rolId)<=1)
 		begin 
 			raiserror ('No se puede dar de baja super admin, ya que no se puede quedar sin super admin el sistema',13,1)
-			--rollback tran
+	
 		end
 		update FOUR_SIZONS.UsuarioXRol
 			set UsuarioXRol_Estado=0
@@ -279,7 +283,7 @@ set @nombre=(select Rol_Nombre from FOUR_SIZONS.Rol where Rol_Codigo=@rolId)
 	else 
 	begin
 		raiserror ('No se puedo dar de baja ya que no esta activo',13,1)
-			--rollback tran
+			
 	end
 commit tran 
 end try
@@ -287,7 +291,7 @@ begin catch
 	declare @mensaje_de_error nvarchar(255)
 	set @mensaje_de_error = ERROR_MESSAGE()
 	RAISERROR(@mensaje_de_error,11,1)
-	--rollback tran 
+	 
 end catch
 GO
 
@@ -576,7 +580,7 @@ set Cliente_Nombre=@nombre ,cliente_Apellido=@apellido,cliente_TipoDoc=@tipoDoc,
 
 	where Cliente_Codigo = @codigo
 else RAISERROR('el mail ingresado ya figura en el sistema, ingrese otro por favor',1,1)
-		--ROLLBACK TRANSACTION
+		
 
 commit tran 
 end try
@@ -719,7 +723,7 @@ create procedure FOUR_SIZONS.ModificacionRol
 	if (@nombre='Super Admin')
 	begin 
 		raiserror ('No se puede modificar el rol de super admin',13,1)
-		rollback tran
+	
 	end
 	update FOUR_SIZONS.Rol
 		set Rol_Nombre= @rolname,Rol_Estado= @estado
@@ -789,7 +793,7 @@ begin try
 	if (@nombre='Super Admin')
 		begin 
 			raiserror ('No se puede modificar la funcion asignada de super admin',13,1)
-			rollback tran
+			
 		end
 	if exists(select * from FOUR_SIZONS.RolXFunc where Rol_Codigo=@rolID and Func_Codigo=@funcID)
 	
@@ -816,6 +820,34 @@ go
 
 
 --------------------------------------------------ABM HABITACION-------------------------------------------------------------
+create procedure four_sizons.asignarHab
+@estadia numeric(18)
+as begin
+	declare @tipo_Hab numeric(18), @cant numeric(18) , @hotel numeric(18)
+	(select @tipo_Hab=r.habitacion_tipo_codigo , @cant=r.Reserva_cant_hab , @hotel=r.Hotel_Codigo from FOUR_SIZONS.Estadia e, FOUR_SIZONS.Reserva r where e.Estadia_Codigo=@estadia and r.Reserva_Codigo= e.Reserva_Codigo)
+
+	declare @hab_asign table  (hab_codigo numeric(18))
+	while((select isnull(count(hab_codigo),0)from @hab_asign)<@cant)
+	begin
+	INSERT INTO @hab_asign (hab_codigo)
+	SELECT top 1 h.Habitacion_Numero
+	FROM  four_sizons.Habitacion h 
+	where h.Habitacion_Tipo_Codigo=@tipo_Hab and @hotel=h.Hotel_Codigo and h.Habitacion_Estado=1 and h.Habitacion_Numero not in(select hab_codigo from @hab_asign)
+	order by h.Habitacion_Numero asc
+	end
+
+	insert into FOUR_SIZONS.EstadiaXHabitacion (Habitacion_numero , Hotel_codigo , Estadia_Codigo)
+	select hab_codigo , @hotel , @estadia
+	from @hab_asign
+
+	select * from @hab_asign
+	update FOUR_SIZONS.Habitacion 
+	set Habitacion_Estado=0
+	where Habitacion_Numero in (select hab_codigo from @hab_asign)
+	return
+	end
+go
+
 create procedure four_sizons.AltaHabitacion
 @numero numeric(18),
 @piso numeric(18),
@@ -980,21 +1012,13 @@ create procedure four_sizons.GenerarReserva
 as begin tran
 begin try
 declare @cantidadNoches numeric(2)
---declare @precio decimal(12)
---declare @preReg decimal(12)  = (select Regimen_Precio from four_sizons.regimen where Regimen_Codigo=@regId)
---declare @recarga decimal(12) = (select Hotel_CantEstrella*Hotel_Recarga_Estrella from FOUR_SIZONS.Hotel where Hotel_Codigo=@hotId)
 
 declare @tipoHab numeric(18) = (select Habitacion_Tipo_Codigo from FOUR_SIZONS.Habitacion_Tipo where Habitacion_Tipo_Descripcion=@tipoHabDesc)
 
---declare @porcentual decimal(12) = (select Habitacion_Tipo_Porcentual from FOUR_SIZONS.Habitacion_Tipo where Habitacion_Tipo_Codigo =@tipoHab)
 
 
 set @cantidadNoches = DATEDIFF(day, @fechaInicio, @fechaFin)
---set @precio = @cantidadNoches * @cantHab*(@preReg*@porcentual+@recarga)
 
-
---if(1= four_sizons.verificarDisp(@fechaInicio, @fechaFin,@hotId, @tipoHab,@cantHab))
---begin
 insert into FOUR_SIZONS.Reserva(Reserva_Codigo,Reserva_Fecha_Inicio,Reserva_Fecha_Fin,Reserva_Cant_Noches,
 								Reserva_Precio,Usuario_ID,Hotel_Codigo,Cliente_Codigo,Regimen_Codigo,Reserva_Estado,habitacion_tipo_codigo,reserva_cant_hab)
 								values((NEXT VALUE FOR sec_cod_reserva),@fechaInicio,@fechaFin,@cantidadNoches,
@@ -1014,10 +1038,7 @@ update FOUR_SIZONS.Disponibilidad
 	where Disp_Fecha= @aux and Hotel_Codigo = @hotId and Habitacion_Tipo_Codigo = @tipohab
 set @aux = DATEADD(day, 1, @aux2)
 end
---end
---else 
---RAISERROR('no hay lugar en este hotel para estas fechas, intente nuevamente',1,1)
---		ROLLBACK TRANSACTION
+
 commit tran 
 end try
 
@@ -1029,7 +1050,7 @@ rollback tran
 end catch
 
 go
-create procedure four_sizons.ModificarReserva
+create  procedure four_sizons.ModificarReserva
 	@codigoReserva numeric(18),
 	@fechaInicio datetime,
 	@fechaFin datetime,
@@ -1045,6 +1066,9 @@ create procedure four_sizons.ModificarReserva
 	as begin tran
 	begin try 
 
+if(@estado !=6)
+	IF(@estado=1 or @estado=2)
+		begin
 	declare @cantidadNoches numeric(2)
 	declare @tipoHab numeric(18) = (select Habitacion_Tipo_Codigo from FOUR_SIZONS.Habitacion_Tipo where Habitacion_Tipo_Descripcion=@tipoHabDesc)
 
@@ -1113,17 +1137,38 @@ end
 
 	insert into FOUR_SIZONS.ReservaMod (ResMod_Codigo,Reserva_Codigo,Usuario_ID, ResMod_Detalle,ResMod_Fecha)
 							   values (@mod_numero,@codigoReserva,@userId,@detalle,@fechaCambio)
+		end
+	else
+		begin
+					--aca aumenta la disponibilidad
+			declare @a datetime = convert(datetime,@fechaInicio,121 )
+			declare @a2 datetime,
+					@a3 datetime
+			set @a3= DATEADD(day, 1, @fechaFin)
+			while(@a!= convert(datetime,@a3, 121))
+				begin
+					set @a2= @a
 
-	commit tran
-	end try
-	begin catch
-		declare @mensaje_de_error nvarchar(255)
-		set @mensaje_de_error = ERROR_MESSAGE()
-		RAISERROR(@mensaje_de_error,11,1)
-		rollback tran 
-	end catch
-	go
+					update FOUR_SIZONS.Disponibilidad
+					set Disp_HabDisponibles = Disp_HabDisponibles + @cantHab
+					where Disp_Fecha= @aux and Hotel_Codigo = @hotId and Habitacion_Tipo_Codigo = @tipohab
+					set @aux = DATEADD(day, 1, @aux2)
+				end
 
+		end	
+else
+	begin
+		raiserror ('La reserva ya fue efectivizada, no puede ser modificada',13,1)
+	end
+commit tran
+end try
+begin catch
+declare @mensaje_de_error nvarchar(255)
+set @mensaje_de_error = ERROR_MESSAGE()
+RAISERROR(@mensaje_de_error,11,1)
+rollback tran 
+end catch
+go
 create function four_sizons.verificarDisp (@inicio datetime , @fin datetime , @hotel numeric(18) , @tipohab numeric(18) , @canthab numeric(18))
 returns bit
 as begin 
@@ -1198,7 +1243,7 @@ create procedure four_sizons.AgregarTarjeta
 
 	else
 	RAISERROR('la tarjeta ya figura en el sistema, ingrese otra por favor',1,1)
-		ROLLBACK TRANSACTION
+	
 
 	commit tran
 	end try
@@ -1417,7 +1462,7 @@ begin try
 		end
 		else 
 		RAISERROR('La factura ya fue facturada, no se puede realizar cambios',1,1)
-		ROLLBACK TRANSACTION
+		
 
 commit tran
 end try
@@ -1449,83 +1494,109 @@ end catch
 end
 GO
 ----------------------------------------------------------------------------------
-alter proc FOUR_SIZONS.registrarCheckIn
+create proc FOUR_SIZONS.registrarCheckIn
 @reserva numeric(18),
-@usuario nvarchar(15)
---@fecha datetime
+@usuario nvarchar(10)
 
-as begin
---verifica que el momento del checkin sea el mismo que el dia de ingreso que dice la reserva
-declare @fecha datetime = GETDATE()
-if (not exists (select Reserva_Codigo from Reserva where Reserva_Codigo=@reserva and Reserva_Fecha_Inicio= @fecha))	
-	IF(EXISTS (select Reserva_Codigo from Reserva where Reserva_Codigo=@reserva and Reserva_Fecha_Inicio< @fecha))
-		update FOUR_SIZONS.Reserva set Reserva_Estado=5 where Reserva_Codigo = @reserva--SE CANCELA LA RESERVA POR NO-SHOW CUANDO ES TARDE
-	else 
-	begin
-	RAISERROR('el numero de reserva esta mal o todavia no es la fecha',1,1)
-		ROLLBACK TRANSACTION
-		end
-else
-declare @precioXNoche numeric(18),
-		@cantNoches numeric(18),
-		@estado decimal(1)
-begin tran ta
+as begin tran 
 begin try
+
+declare @fecha datetime = getdate()
+declare @estado decimal = 0 
+--verifica que el momento del checkin sea el mismo que el dia de ingreso que dice la reserva
+
+if(not exists (select Reserva_Codigo from Reserva where Reserva_Codigo=@reserva ))
+	begin 
+	raiserror('no existe el codigo de reserva',1,1)
+	end
+else 
+
+begin
+declare @fechaInicio datetime = (select convert(datetime,Reserva_Fecha_Inicio,121) from FOUR_SIZONS.Reserva where Reserva_Codigo= @reserva )
+	
+	declare @fechaFin datetime = (select convert(datetime,Reserva_Fecha_Fin,121) from FOUR_SIZONS.Reserva where Reserva_Codigo= @reserva )
+	declare @precioXNoche numeric(18),
+		@cantNoches numeric(18)
+		set @estado =(select Reserva_Estado from Reserva where Reserva_Codigo=@reserva)
+		
+		declare @hotel numeric(18),@tipo numeric(18),@cant numeric(18)
+		select @hotel =Hotel_Codigo , @tipo= habitacion_tipo_codigo, @cant=Reserva_cant_hab from Reserva where Reserva_Codigo=@reserva
+		
 ---------------verifica el estado de la reserva y efectiviza la correcta y modificada
-	if (exists (select Reserva_Codigo from Reserva where Reserva_Codigo=@reserva and (Reserva_Estado= 1 or Reserva_Estado=2)))
-		if(not exists (select Reserva_Codigo from Reserva where Reserva_Codigo=@reserva and Reserva_Estado= 3))
-			if(not exists (select Reserva_Codigo from Reserva where Reserva_Codigo=@reserva and Reserva_Estado= 4))
-				if(not exists (select Reserva_Codigo from Reserva where Reserva_Codigo=@reserva and Reserva_Estado= 5))
-					if(not exists (select Reserva_Codigo from Reserva where Reserva_Codigo=@reserva and Reserva_Estado= 6))
-						begin
-						RAISERROR('Error de estado',1,1)
-						ROLLBACK TRANSACTION
-						end
-					else 
-					begin
-					RAISERROR('Reserva ya efectivizada',1,1)
-					ROLLBACK TRANSACTION
-					end
-				else 
+	
+	if((select datediff(day,@fechaInicio,@fecha))>0 and (@estado = 1 or @estado = 2 ))
+	begin
+			update FOUR_SIZONS.Reserva set Reserva_Estado=5 where Reserva_Codigo = @reserva--SE CANCELA LA RESERVA POR NO-SHOW CUANDO ES TARDE
+			set @estado = 5
+			declare @aux3 datetime=@fechaInicio,
+					@aux4 datetime
+			while(DATEDIFF(day,@aux3,@fechaFin)>=0)
 				begin
-				RAISERROR('Reserva cancelada por No-Show',1,1)
-				ROLLBACK TRANSACTION
+				set @aux4=@aux3
+				update FOUR_SIZONS.Disponibilidad set Disp_HabDisponibles= Disp_HabDisponibles+@cant
+				where Habitacion_Tipo_Codigo=@tipo and Hotel_Codigo=@hotel 
+				set @aux3=dateadd(day,1,@aux4)
 				end
-			else 
-			begin
-			RAISERROR('la reserva fue cancelada por cliente',1,1)
-			ROLLBACK TRANSACTION
-			end
-		else 
-			begin
+		end
+	if((select datediff(day,@fechaInicio,@fecha))<0 and (@estado = 1 or @estado = 2 ))
+	begin
+		set @estado=7
+	end
+
+	if(@Estado= 3)
+	begin
 			RAISERROR('la reserva fue cancelada por recepcionista',1,1)
-			ROLLBACK TRANSACTION
-			end
-	else set @estado= 6			
+	end
+	
+	if(@Estado= 4)
+	begin
+	RAISERROR('la reserva fue cancelada por cliente',1,1)
+	end
+
+
+
+	if(@Estado= 5)
+	begin
+				RAISERROR('Reserva cancelada por No-Show',1,1)
+	end
+
+	if(@estado=7)
+	begin
+	RAISERROR('todavia no es la fecha de ingreso de la reserva',1,1)
+	end
+
+	if(@estado=6)
+	begin
+	RAISERROR('Reserva ya efectivizada',1,1)
+	end
+
+	if (@Estado = 1 or @Estado =2)
+	begin
+	set @estado= 6			
 	set @cantNoches = (select Reserva_Cant_Noches from FOUR_SIZONS.Reserva   where Reserva_Codigo = @reserva)
 	set @precioXNoche = (select Reserva_Precio from FOUR_SIZONS.Reserva res where res.Reserva_Codigo = @reserva)/@cantNoches
-	insert into FOUR_SIZONS.Estadia(Reserva_Codigo,Estadia_FechaInicio,Usuario_ID,Estadia_PreXNoche,Estadia_CantNoches) values(@reserva,@fecha,@usuario,@precioXNoche,@cantNoches);
-	update FOUR_SIZONS.Reserva set Reserva_Estado=@estado where Reserva_Codigo = @reserva
+	insert into FOUR_SIZONS.Estadia(Reserva_Codigo,Estadia_FechaInicio,Usuario_ID,Estadia_PreXNoche,Estadia_CantNoches,Estadia_FechaFin,Usuario_OUT,Estadia_DiasRest,Estadia_Codigo,Hotel_Codigo) 
+							values(@reserva,@fechaInicio,@usuario,@precioXNoche,@cantNoches,@fechaFin,@usuario,0,1,@hotel)
 	
+	update FOUR_SIZONS.Reserva set Reserva_Estado=@estado where Reserva_Codigo = @reserva
+	end
+end				
 commit tran 
 end try
-
 begin catch
 declare @mensaje_de_error nvarchar(255)
 	set @mensaje_de_error = ERROR_MESSAGE()
 	RAISERROR(@mensaje_de_error,11,1)
 rollback tran
 end catch
-END
+
 GO
 
 create proc FOUR_SIZONS.registrarCheckOut
 @Estadia numeric(18),
-@fecha datetime,
-@usuario numeric(18)
-as
-begin
-
+@usuario nvarchar(15)
+as begin tran
+begin try
 declare @cantDias numeric(18),
 		@difDates numeric(18),
 		@precioXNoche numeric(18,0),
@@ -1533,13 +1604,12 @@ declare @cantDias numeric(18),
 		@finR datetime,
 		@fact numeric(18),
 		@monto numeric(18,2),
+		@regimen numeric(18),
+		@fecha datetime = CONVERT(datetime,getdate(),121) 
 
-		@regimen numeric(18)
-begin tran ta
-begin try
 	set @cantDias = DATEDIFF(day,( select Estadia_FechaInicio from FOUR_SIZONS.Estadia where Estadia_Codigo = @Estadia ),@fecha);
 	set @Reserva = (select Reserva_Codigo from FOUR_SIZONS.Estadia where Estadia_Codigo = @Estadia);
-	set @finR = (select Reserva_Fecha_Fin from FOUR_SIZONS.Reserva where Reserva_Codigo = @Reserva);
+	set @finR = CONVERT(datetime,(select Reserva_Fecha_Fin from FOUR_SIZONS.Reserva where Reserva_Codigo = @Reserva),121) 
 	set @difDates = DATEDIFF(day,@fecha,@finR);
 	set @precioXNoche = (select Estadia_PreXNoche from FOUR_SIZONS.Estadia where Estadia_Codigo = @Estadia);
 	
@@ -1548,7 +1618,8 @@ begin try
 		Usuario_OUT = @usuario,
 		Estadia_FechaFin = @fecha,
 		Estadia_DiasRest = @difDates,
-		Estadia_CantNoches =  @cantDias
+		Estadia_CantNoches =  @cantDias,
+		Estadia_Estado=0
 		where Estadia_Codigo = @Estadia;
 
 	set @monto = (select Reserva_Precio from FOUR_SIZONS.Reserva where Reserva_Codigo =@Reserva)
@@ -1574,18 +1645,28 @@ begin try
 			insert into FOUR_SIZONS.Item_Factura(Factura_Nro,item_descripcion,Item_Factura_Cant,Item_Factura_Monto)
 				values(@fact,'Recargo de estadia',(@difDates-1),( @difDates-1)*@precioXNoche)
 		end
-
+		declare @habi numeric(18),
+				@hotel numeric(18),
+				@tipoHab numeric(18)
+		set @habi=(select Reserva_cant_hab from Reserva where Reserva_Codigo=@Reserva)
+		set @hotel=(select Hotel_Codigo from Reserva where Reserva_Codigo=@Reserva)
+		
+		while(@habi>0)
+		begin
+			update FOUR_SIZONS.Habitacion 
+			set Habitacion_Estado=1
+			where Hotel_Codigo=@hotel and Habitacion_Estado=0 and Habitacion_Tipo_Codigo=@tipoHab
+			set @habi=@habi-1
+		end
 
 commit tran 
 end try
-
 begin catch
 declare @mensaje_de_error nvarchar(255)
 	set @mensaje_de_error = ERROR_MESSAGE()
 	RAISERROR(@mensaje_de_error,11,1)
 rollback tran
 end catch
-END
 GO
 
 ----------------------------------------------------------------------------------
@@ -1663,7 +1744,6 @@ if(not exists (select *  from four_sizons.Reserva r join FOUR_SIZONS.ReservaMod 
 			 where r.Reserva_Codigo!=1 and r.Reserva_Codigo!=2 and r.Reserva_Codigo!=6 and m.ResMod_Fecha between @inicio and @fin))
 	begin
 		raiserror('No hay datos reservas canceladas',13,1)
-		rollback tran
 	end
 	begin
 		select top 5 h.Hotel_Codigo, COUNT(r.Reserva_Codigo)cant_Reservas_cans
@@ -1687,6 +1767,12 @@ declare @inicio datetime
 
 set @inicio = CONVERT(datetime, FOUR_SIZONS.InicioTRi(@tri,@anio),121)
 set @fin = CONVERT(datetime,FOUR_SIZONS.finTri(@tri,@anio),121)
+
+if(not exists (select * from four_sizons.Factura where  (Factura_Fecha between @inicio and @fin) ))
+	begin
+		raiserror('No hay datos de consumibles facturados para ese trimestre',13,1)
+	end
+else 
 
 select top 5 h.Hotel_Codigo
 
@@ -1713,7 +1799,7 @@ set @fin = CONVERT(datetime,FOUR_SIZONS.finTri(@tri,@anio),121)
 if(not exists (select * from four_sizons.Hotel_Cerrado where  (Cerrado_FechaI between @inicio and @fin) or (Cerrado_FechaF between @inicio and @fin)))
 	begin
 		raiserror('No hay datos de hoteles que cerraron',13,1)
-		rollback
+		
 	end
 	else 
 	begin
@@ -1738,9 +1824,15 @@ declare @inicio datetime
 set @inicio = CONVERT(datetime,FOUR_SIZONS.InicioTRi(@tri,@anio),121)
 set @fin =CONVERT(datetime, FOUR_SIZONS.finTri(@tri,@anio),121)
 
+if(not exists (select * from four_sizons.Estadia e where (e.Estadia_FechaInicio between @inicio and @fin) or (e.Estadia_FechaFin between @inicio and @fin)))
+	begin
+		raiserror('No hay habitaciones ocupadas en ese trimestre',13,1)
+	end
+else
+
 select top 5 h.Habitacion_Numero, h.Hotel_Codigo 
-from FOUR_SIZONS.Estadia e ,FOUR_SIZONS.Habitacion h
-where e.Hotel_Codigo = h.Hotel_Codigo and e.Habitacion_Numero = h.Habitacion_Numero and ((e.Estadia_FechaInicio between @inicio and @fin) or (e.Estadia_FechaFin between @inicio and @fin))
+from FOUR_SIZONS.Estadia e ,FOUR_SIZONS.Habitacion h,FOUR_SIZONS.EstadiaXHabitacion ExH
+where exh.Hotel_Codigo = h.Hotel_Codigo and ExH.Estadia_Codigo=e.Estadia_Codigo and ExH.Habitacion_numero = h.Habitacion_Numero and ((e.Estadia_FechaInicio between @inicio and @fin) or (e.Estadia_FechaFin between @inicio and @fin))
 group by h.Habitacion_Numero, h.Hotel_Codigo
 order by sum(e.Estadia_CantNoches) desc
 
@@ -1791,6 +1883,13 @@ as begin
 	set @inicio = convert(datetime,FOUR_SIZONS.InicioTRi(@tri,@anio),121)
 	set @fin = convert(datetime,FOUR_SIZONS.finTri(@tri,@anio),121)
 
+
+if(not exists (select * from four_sizons.Factura where  (Factura_Fecha between @inicio and @fin) and Factura_Estado=1 ))
+	begin
+		raiserror('No hay datos de consumibles facturados para ese trimestre',13,1)
+	end
+else 
+
 	select top 5 c.Cliente_Codigo, c.cliente_numdoc , c.cliente_nombre , c.cliente_apellido, sum(FOUR_SIZONS.calcPuntaje(f.Estadia_Codigo))puntos
 
 		from Cliente c JOIN Factura f on c.Cliente_Codigo=f.Cliente_Codigo
@@ -1798,27 +1897,6 @@ as begin
 		group by c.Cliente_Codigo, c.cliente_numdoc , c.cliente_nombre , c.cliente_apellido
 
 		order by sum(FOUR_SIZONS.calcPuntaje(f.Estadia_Codigo)) desc
-end 
-go
 
-alter procedure four_sizons.asignarHab
-@hotel numeric(18),
-@cant numeric(18),
-@tipo_Hab numeric(18)
-as begin
-	declare @hab_asign table  (hab_codigo numeric(18))
-	while((select isnull(count(hab_codigo),0)from @hab_asign)<@cant)
-	begin
-	INSERT INTO @hab_asign (hab_codigo)
-	SELECT top 1 h.Habitacion_Numero
-	FROM  four_sizons.Habitacion h 
-	where h.Habitacion_Tipo_Codigo=@tipo_Hab and @hotel=h.Hotel_Codigo and h.Habitacion_Estado=1 and h.Habitacion_Numero not in(select hab_codigo from @hab_asign)
-	order by h.Habitacion_Numero asc
-	end
-	select * from @hab_asign
-	update FOUR_SIZONS.Habitacion 
-	set Habitacion_Estado=0
-	where Habitacion_Numero in (select hab_codigo from @hab_asign)
-	return
-	end
+end
 go

@@ -35,6 +35,11 @@ BEGIN
 		DROP TABLE FOUR_SIZONS.EstadiaXConsumible
 	END
 
+	IF (OBJECT_ID('FOUR_SIZONS.EstadiaXHabitacion', 'U') IS NOT NULL)
+	BEGIN
+		DROP TABLE FOUR_SIZONS.EstadiaXHabitacion
+	END
+	
 	IF (OBJECT_ID('FOUR_SIZONS.Habitacion_TipoXReser', 'U') IS NOT NULL)
 	BEGIN
 		DROP TABLE FOUR_SIZONS.Habitacion_TipoXReser
@@ -126,8 +131,7 @@ BEGIN
 	END
 
 	
-
-
+	
 
 
 
@@ -439,20 +443,6 @@ BEGIN
 		)
 	END
 
-	IF NOT EXISTS (SELECT * FROM sys.tables WHERE name = 'Habitacion_TipoXReser')
-	BEGIN
-		CREATE TABLE FOUR_SIZONS.Habitacion_TipoXReser (
-			Reserva_Codigo numeric(18),
-			Habitacion_Tipo_Codigo numeric(18),	
-			HabTipoXRes_CantHab numeric(18),		
-
-			CONSTRAINT FK_Habitacion_TipoXReser_1 FOREIGN KEY (Reserva_Codigo) REFERENCES FOUR_SIZONS.Reserva(Reserva_Codigo),
-			CONSTRAINT FK_Habitacion_TipoXReser_2 FOREIGN KEY (Habitacion_Tipo_Codigo) REFERENCES FOUR_SIZONS.Habitacion_Tipo(Habitacion_Tipo_Codigo),
-
-			CONSTRAINT PK_Habitacion_TipoXReser PRIMARY KEY (Reserva_Codigo, Habitacion_Tipo_Codigo)
-		)
-	END
-
 	IF NOT EXISTS (SELECT * FROM sys.tables WHERE name = 'Estadia')
 	BEGIN
 		CREATE TABLE FOUR_SIZONS.Estadia (
@@ -465,20 +455,34 @@ BEGIN
 			Estadia_PreXNoche numeric(18) ,
 			Usuario_ID nvarchar(15),
 			Usuario_OUT nvarchar(15),
-			Habitacion_Numero numeric(18),
 			Hotel_Codigo numeric(18),
 			Estadia_Estado bit
 
 			CONSTRAINT FK_Estadia_1 FOREIGN KEY (Reserva_Codigo) REFERENCES FOUR_SIZONS.Reserva(Reserva_Codigo),
 			CONSTRAINT FK_Estadia_2 FOREIGN KEY (Usuario_ID) REFERENCES FOUR_SIZONS.Usuario(Usuario_ID),
-			CONSTRAINT FK_Estadia_3 FOREIGN KEY (Habitacion_Numero, Hotel_Codigo) REFERENCES FOUR_SIZONS.Habitacion(Habitacion_Numero, Hotel_Codigo),
+			CONSTRAINT FK_Estadia_3 FOREIGN KEY (Hotel_Codigo) REFERENCES FOUR_SIZONS.Hotel(Hotel_Codigo),
 			CONSTRAINT FK_Estadia_4 FOREIGN KEY (Usuario_OUT) REFERENCES FOUR_SIZONS.Usuario(Usuario_ID),
+
 
 			CONSTRAINT PK_Estadia PRIMARY KEY (Estadia_Codigo)
 
 		)
 	END
 
+	IF NOT EXISTS (SELECT * FROM sys.tables WHERE name = 'EstadiaXHabitacion')
+	BEGIN
+		CREATE TABLE FOUR_SIZONS.EstadiaXHabitacion (
+			Habitacion_numero numeric(18),
+			Estadia_Codigo numeric(18),
+			Hotel_codigo numeric(18),
+
+
+			CONSTRAINT FK_EstadiaXHabitacion_1 FOREIGN KEY (Habitacion_numero,Hotel_codigo) REFERENCES FOUR_SIZONS.Habitacion(Habitacion_numero, Hotel_Codigo),
+			CONSTRAINT FK_EstadiaXHabitacion_2 FOREIGN KEY (Estadia_Codigo) REFERENCES FOUR_SIZONS.Estadia(Estadia_Codigo),
+
+			CONSTRAINT PK_EstadiaXHabitacion PRIMARY KEY (Habitacion_numero, Estadia_Codigo,Hotel_Codigo)
+		)
+	END
 	IF NOT EXISTS (SELECT * FROM sys.tables WHERE name = 'EstadiaXCliente')
 	BEGIN
 		CREATE TABLE FOUR_SIZONS.EstadiaXCliente (
@@ -514,7 +518,7 @@ BEGIN
 			Factura_Fecha datetime,
 			Factura_Total decimal(18,2),
 			Factura_FormaPago nvarchar(50),
-			Factura_Estado bit,
+			Factura_Estado bit default 0,
 			Factura_Consistencia bit default 1,
 			Usuario_ID nvarchar(15),
 			Estadia_Codigo numeric(18),
@@ -635,7 +639,7 @@ BEGIN
 	-- Hoteles
 	INSERT INTO FOUR_SIZONS.Hotel (Hotel_Nombre, Hotel_Mail, Hotel_Telefono, Hotel_Calle, Hotel_Nro_Calle, Hotel_CantEstrella, 
 	Hotel_Recarga_Estrella, Hotel_Ciudad, Hotel_Pais, Hotel_FechaCreacion, Hotel_Estado) 
-	SELECT DISTINCT '', '', '', Hotel_Calle, Hotel_Nro_Calle, Hotel_CantEstrella, Hotel_Recarga_Estrella, Hotel_Ciudad, '',
+	SELECT DISTINCT '', '', '', Hotel_Calle, Hotel_Nro_Calle, Hotel_CantEstrella, Hotel_Recarga_Estrella, Hotel_Ciudad, 'Argentina',
 	GETDATE(), 1
 	FROM GD1C2018.gd_esquema.Maestra
 
@@ -676,7 +680,7 @@ BEGIN
 	
 	UPDATE FOUR_SIZONS.Cliente
 	SET Cliente_NumDoc = (Cliente_NumDoc)*(-1),
-	Cliente_Consistente = 0
+	Cliente_Consistente = 0, Cliente_Estado=0
 	WHERE Cliente_Codigo IN (select clienteD from @updateDupli)
 
 	DECLARE @updateDupli2 TABLE(
@@ -689,9 +693,9 @@ BEGIN
 
 	UPDATE FOUR_SIZONS.Cliente
 	SET Cliente_mail = 'mail repetido',
-	Cliente_Consistente = 0
+	Cliente_Consistente = 0, Cliente_Estado=0
 	WHERE Cliente_Codigo IN (select clienteD from @updateDupli2)
-
+	 
 	-- Usuario
 	-- Inserta usuario administrador
 	INSERT INTO FOUR_SIZONS.Usuario
@@ -761,15 +765,10 @@ end
 	--@cantidadNoches * @cantHab*(@preReg*@porcentual+@recarga)
 
 	-- Habitacion_TipoXReserva
-	INSERT INTO FOUR_SIZONS.Habitacion_TipoXReser(Reserva_Codigo, Habitacion_Tipo_Codigo)
-	SELECT DISTINCT Reserva_Codigo, Habitacion_Tipo_Codigo
-	FROM gd_esquema.Maestra
-	ORDER BY Reserva_Codigo
-
+	
 	-- Estadia
-	INSERT INTO FOUR_SIZONS.Estadia (Reserva_Codigo, Estadia_FechaInicio, Estadia_FechaFin, Estadia_CantNoches, Usuario_ID,
-	Habitacion_Numero, Hotel_Codigo, Estadia_Estado,Estadia_PreXNoche,usuario_out)
-	SELECT DISTINCT M.Reserva_Codigo, M.Estadia_Fecha_Inicio, dateadd(day, M.Estadia_Cant_Noches,M.Estadia_Fecha_Inicio), M.Estadia_Cant_Noches, 'SYSADM', M.Habitacion_Numero, H.Hotel_Codigo, 1,r.regimen_precio*ht.Habitacion_Tipo_Porcentual+h.Hotel_Recarga_Estrella*h.Hotel_CantEstrella,'SYSADM'
+	INSERT INTO FOUR_SIZONS.Estadia (Reserva_Codigo, Estadia_FechaInicio, Estadia_FechaFin, Estadia_CantNoches, Usuario_ID, Hotel_Codigo, Estadia_Estado,Estadia_PreXNoche,usuario_out)
+	SELECT DISTINCT M.Reserva_Codigo, M.Estadia_Fecha_Inicio, dateadd(day, M.Estadia_Cant_Noches,M.Estadia_Fecha_Inicio), M.Estadia_Cant_Noches, 'SYSADM', H.Hotel_Codigo, 1,r.regimen_precio*ht.Habitacion_Tipo_Porcentual+h.Hotel_Recarga_Estrella*h.Hotel_CantEstrella,'SYSADM'
 	FROM GD1C2018.gd_esquema.Maestra AS M
 	JOIN FOUR_SIZONS.Hotel AS H ON H.Hotel_Nro_Calle = M.Hotel_Nro_Calle
 	JOIN FOUR_SIZONS.Cliente AS C ON C.Cliente_NumDoc = M.Cliente_Pasaporte_Nro
@@ -777,6 +776,13 @@ end
 	JOIN FOUR_SIZONS.habitacion_tipo AS HT ON ht.habitacion_tipo_codigo = M.habitacion_tipo_codigo
 	WHERE M.Estadia_Fecha_Inicio IS NOT NULL AND M.Estadia_Cant_Noches IS NOT NULL
 	ORDER BY M.Reserva_Codigo
+
+	--EstadiaXHabitacion
+	INSERT INTO FOUR_SIZONS.EstadiaXHabitacion (Estadia_Codigo,Habitacion_numero,Hotel_codigo)
+	select distinct E.Estadia_Codigo,M.Habitacion_Numero,H.Hotel_Codigo
+	from GD1C2018.gd_esquema.Maestra AS M
+	JOIN FOUR_SIZONS.Hotel AS H ON H.Hotel_Nro_Calle = M.Hotel_Nro_Calle
+	JOIN FOUR_SIZONS.Estadia AS E ON E.Reserva_Codigo = M.Reserva_Codigo
 
 	--EstadiaXCliente
 	INSERT INTO FOUR_SIZONS.EstadiaXCliente(Cliente_Codigo, Estadia_Codigo)
