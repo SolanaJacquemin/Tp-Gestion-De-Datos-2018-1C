@@ -73,10 +73,11 @@ namespace FrbaHotel.ABMUsuario
             using (PromptHoteles prompt = new PromptHoteles())
             {
                 prompt.ShowDialog();
-
-                hotel = Convert.ToDecimal(prompt.TextBox1.Text);
-                txt_hotel.Text = prompt.TextBox2.Text;
-
+                if (prompt.TextBox1.Text != "")
+                {
+                    hotel = Convert.ToDecimal(prompt.TextBox1.Text);
+                    txt_hotel.Text = prompt.TextBox2.Text;
+                }
                 prompt.Close();
             }
             this.Show();

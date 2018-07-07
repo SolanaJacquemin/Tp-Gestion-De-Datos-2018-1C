@@ -44,10 +44,11 @@ namespace FrbaHotel.ABMUsuario
             using (PromptRoles prompt = new PromptRoles())
             {
                 prompt.ShowDialog();
-
-                rol = Convert.ToDecimal(prompt.TextBox1.Text);
-                txt_rol.Text = prompt.TextBox2.Text;
-
+                if (prompt.TextBox1.Text != "")
+                {
+                    rol = Convert.ToDecimal(prompt.TextBox1.Text);
+                    txt_rol.Text = prompt.TextBox2.Text;
+                }
                 prompt.Close();
             }
             this.Show();

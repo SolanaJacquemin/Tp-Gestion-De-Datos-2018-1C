@@ -125,8 +125,11 @@ namespace FrbaHotel.GestionReservas
             using (PromptHoteles formPromptHotel01 = new PromptHoteles())
             {
                 formPromptHotel01.ShowDialog();
-                hotelID = Convert.ToDecimal(formPromptHotel01.TextBox1.Text);
-                txt_hotel.Text = formPromptHotel01.TextBox2.Text;
+                if (formPromptHotel01.TextBox1.Text != "")
+                {
+                    hotelID = Convert.ToDecimal(formPromptHotel01.TextBox1.Text);
+                    txt_hotel.Text = formPromptHotel01.TextBox2.Text;
+                }
                 formPromptHotel01.Close();
             }
             this.Show();
@@ -137,8 +140,11 @@ namespace FrbaHotel.GestionReservas
             using (PromptRegimenes formPromptRegimen01 = new PromptRegimenes())
             {
                 formPromptRegimen01.ShowDialog();
-                regimenID = Convert.ToDecimal(formPromptRegimen01.TextBox1.Text);
-                txt_regimen.Text = formPromptRegimen01.TextBox2.Text;
+                if (formPromptRegimen01.TextBox1.Text != "")
+                {
+                    regimenID = Convert.ToDecimal(formPromptRegimen01.TextBox1.Text);
+                    txt_regimen.Text = formPromptRegimen01.TextBox2.Text;
+                }
                 formPromptRegimen01.Close();
             }
             this.Show();

@@ -256,11 +256,13 @@ namespace FrbaHotel.ABMHotel
             {
                 prompt.ShowDialog();
 
-                hotel = Convert.ToDecimal(prompt.TextBox1.Text);
-                txt_codigo.Text = prompt.TextBox2.Text;
-
+                if (prompt.TextBox1.Text != "")
+                {
+                    hotel = Convert.ToDecimal(prompt.TextBox1.Text);
+                    txt_codigo.Text = prompt.TextBox2.Text;
+                }
                 prompt.Close();
-            }
+                }
             this.Show();
         }
     }

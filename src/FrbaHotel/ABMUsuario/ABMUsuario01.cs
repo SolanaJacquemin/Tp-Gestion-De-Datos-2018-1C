@@ -202,8 +202,11 @@ namespace FrbaHotel.ABMUsuario
             using (PromptUsuarios prompt = new PromptUsuarios())
             {
                 prompt.ShowDialog();
-                txt_Id.Text = prompt.TextBox1.Text;
-                prompt.Close();
+                if (prompt.TextBox1.Text != "")
+                {
+                    txt_Id.Text = prompt.TextBox1.Text;
+                    prompt.Close();
+                }
             }
             this.Show();
         }

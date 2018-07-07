@@ -7,6 +7,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using FrbaHotel.Prompts;
 
 namespace FrbaHotel.ABMHabitacion
 {
@@ -45,56 +46,14 @@ namespace FrbaHotel.ABMHabitacion
 
         public void iniciarGrilla()
         {
-            dgv_Habitaciones.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
-            cb_tipoFrente.DropDownStyle = ComboBoxStyle.DropDownList;
-            cb_tipohab.DropDownStyle = ComboBoxStyle.DropDownList;
-            dgv_Habitaciones.Rows.Clear();
 
-            Conexion con = new Conexion();
-            con.strQuery = "select Ho.Hotel_Nombre, Ha.Hotel_Codigo, Ha.Habitacion_Numero, Ha.Habitacion_Piso, HT.Habitacion_Tipo_Descripcion, " +
-            "Ha.Habitacion_Frente, Ha.Habitacion_Estado from FOUR_SIZONS.Habitacion as Ha JOIN FOUR_SIZONS.Hotel " +
-            "as Ho on Ho.Hotel_Codigo = Ha.Hotel_Codigo JOIN FOUR_SIZONS.Habitacion_Tipo as HT on " +
-            "HT.Habitacion_Tipo_Codigo = Ha.Habitacion_Tipo_Codigo ";
-            if (hotel != 0)
-            {
-                con.strQuery = con.strQuery + " AND HO.Hotel_Codigo = " + hotel;
-            }
-            con.strQuery = con.strQuery + " ORDER BY Ho.Hotel_Codigo, Ha.Habitacion_Numero";
-
-            con.executeQuery();
-            if (!con.reader())
-            {
-                MessageBox.Show("No se han encontrado usuarios. Revise los criterios de búsqueda", "FOUR SIZONS - FRBA Hoteles", MessageBoxButtons.OK, MessageBoxIcon.Information);
-                con.strQuery = "";
-                con.closeConection();
-                return;
-            }
-
-            dgv_Habitaciones.Rows.Add(new Object[] { con.lector.GetString(0), con.lector.GetDecimal(1),
-            con.lector.GetDecimal(2), con.lector.GetDecimal(3), con.lector.GetString(4), con.lector.GetString(5),
-            con.lector.GetBoolean(6)});
-
-            while (con.reader())
-            {
-                dgv_Habitaciones.Rows.Add(new Object[] { con.lector.GetString(0), con.lector.GetDecimal(1),
-                con.lector.GetDecimal(2), con.lector.GetDecimal(3), con.lector.GetString(4), con.lector.GetString(5),
-                con.lector.GetBoolean(6)});
-            }
-            con.closeConection();
-
-            dgv_Habitaciones.ClearSelection();
-            foreach (DataGridViewRow row in dgv_Habitaciones.Rows)
-                if (Convert.ToBoolean(row.Cells[6].Value) == false)
-                {
-                    row.DefaultCellStyle.BackColor = Color.Red;
-                }
         }
 
         public void limpiar()
         {
             dgv_Habitaciones.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
             dgv_Habitaciones.Rows.Clear();
-            txt_nombre_hotel.Text = "";
+            txt_hotel.Text = "";
             txt_piso.Text = "";
             txt_nro_hab.Text = "";
             cb_tipohab.Items.Clear();
@@ -186,18 +145,63 @@ namespace FrbaHotel.ABMHabitacion
 
         private void ABMHabitacion01_Load(object sender, EventArgs e)
         {
+            Conexion con = new Conexion();
             if (hotel != 0)
             {
-                Conexion con = new Conexion();
+                
                 con.strQuery = "SELECT H.Hotel_Nombre FROM FOUR_SIZONS.Hotel H WHERE H.Hotel_Codigo = " + hotel;
                 con.executeQuery();
 
                 if (con.reader())
                 {
-                    txt_nombre_hotel.Text = con.lector.GetString(0);
+                    txt_hotel.Text = con.lector.GetString(0);
                 }
-                txt_nombre_hotel.Enabled = false;
+                txt_hotel.Enabled = false;
             }
+
+            dgv_Habitaciones.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
+            cb_tipoFrente.DropDownStyle = ComboBoxStyle.DropDownList;
+            cb_tipohab.DropDownStyle = ComboBoxStyle.DropDownList;
+            dgv_Habitaciones.Rows.Clear();
+
+            //Conexion con = new Conexion();
+            con.strQuery = "select Ho.Hotel_Nombre, Ha.Hotel_Codigo, Ha.Habitacion_Numero, Ha.Habitacion_Piso, HT.Habitacion_Tipo_Descripcion, " +
+            "Ha.Habitacion_Frente, Ha.Habitacion_Estado from FOUR_SIZONS.Habitacion as Ha JOIN FOUR_SIZONS.Hotel " +
+            "as Ho on Ho.Hotel_Codigo = Ha.Hotel_Codigo JOIN FOUR_SIZONS.Habitacion_Tipo as HT on " +
+            "HT.Habitacion_Tipo_Codigo = Ha.Habitacion_Tipo_Codigo ";
+            if (hotel != 0)
+            {
+                con.strQuery = con.strQuery + " AND HO.Hotel_Codigo = " + hotel;
+            }
+            con.strQuery = con.strQuery + " ORDER BY Ho.Hotel_Codigo, Ha.Habitacion_Numero";
+
+            con.executeQuery();
+            if (!con.reader())
+            {
+                MessageBox.Show("No se han encontrado usuarios. Revise los criterios de búsqueda", "FOUR SIZONS - FRBA Hoteles", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                con.strQuery = "";
+                con.closeConection();
+                return;
+            }
+
+            dgv_Habitaciones.Rows.Add(new Object[] { con.lector.GetString(0), con.lector.GetDecimal(1),
+            con.lector.GetDecimal(2), con.lector.GetDecimal(3), con.lector.GetString(4), con.lector.GetString(5),
+            con.lector.GetBoolean(6)});
+
+            while (con.reader())
+            {
+                dgv_Habitaciones.Rows.Add(new Object[] { con.lector.GetString(0), con.lector.GetDecimal(1),
+                con.lector.GetDecimal(2), con.lector.GetDecimal(3), con.lector.GetString(4), con.lector.GetString(5),
+                con.lector.GetBoolean(6)});
+            }
+            con.closeConection();
+
+            dgv_Habitaciones.ClearSelection();
+            /*foreach (DataGridViewRow row in dgv_Habitaciones.Rows)
+                if (Convert.ToBoolean(row.Cells[6].Value) == false)
+                {
+                    row.DefaultCellStyle.BackColor = Color.Red;
+                }*/
         }
 
         private void btn_volver_Click(object sender, EventArgs e)
@@ -226,6 +230,27 @@ namespace FrbaHotel.ABMHabitacion
             DataGridViewRow selectedRow = dgv_Habitaciones.Rows[index];
             dgv_hotel_ID = Convert.ToDecimal(selectedRow.Cells[1].Value.ToString());
             dgv_habitacion_ID = Convert.ToDecimal(selectedRow.Cells[2].Value.ToString());
+        }
+
+        private void btn_promptUsu_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void btn_promptHotel_Click(object sender, EventArgs e)
+        {
+            using (PromptHoteles prompt = new PromptHoteles())
+            {
+                prompt.ShowDialog();
+
+                if (prompt.TextBox1.Text != "")
+                {
+                    hotel = Convert.ToDecimal(prompt.TextBox1.Text);
+                    txt_hotel.Text = prompt.TextBox2.Text;
+                }
+
+                prompt.Close();
+            }
         }
 
     }

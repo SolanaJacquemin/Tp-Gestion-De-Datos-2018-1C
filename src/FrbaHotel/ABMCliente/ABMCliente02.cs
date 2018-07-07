@@ -67,9 +67,7 @@ namespace FrbaHotel.ABMCliente
                 case "UPD":
                     labelTitulo.Text = "Modificación de Cliente";
                     btn_aceptar_nuevo.Visible = false;
-                    lbl_estado.Enabled = false;
                     lbl_obligacion.Visible = false;
-                    lbl_estado.Visible = false;
                     break;
             }
 

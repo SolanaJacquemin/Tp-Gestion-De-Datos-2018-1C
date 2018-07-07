@@ -35,19 +35,16 @@
             this.boton_baja = new System.Windows.Forms.Button();
             this.boton_alta = new System.Windows.Forms.Button();
             this.groupBox1 = new System.Windows.Forms.GroupBox();
-            this.btn_promptUsu = new System.Windows.Forms.Button();
             this.cb_tipoFrente = new System.Windows.Forms.ComboBox();
             this.cb_tipohab = new System.Windows.Forms.ComboBox();
             this.label7 = new System.Windows.Forms.Label();
             this.label5 = new System.Windows.Forms.Label();
             this.label4 = new System.Windows.Forms.Label();
             this.label3 = new System.Windows.Forms.Label();
-            this.label2 = new System.Windows.Forms.Label();
             this.btn_limpiar = new System.Windows.Forms.Button();
             this.btn_buscar = new System.Windows.Forms.Button();
             this.txt_nro_hab = new System.Windows.Forms.TextBox();
             this.txt_piso = new System.Windows.Forms.TextBox();
-            this.txt_nombre_hotel = new System.Windows.Forms.TextBox();
             this.label1 = new System.Windows.Forms.Label();
             this.dgv_Habitaciones = new System.Windows.Forms.DataGridView();
             this.Hotel_Nombre = new System.Windows.Forms.DataGridViewTextBoxColumn();
@@ -57,6 +54,9 @@
             this.habitacion_tipo_codigo = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.habitacion_frente = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.habitacion_estado = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.btn_promptHotel = new System.Windows.Forms.Button();
+            this.label14 = new System.Windows.Forms.Label();
+            this.txt_hotel = new System.Windows.Forms.TextBox();
             this.groupBox1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dgv_Habitaciones)).BeginInit();
             this.SuspendLayout();
@@ -123,34 +123,25 @@
             // 
             // groupBox1
             // 
-            this.groupBox1.Controls.Add(this.btn_promptUsu);
+            this.groupBox1.Controls.Add(this.btn_promptHotel);
+            this.groupBox1.Controls.Add(this.label14);
+            this.groupBox1.Controls.Add(this.txt_hotel);
             this.groupBox1.Controls.Add(this.cb_tipoFrente);
             this.groupBox1.Controls.Add(this.cb_tipohab);
             this.groupBox1.Controls.Add(this.label7);
             this.groupBox1.Controls.Add(this.label5);
             this.groupBox1.Controls.Add(this.label4);
             this.groupBox1.Controls.Add(this.label3);
-            this.groupBox1.Controls.Add(this.label2);
             this.groupBox1.Controls.Add(this.btn_limpiar);
             this.groupBox1.Controls.Add(this.btn_buscar);
             this.groupBox1.Controls.Add(this.txt_nro_hab);
             this.groupBox1.Controls.Add(this.txt_piso);
-            this.groupBox1.Controls.Add(this.txt_nombre_hotel);
             this.groupBox1.Location = new System.Drawing.Point(29, 48);
             this.groupBox1.Name = "groupBox1";
             this.groupBox1.Size = new System.Drawing.Size(639, 87);
             this.groupBox1.TabIndex = 13;
             this.groupBox1.TabStop = false;
             this.groupBox1.Text = "Filtros de Búsqueda";
-            // 
-            // btn_promptUsu
-            // 
-            this.btn_promptUsu.Location = new System.Drawing.Point(211, 17);
-            this.btn_promptUsu.Name = "btn_promptUsu";
-            this.btn_promptUsu.Size = new System.Drawing.Size(26, 23);
-            this.btn_promptUsu.TabIndex = 36;
-            this.btn_promptUsu.Text = "...";
-            this.btn_promptUsu.UseVisualStyleBackColor = true;
             // 
             // cb_tipoFrente
             // 
@@ -204,15 +195,6 @@
             this.label3.TabIndex = 2;
             this.label3.Text = "Tipo Hab.";
             // 
-            // label2
-            // 
-            this.label2.AutoSize = true;
-            this.label2.Location = new System.Drawing.Point(7, 23);
-            this.label2.Name = "label2";
-            this.label2.Size = new System.Drawing.Size(32, 13);
-            this.label2.TabIndex = 2;
-            this.label2.Text = "Hotel";
-            // 
             // btn_limpiar
             // 
             this.btn_limpiar.Location = new System.Drawing.Point(544, 46);
@@ -248,13 +230,6 @@
             this.txt_piso.Size = new System.Drawing.Size(60, 20);
             this.txt_piso.TabIndex = 1;
             this.txt_piso.TextChanged += new System.EventHandler(this.txt_apellido_TextChanged);
-            // 
-            // txt_nombre_hotel
-            // 
-            this.txt_nombre_hotel.Location = new System.Drawing.Point(60, 19);
-            this.txt_nombre_hotel.Name = "txt_nombre_hotel";
-            this.txt_nombre_hotel.Size = new System.Drawing.Size(145, 20);
-            this.txt_nombre_hotel.TabIndex = 0;
             // 
             // label1
             // 
@@ -320,6 +295,32 @@
             this.habitacion_estado.HeaderText = "Estado";
             this.habitacion_estado.Name = "habitacion_estado";
             // 
+            // btn_promptHotel
+            // 
+            this.btn_promptHotel.Location = new System.Drawing.Point(208, 17);
+            this.btn_promptHotel.Name = "btn_promptHotel";
+            this.btn_promptHotel.Size = new System.Drawing.Size(26, 23);
+            this.btn_promptHotel.TabIndex = 47;
+            this.btn_promptHotel.Text = "...";
+            this.btn_promptHotel.UseVisualStyleBackColor = true;
+            this.btn_promptHotel.Click += new System.EventHandler(this.btn_promptHotel_Click);
+            // 
+            // label14
+            // 
+            this.label14.AutoSize = true;
+            this.label14.Location = new System.Drawing.Point(22, 22);
+            this.label14.Name = "label14";
+            this.label14.Size = new System.Drawing.Size(32, 13);
+            this.label14.TabIndex = 45;
+            this.label14.Text = "Hotel";
+            // 
+            // txt_hotel
+            // 
+            this.txt_hotel.Location = new System.Drawing.Point(60, 19);
+            this.txt_hotel.Name = "txt_hotel";
+            this.txt_hotel.Size = new System.Drawing.Size(147, 20);
+            this.txt_hotel.TabIndex = 46;
+            // 
             // ABMHabitacion01
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -358,17 +359,14 @@
         private System.Windows.Forms.Label label5;
         private System.Windows.Forms.Label label4;
         private System.Windows.Forms.Label label3;
-        private System.Windows.Forms.Label label2;
         private System.Windows.Forms.Button btn_limpiar;
         private System.Windows.Forms.Button btn_buscar;
         private System.Windows.Forms.TextBox txt_piso;
-        private System.Windows.Forms.TextBox txt_nombre_hotel;
         private System.Windows.Forms.Label label1;
         private System.Windows.Forms.DataGridView dgv_Habitaciones;
         private System.Windows.Forms.ComboBox cb_tipoFrente;
         private System.Windows.Forms.Label label7;
         private System.Windows.Forms.TextBox txt_nro_hab;
-        private System.Windows.Forms.Button btn_promptUsu;
         private System.Windows.Forms.DataGridViewTextBoxColumn Hotel_Nombre;
         private System.Windows.Forms.DataGridViewTextBoxColumn hotel_codigo;
         private System.Windows.Forms.DataGridViewTextBoxColumn habitacion_codigo;
@@ -376,5 +374,8 @@
         private System.Windows.Forms.DataGridViewTextBoxColumn habitacion_tipo_codigo;
         private System.Windows.Forms.DataGridViewTextBoxColumn habitacion_frente;
         private System.Windows.Forms.DataGridViewTextBoxColumn habitacion_estado;
+        private System.Windows.Forms.Button btn_promptHotel;
+        private System.Windows.Forms.Label label14;
+        private System.Windows.Forms.TextBox txt_hotel;
     }
 }

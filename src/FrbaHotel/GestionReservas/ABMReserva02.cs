@@ -25,6 +25,7 @@ namespace FrbaHotel.GestionReservas
         public bool buscoCliente;
         public bool tieneDisponibilidad;
         public decimal reservaID;
+        public string mensajeHab;
 
         public ABMReserva02(string modo, string user)
         {
@@ -216,6 +217,28 @@ namespace FrbaHotel.GestionReservas
 
                         con.closeConection();
 
+                        DataSet dataset = new DataSet();
+                        con.strQuery = "four_sizons.asignarHab";
+                        con.execute();
+                        con.command.CommandType = CommandType.StoredProcedure;
+
+                        con.command.Parameters.Add("@hotel", SqlDbType.Decimal).Value = hotelID;
+                        con.command.Parameters.Add("@cant", SqlDbType.Decimal).Value = Convert.ToDecimal(txt_cantHab.Text);
+                        con.command.Parameters.Add("@tipoHabDesc", SqlDbType.NVarChar).Value = cb_tipoHabitacion.Text;
+
+                        con.openConection();
+
+                        SqlDataAdapter da = new SqlDataAdapter(con.command);
+
+                        da.Fill(dataset);
+
+                        for (int i = 0; i < dataset.Tables[0].Rows.Count; i++)
+                        {
+                            mensajeHab = mensajeHab + (dataset.Tables[0].Rows[i][0]).ToString() + " ";
+                        }
+                        MessageBox.Show("Las habitaciones que corresponden: " + mensajeHab, "FOUR SIZONS - FRBA Hoteles", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                        con.closeConection();
+
                         MessageBox.Show("Operación exitosa. El código de reserva es " + reservaID.ToString() , "FOUR SIZONS - FRBA Hoteles", MessageBoxButtons.OK, MessageBoxIcon.Information);
                     }
                     catch (Exception ex)
@@ -368,8 +391,11 @@ namespace FrbaHotel.GestionReservas
             using (PromptHoteles formPromptHotel01 = new PromptHoteles())
             {
                 formPromptHotel01.ShowDialog();
-                hotelID = Convert.ToDecimal(formPromptHotel01.TextBox1.Text);
-                txt_hotel.Text = formPromptHotel01.TextBox2.Text;
+                if (formPromptHotel01.TextBox1.Text != "")
+                {
+                    hotelID = Convert.ToDecimal(formPromptHotel01.TextBox1.Text);
+                    txt_hotel.Text = formPromptHotel01.TextBox2.Text;
+                }
                 formPromptHotel01.Close();
             }
             this.Show();
@@ -380,8 +406,11 @@ namespace FrbaHotel.GestionReservas
             using (PromptRegimenes formPromptRegimen01 = new PromptRegimenes())
             {
                 formPromptRegimen01.ShowDialog();
-                regimenID = Convert.ToDecimal(formPromptRegimen01.TextBox1.Text);
-                txt_regimen.Text = formPromptRegimen01.TextBox2.Text;
+                if (formPromptRegimen01.TextBox1.Text != "")
+                {
+                    regimenID = Convert.ToDecimal(formPromptRegimen01.TextBox1.Text);
+                    txt_regimen.Text = formPromptRegimen01.TextBox2.Text;
+                }
                 formPromptRegimen01.Close();
             }
             this.Show();
