@@ -899,15 +899,18 @@ go
 
 --------------------------------------------------ABM HABITACION-------------------------------------------------------------
 create procedure four_sizons.asignarHab
-@estadia numeric(18)
+@estadia numeric(18),
+@reserva numeric(18)
 as begin
 	declare @tipo_Hab numeric(18), @cant numeric(18) , @hotel numeric(18)
-	(select @tipo_Hab=r.habitacion_tipo_codigo , @cant=r.Reserva_cant_hab , @hotel=r.Hotel_Codigo from FOUR_SIZONS.Estadia e, FOUR_SIZONS.Reserva r where e.Estadia_Codigo=@estadia and r.Reserva_Codigo= e.Reserva_Codigo)
+	(select @tipo_Hab=r.habitacion_tipo_codigo , @cant=r.Reserva_cant_hab , @hotel=r.Hotel_Codigo from FOUR_SIZONS.Reserva r where  Reserva_Codigo= @reserva)
 
 	declare @hab_asign table  (hab_codigo numeric(18))
 	while((select isnull(count(hab_codigo),0)from @hab_asign)<@cant)
 	begin
 	INSERT INTO @hab_asign (hab_codigo)
+	
+	
 	SELECT top 1 h.Habitacion_Numero
 	FROM  four_sizons.Habitacion h 
 	where h.Habitacion_Tipo_Codigo=@tipo_Hab and @hotel=h.Hotel_Codigo and h.Habitacion_Estado=1 and h.Habitacion_Numero not in(select hab_codigo from @hab_asign)
@@ -1643,7 +1646,9 @@ declare @fechaInicio datetime = (select convert(datetime,Reserva_Fecha_Inicio,12
 
 	update FOUR_SIZONS.Reserva set Reserva_Estado=@estado where Reserva_Codigo = @reserva
 
-	begin
+	declare @tipo_Hab numeric(18), @cant2 numeric(18) , @hotel2 numeric(18)
+	(select @tipo_Hab=r.habitacion_tipo_codigo , @cant2=r.Reserva_cant_hab , @hotel2=r.Hotel_Codigo from FOUR_SIZONS.Reserva r where Reserva_Codigo = @reserva)
+
 	
 	declare @hab_asign table  (hab_codigo numeric(18))
 	while((select isnull(count(hab_codigo),0)from @hab_asign)<@cant)
@@ -1651,7 +1656,7 @@ declare @fechaInicio datetime = (select convert(datetime,Reserva_Fecha_Inicio,12
 	INSERT INTO @hab_asign (hab_codigo)
 	SELECT top 1 h.Habitacion_Numero
 	FROM  four_sizons.Habitacion h 
-	where h.Habitacion_Tipo_Codigo=@tipo and @hotel=h.Hotel_Codigo and h.Habitacion_Estado=1 and h.Habitacion_Numero not in(select hab_codigo from @hab_asign)
+	where h.Habitacion_Tipo_Codigo=@tipo_Hab and @hotel2=h.Hotel_Codigo and h.Habitacion_Estado=1 and h.Habitacion_Numero not in(select hab_codigo from @hab_asign)
 	order by h.Habitacion_Numero asc
 	end
 
@@ -1664,7 +1669,7 @@ declare @fechaInicio datetime = (select convert(datetime,Reserva_Fecha_Inicio,12
 	set Habitacion_Estado=0
 	where Habitacion_Numero in (select hab_codigo from @hab_asign)
 	
-	end
+	
 	end
 end				
 commit tran 
