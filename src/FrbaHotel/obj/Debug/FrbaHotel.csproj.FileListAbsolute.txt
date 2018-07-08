@@ -157,6 +157,7 @@ C:\Users\Janice\TP ACTUALIZADO 2\Tp-Gestion-De-Datos-2018-1C\src\FrbaHotel\obj\D
 C:\Users\Nicolas\Desktop\Gestion de Datos\Tp-Gestion-De-Datos-2018-1C\src\FrbaHotel\bin\Debug\FrbaHotel.exe.config
 C:\Users\Nicolas\Desktop\Gestion de Datos\Tp-Gestion-De-Datos-2018-1C\src\FrbaHotel\bin\Debug\FrbaHotel.exe
 C:\Users\Nicolas\Desktop\Gestion de Datos\Tp-Gestion-De-Datos-2018-1C\src\FrbaHotel\bin\Debug\FrbaHotel.pdb
+C:\Users\Nicolas\Desktop\Gestion de Datos\Tp-Gestion-De-Datos-2018-1C\src\FrbaHotel\obj\Debug\FrbaHotel.csprojResolveAssemblyReference.cache
 C:\Users\Nicolas\Desktop\Gestion de Datos\Tp-Gestion-De-Datos-2018-1C\src\FrbaHotel\obj\Debug\FrbaHotel.AbmCliente.ABMCliente01.resources
 C:\Users\Nicolas\Desktop\Gestion de Datos\Tp-Gestion-De-Datos-2018-1C\src\FrbaHotel\obj\Debug\FrbaHotel.ABMCliente.ABMCliente02.resources
 C:\Users\Nicolas\Desktop\Gestion de Datos\Tp-Gestion-De-Datos-2018-1C\src\FrbaHotel\obj\Debug\FrbaHotel.ABMHabitacion.ABMHabitacion01.resources
@@ -164,6 +165,7 @@ C:\Users\Nicolas\Desktop\Gestion de Datos\Tp-Gestion-De-Datos-2018-1C\src\FrbaHo
 C:\Users\Nicolas\Desktop\Gestion de Datos\Tp-Gestion-De-Datos-2018-1C\src\FrbaHotel\obj\Debug\FrbaHotel.ABMHotel.ABMHotel01.resources
 C:\Users\Nicolas\Desktop\Gestion de Datos\Tp-Gestion-De-Datos-2018-1C\src\FrbaHotel\obj\Debug\FrbaHotel.ABMHotel.ABMHotel02.resources
 C:\Users\Nicolas\Desktop\Gestion de Datos\Tp-Gestion-De-Datos-2018-1C\src\FrbaHotel\obj\Debug\FrbaHotel.ABMHotel.ABMHotel03.resources
+C:\Users\Nicolas\Desktop\Gestion de Datos\Tp-Gestion-De-Datos-2018-1C\src\FrbaHotel\obj\Debug\FrbaHotel.ABMHotel.ABMHotel04.resources
 C:\Users\Nicolas\Desktop\Gestion de Datos\Tp-Gestion-De-Datos-2018-1C\src\FrbaHotel\obj\Debug\FrbaHotel.ABMRol.ABMRol01.resources
 C:\Users\Nicolas\Desktop\Gestion de Datos\Tp-Gestion-De-Datos-2018-1C\src\FrbaHotel\obj\Debug\FrbaHotel.ABMRol.ABMRol02.resources
 C:\Users\Nicolas\Desktop\Gestion de Datos\Tp-Gestion-De-Datos-2018-1C\src\FrbaHotel\obj\Debug\FrbaHotel.ABMUsuario.ABMUsuario01.resources

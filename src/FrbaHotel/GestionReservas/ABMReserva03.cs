@@ -201,7 +201,7 @@ namespace FrbaHotel.GestionReservas
                 try
                 {
                     Conexion con = new Conexion();
-                    con.strQuery = "four_sizons.DisponbilidadyPrecio";
+                    con.strQuery = "four_sizons.DisponibilidadyPrecio";
                     con.execute();
                     con.command.CommandType = CommandType.StoredProcedure;
 

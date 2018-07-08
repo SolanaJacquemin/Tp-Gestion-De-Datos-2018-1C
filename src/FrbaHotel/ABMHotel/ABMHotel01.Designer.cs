@@ -69,6 +69,7 @@
             this.Hotel_FechaCreacion = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.Hotel_Estado = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.btn_cerrar = new System.Windows.Forms.Button();
+            this.btn_regimen = new System.Windows.Forms.Button();
             this.groupBox1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dgv_Hoteles)).BeginInit();
             this.SuspendLayout();
@@ -449,11 +450,22 @@
             this.btn_cerrar.UseVisualStyleBackColor = true;
             this.btn_cerrar.Click += new System.EventHandler(this.btn_cerrar_Click);
             // 
+            // btn_regimen
+            // 
+            this.btn_regimen.Location = new System.Drawing.Point(569, 364);
+            this.btn_regimen.Name = "btn_regimen";
+            this.btn_regimen.Size = new System.Drawing.Size(89, 23);
+            this.btn_regimen.TabIndex = 18;
+            this.btn_regimen.Text = "Regímenes";
+            this.btn_regimen.UseVisualStyleBackColor = true;
+            this.btn_regimen.Click += new System.EventHandler(this.btn_regimen_Click);
+            // 
             // ABMHotel01
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(675, 466);
+            this.Controls.Add(this.btn_regimen);
             this.Controls.Add(this.btn_cerrar);
             this.Controls.Add(this.btn_volver);
             this.Controls.Add(this.label8);
@@ -518,5 +530,6 @@
         private System.Windows.Forms.Label label11;
         private System.Windows.Forms.TextBox txt_calle;
         private System.Windows.Forms.Button btn_cerrar;
+        private System.Windows.Forms.Button btn_regimen;
     }
 }

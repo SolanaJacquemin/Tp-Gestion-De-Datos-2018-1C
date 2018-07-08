@@ -295,10 +295,6 @@ begin catch
 end catch
 GO
 
-
-
-
-
 alter procedure FOUR_SIZONS.ValidarUsuario
 @usuario nvarchar(15), 
 @password nvarchar(100),
@@ -536,7 +532,7 @@ insert into four_sizons.Cliente(Cliente_Nombre ,cliente_Apellido,cliente_TipoDoc
 								values (@nombre,@apellido,@tipoDoc,@numDoc,@calle,@numCalle,@piso,@depto,@localidad,@mail,@telefono,
 								@pais,@ciudad,@nacionalidad,@fechaNac,0,1,1)
 else 
-RAISERROR('el mail ingresado ya figura en el sistema, ingrese otro por favor',1,1)
+RAISERROR('el mail ingresado ya figura en el sistema, ingrese otro por favor',16,1)
 
 commit tran 
 end try
@@ -579,7 +575,7 @@ set Cliente_Nombre=@nombre ,cliente_Apellido=@apellido,cliente_TipoDoc=@tipoDoc,
 		 Cliente_Fecha_Nac=@fechaNac,Cliente_Estado=@estado
 
 	where Cliente_Codigo = @codigo
-else RAISERROR('el mail ingresado ya figura en el sistema, ingrese otro por favor',1,1)
+else RAISERROR('el mail ingresado ya figura en el sistema, ingrese otro por favor',16,1)
 		
 
 commit tran 
@@ -594,7 +590,8 @@ go
 
 
 -------------------------------------------------ABM HOTEL------------------------------------------------------------------------
-create procedure four_sizons.AltaHotel
+alter procedure four_sizons.AltaHotel
+@hotID numeric(18) output,
 @nombre nvarchar(50),
 @mail nvarchar(50),
 @telefono nvarchar(50),
@@ -603,20 +600,39 @@ create procedure four_sizons.AltaHotel
 @cantEstrellas numeric(18),
 @recarga_estrella numeric(5),
 @ciudad nvarchar(50),
-@pais nvarchar(50),
-@fechaCreacion datetime
+@pais nvarchar(50)
 
 as begin try
 begin tran
-
+declare @fechaCreacion datetime= convert(datetime,getdate(),121)
 insert into FOUR_SIZONS.Hotel(Hotel_Nombre,Hotel_Mail,Hotel_Telefono,Hotel_Calle,Hotel_Nro_Calle,
 					Hotel_CantEstrella,Hotel_Recarga_Estrella, Hotel_Ciudad,Hotel_Pais,Hotel_FechaCreacion,Hotel_Estado)
 					values (@nombre,@mail,@telefono,@calle,@numCalle,@cantEstrellas,@recarga_estrella,@ciudad,@pais,@fechaCreacion,1)
 
+declare @tipohab numeric = 1001
+while(@tipohab<1006)
+	begin 
+		declare @aux datetime = convert(datetime, '01-01-2017' ,121)
+
+		declare @aux2 datetime
+		declare @fin datetime= convert(datetime, '01-01-2021' ,121)
+		declare @hotel numeric(18)=(select top 1 Hotel_Codigo from Hotel order by Hotel_Codigo desc)
+		while (@aux != @fin)
+			begin
+				set @aux2= @aux 
+				insert into FOUR_SIZONS.Disponibilidad(Disp_Fecha,Disp_HabDisponibles,Habitacion_Tipo_Codigo,Hotel_Codigo)
+								values(@aux,0 ,@tipohab,@hotel)
+				set @aux = DATEADD(day, 1, @aux2)
+			end
+		set @tipohab = @tipohab+1
+	end
+
+	set @hotID = (select top 1 Hotel_Codigo from four_sizons.Hotel order by Hotel_Codigo desc)
+
+
 commit tran 
 end try
 begin catch
-	
 	declare @mensaje_de_error nvarchar(255)
 	set @mensaje_de_error = ERROR_MESSAGE()
 	RAISERROR(@mensaje_de_error,11,1)
@@ -625,18 +641,19 @@ end catch
 go
 
 
-create procedure four_sizons.altaRegXHotel
+alter procedure four_sizons.altaRegXHotel
 @regimen nvarchar(50),
-@hotel nvarchar(50)
+@hotID numeric(18)
+--@hotel nvarchar(50)
 
 as begin tran 
 begin try 
 
 declare @regID nvarchar(50)
-declare @hotID nvarchar(50)
+--declare @hotID nvarchar(50)
 
 set @regID = (select Regimen_Codigo  from four_sizons.regimen where Regimen_Descripcion = @regimen)
-set @hotID = (select Hotel_Codigo from FOUR_SIZONS.Hotel where Hotel_Nombre = @hotel)
+--set @hotID = (select Hotel_Codigo from FOUR_SIZONS.Hotel where Hotel_Nombre = @hotel)
 
 insert into FOUR_SIZONS.RegXHotel(Hotel_Codigo,Regimen_Codigo,RegXHotel_Estado) 
 							values (@hotID,@regID,1)
@@ -653,7 +670,39 @@ declare @mensaje_de_error nvarchar(255)
 end catch 
 go
 
--- faltaria poder modificar el regXhotel, para poder darle de baja (seria igual al de userXhotel)
+alter procedure four_sizons.modificarRegXhot
+@hotel numeric(18),
+@reg nvarchar(50),
+@estado bit
+as begin tran 
+begin try
+
+	declare @regID numeric(18)	
+	
+	set @regID = (select Regimen_Codigo from FOUR_SIZONS.regimen where Regimen_Descripcion = @reg)
+	
+	if exists(select * from FOUR_SIZONS.RegXHotel where Hotel_Codigo=@hotel and Regimen_Codigo=@regID)
+	
+	begin
+		update FOUR_SIZONS.RegXHotel
+			set RegXHotel_Estado = @estado
+		where Regimen_Codigo=@regID and Hotel_Codigo=@hotel
+	end
+	else
+	begin
+		exec four_sizons.altaRegXHotel @reg, @hotel
+	end
+
+	commit tran 
+	end try
+
+	begin catch
+	declare @mensaje_de_error nvarchar(255)
+	set @mensaje_de_error = ERROR_MESSAGE()
+	RAISERROR(@mensaje_de_error,11,1)
+	rollback tran  
+	end catch 
+go
 
 create procedure four_sizons.modificarHotel
 @codigo nvarchar(50),
@@ -902,7 +951,7 @@ declare @TipoHabID numeric(18)
 				end
 					else 
 						begin
-						RAISERROR('el numero de habitacion ya figura en ese hotel, ingrese otro por favor',1,1)
+						RAISERROR('el numero de habitacion ya figura en ese hotel, ingrese otro por favor',16,1)
 
 						end
 commit tran 
@@ -965,12 +1014,12 @@ go
 
 --------------------------------------------------DICE QUE NO HAY QUE DESARROLLARLO----------------------------------
 
-IF (OBJECT_ID('FOUR_SIZONS.DisponbilidadyPrecio', 'P') IS NOT NULL)
+IF (OBJECT_ID('FOUR_SIZONS.DisponibilidadyPrecio', 'P') IS NOT NULL)
 BEGIN
-    DROP proc FOUR_SIZONS.DisponbilidadyPrecio
+    DROP proc FOUR_SIZONS.DisponibilidadyPrecio
 END;
 go
-create proc four_sizons.DisponbilidadyPrecio
+alter proc four_sizons.DisponibilidadyPrecio
 @fechaInicio datetime,
 @fechaFin datetime,
 @hotid numeric (18),
@@ -992,7 +1041,7 @@ as begin
 	set @precio = @cantidadNoches * @cantHab*(@preReg*@porcentual+@recarga)
 	end
 
-	else RAISERROR('No hay lugar en este hotel para estas fechas, intente nuevamente',1,1) 
+	else RAISERROR('No hay lugar en este hotel para estas fechas, intente nuevamente',16,1) 
 
 end
 go
@@ -1117,7 +1166,7 @@ update FOUR_SIZONS.Disponibilidad
 set @aux = DATEADD(day, 1, @aux2)
 end
 	end
-	else RAISERROR('no hay lugar en este hotel para estas fechas, intente nuevamente',1,1)
+	else RAISERROR('no hay lugar en este hotel para estas fechas, intente nuevamente',16,1)
 		ROLLBACK TRANSACTION
 
 	end
@@ -1241,7 +1290,7 @@ create procedure four_sizons.AgregarTarjeta
 								values (@Tarjeta_Numero, @Tarjeta_Venc,@Tarjeta_Cod,@Tarjeta_Titular,@Tarjeta_Marca,@Cliente_Codigo,1)
 
 	else
-	RAISERROR('la tarjeta ya figura en el sistema, ingrese otra por favor',1,1)
+	RAISERROR('la tarjeta ya figura en el sistema, ingrese otra por favor',16,1)
 	
 
 	commit tran
@@ -1460,7 +1509,7 @@ begin try
 			where Factura_Nro = @fact_Nro
 		end
 		else 
-		RAISERROR('La factura ya fue facturada, no se puede realizar cambios',1,1)
+		RAISERROR('La factura ya fue facturada, no se puede realizar cambios',16,1)
 		
 
 commit tran
@@ -1493,9 +1542,11 @@ end catch
 end
 GO
 ----------------------------------------------------------------------------------
+
 alter proc FOUR_SIZONS.registrarCheckIn
 @reserva numeric(18),
-@usuario nvarchar(10)
+@usuario nvarchar(10),
+@codigo numeric(18) output
 
 as begin tran 
 begin try
@@ -1576,8 +1627,32 @@ declare @fechaInicio datetime = (select convert(datetime,Reserva_Fecha_Inicio,12
 	set @precioXNoche = (select Reserva_Precio from FOUR_SIZONS.Reserva res where res.Reserva_Codigo = @reserva)/@cantNoches
 	insert into FOUR_SIZONS.Estadia(Reserva_Codigo,Estadia_FechaInicio,Usuario_ID,Estadia_PreXNoche,Estadia_CantNoches,Estadia_FechaFin,Usuario_OUT,Estadia_DiasRest,Hotel_Codigo,Estadia_Estado) 
 							values(@reserva,@fechaInicio,@usuario,@precioXNoche,@cantNoches,@fechaFin,@usuario,0,@hotel,1)
-	
+	set @codigo = (select top 1 Estadia_Codigo from FOUR_SIZONS.Estadia order by Estadia_Codigo desc)
+
 	update FOUR_SIZONS.Reserva set Reserva_Estado=@estado where Reserva_Codigo = @reserva
+
+	begin
+	
+	declare @hab_asign table  (hab_codigo numeric(18))
+	while((select isnull(count(hab_codigo),0)from @hab_asign)<@cant)
+	begin
+	INSERT INTO @hab_asign (hab_codigo)
+	SELECT top 1 h.Habitacion_Numero
+	FROM  four_sizons.Habitacion h 
+	where h.Habitacion_Tipo_Codigo=@tipo and @hotel=h.Hotel_Codigo and h.Habitacion_Estado=1 and h.Habitacion_Numero not in(select hab_codigo from @hab_asign)
+	order by h.Habitacion_Numero asc
+	end
+
+	insert into FOUR_SIZONS.EstadiaXHabitacion (Habitacion_numero , Hotel_codigo , Estadia_Codigo)
+	select hab_codigo , @hotel , @codigo
+	from @hab_asign
+
+	select * from @hab_asign
+	update FOUR_SIZONS.Habitacion 
+	set Habitacion_Estado=0
+	where Habitacion_Numero in (select hab_codigo from @hab_asign)
+	
+	end
 	end
 end				
 commit tran 

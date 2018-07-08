@@ -30,7 +30,6 @@ namespace FrbaHotel.ABMHabitacion
             cb_tipohab.DropDownStyle = ComboBoxStyle.DropDownList;
 
             iniciarGrilla();
-            refrescarGrid();
 
             Conexion con = new Conexion();
             con.strQuery = "SELECT Habitacion_Tipo_Descripcion FROM FOUR_SIZONS.Habitacion_Tipo";
@@ -70,6 +69,12 @@ namespace FrbaHotel.ABMHabitacion
             con.lector.GetBoolean(6)});
             }
             con.closeConection();
+            dgv_Habitaciones.ClearSelection();
+            foreach (DataGridViewRow row in dgv_Habitaciones.Rows)
+                if (Convert.ToBoolean(row.Cells[6].Value) == false)
+                {
+                    row.DefaultCellStyle.BackColor = Color.Red;
+                }
         }
 
         public void limpiar()
@@ -125,6 +130,13 @@ namespace FrbaHotel.ABMHabitacion
                 con.lector.GetBoolean(6)});
             }
             con.closeConection();
+
+            dgv_Habitaciones.ClearSelection();
+            foreach (DataGridViewRow row in dgv_Habitaciones.Rows)
+                if (Convert.ToBoolean(row.Cells[6].Value) == false)
+                {
+                    row.DefaultCellStyle.BackColor = Color.Red;
+                }
 
         }
 
@@ -218,19 +230,7 @@ namespace FrbaHotel.ABMHabitacion
                 return;
             }
 
-            dgv_Habitaciones.Rows.Add(new Object[] { con.lector.GetString(0), con.lector.GetDecimal(1),
-            con.lector.GetDecimal(2), con.lector.GetDecimal(3), con.lector.GetString(4), con.lector.GetString(5),
-            con.lector.GetBoolean(6)});
-
-            while (con.reader())
-            {
-                dgv_Habitaciones.Rows.Add(new Object[] { con.lector.GetString(0), con.lector.GetDecimal(1),
-                con.lector.GetDecimal(2), con.lector.GetDecimal(3), con.lector.GetString(4), con.lector.GetString(5),
-                con.lector.GetBoolean(6)});
-            }
-            con.closeConection();
-
-            dgv_Habitaciones.ClearSelection();
+            iniciarGrilla();
 
         }
 
@@ -256,12 +256,7 @@ namespace FrbaHotel.ABMHabitacion
 
         public void refrescarGrid()
         {
-            dgv_Habitaciones.ClearSelection();
-            foreach (DataGridViewRow row in dgv_Habitaciones.Rows)
-                if (Convert.ToBoolean(row.Cells[6].Value) == false)
-                {
-                    row.DefaultCellStyle.BackColor = Color.Red;
-                }
+
         }
 
         public void dgv_Habitaciones_CellClick(object sender, DataGridViewCellEventArgs e)

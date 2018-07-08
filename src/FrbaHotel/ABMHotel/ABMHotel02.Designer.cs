@@ -32,7 +32,6 @@
             this.label11 = new System.Windows.Forms.Label();
             this.labelTitulo = new System.Windows.Forms.Label();
             this.boton_volver = new System.Windows.Forms.Button();
-            this.btn_aceptar_nuevo = new System.Windows.Forms.Button();
             this.boton_aceptar = new System.Windows.Forms.Button();
             this.l_estado = new System.Windows.Forms.Label();
             this.txt_estado = new System.Windows.Forms.TextBox();
@@ -58,6 +57,7 @@
             this.txt_telefono = new System.Windows.Forms.TextBox();
             this.txt_recargaEstrella = new System.Windows.Forms.TextBox();
             this.lbl_obligacion = new System.Windows.Forms.Label();
+            this.btn_regimen = new System.Windows.Forms.Button();
             this.groupBox1.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -101,16 +101,6 @@
             this.boton_volver.UseVisualStyleBackColor = true;
             this.boton_volver.Click += new System.EventHandler(this.boton_volver_Click);
             // 
-            // btn_aceptar_nuevo
-            // 
-            this.btn_aceptar_nuevo.Location = new System.Drawing.Point(107, 284);
-            this.btn_aceptar_nuevo.Name = "btn_aceptar_nuevo";
-            this.btn_aceptar_nuevo.Size = new System.Drawing.Size(108, 23);
-            this.btn_aceptar_nuevo.TabIndex = 14;
-            this.btn_aceptar_nuevo.Text = "Aceptar y Nuevo";
-            this.btn_aceptar_nuevo.UseVisualStyleBackColor = true;
-            this.btn_aceptar_nuevo.Click += new System.EventHandler(this.btn_aceptar_nuevo_Click);
-            // 
             // boton_aceptar
             // 
             this.boton_aceptar.Location = new System.Drawing.Point(26, 284);
@@ -141,6 +131,7 @@
             // 
             // groupBox1
             // 
+            this.groupBox1.Controls.Add(this.btn_regimen);
             this.groupBox1.Controls.Add(this.txt_nombre_hotel);
             this.groupBox1.Controls.Add(this.dt_fecha_cre);
             this.groupBox1.Controls.Add(this.l_estado);
@@ -231,7 +222,7 @@
             // label6
             // 
             this.label6.AutoSize = true;
-            this.label6.Location = new System.Drawing.Point(31, 73);
+            this.label6.Location = new System.Drawing.Point(31, 76);
             this.label6.Name = "label6";
             this.label6.Size = new System.Drawing.Size(26, 13);
             this.label6.TabIndex = 30;
@@ -240,7 +231,7 @@
             // label3
             // 
             this.label3.AutoSize = true;
-            this.label3.Location = new System.Drawing.Point(280, 80);
+            this.label3.Location = new System.Drawing.Point(281, 76);
             this.label3.Name = "label3";
             this.label3.Size = new System.Drawing.Size(90, 13);
             this.label3.TabIndex = 31;
@@ -258,7 +249,7 @@
             // label4
             // 
             this.label4.AutoSize = true;
-            this.label4.Location = new System.Drawing.Point(344, 129);
+            this.label4.Location = new System.Drawing.Point(343, 130);
             this.label4.Name = "label4";
             this.label4.Size = new System.Drawing.Size(29, 13);
             this.label4.TabIndex = 33;
@@ -267,7 +258,7 @@
             // label10
             // 
             this.label10.AutoSize = true;
-            this.label10.Location = new System.Drawing.Point(324, 49);
+            this.label10.Location = new System.Drawing.Point(324, 50);
             this.label10.Name = "label10";
             this.label10.Size = new System.Drawing.Size(46, 13);
             this.label10.TabIndex = 34;
@@ -340,6 +331,16 @@
             this.lbl_obligacion.TabIndex = 46;
             this.lbl_obligacion.Text = "Todos los campos son obligatorios";
             // 
+            // btn_regimen
+            // 
+            this.btn_regimen.Location = new System.Drawing.Point(327, 16);
+            this.btn_regimen.Name = "btn_regimen";
+            this.btn_regimen.Size = new System.Drawing.Size(89, 23);
+            this.btn_regimen.TabIndex = 47;
+            this.btn_regimen.Text = "Regímenes";
+            this.btn_regimen.UseVisualStyleBackColor = true;
+            this.btn_regimen.Click += new System.EventHandler(this.btn_regimen_Click);
+            // 
             // ABMHotel02
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -348,7 +349,6 @@
             this.Controls.Add(this.lbl_obligacion);
             this.Controls.Add(this.groupBox1);
             this.Controls.Add(this.boton_volver);
-            this.Controls.Add(this.btn_aceptar_nuevo);
             this.Controls.Add(this.boton_aceptar);
             this.Controls.Add(this.label1);
             this.Controls.Add(this.label11);
@@ -369,7 +369,6 @@
         private System.Windows.Forms.Label label11;
         private System.Windows.Forms.Label labelTitulo;
         private System.Windows.Forms.Button boton_volver;
-        private System.Windows.Forms.Button btn_aceptar_nuevo;
         private System.Windows.Forms.Button boton_aceptar;
         private System.Windows.Forms.Label l_estado;
         private System.Windows.Forms.TextBox txt_estado;
@@ -395,5 +394,6 @@
         private System.Windows.Forms.Label label12;
         private System.Windows.Forms.Label lbl_obligacion;
         private System.Windows.Forms.TextBox txt_nombre_hotel;
+        private System.Windows.Forms.Button btn_regimen;
     }
 }

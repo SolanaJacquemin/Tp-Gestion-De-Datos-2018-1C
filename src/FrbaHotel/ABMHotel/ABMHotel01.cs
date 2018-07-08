@@ -280,5 +280,22 @@ namespace FrbaHotel.ABMHotel
                 }
             this.Show();
         }
+
+        private void btn_regimen_Click(object sender, EventArgs e)
+        {
+            if (dgv_Hoteles.SelectedRows.Count > 0)
+            {
+                this.Hide();
+                ABMHotel04 formABMHotel04 = new ABMHotel04("UPD", Convert.ToDecimal(dgv_hotel_codigo));
+                formABMHotel04.ShowDialog();
+                this.Show();
+                this.buscar();
+                this.refrescarGrid();
+            }
+            else
+            {
+                MessageBox.Show("Debe seleccionar un hotel de la grilla", "FOUR SIZONS - FRBA Hoteles", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+        }
     }
 }

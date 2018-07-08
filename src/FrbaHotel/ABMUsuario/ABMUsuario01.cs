@@ -33,6 +33,22 @@ namespace FrbaHotel.ABMUsuario
             cb_tipodoc.DropDownStyle = ComboBoxStyle.DropDownList;
             dgv_Usuarios.Rows.Clear();
 
+            iniciarGrilla();
+
+            Conexion con = new Conexion();
+
+            con.strQuery = "SELECT Parametro_Descripcion FROM FOUR_SIZONS.Parametros WHERE Parametro_Codigo = 'DOCUMENTO'";
+            con.executeQuery();
+            cb_tipodoc.Items.Add("");
+            while (con.reader())
+            {
+                cb_tipodoc.Items.Add(con.lector.GetString(0));
+            }
+            con.closeConection();
+        }
+
+        private void iniciarGrilla() 
+        {
             Conexion con = new Conexion();
             con.strQuery = "SELECT U.Usuario_ID, U.Usuario_Nombre, U.Usuario_Apellido, U.Usuario_TipoDoc, U.Usuario_NroDoc, U.Usuario_Telefono, U.Usuario_Direccion, U.Usuario_Fec_Nac, U.Usuario_Mail, U.Usuario_Estado, U.Usuario_FallaLog" +
                            " FROM FOUR_SIZONS.Usuario U" +
@@ -41,7 +57,7 @@ namespace FrbaHotel.ABMUsuario
 
             con.executeQuery();
 
-            
+
             if (con.reader())
             {
                 esAdminGral = true;
@@ -55,7 +71,9 @@ namespace FrbaHotel.ABMUsuario
                                 "Usuario_TipoDoc, Usuario_NroDoc, Usuario_Telefono, Usuario_Direccion, " +
                                 "Usuario_Fec_Nac, Usuario_Mail, Usuario_Estado, Usuario_FallaLog " +
                                 "FROM FOUR_SIZONS.Usuario ORDER BY Usuario_ID";
-            }else{
+            }
+            else
+            {
                 con.strQuery = "SELECT U.Usuario_ID, U.Usuario_Nombre, U.Usuario_Apellido, U.Usuario_TipoDoc, U.Usuario_NroDoc, U.Usuario_Telefono, U.Usuario_Direccion, U.Usuario_Fec_Nac, U.Usuario_Mail, U.Usuario_Estado, U.Usuario_FallaLog " +
                                "FROM FOUR_SIZONS.Usuario U JOIN FOUR_SIZONS.UsuarioXHotel UH ON UH.Usuario_ID = U.Usuario_ID";
                 if (hotel_id != 0)
@@ -87,14 +105,6 @@ namespace FrbaHotel.ABMUsuario
                 con.lector.GetString(2), con.lector.GetString(3), con.lector.GetDecimal(4), con.lector.GetString(5),
                 con.lector.GetString(6), con.lector.GetDateTime(7), con.lector.GetString(8), con.lector.GetBoolean(9),
                 con.lector.GetDecimal(10)});
-            }
-            con.closeConection();
-
-            con.strQuery = "SELECT Parametro_Descripcion FROM FOUR_SIZONS.Parametros WHERE Parametro_Codigo = 'DOCUMENTO'";
-            con.executeQuery();
-            while (con.reader())
-            {
-                cb_tipodoc.Items.Add(con.lector.GetString(0));
             }
             con.closeConection();
         }
@@ -172,34 +182,9 @@ namespace FrbaHotel.ABMUsuario
             cb_tipodoc.Text = "";
             txt_nrodoc.Text = "";
             txt_mail.Text = "";
-
-            Conexion con = new Conexion();
-            con.strQuery = "SELECT Usuario_ID, Usuario_Nombre, Usuario_Apellido, " +
-                            "Usuario_TipoDoc, Usuario_NroDoc, Usuario_Telefono, Usuario_Direccion, " +
-                            "Usuario_Fec_Nac, Usuario_Mail, Usuario_Estado, Usuario_FallaLog " +
-                            "FROM FOUR_SIZONS.Usuario ORDER BY Usuario_ID";
-            con.executeQuery();
-            if (!con.reader())
-            {
-                MessageBox.Show("No se han encontrado usuarios. Revise los criterios de búsqueda", "FOUR SIZONS - FRBA Hoteles", MessageBoxButtons.OK, MessageBoxIcon.Information);
-                con.strQuery = "";
-                con.closeConection();
-                return;
-            }
-
-            dgv_Usuarios.Rows.Add(new Object[] { con.lector.GetString(0), con.lector.GetString(1),
-            con.lector.GetString(2), con.lector.GetString(3), con.lector.GetDecimal(4), con.lector.GetString(5),
-            con.lector.GetString(6), con.lector.GetDateTime(7), con.lector.GetString(8), con.lector.GetBoolean(9),
-            con.lector.GetDecimal(10)});
-
-            while (con.reader())
-            {
-                dgv_Usuarios.Rows.Add(new Object[] { con.lector.GetString(0), con.lector.GetString(1),
-                con.lector.GetString(2), con.lector.GetString(3), con.lector.GetDecimal(4), con.lector.GetString(5),
-                con.lector.GetString(6), con.lector.GetDateTime(7), con.lector.GetString(8), con.lector.GetBoolean(9),
-                con.lector.GetDecimal(10)});
-            }
-            con.closeConection();
+            dgv_Usuarios.Rows.Clear();
+            dgv_Usuarios.ClearSelection();
+            iniciarGrilla();
         }
 
         private void buscar()

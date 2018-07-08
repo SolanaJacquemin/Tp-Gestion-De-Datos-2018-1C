@@ -86,6 +86,12 @@
     <Compile Include="ABMHotel\ABMHotel03.Designer.cs">
       <DependentUpon>ABMHotel03.cs</DependentUpon>
     </Compile>
+    <Compile Include="ABMHotel\ABMHotel04.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="ABMHotel\ABMHotel04.Designer.cs">
+      <DependentUpon>ABMHotel04.cs</DependentUpon>
+    </Compile>
     <Compile Include="ABMRol\ABMRol01.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -267,6 +273,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="ABMHotel\ABMHotel03.resx">
       <DependentUpon>ABMHotel03.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="ABMHotel\ABMHotel04.resx">
+      <DependentUpon>ABMHotel04.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="ABMRol\ABMRol01.resx">
       <DependentUpon>ABMRol01.cs</DependentUpon>

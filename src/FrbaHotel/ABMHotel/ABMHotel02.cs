@@ -8,6 +8,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using FrbaHotel.Prompts;
+using System.Data.SqlClient;
 
 namespace FrbaHotel.ABMHotel
 {
@@ -19,12 +20,14 @@ namespace FrbaHotel.ABMHotel
         public decimal hotel;
         public string nombreHotel;
         public int error;
+        public decimal codigoHotel;
 
         public ABMHotel02(string modo, decimal hotelId)
         {
             InitializeComponent();
             this.StartPosition = FormStartPosition.CenterScreen;
             labelTitulo.AutoSize = false;
+            btn_regimen.Enabled = false;
 
             hotel = hotelId;
             modoABM = modo;
@@ -52,7 +55,6 @@ namespace FrbaHotel.ABMHotel
                     cb_estrellas.Enabled = false;
                     txt_estado.Visible = false;
                     l_estado.Visible = false;
-                    btn_aceptar_nuevo.Visible = false;
                     break;
                 case "UPD":
                     labelTitulo.Text = "Modificación de Hotel";
@@ -68,7 +70,6 @@ namespace FrbaHotel.ABMHotel
                     cb_estrellas.Enabled = true;
                     txt_estado.Visible = false;
                     l_estado.Visible = false;
-                    btn_aceptar_nuevo.Visible = false;
                     break;
             }
 
@@ -169,15 +170,23 @@ namespace FrbaHotel.ABMHotel
                 try
                 {
                     Conexion con = new Conexion();
-                    Encriptor encriptor = new Encriptor();
                     con.strQuery = nombreStored;
                     con.execute();
                     con.command.CommandType = CommandType.StoredProcedure;
                     
-                    if (modoABM != "INS")
-                    {
-                        con.command.Parameters.Add("@codigo", SqlDbType.Decimal).Value = hotel;
-                    }
+                   // if (modoABM != "INS")
+                    //{
+                       // con.command.Parameters.Add("@codigo", SqlDbType.Decimal).Value = hotel;
+                    //}
+                    /*var codigoHotel = new SqlParameter();
+
+                    codigoHotel.ParameterName = "@hotID";
+                    codigoHotel.SqlDbType = System.Data.SqlDbType.Decimal;
+                    codigoHotel.Direction = ParameterDirection.Output;
+                    codigoHotel.Size = 18;
+                    con.command.Parameters.Add(codigoHotel);*/
+
+                    con.command.Parameters.Add("@hotID", SqlDbType.Decimal).Direction = ParameterDirection.Output;
                     con.command.Parameters.Add("@nombre", SqlDbType.NVarChar).Value = txt_nombre_hotel.Text;
                     con.command.Parameters.Add("@mail", SqlDbType.NVarChar).Value = txt_mail.Text;
                     con.command.Parameters.Add("@telefono", SqlDbType.NVarChar).Value = txt_telefono.Text;
@@ -187,7 +196,6 @@ namespace FrbaHotel.ABMHotel
                     con.command.Parameters.Add("@recarga_estrella", SqlDbType.Decimal).Value = txt_recargaEstrella.Text;
                     con.command.Parameters.Add("@ciudad", SqlDbType.NVarChar).Value = txt_ciudad.Text;
                     con.command.Parameters.Add("@pais", SqlDbType.NVarChar).Value = txt_pais.Text;
-                    con.command.Parameters.Add("@fechaCreacion", SqlDbType.DateTime).Value = dt_fecha_cre.Text;
                     if (modoABM == "DLT")
                     {
                         con.command.Parameters.Add("@estado", SqlDbType.Bit).Value = 0;
@@ -199,6 +207,8 @@ namespace FrbaHotel.ABMHotel
 
                     con.openConection();
                     con.command.ExecuteNonQuery();
+                    
+                    codigoHotel = Convert.ToDecimal(con.command.Parameters["@hotID"].Value);
 
                     MessageBox.Show("Operación exitosa", "FOUR SIZONS - FRBA Hoteles", MessageBoxButtons.OK, MessageBoxIcon.Information);
                 }
@@ -295,7 +305,9 @@ namespace FrbaHotel.ABMHotel
             if (error == 0)
             {   
                 ejecutarABMHotel(nombreSP);
-                this.Close();
+                btn_regimen.Enabled = true; 
+                MessageBox.Show("Cree regímenes para el hotel para continuar", "FOUR SIZONS - FRBA Hoteles", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                //this.Close();
             }
 
         }
@@ -336,6 +348,14 @@ namespace FrbaHotel.ABMHotel
 
                 prompt.Close();
             }
+            this.Show();
+        }
+
+        private void btn_regimen_Click(object sender, EventArgs e)
+        {
+            this.Hide();
+            ABMHotel04 formABMHotel04 = new ABMHotel04(modoABM, codigoHotel);
+            formABMHotel04.ShowDialog();
             this.Show();
         }
     }

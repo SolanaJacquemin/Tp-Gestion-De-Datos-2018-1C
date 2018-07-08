@@ -16,7 +16,6 @@ namespace FrbaHotel.RegistrarEstadia
     {
         public bool altaValida;
         public decimal reserva;
-        public decimal estadia;
         public string modoCheck;
         public int error;
         public string nombreSp;
@@ -28,6 +27,7 @@ namespace FrbaHotel.RegistrarEstadia
         public decimal tipoHab;
         public string mensajeHab;
         public string usuario;
+        public decimal codigoEstadia;
 
         public RegistrarEstadia(string modo, decimal res, string user)
         {
@@ -81,35 +81,28 @@ namespace FrbaHotel.RegistrarEstadia
 
                     con.command.Parameters.Add("@reserva", SqlDbType.Decimal).Value = Convert.ToDecimal(txt_CodReserva.Text);
                     con.command.Parameters.Add("@usuario", SqlDbType.NVarChar).Value = usuario;
-                  //  con.command.Parameters.Add("@fecha", SqlDbType.DateTime).Value = dt_Fecha.Value;
+                    con.command.Parameters.Add("@codigo", SqlDbType.Decimal).Direction = ParameterDirection.Output;
 
                     con.openConection();
                     con.command.ExecuteNonQuery();
                     con.closeConection();
 
+                    codigoEstadia = Convert.ToDecimal(con.command.Parameters["@codigo"].Value);
+                    txt_estadia.Text = codigoEstadia.ToString();
+
+
                     MessageBox.Show("Operación exitosa", "FOUR SIZONS - FRBA Hoteles", MessageBoxButtons.OK, MessageBoxIcon.Information);
 
                     try
                     {
-                        con.strQuery = "SELECT Estadia_Codigo From FOUR_SIZONS.Estadia where Reserva_Codigo = " + reserva;
-                        con.executeQuery();
-
-                        if (con.reader())
-                        {
-                            estadia = con.lector.GetDecimal(0);
-                            txt_estadia.Text = estadia.ToString();
-                        }
-                        con.closeConection();
-
-                        DataSet dataset = new DataSet();
                         con.strQuery = "four_sizons.asignarHab";
                         con.execute();
                         con.command.CommandType = CommandType.StoredProcedure;
 
-                        con.command.Parameters.Add("@estadia", SqlDbType.Decimal).Value = estadia;
+                        con.command.Parameters.Add("@estadia", SqlDbType.Decimal).Value = codigoEstadia;
 
                         con.openConection();
-
+                        DataSet dataset = new DataSet();
                         SqlDataAdapter da = new SqlDataAdapter(con.command);
 
                         da.Fill(dataset);
@@ -120,12 +113,12 @@ namespace FrbaHotel.RegistrarEstadia
                         }
                         MessageBox.Show("Las habitaciones que corresponden: " + mensajeHab, "FOUR SIZONS - FRBA Hoteles", MessageBoxButtons.OK, MessageBoxIcon.Information);
                         con.closeConection();
-                    }
+                    /*}
                     catch (Exception ex)
                     {
                         error = 1;
                         MessageBox.Show("Error al completar la operación. " + ex.Message, "FOUR SIZONS - FRBA Hoteles", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                    }
+                    }*/
                 }
                 catch (Exception ex)
                 {
@@ -287,7 +280,7 @@ namespace FrbaHotel.RegistrarEstadia
                     con.execute();
                     con.command.CommandType = CommandType.StoredProcedure;
 
-                    con.command.Parameters.Add("@estadia", SqlDbType.Decimal).Value = estadia;
+                    con.command.Parameters.Add("@estadia", SqlDbType.Decimal).Value = codigoEstadia;
                     con.command.Parameters.Add("@formaPago", SqlDbType.NVarChar).Value = formaPago;
 
                     con.openConection();
@@ -309,7 +302,7 @@ namespace FrbaHotel.RegistrarEstadia
         private void btn_tarjeta_Click(object sender, EventArgs e)
         {
                 this.Hide();
-                AgregarTarjeta formTarjeta = new AgregarTarjeta(estadia);
+                AgregarTarjeta formTarjeta = new AgregarTarjeta(codigoEstadia);
                 formTarjeta.ShowDialog();
                 this.Show();
         }
