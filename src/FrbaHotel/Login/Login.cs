@@ -52,40 +52,57 @@ namespace FrbaHotel
 
             if (errLogin == 0)
             {
-                Conexion con = new Conexion();
-                Encriptor encriptor = new Encriptor();
-                con.strQuery = "FOUR_SIZONS.ValidarUsuario";
-                con.execute();
-                con.command.CommandType = CommandType.StoredProcedure;
-
-                con.command.Parameters.Add("@usuario", SqlDbType.NVarChar).Value = txt_usuario.Text;
-                string msg = encriptor.Encrypt(txt_password.Text);
-                con.command.Parameters.Add("@password", SqlDbType.NVarChar).Value = encriptor.Encrypt(txt_password.Text);
-                con.command.Parameters.Add("@loginok", SqlDbType.Decimal).Direction = ParameterDirection.Output;
-
-                var errMsg = new SqlParameter();
-
-                errMsg.ParameterName = "@errorMsg";
-                errMsg.SqlDbType = System.Data.SqlDbType.NVarChar;
-                errMsg.Direction = ParameterDirection.Output;
-                errMsg.Size = 100;
-                con.command.Parameters.Add(errMsg);
-
-                con.openConection();
-                con.command.ExecuteNonQuery();
-                con.closeConection();
-                if ((Convert.ToDecimal(con.command.Parameters["@loginok"].Value) == 0))
+                try 
                 {
-                    MessageBox.Show(Convert.ToString(con.command.Parameters["@errorMsg"].Value), "FOUR SIZONS - FRBA Hoteles", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                }
-                else
-                {
+                    Conexion con = new Conexion();
+                    Encriptor encriptor = new Encriptor();
+                    con.strQuery = "FOUR_SIZONS.ValidarUsuario2";
+                    con.execute();
+                    con.command.CommandType = CommandType.StoredProcedure;
+
+                    con.command.Parameters.Add("@usuario", SqlDbType.NVarChar).Value = txt_usuario.Text;
+                    string msg = encriptor.Encrypt(txt_password.Text);
+                    con.command.Parameters.Add("@password", SqlDbType.NVarChar).Value = encriptor.Encrypt(txt_password.Text);
+
+                    con.openConection();
+                    con.command.ExecuteNonQuery();
+                    con.closeConection();
+                    //con.command.Parameters.Add("@loginok", SqlDbType.Decimal).Direction = ParameterDirection.Output;
+
+                    /*var errMsg = new SqlParameter();
+
+                    errMsg.ParameterName = "@errorMsg";
+                    errMsg.SqlDbType = System.Data.SqlDbType.NVarChar;
+                    errMsg.Direction = ParameterDirection.Output;
+                    errMsg.Size = 100;
+                    con.command.Parameters.Add(errMsg);
+
+                    con.openConection();
+                    con.command.ExecuteNonQuery();
+                    con.closeConection();
+                    if ((Convert.ToDecimal(con.command.Parameters["@loginok"].Value) == 0))
+                    {
+                        MessageBox.Show(Convert.ToString(con.command.Parameters["@errorMsg"].Value), "FOUR SIZONS - FRBA Hoteles", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    }
+                    else
+                    {
+                        this.Hide();
+                        FrbaHotel.PantallaPrincipal.PantallaPrincipal01 pantallaPrincipal = new PantallaPrincipal01(txt_usuario.Text);
+                        pantallaPrincipal.ShowDialog();
+                        this.Show();
+                        txt_usuario.Clear();
+                        txt_password.Clear();                    
+                    }*/
                     this.Hide();
                     FrbaHotel.PantallaPrincipal.PantallaPrincipal01 pantallaPrincipal = new PantallaPrincipal01(txt_usuario.Text);
                     pantallaPrincipal.ShowDialog();
                     this.Show();
                     txt_usuario.Clear();
-                    txt_password.Clear();                    
+                    txt_password.Clear();  
+                }
+                catch (Exception ex)
+                {
+                    MessageBox.Show(ex.Message, "FOUR SIZONS - FRBA Hoteles", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 }
             }
         }

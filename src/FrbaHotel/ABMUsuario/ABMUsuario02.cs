@@ -148,30 +148,34 @@ namespace FrbaHotel.ABMUsuario
                 }
                 con.closeConection();
             }else{
-                Conexion con = new Conexion();
-
                 if ((modoABM == "INS") && (hotelppal != 0))
                 {
+                    Conexion con = new Conexion();
                     btn_promptHotel.Enabled = false;
                     con.strQuery = "SELECT H.Hotel_Nombre FROM FOUR_SIZONS.Hotel H WHERE H.Hotel_Codigo = " + hotelppal;
+                    con.executeQuery();
+                    if (con.reader())
+                    {
+                        txt_hotel.Text = con.lector.GetString(0);
+                    }
+                    con.closeConection();
                 }
 
                 if (modoABM == "DLT")
                 {
+                    Conexion con = new Conexion();
                     btn_promptHotel.Enabled = false;
                     con.strQuery = "SELECT H.Hotel_Nombre FROM FOUR_SIZONS.UsuarioXHotel UH " +
                                    "JOIN FOUR_SIZONS.Hotel H ON H.Hotel_Codigo = UH.Hotel_Codigo " +
                                    "WHERE UH.Usuario_ID = '" + usuario + "' AND H.Hotel_Codigo = " + hotelppal;
+                    con.executeQuery();
+                    if (con.reader())
+                    {
+                        txt_hotel.Text = con.lector.GetString(0);
+                    }
+                    con.closeConection();
                 }
 
-                con.executeQuery();
-
-                if (con.reader())
-                {
-                    txt_hotel.Text = con.lector.GetString(0);
-                }
-
-                con.closeConection();
             }
 
         }
@@ -296,7 +300,7 @@ namespace FrbaHotel.ABMUsuario
             }
             con.closeConection();
 
-            con.strQuery = "SELECT Rol_Nombre FROM FOUR_SIZONS.Rol";
+            con.strQuery = "SELECT Rol_Nombre FROM FOUR_SIZONS.Rol WHERE Rol_Estado = 1";
             con.executeQuery();
             while (con.reader())
             {

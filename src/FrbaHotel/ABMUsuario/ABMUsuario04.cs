@@ -86,30 +86,35 @@ namespace FrbaHotel.ABMUsuario
 
         private void ABMUsuario04_Load(object sender, EventArgs e)
         {
-            Conexion con = new Conexion();
 
             if ((modoABM == "INS") && (hotel != 0))
             {
+                Conexion con = new Conexion();
                 btn_promptHotel.Enabled = false;
                 con.strQuery = "SELECT H.Hotel_Nombre FROM FOUR_SIZONS.Hotel H WHERE H.Hotel_Codigo = " + hotel;
+                con.executeQuery();
+                con.closeConection();
+                if (con.reader())
+                {
+                    txt_hotel.Text = con.lector.GetString(0);
+                }
             }
 
             if (modoABM == "DLT")
             {
+                Conexion con = new Conexion();
                 btn_promptHotel.Enabled = false;
                 con.strQuery = "SELECT H.Hotel_Nombre FROM FOUR_SIZONS.UsuarioXHotel UH " +
                                "JOIN FOUR_SIZONS.Hotel H ON H.Hotel_Codigo = UH.Hotel_Codigo " +
                                "WHERE UH.Usuario_ID = '" + usuario + "' AND H.Hotel_Codigo = " + hotel;
+                con.executeQuery();
+                con.closeConection();
+                if (con.reader())
+                {
+                    txt_hotel.Text = con.lector.GetString(0);
+                }
             }
 
-            con.executeQuery();
-
-            if(con.reader())
-            {
-                txt_hotel.Text = con.lector.GetString(0);
-            }
-
-            con.closeConection();
         }
     }
 }

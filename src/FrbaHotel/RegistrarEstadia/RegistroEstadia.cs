@@ -85,35 +85,50 @@ namespace FrbaHotel.RegistrarEstadia
 
                     con.openConection();
                     con.command.ExecuteNonQuery();
-                    con.closeConection();
+                    //con.closeConection();
 
                     codigoEstadia = Convert.ToDecimal(con.command.Parameters["@codigo"].Value);
                     txt_estadia.Text = codigoEstadia.ToString();
 
+                    //con.openConection();
+                    /*DataSet dataset = new DataSet();
+                    SqlDataAdapter da = new SqlDataAdapter(con.command);
+
+                    da.Fill(dataset);
+
+                    for (int i = 0; i < dataset.Tables[0].Rows.Count; i++)
+                    {
+                        mensajeHab = mensajeHab + (dataset.Tables[0].Rows[i][0]).ToString() + " ";
+                    }
+                    MessageBox.Show("Las habitaciones que corresponden: " + mensajeHab, "FOUR SIZONS - FRBA Hoteles", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                    */con.closeConection();
+
 
                     MessageBox.Show("Operación exitosa", "FOUR SIZONS - FRBA Hoteles", MessageBoxButtons.OK, MessageBoxIcon.Information);
 
-                    try
-                    {
-                        con.strQuery = "four_sizons.asignarHab";
-                        con.execute();
-                        con.command.CommandType = CommandType.StoredProcedure;
-
-                        con.command.Parameters.Add("@estadia", SqlDbType.Decimal).Value = codigoEstadia;
-
-                        con.openConection();
-                        DataSet dataset = new DataSet();
-                        SqlDataAdapter da = new SqlDataAdapter(con.command);
-
-                        da.Fill(dataset);
-
-                        for (int i = 0; i < dataset.Tables[0].Rows.Count; i++)
+                        try
                         {
-                            mensajeHab = mensajeHab + (dataset.Tables[0].Rows[i][0]).ToString() + " ";
+                            con.strQuery = "four_sizons.asignarHab";
+                            con.execute();
+                            con.command.CommandType = CommandType.StoredProcedure;
+
+                            con.command.Parameters.Add("@estadia", SqlDbType.Decimal).Value = codigoEstadia;
+                            con.command.Parameters.Add("@reserva", SqlDbType.Decimal).Value = reserva;
+
+                            con.openConection();
+                            DataSet dataset = new DataSet();
+                            SqlDataAdapter da = new SqlDataAdapter(con.command);
+                            con.closeConection();
+                            da.Fill(dataset);
+
+
+                            for (int i = 0; i < dataset.Tables[0].Rows.Count; i++)
+                            {
+                                mensajeHab = mensajeHab + (dataset.Tables[0].Rows[i][0]).ToString() + " ";
+                            }
+                            MessageBox.Show("Las habitaciones que corresponden: " + mensajeHab, "FOUR SIZONS - FRBA Hoteles", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                           
                         }
-                        MessageBox.Show("Las habitaciones que corresponden: " + mensajeHab, "FOUR SIZONS - FRBA Hoteles", MessageBoxButtons.OK, MessageBoxIcon.Information);
-                        con.closeConection();
-                    }
                         catch (Exception ex)
                         {
                             error = 1;

@@ -35,7 +35,7 @@ namespace FrbaHotel.Prompts
 
             con.strQuery = "SELECT R.Rol_Codigo, R.Rol_Nombre FROM FOUR_SIZONS.UsuarioXRol UR"
                            + " JOIN FOUR_SIZONS.Rol R ON R.Rol_Codigo = UR.Rol_Codigo"
-                           + " WHERE UR.UsuarioXRol_Estado = 1 AND UR.Usuario_ID = '" + usuario + "'";
+                           + " WHERE UR.UsuarioXRol_Estado = 1 AND R.Rol_Estado = 1 AND UR.Usuario_ID = '" + usuario + "'";
             con.executeQuery();
             if (!con.reader())
             {
