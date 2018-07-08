@@ -5,6 +5,10 @@ IF (OBJECT_ID('FOUR_SIZONS.ValidarUsuario', 'P') IS NOT NULL)
 BEGIN
     DROP PROCEDURE FOUR_SIZONS.ValidarUsuario
 END;
+IF (OBJECT_ID('FOUR_SIZONS.modificarRegXhot', 'P') IS NOT NULL)
+BEGIN
+    DROP PROCEDURE FOUR_SIZONS.modificarRegXhot
+END;
 
 IF (OBJECT_ID('FOUR_SIZONS.asignarHab', 'P') IS NOT NULL)
 BEGIN
@@ -229,6 +233,31 @@ END;
 GO
 
 --------------------------------------------------------ABM USUARIO------------------------------
+
+create function four_sizons.verificarDisp (@inicio datetime , @fin datetime , @hotel numeric(18) , @tipohab numeric(18) , @canthab numeric(18))
+returns bit
+as begin 
+declare @respuesta bit = 1
+declare @aux datetime = convert(datetime,@inicio,121 )
+declare @aux2 datetime
+
+while (datediff(day ,@fin,@aux) != 0)
+begin
+set @aux2=@aux
+declare @habDisp numeric(18) = (select Disp_HabDisponibles from FOUR_SIZONS.Disponibilidad where Hotel_Codigo=@hotel and Habitacion_Tipo_Codigo=@tipohab and datediff(day ,Disp_Fecha,@aux) = 0)
+if(@habDisp<@canthab )
+begin 
+set @respuesta = 0
+end
+set @aux = DATEADD(day, 1, @aux2)
+end
+
+return @respuesta
+end
+go
+
+
+
 create procedure four_sizons.altaUserxRol
 @userID nvarchar(50),
 @rolId numeric(18)
@@ -295,7 +324,7 @@ begin catch
 end catch
 GO
 
-alter procedure FOUR_SIZONS.ValidarUsuario
+create procedure FOUR_SIZONS.ValidarUsuario
 @usuario nvarchar(15), 
 @password nvarchar(100),
 @loginok decimal(1) output,
@@ -441,7 +470,7 @@ create procedure four_sizons.altaUserXHot
 
 go
 
-alter procedure FOUR_SIZONS.ModificacionUsuario
+create procedure FOUR_SIZONS.ModificacionUsuario
 	@username nvarchar(15),
 	@password nvarchar(100),
 	@rolNombre nvarchar(50),
@@ -505,7 +534,7 @@ end catch
 go
 
 ------------------------------------------------ABM CLIENTE------------------------------------------------------------
-alter procedure four_sizons.AltaCliente
+create procedure four_sizons.AltaCliente
 @nombre nvarchar(50),
 @apellido nvarchar(50),
 @numDoc numeric (18),
@@ -590,7 +619,7 @@ go
 
 
 -------------------------------------------------ABM HOTEL------------------------------------------------------------------------
-alter procedure four_sizons.AltaHotel
+create procedure four_sizons.AltaHotel
 @hotID numeric(18) output,
 @nombre nvarchar(50),
 @mail nvarchar(50),
@@ -617,7 +646,7 @@ while(@tipohab<1006)
 		declare @aux2 datetime
 		declare @fin datetime= convert(datetime, '01-01-2021' ,121)
 		declare @hotel numeric(18)=(select top 1 Hotel_Codigo from Hotel order by Hotel_Codigo desc)
-		while (@aux != @fin)
+		while (datediff(day,@aux,@fin)!=0)
 			begin
 				set @aux2= @aux 
 				insert into FOUR_SIZONS.Disponibilidad(Disp_Fecha,Disp_HabDisponibles,Habitacion_Tipo_Codigo,Hotel_Codigo)
@@ -641,7 +670,7 @@ end catch
 go
 
 
-alter procedure four_sizons.altaRegXHotel
+create procedure four_sizons.altaRegXHotel
 @regimen nvarchar(50),
 @hotID numeric(18)
 --@hotel nvarchar(50)
@@ -670,7 +699,7 @@ declare @mensaje_de_error nvarchar(255)
 end catch 
 go
 
-alter procedure four_sizons.modificarRegXhot
+create procedure four_sizons.modificarRegXhot
 @hotel numeric(18),
 @reg nvarchar(50),
 @estado bit
@@ -897,7 +926,7 @@ as begin
 	end
 go
 
-alter procedure four_sizons.AltaHabitacion
+create procedure four_sizons.AltaHabitacion
 @numero numeric(18),
 @piso numeric(18),
 @frente nvarchar(50),
@@ -930,18 +959,18 @@ declare @TipoHabID numeric(18)
 
 					if(exists (select * from FOUR_SIZONS.Disponibilidad where Hotel_Codigo=@HotelId and Habitacion_Tipo_Codigo=@TipoHabID))
 					begin
-					while (@aux != @fin)
+					while (datediff(day, @aux, @fin) != 0)
 						begin
 							set @aux2= @aux 
 							update FOUR_SIZONS.Disponibilidad
 							set Disp_HabDisponibles= Disp_HabDisponibles+1
-							where @TipoHabID=Habitacion_Tipo_Codigo and @aux= Disp_Fecha and Hotel_Codigo =@HotelId
+							where @TipoHabID=Habitacion_Tipo_Codigo and datediff(day, Disp_Fecha, @aux) = 0 and Hotel_Codigo =@HotelId
 							set @aux = DATEADD(day, 1, @aux2)
 						end
 					end
 					else 
 						begin
-							while (@aux != @fin)
+							while (datediff(day,@aux,@fin)!=0)
 							begin
 							set @aux2= @aux 
 							insert into FOUR_SIZONS.Disponibilidad	(Disp_HabDisponibles,Habitacion_Tipo_Codigo,Disp_Fecha,Hotel_Codigo) values(1,@TipoHabID,@aux,@HotelId)
@@ -1019,7 +1048,7 @@ BEGIN
     DROP proc FOUR_SIZONS.DisponibilidadyPrecio
 END;
 go
-alter proc four_sizons.DisponibilidadyPrecio
+create proc four_sizons.DisponibilidadyPrecio
 @fechaInicio datetime,
 @fechaFin datetime,
 @hotid numeric (18),
@@ -1078,12 +1107,13 @@ declare @aux datetime = convert(datetime,@fechaInicio,121 )
 declare @aux2 datetime,
 		@aux3 datetime 
 set @aux3=DATEADD(day, 1, @fechaFin)
-while(@aux!= convert(datetime,@aux3, 121))
+set @aux3=convert(datetime,@aux3,121)
+while(datediff(day,@aux,@aux3)!=0 )
 begin
 set @aux2= @aux
 update FOUR_SIZONS.Disponibilidad
 	set Disp_HabDisponibles = Disp_HabDisponibles - @cantHab
-	where Disp_Fecha= @aux and Hotel_Codigo = @hotId and Habitacion_Tipo_Codigo = @tipohab
+	where datediff(day, Disp_Fecha, @aux) = 0 and Hotel_Codigo = @hotId and Habitacion_Tipo_Codigo = @tipohab
 set @aux = DATEADD(day, 1, @aux2)
 end
 
@@ -1156,18 +1186,19 @@ declare @aux datetime = convert(datetime,@fechaInicio,121 )
 declare @aux2 datetime,
 		@aux3 datetime
 set @aux3= DATEADD(day, 1, @fechaFin)
-while(@aux!= convert(datetime,@aux3, 121))
+set @aux3 = convert(datetime,@aux3, 121)
+while(datediff(day,@aux,@aux3)!=0)
 begin
 set @aux2= @aux
 
 update FOUR_SIZONS.Disponibilidad
 	set Disp_HabDisponibles = Disp_HabDisponibles - @cantHab
-	where Disp_Fecha= @aux and Hotel_Codigo = @hotId and Habitacion_Tipo_Codigo = @tipohab
+	where datediff(day, Disp_Fecha, @aux) = 0 and Hotel_Codigo = @hotId and Habitacion_Tipo_Codigo = @tipohab
 set @aux = DATEADD(day, 1, @aux2)
 end
 	end
 	else RAISERROR('no hay lugar en este hotel para estas fechas, intente nuevamente',16,1)
-		ROLLBACK TRANSACTION
+	rollback transaction
 
 	end
 
@@ -1193,13 +1224,14 @@ end
 			declare @a2 datetime,
 					@a3 datetime
 			set @a3= DATEADD(day, 1, @fechaFin)
-			while(@a!= convert(datetime,@a3, 121))
+			set @a3=convert(datetime,@a3, 121)
+			while(datediff(day,@a,@a3)!=0)
 				begin
 					set @a2= @a
 
 					update FOUR_SIZONS.Disponibilidad
 					set Disp_HabDisponibles = Disp_HabDisponibles + @cantHab
-					where Disp_Fecha= @aux and Hotel_Codigo = @hotId and Habitacion_Tipo_Codigo = @tipohab
+					where datediff(day, Disp_Fecha, @aux) = 0 and Hotel_Codigo = @hotId and Habitacion_Tipo_Codigo = @tipohab
 					set @aux = DATEADD(day, 1, @aux2)
 				end
 
@@ -1217,27 +1249,7 @@ RAISERROR(@mensaje_de_error,11,1)
 rollback tran 
 end catch
 go
-create function four_sizons.verificarDisp (@inicio datetime , @fin datetime , @hotel numeric(18) , @tipohab numeric(18) , @canthab numeric(18))
-returns bit
-as begin 
-declare @respuesta bit = 1
-declare @aux datetime = convert(datetime,@inicio,121 )
-declare @aux2 datetime
 
-while (@aux!= convert(datetime,@fin, 121))
-begin
-set @aux2=@aux
-declare @habDisp numeric(18) = (select Disp_HabDisponibles from FOUR_SIZONS.Disponibilidad where Hotel_Codigo=@hotel and Habitacion_Tipo_Codigo=@tipohab and Disp_Fecha=@aux)
-if(@habDisp<@canthab )
-begin 
-set @respuesta = 0
-end
-set @aux = DATEADD(day, 1, @aux2)
-end
-
-return @respuesta
-end
-go
 
 
 -- este no va mas xq no es bueno ejecutar un proc dentro de otro proc
@@ -1260,7 +1272,7 @@ set @aux2= @aux
 
 update FOUR_SIZONS.Disponibilidad
 	set Disp_HabDisponibles = Disp_HabDisponibles - @cantHab
-	where Disp_Fecha= @aux and Hotel_Codigo = @hotel and Habitacion_Tipo_Codigo = @hab_tipo
+	where datediff(day, Disp_Fecha, @aux) = 0 and Hotel_Codigo = @hotel and Habitacion_Tipo_Codigo = @hab_tipo
 set @aux = DATEADD(day, 1, @aux2)
 end
 
@@ -1543,7 +1555,7 @@ end
 GO
 ----------------------------------------------------------------------------------
 
-alter proc FOUR_SIZONS.registrarCheckIn
+create proc FOUR_SIZONS.registrarCheckIn
 @reserva numeric(18),
 @usuario nvarchar(10),
 @codigo numeric(18) output
