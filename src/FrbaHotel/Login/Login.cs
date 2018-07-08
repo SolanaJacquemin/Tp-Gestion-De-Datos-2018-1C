@@ -56,7 +56,7 @@ namespace FrbaHotel
                 {
                     Conexion con = new Conexion();
                     Encriptor encriptor = new Encriptor();
-                    con.strQuery = "FOUR_SIZONS.ValidarUsuario2";
+                    con.strQuery = "FOUR_SIZONS.ValidarUsuario";
                     con.execute();
                     con.command.CommandType = CommandType.StoredProcedure;
 
