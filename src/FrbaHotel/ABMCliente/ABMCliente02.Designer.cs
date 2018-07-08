@@ -35,6 +35,8 @@
             this.btn_aceptar_nuevo = new System.Windows.Forms.Button();
             this.labelTitulo = new System.Windows.Forms.Label();
             this.groupBox1 = new System.Windows.Forms.GroupBox();
+            this.txt_estado = new System.Windows.Forms.TextBox();
+            this.lbl_estado = new System.Windows.Forms.Label();
             this.dt_fecha_nac = new System.Windows.Forms.DateTimePicker();
             this.label16 = new System.Windows.Forms.Label();
             this.label12 = new System.Windows.Forms.Label();
@@ -67,9 +69,21 @@
             this.label5 = new System.Windows.Forms.Label();
             this.label4 = new System.Windows.Forms.Label();
             this.label3 = new System.Windows.Forms.Label();
-            this.txt_estado = new System.Windows.Forms.TextBox();
-            this.lbl_estado = new System.Windows.Forms.Label();
             this.lbl_obligacion = new System.Windows.Forms.Label();
+            this.a1 = new System.Windows.Forms.Label();
+            this.a4 = new System.Windows.Forms.Label();
+            this.a5 = new System.Windows.Forms.Label();
+            this.a6 = new System.Windows.Forms.Label();
+            this.a7 = new System.Windows.Forms.Label();
+            this.a8 = new System.Windows.Forms.Label();
+            this.a2 = new System.Windows.Forms.Label();
+            this.a12 = new System.Windows.Forms.Label();
+            this.a13 = new System.Windows.Forms.Label();
+            this.a14 = new System.Windows.Forms.Label();
+            this.a9 = new System.Windows.Forms.Label();
+            this.a10 = new System.Windows.Forms.Label();
+            this.a11 = new System.Windows.Forms.Label();
+            this.a3 = new System.Windows.Forms.Label();
             this.groupBox1.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -143,6 +157,19 @@
             this.groupBox1.Controls.Add(this.lpuntos);
             this.groupBox1.Controls.Add(this.label10);
             this.groupBox1.Controls.Add(this.txt_nro_doc);
+            this.groupBox1.Controls.Add(this.a3);
+            this.groupBox1.Controls.Add(this.a2);
+            this.groupBox1.Controls.Add(this.a11);
+            this.groupBox1.Controls.Add(this.a10);
+            this.groupBox1.Controls.Add(this.a14);
+            this.groupBox1.Controls.Add(this.a13);
+            this.groupBox1.Controls.Add(this.a9);
+            this.groupBox1.Controls.Add(this.a8);
+            this.groupBox1.Controls.Add(this.a12);
+            this.groupBox1.Controls.Add(this.a7);
+            this.groupBox1.Controls.Add(this.a6);
+            this.groupBox1.Controls.Add(this.a5);
+            this.groupBox1.Controls.Add(this.a4);
             this.groupBox1.Controls.Add(this.txt_apellido);
             this.groupBox1.Controls.Add(this.txt_ciudad);
             this.groupBox1.Controls.Add(this.txt_pais);
@@ -171,9 +198,25 @@
             this.groupBox1.Controls.Add(this.label3);
             this.groupBox1.Location = new System.Drawing.Point(25, 63);
             this.groupBox1.Name = "groupBox1";
-            this.groupBox1.Size = new System.Drawing.Size(418, 432);
+            this.groupBox1.Size = new System.Drawing.Size(440, 432);
             this.groupBox1.TabIndex = 44;
             this.groupBox1.TabStop = false;
+            // 
+            // txt_estado
+            // 
+            this.txt_estado.Location = new System.Drawing.Point(285, 310);
+            this.txt_estado.Name = "txt_estado";
+            this.txt_estado.Size = new System.Drawing.Size(121, 20);
+            this.txt_estado.TabIndex = 70;
+            // 
+            // lbl_estado
+            // 
+            this.lbl_estado.AutoSize = true;
+            this.lbl_estado.Location = new System.Drawing.Point(231, 313);
+            this.lbl_estado.Name = "lbl_estado";
+            this.lbl_estado.Size = new System.Drawing.Size(40, 13);
+            this.lbl_estado.TabIndex = 71;
+            this.lbl_estado.Text = "Estado";
             // 
             // dt_fecha_nac
             // 
@@ -432,36 +475,160 @@
             this.label3.TabIndex = 54;
             this.label3.Text = "Nombre";
             // 
-            // txt_estado
-            // 
-            this.txt_estado.Location = new System.Drawing.Point(285, 310);
-            this.txt_estado.Name = "txt_estado";
-            this.txt_estado.Size = new System.Drawing.Size(121, 20);
-            this.txt_estado.TabIndex = 70;
-            // 
-            // lbl_estado
-            // 
-            this.lbl_estado.AutoSize = true;
-            this.lbl_estado.Location = new System.Drawing.Point(231, 313);
-            this.lbl_estado.Name = "lbl_estado";
-            this.lbl_estado.Size = new System.Drawing.Size(40, 13);
-            this.lbl_estado.TabIndex = 71;
-            this.lbl_estado.Text = "Estado";
-            // 
             // lbl_obligacion
             // 
             this.lbl_obligacion.AutoSize = true;
-            this.lbl_obligacion.Location = new System.Drawing.Point(22, 498);
+            this.lbl_obligacion.Location = new System.Drawing.Point(49, 498);
             this.lbl_obligacion.Name = "lbl_obligacion";
-            this.lbl_obligacion.Size = new System.Drawing.Size(169, 13);
+            this.lbl_obligacion.Size = new System.Drawing.Size(101, 13);
             this.lbl_obligacion.TabIndex = 45;
-            this.lbl_obligacion.Text = "Todos los campos son obligatorios";
+            this.lbl_obligacion.Text = "Campos obligatorios";
+            // 
+            // a1
+            // 
+            this.a1.AutoSize = true;
+            this.a1.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.a1.Location = new System.Drawing.Point(37, 498);
+            this.a1.Name = "a1";
+            this.a1.Size = new System.Drawing.Size(15, 20);
+            this.a1.TabIndex = 46;
+            this.a1.Text = "*";
+            // 
+            // a4
+            // 
+            this.a4.AutoSize = true;
+            this.a4.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.a4.Location = new System.Drawing.Point(216, 308);
+            this.a4.Name = "a4";
+            this.a4.Size = new System.Drawing.Size(15, 20);
+            this.a4.TabIndex = 46;
+            this.a4.Text = "*";
+            // 
+            // a5
+            // 
+            this.a5.AutoSize = true;
+            this.a5.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.a5.Location = new System.Drawing.Point(216, 239);
+            this.a5.Name = "a5";
+            this.a5.Size = new System.Drawing.Size(15, 20);
+            this.a5.TabIndex = 46;
+            this.a5.Text = "*";
+            // 
+            // a6
+            // 
+            this.a6.AutoSize = true;
+            this.a6.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.a6.Location = new System.Drawing.Point(330, 206);
+            this.a6.Name = "a6";
+            this.a6.Size = new System.Drawing.Size(15, 20);
+            this.a6.TabIndex = 46;
+            this.a6.Text = "*";
+            // 
+            // a7
+            // 
+            this.a7.AutoSize = true;
+            this.a7.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.a7.Location = new System.Drawing.Point(330, 169);
+            this.a7.Name = "a7";
+            this.a7.Size = new System.Drawing.Size(15, 20);
+            this.a7.TabIndex = 46;
+            this.a7.Text = "*";
+            // 
+            // a8
+            // 
+            this.a8.AutoSize = true;
+            this.a8.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.a8.Location = new System.Drawing.Point(330, 132);
+            this.a8.Name = "a8";
+            this.a8.Size = new System.Drawing.Size(15, 20);
+            this.a8.TabIndex = 46;
+            this.a8.Text = "*";
+            // 
+            // a2
+            // 
+            this.a2.AutoSize = true;
+            this.a2.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.a2.Location = new System.Drawing.Point(330, 369);
+            this.a2.Name = "a2";
+            this.a2.Size = new System.Drawing.Size(15, 20);
+            this.a2.TabIndex = 46;
+            this.a2.Text = "*";
+            // 
+            // a12
+            // 
+            this.a12.AutoSize = true;
+            this.a12.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.a12.Location = new System.Drawing.Point(213, 97);
+            this.a12.Name = "a12";
+            this.a12.Size = new System.Drawing.Size(15, 20);
+            this.a12.TabIndex = 46;
+            this.a12.Text = "*";
+            // 
+            // a13
+            // 
+            this.a13.AutoSize = true;
+            this.a13.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.a13.Location = new System.Drawing.Point(213, 60);
+            this.a13.Name = "a13";
+            this.a13.Size = new System.Drawing.Size(15, 20);
+            this.a13.TabIndex = 46;
+            this.a13.Text = "*";
+            // 
+            // a14
+            // 
+            this.a14.AutoSize = true;
+            this.a14.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.a14.Location = new System.Drawing.Point(213, 23);
+            this.a14.Name = "a14";
+            this.a14.Size = new System.Drawing.Size(15, 20);
+            this.a14.TabIndex = 46;
+            this.a14.Text = "*";
+            // 
+            // a9
+            // 
+            this.a9.AutoSize = true;
+            this.a9.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.a9.Location = new System.Drawing.Point(412, 96);
+            this.a9.Name = "a9";
+            this.a9.Size = new System.Drawing.Size(15, 20);
+            this.a9.TabIndex = 46;
+            this.a9.Text = "*";
+            // 
+            // a10
+            // 
+            this.a10.AutoSize = true;
+            this.a10.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.a10.Location = new System.Drawing.Point(412, 59);
+            this.a10.Name = "a10";
+            this.a10.Size = new System.Drawing.Size(15, 20);
+            this.a10.TabIndex = 46;
+            this.a10.Text = "*";
+            // 
+            // a11
+            // 
+            this.a11.AutoSize = true;
+            this.a11.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.a11.Location = new System.Drawing.Point(412, 22);
+            this.a11.Name = "a11";
+            this.a11.Size = new System.Drawing.Size(15, 20);
+            this.a11.TabIndex = 46;
+            this.a11.Text = "*";
+            // 
+            // a3
+            // 
+            this.a3.AutoSize = true;
+            this.a3.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.a3.Location = new System.Drawing.Point(213, 342);
+            this.a3.Name = "a3";
+            this.a3.Size = new System.Drawing.Size(15, 20);
+            this.a3.TabIndex = 46;
+            this.a3.Text = "*";
             // 
             // ABMCliente02
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(454, 566);
+            this.ClientSize = new System.Drawing.Size(477, 566);
             this.Controls.Add(this.lbl_obligacion);
             this.Controls.Add(this.groupBox1);
             this.Controls.Add(this.labelTitulo);
@@ -470,6 +637,7 @@
             this.Controls.Add(this.btn_volver);
             this.Controls.Add(this.label1);
             this.Controls.Add(this.label11);
+            this.Controls.Add(this.a1);
             this.Name = "ABMCliente02";
             this.Text = "Alta Cliente";
             this.Load += new System.EventHandler(this.ABMCliente02_Load);
@@ -524,5 +692,19 @@
         private System.Windows.Forms.TextBox txt_estado;
         private System.Windows.Forms.Label lbl_estado;
         private System.Windows.Forms.Label lbl_obligacion;
+        private System.Windows.Forms.Label a3;
+        private System.Windows.Forms.Label a2;
+        private System.Windows.Forms.Label a11;
+        private System.Windows.Forms.Label a10;
+        private System.Windows.Forms.Label a14;
+        private System.Windows.Forms.Label a13;
+        private System.Windows.Forms.Label a9;
+        private System.Windows.Forms.Label a8;
+        private System.Windows.Forms.Label a12;
+        private System.Windows.Forms.Label a7;
+        private System.Windows.Forms.Label a6;
+        private System.Windows.Forms.Label a5;
+        private System.Windows.Forms.Label a4;
+        private System.Windows.Forms.Label a1;
     }
 }

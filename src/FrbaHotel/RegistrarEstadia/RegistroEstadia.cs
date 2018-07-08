@@ -113,15 +113,15 @@ namespace FrbaHotel.RegistrarEstadia
                         }
                         MessageBox.Show("Las habitaciones que corresponden: " + mensajeHab, "FOUR SIZONS - FRBA Hoteles", MessageBoxButtons.OK, MessageBoxIcon.Information);
                         con.closeConection();
-                    /*}
-                    catch (Exception ex)
-                    {
-                        error = 1;
-                        MessageBox.Show("Error al completar la operación. " + ex.Message, "FOUR SIZONS - FRBA Hoteles", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                    }*/
+                    }
+                        catch (Exception ex)
+                        {
+                            error = 1;
+                            MessageBox.Show("Error al completar la operación. " + ex.Message, "FOUR SIZONS - FRBA Hoteles", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                        }
                 }
                 catch (Exception ex)
-                {
+                    {
                     error = 1;
                     MessageBox.Show("Error al completar la operación. " + ex.Message, "FOUR SIZONS - FRBA Hoteles", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 }
@@ -132,7 +132,7 @@ namespace FrbaHotel.RegistrarEstadia
                 error = 1;
                 MessageBox.Show("No se ha completado la operación", "FOUR SIZONS - FRBA Hoteles", MessageBoxButtons.OK, MessageBoxIcon.Information);
             }
-
+        
         }
 
         private void RegistrarEstadia_Load_1(object sender, System.EventArgs e)

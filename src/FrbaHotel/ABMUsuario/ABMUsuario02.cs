@@ -70,7 +70,8 @@ namespace FrbaHotel.ABMUsuario
                     labelTitulo.Text = "Modificación de Usuario";
                     txt_usuario.Text = usuario;
                     txt_usuario.ReadOnly = true;
-                    txt_estado.ReadOnly = true;
+                    txt_estado.Visible = false;
+                    l_estado.Visible = false;
                     lhotel.Visible = false;
                     txt_hotel.Visible = false;
                     btn_promptHotel.Visible = false;

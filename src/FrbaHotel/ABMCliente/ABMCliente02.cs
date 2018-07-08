@@ -38,7 +38,6 @@ namespace FrbaHotel.ABMCliente
                     lpuntos.Visible = false;
                     lbl_estado.Visible = false;
                     txt_estado.Visible = false;
-                    lbl_obligacion.ForeColor = Color.Red;
                     break;
 
                 case "DLT":
@@ -160,12 +159,12 @@ namespace FrbaHotel.ABMCliente
                     error = 1;
                     MessageBox.Show("Por favor, el número de documento debe ser un dato numérico", "FOUR SIZONS - FRBA Hoteles", MessageBoxButtons.OK, MessageBoxIcon.Information);
                 };
-                if (IsNumber(txt_piso.Text) == false)
+                if (IsNumber(txt_piso.Text) == false && txt_piso.Text != "")
                 {
                     error = 1;
                     MessageBox.Show("Por favor, el piso debe ser un dato numérico", "FOUR SIZONS - FRBA Hoteles", MessageBoxButtons.OK, MessageBoxIcon.Information);
                 };
-                if (IsNumber(txt_nro_calle.Text) == false)
+                if (IsNumber(txt_nro_calle.Text) == false && txt_nro_calle.Text !="")
                 {
                     error = 1;
                     MessageBox.Show("Por favor, el número de calle debe ser un dato numérico", "FOUR SIZONS - FRBA Hoteles", MessageBoxButtons.OK, MessageBoxIcon.Information);
@@ -205,6 +204,22 @@ namespace FrbaHotel.ABMCliente
                 error = 1;
                 MessageBox.Show("Por favor, complete los campos obligatorios", "FOUR SIZONS - FRBA Hoteles", MessageBoxButtons.OK, MessageBoxIcon.Information);
             };
+
+            if (IsNumber(txt_nro_doc.Text) == false)
+            {
+                error = 1;
+                MessageBox.Show("Por favor, el número de documento debe ser un dato numérico", "FOUR SIZONS - FRBA Hoteles", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            };
+            if (IsNumber(txt_piso.Text) == false && txt_piso.Text != "")
+            {
+                error = 1;
+                MessageBox.Show("Por favor, el piso debe ser un dato numérico", "FOUR SIZONS - FRBA Hoteles", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            };
+            if (IsNumber(txt_nro_calle.Text) == false && txt_nro_calle.Text != "")
+            {
+                error = 1;
+                MessageBox.Show("Por favor, el número de calle debe ser un dato numérico", "FOUR SIZONS - FRBA Hoteles", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            };
             if (error == 0)
             {
                 nombre_sp = "FOUR_SIZONS.AltaCliente";
@@ -215,8 +230,11 @@ namespace FrbaHotel.ABMCliente
                 txt_telefono.Text = "";
                 txt_mail.Text = "";
                 txt_nombre.Text = "";
+                txt_piso.Text = "";
+                txt_nro_calle.Text = "";
                 txt_apellido.Text = "";
                 txt_nacionalidad.Text = "";
+                txt_localidad.Text = "";
                 txt_pais.Text = "";
                 txt_ciudad.Text = "";
 
@@ -235,6 +253,7 @@ namespace FrbaHotel.ABMCliente
             if (txt_telefono.Text == "") abm_valido = false;
             if (txt_direccion.Text == "") abm_valido = false;
             if (dt_fecha_nac.Text == "") abm_valido = false;
+            if (txt_nro_calle.Text == "") abm_valido = false;
             if (txt_mail.Text == "") abm_valido = false;
             if (txt_nacionalidad.Text == "") abm_valido = false;
 

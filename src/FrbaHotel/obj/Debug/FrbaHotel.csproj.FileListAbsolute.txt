@@ -196,3 +196,4 @@ C:\Users\Nicolas\Desktop\Gestion de Datos\Tp-Gestion-De-Datos-2018-1C\src\FrbaHo
 C:\Users\Nicolas\Desktop\Gestion de Datos\Tp-Gestion-De-Datos-2018-1C\src\FrbaHotel\obj\Debug\FrbaHotel.csproj.GenerateResource.Cache
 C:\Users\Nicolas\Desktop\Gestion de Datos\Tp-Gestion-De-Datos-2018-1C\src\FrbaHotel\obj\Debug\FrbaHotel.exe
 C:\Users\Nicolas\Desktop\Gestion de Datos\Tp-Gestion-De-Datos-2018-1C\src\FrbaHotel\obj\Debug\FrbaHotel.pdb
+C:\Users\Janice\TP ACTUALIZADO 2\Tp-Gestion-De-Datos-2018-1C\src\FrbaHotel\obj\Debug\FrbaHotel.ABMHotel.ABMHotel04.resources

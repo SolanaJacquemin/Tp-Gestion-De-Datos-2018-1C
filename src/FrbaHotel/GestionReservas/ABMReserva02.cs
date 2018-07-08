@@ -138,12 +138,16 @@ namespace FrbaHotel.GestionReservas
 
         bool IsNumber(string s)
         {
-            foreach (char c in s)
+            if (s != "")
             {
-                if (!Char.IsDigit(c))
-                    return false;
+                foreach (char c in s)
+                {
+                    if (!Char.IsDigit(c))
+                        return false;
+                }
+                return true;
             }
-            return true;
+            else return false;
         }
 
         private void boton_aceptar_Click(object sender, EventArgs e)
@@ -416,7 +420,7 @@ namespace FrbaHotel.GestionReservas
             if (dt_fechaHasta.Value < dt_fechaDesde.Value)
             {
                 error = 1;
-                MessageBox.Show("El campo Fecha Hasta no puede ser igual o posterior a Fecha Desde", "FOUR SIZONS - FRBA Hoteles", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                MessageBox.Show("El campo Fecha Desde no puede ser igual o posterior a Fecha Hasta", "FOUR SIZONS - FRBA Hoteles", MessageBoxButtons.OK, MessageBoxIcon.Information);
             }
             if (regimenID == 0)
             {

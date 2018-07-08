@@ -14,7 +14,7 @@ namespace FrbaHotel.ABMRol
     {
         public string dgv_Roles_Id;
         public int index;
-        public int estado;
+        public bool estado;
 
         public ABMRol01()
         {
@@ -89,6 +89,7 @@ namespace FrbaHotel.ABMRol
             int index = e.RowIndex;
             DataGridViewRow selectedRow = dgv_Roles.Rows[index];
             dgv_Roles_Id = selectedRow.Cells[0].Value.ToString();
+            estado = Convert.ToBoolean(selectedRow.Cells[2].Value);
         }
 
         private void refrescarGrid()
@@ -129,7 +130,7 @@ namespace FrbaHotel.ABMRol
 
         private void boton_baja_Click(object sender, EventArgs e)
         {
-            if (dgv_Roles.SelectedRows.Count > 0)
+            if (dgv_Roles.SelectedRows.Count > 0 && estado==true)
             {
                 string modo = "DLT";
                 this.Hide();
@@ -141,21 +142,27 @@ namespace FrbaHotel.ABMRol
             }
             else
             {
-                MessageBox.Show("Debe seleccionar un rol de la grilla", "FOUR SIZONS - FRBA Hoteles", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                MessageBox.Show("Por favor, seleccione un rol que se encuentre habilitado de la grilla", "FOUR SIZONS - FRBA Hoteles", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
 
         private void boton_modificacion_Click(object sender, EventArgs e)
         {
             if (dgv_Roles.SelectedRows.Count > 0)
-            {
-                string modo = "UPD";
-                this.Hide();
-                ABMRol02 formABMRol02 = new ABMRol02(modo, dgv_Roles_Id);
-                formABMRol02.ShowDialog();
-                this.Show();
-                this.buscar();
-                this.refrescarGrid();
+            {    
+                if(estado==false)
+                {
+                    if (MessageBox.Show("El rol se encuentra inhabilitado, desea darle de alta?", "FOUR SIZONS - FRBA Hoteles", MessageBoxButtons.YesNo, MessageBoxIcon.Question) == DialogResult.Yes)
+                    {
+                        string modo = "UPD";
+                        this.Hide();
+                        ABMRol02 formABMRol02 = new ABMRol02(modo, dgv_Roles_Id);
+                        formABMRol02.ShowDialog();
+                        this.Show();
+                        this.buscar();
+                        this.refrescarGrid();
+                    }
+                }
             }
             else
             {
@@ -174,6 +181,7 @@ namespace FrbaHotel.ABMRol
             txt_nombre.Text = "";
             dgv_Roles.Rows.Clear();
             iniciarGrilla();
+            refrescarGrid();
         }
 
     }

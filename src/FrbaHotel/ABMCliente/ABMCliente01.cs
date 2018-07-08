@@ -16,6 +16,7 @@ namespace FrbaHotel.AbmCliente
     {
         public decimal dgv_cliente_ID;
         public int index;
+        public bool estado;
 
         public ABMCliente01()
         {
@@ -163,7 +164,7 @@ namespace FrbaHotel.AbmCliente
         private void btn_baja_Click(object sender, EventArgs e)
         {
             
-            if (dgv_Clientes.SelectedRows.Count > 0)
+            if (dgv_Clientes.SelectedRows.Count > 0 && estado==true)
             {
                 string modo = "DLT";
                 this.Hide();
@@ -175,7 +176,7 @@ namespace FrbaHotel.AbmCliente
             }
             else
             {
-                MessageBox.Show("Debe seleccionar un cliente de la grilla", "FOUR SIZONS - FRBA Hoteles", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                MessageBox.Show("Por favor, seleccione un cliente que se encuentre habilitado de la grilla", "FOUR SIZONS - FRBA Hoteles", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
            
         }
@@ -184,13 +185,19 @@ namespace FrbaHotel.AbmCliente
         {
             if (dgv_Clientes.SelectedRows.Count > 0)
             {
-                string modo = "UPD";
-                this.Hide();
-                ABMCliente02 formABMCliente02 = new ABMCliente02(modo, dgv_cliente_ID);
-                formABMCliente02.ShowDialog();
-                this.Show();
-                limpiar();
-                this.refrescarGrid();
+                if (estado == false)
+                {
+                    if (MessageBox.Show("El cliente se encuentra inhabilitado, desea darle de alta?", "FOUR SIZONS - FRBA Hoteles", MessageBoxButtons.YesNo, MessageBoxIcon.Question) == DialogResult.Yes)
+                    {
+                        string modo = "UPD";
+                        this.Hide();
+                        ABMCliente02 formABMCliente02 = new ABMCliente02(modo, dgv_cliente_ID);
+                        formABMCliente02.ShowDialog();
+                        this.Show();
+                        limpiar();
+                        this.refrescarGrid();
+                    }
+                }
             }
             else
             {
@@ -223,6 +230,7 @@ namespace FrbaHotel.AbmCliente
             int index = e.RowIndex;
             DataGridViewRow selectedRow = dgv_Clientes.Rows[index];
             dgv_cliente_ID = Convert.ToDecimal(selectedRow.Cells[0].Value.ToString());
+            estado = Convert.ToBoolean(selectedRow.Cells[13].Value);
         }
     }
 }

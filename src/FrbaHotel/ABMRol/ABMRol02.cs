@@ -19,6 +19,10 @@ namespace FrbaHotel.ABMRol
         public string func_nombre;
         public decimal func_codigo;
         public bool altaValida;
+        public string func1;
+        public string func2;
+        public bool repeValido;
+        public int i;
 
         public ABMRol02(string modo, string rolId)
         {
@@ -46,10 +50,12 @@ namespace FrbaHotel.ABMRol
                     btn_eliminar.Enabled = false;
                     btn_eliminarTodo.Enabled = false;
                     txt_estado.Enabled = false;
+                    lbl_obligacion.Visible = false;
                     break;
                 case "UPD":
                     labelTitulo.Text = "Modificación de Rol";
-                    txt_estado.Enabled = false;
+                    txt_estado.Visible = false;
+                    lEstado.Visible = false;
                     break;
             }
         }
@@ -63,7 +69,7 @@ namespace FrbaHotel.ABMRol
             con.executeQuery();
             if (!con.reader())
             {
-                MessageBox.Show("No se han encontrado usuarios. Revise los criterios de búsqueda", "FOUR SIZONS - FRBA Hoteles", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                MessageBox.Show("No se han encontrado roles. Revise los criterios de búsqueda", "FOUR SIZONS - FRBA Hoteles", MessageBoxButtons.OK, MessageBoxIcon.Information);
                 con.strQuery = "";
                 con.closeConection();
                 return;
@@ -185,6 +191,7 @@ namespace FrbaHotel.ABMRol
             altaValida = true;
 
             if (txt_nombreRol.Text == "") altaValida = false;
+            if(lb_func_usralta.Items.Count==0) altaValida =false;
             return altaValida;
         }
 
@@ -201,6 +208,22 @@ namespace FrbaHotel.ABMRol
             }
             else return false;
         }
+
+
+          public bool verificarRepetidos()
+          {
+              repeValido=true;
+              for (i = 0; i < lb_func_usralta.Items.Count; i++)
+              {
+                    func1 = lb_func_usralta.Items[i].ToString();
+                    for (int j =0;j<lb_func_usralta.Items.Count;j++)
+                        {
+                            func2 = lb_func_usralta.Items[j].ToString();
+                            if( func1==func2 && i !=j ) return false;
+                        }
+              }
+              return repeValido;
+          }
 
         private void boton_aceptar_Click(object sender, EventArgs e)
         {
@@ -219,8 +242,14 @@ namespace FrbaHotel.ABMRol
                     error = 1;
                     MessageBox.Show("Por favor, el nombre del rol no debe contener números", "FOUR SIZONS - FRBA Hoteles", MessageBoxButtons.OK, MessageBoxIcon.Information);
                 }
+                if (verificarRepetidos() == false)
+                {
+                    error = 1;
+                    MessageBox.Show("Por favor, un rol no puede tener más de una vez la misma funcionalidad", "FOUR SIZONS - FRBA Hoteles", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                }
+
             }
-            
+          
             switch (modoABM)
             {
                 case "INS":
@@ -347,6 +376,7 @@ namespace FrbaHotel.ABMRol
             {
                 error = 1;
                 MessageBox.Show("No se ha completado la operación", "FOUR SIZONS - FRBA Hoteles", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                this.Show();
             }
         }
 

@@ -29,6 +29,7 @@ namespace FrbaHotel.ABMHotel
 
             cb_estrellas.DropDownStyle = ComboBoxStyle.DropDownList;
 
+            cb_estrellas.Items.Add("");
             cb_estrellas.Items.Add("1");
             cb_estrellas.Items.Add("2");
             cb_estrellas.Items.Add("3");
@@ -130,14 +131,13 @@ namespace FrbaHotel.ABMHotel
 
           public void limpiar()
           {
-            iniciarGrilla();
-
+            dgv_Hoteles.Rows.Clear();
             txt_codigo.Text = "";
             txt_nombre.Text = "";
             txt_mail.Text = "";
             txt_telefono.Text = "";
             txt_calle.Text = "";
-            cb_estrellas.Text = "";
+            cb_estrellas.SelectedItem = "";
             txt_ciudad.Text = "";
             txt_pais.Text = "";
             iniciarGrilla();
