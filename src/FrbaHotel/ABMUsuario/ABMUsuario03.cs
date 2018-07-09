@@ -37,7 +37,7 @@ namespace FrbaHotel.ABMUsuario
         private void btn_agregar_Click(object sender, EventArgs e)
         {
             string modo = "INS";
-            this.Hide();
+            //this.Hide();
             ABMUsuario04 formABMUsuario04 = new ABMUsuario04(modo, usuario, hotel_id);
             formABMUsuario04.ShowDialog();
             this.Show();

@@ -27,6 +27,7 @@ namespace FrbaHotel.ABMUsuario
             usuario = user;
             modoABM = modo;
 
+            txt_hotel.Enabled = false;
             switch (modoABM)
             {
                 case "INS":
@@ -34,7 +35,6 @@ namespace FrbaHotel.ABMUsuario
                     break;
                 case "DLT":
                     labelTitulo.Text = "Eliminar Hotel";
-                    txt_hotel.Enabled = false;
                     btn_promptHotel.Visible = false;
                     break;
             }

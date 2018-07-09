@@ -26,6 +26,7 @@ namespace FrbaHotel.ABMUsuario
             usuario = user;
             modoABM = modo;
 
+            txt_rol.Enabled = false;
             switch (modoABM)
             {
                 case "INS":
@@ -33,7 +34,6 @@ namespace FrbaHotel.ABMUsuario
                     break;
                 case "DLT":
                     labelTitulo.Text = "Eliminar Rol";
-                    txt_rol.Enabled = false;
                     btn_promptUsu.Visible = false;
                     break;
             }

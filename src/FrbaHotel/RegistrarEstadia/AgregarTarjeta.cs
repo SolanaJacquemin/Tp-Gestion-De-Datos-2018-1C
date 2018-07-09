@@ -21,17 +21,16 @@ namespace FrbaHotel.RegistrarEstadia
         public AgregarTarjeta(decimal est)
         {
             InitializeComponent();
+            this.StartPosition = FormStartPosition.CenterScreen;
             estadia = est;
+
+            dt_fecha_venc.Format = DateTimePickerFormat.Custom;
+            dt_fecha_venc.CustomFormat = "dd/MM/yyyy";
             
         }
 
         private void AgregarTarjeta_Load_1(object sender, EventArgs e)
         {
-            //public FacturarEstadia01(decimal estadia)
-            this.StartPosition = FormStartPosition.CenterScreen;
-
-            dt_fecha_venc.Format = DateTimePickerFormat.Custom;
-            dt_fecha_venc.CustomFormat = "dd/MM/yyyy";
 
             Conexion con = new Conexion();
             con.strQuery="select Cliente_Codigo from FOUR_SIZONS.EstadiaXCliente where Estadia_Codigo = " + estadia;

@@ -69,7 +69,6 @@ namespace FrbaHotel.ABMUsuario
             int index = e.RowIndex;
             DataGridViewRow selectedRow = dgv_Roles.Rows[index];
             dgv_rol_ID = Convert.ToDecimal(selectedRow.Cells[0].Value.ToString());
-            MessageBox.Show(selectedRow.Cells[0].Value.ToString());
         }
 
 
@@ -97,7 +96,7 @@ namespace FrbaHotel.ABMUsuario
         private void btn_agregar_Click(object sender, EventArgs e)
         {
             string modo = "INS";
-            this.Hide();
+            //this.Hide();
             ABMUsuario06 formABMUsuario06 = new ABMUsuario06(modo, usuario, 0);
             formABMUsuario06.ShowDialog();
             this.Show();

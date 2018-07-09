@@ -41,10 +41,10 @@
             this.lbl_CodReserva = new System.Windows.Forms.Label();
             this.label8 = new System.Windows.Forms.Label();
             this.label9 = new System.Windows.Forms.Label();
-            this.lbl_Titulo = new System.Windows.Forms.Label();
             this.lbl_camposObligatorios = new System.Windows.Forms.Label();
             this.btn_factura = new System.Windows.Forms.Button();
             this.btn_tarjeta = new System.Windows.Forms.Button();
+            this.labelTitulo = new System.Windows.Forms.Label();
             this.gb_Titulo.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -169,16 +169,6 @@
             this.label9.TabIndex = 14;
             this.label9.Text = "FOUR SIZONS";
             // 
-            // lbl_Titulo
-            // 
-            this.lbl_Titulo.AutoSize = true;
-            this.lbl_Titulo.Font = new System.Drawing.Font("Calibri", 15F);
-            this.lbl_Titulo.Location = new System.Drawing.Point(258, 19);
-            this.lbl_Titulo.Name = "lbl_Titulo";
-            this.lbl_Titulo.Size = new System.Drawing.Size(59, 24);
-            this.lbl_Titulo.TabIndex = 12;
-            this.lbl_Titulo.Text = "Titulo";
-            // 
             // lbl_camposObligatorios
             // 
             this.lbl_camposObligatorios.AutoSize = true;
@@ -208,15 +198,25 @@
             this.btn_tarjeta.UseVisualStyleBackColor = true;
             this.btn_tarjeta.Click += new System.EventHandler(this.btn_tarjeta_Click);
             // 
+            // labelTitulo
+            // 
+            this.labelTitulo.Font = new System.Drawing.Font("Calibri", 20F);
+            this.labelTitulo.Location = new System.Drawing.Point(126, 12);
+            this.labelTitulo.Name = "labelTitulo";
+            this.labelTitulo.Size = new System.Drawing.Size(350, 33);
+            this.labelTitulo.TabIndex = 53;
+            this.labelTitulo.Text = "Título de pantalla";
+            this.labelTitulo.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+            // 
             // RegistrarEstadia
             // 
             this.ClientSize = new System.Drawing.Size(530, 292);
+            this.Controls.Add(this.labelTitulo);
             this.Controls.Add(this.btn_tarjeta);
             this.Controls.Add(this.btn_factura);
             this.Controls.Add(this.lbl_camposObligatorios);
             this.Controls.Add(this.label8);
             this.Controls.Add(this.label9);
-            this.Controls.Add(this.lbl_Titulo);
             this.Controls.Add(this.gb_Titulo);
             this.Controls.Add(this.button2);
             this.Controls.Add(this.btn_Aceptar);
@@ -238,7 +238,6 @@
         private System.Windows.Forms.Label lbl_CodReserva;
         private System.Windows.Forms.Label label8;
         private System.Windows.Forms.Label label9;
-        private System.Windows.Forms.Label lbl_Titulo;
         private System.Windows.Forms.Label label1;
         private System.Windows.Forms.Label lbl_camposObligatorios;
         private System.Windows.Forms.Button btn_factura;
@@ -248,5 +247,6 @@
         private System.Windows.Forms.Label label3;
         private System.Windows.Forms.Label lbl_estadia;
         private System.Windows.Forms.ComboBox cb_medioPago;
+        private System.Windows.Forms.Label labelTitulo;
     }
 }

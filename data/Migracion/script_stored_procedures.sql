@@ -694,8 +694,8 @@ go
 
 
 -------------------------------------------------ABM HOTEL------------------------------------------------------------------------
-create procedure four_sizons.AltaHotel
-@hotID numeric(18) output,
+alter procedure four_sizons.AltaHotel
+@codigo numeric(18) output,
 @nombre nvarchar(50),
 @mail nvarchar(50),
 @telefono nvarchar(50),
@@ -733,13 +733,10 @@ if (not exists (select Hotel_Codigo from FOUR_SIZONS.Hotel where Hotel_Nombre= @
 				set @tipohab = @tipohab+1
 			end
 
-		set @hotID = (select top 1 Hotel_Codigo from four_sizons.Hotel order by Hotel_Codigo desc)
+		set @codigo = (select top 1 Hotel_Codigo from four_sizons.Hotel order by Hotel_Codigo desc)
 
 	end
 else raiserror ('Ya existe un hotel con ese nombre en el sistema, por favor ingrese otro.',16,1)
-
-
-
 
 commit tran 
 end try
@@ -830,10 +827,10 @@ create procedure four_sizons.modificarHotel
 @pais nvarchar(50),
 @fechaCreacion datetime,
 @estado bit
-
 as 
 begin tran 
 begin try
+
 update FOUR_SIZONS.Hotel
 set Hotel_Nombre= @nombre,Hotel_Mail= @mail,Hotel_Telefono=@telefono,Hotel_Calle=@calle ,
 	Hotel_Nro_Calle=@numCalle,Hotel_CantEstrella=@cantEstrellas,Hotel_Recarga_Estrella=@recarga_estrella,
@@ -1228,7 +1225,7 @@ end catch
 
 go
 
-create  procedure four_sizons.ModificarReserva
+create procedure four_sizons.ModificarReserva
 	@codigoReserva numeric(18),
 	@fechaInicio datetime,
 	@fechaFin datetime,
@@ -1245,36 +1242,13 @@ create  procedure four_sizons.ModificarReserva
 	begin try 
 declare @estadoActual numeric(1)=(select Reserva_Estado from four_sizons.Reserva where Reserva_Codigo=@codigoReserva)
 if(@estadoActual !=6)
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 	begin
-		if(@estadoActual!=1 and @estadoActual!=2)
+		if(@estadoActual=1 or @estadoActual=2)
 			begin
 				IF(@estado=1 or @estado=2)
 					begin
 						declare @cantidadNoches numeric(2)
 						declare @tipoHab numeric(18) = (select Habitacion_Tipo_Codigo from FOUR_SIZONS.Habitacion_Tipo where Habitacion_Tipo_Descripcion=@tipoHabDesc)
-
-
 
 						declare @fechaCambio datetime
 						set @fechaCambio = GETDATE()
@@ -1287,16 +1261,6 @@ if(@estadoActual !=6)
 						set @precio = @cantidadNoches * @cantHab*(@preReg*@porcentual+@recarga)
 						
 						declare @mod_numero decimal(18)
-
-
-
-
-
-
-
-
-
-
 
 						select @mod_numero = count(*) from FOUR_SIZONS.ReservaMod where Reserva_Codigo = @codigoReserva
 						if(@canthab != (select reserva_cant_hab from four_sizons.reserva where reserva_codigo = @codigoReserva) or @tipohab != (select habitacion_tipo_codigo from four_sizons.reserva where reserva_codigo = @codigoReserva ))
@@ -1352,18 +1316,6 @@ if(@estadoActual !=6)
 
 
 						where Reserva_Codigo = @codigoReserva
-
-
-
-
-
-
-
-
-
-
-
-
 						insert into FOUR_SIZONS.ReservaMod (ResMod_Codigo,Reserva_Codigo,Usuario_ID, ResMod_Detalle,ResMod_Fecha)
 							   values (@mod_numero,@codigoReserva,@userId,@detalle,@fechaCambio)
 					end	
@@ -1405,29 +1357,6 @@ RAISERROR(@mensaje_de_error,11,1)
 rollback tran 
 end catch
 go
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 -- este no va mas xq no es bueno ejecutar un proc dentro de otro proc
 
@@ -1740,7 +1669,7 @@ GO
 
 ----------------------------------------------------------------------------------
 
-create proc FOUR_SIZONS.registrarCheckIn
+alter proc FOUR_SIZONS.registrarCheckIn
 @reserva numeric(18),
 @usuario nvarchar(10),
 @codigo numeric(18) output
@@ -1867,8 +1796,8 @@ end catch
 
 GO
 
-create proc FOUR_SIZONS.registrarCheckOut
-@Estadia numeric(18),
+alter proc FOUR_SIZONS.registrarCheckOut
+@estadia numeric(18),
 @usuario nvarchar(15)
 as begin tran
 begin try

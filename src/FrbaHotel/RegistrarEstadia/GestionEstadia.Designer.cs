@@ -183,7 +183,9 @@
             this.Regimen_Codigo,
             this.Reserva_Estado});
             this.dgv_Reserva.Location = new System.Drawing.Point(26, 224);
+            this.dgv_Reserva.MultiSelect = false;
             this.dgv_Reserva.Name = "dgv_Reserva";
+            this.dgv_Reserva.ReadOnly = true;
             this.dgv_Reserva.Size = new System.Drawing.Size(531, 150);
             this.dgv_Reserva.TabIndex = 14;
             this.dgv_Reserva.CellClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dgv_Reserva_CellClick);

@@ -39,6 +39,7 @@ namespace FrbaHotel.RegistrarEstadia
             usuario = user;
 
             txt_estadia.Enabled = false;
+            txt_hotel.Enabled = false;
 
             generarFactura = false;
             facturaGenerada = false;
@@ -49,7 +50,7 @@ namespace FrbaHotel.RegistrarEstadia
             {
                     
                 case "IN":
-                    lbl_Titulo.Text = "Abrir Estadía";
+                    labelTitulo.Text = "Abrir Estadía";
                     gb_Titulo.Text = "Check-in";
                     txt_CodReserva.ReadOnly = true;
                     txt_estadia.Visible = false;
@@ -58,7 +59,7 @@ namespace FrbaHotel.RegistrarEstadia
                     break;
 
                 case "OUT":
-                    lbl_Titulo.Text = "Cerrar Estadía";
+                    labelTitulo.Text = "Cerrar Estadía";
                     gb_Titulo.Text = "Check-out";
                     txt_CodReserva.ReadOnly = true;
 
@@ -71,42 +72,42 @@ namespace FrbaHotel.RegistrarEstadia
         {
             if (MessageBox.Show("Está seguro que desea continuar con la operación?", "FOUR SIZONS - FRBA Hoteles", MessageBoxButtons.YesNo, MessageBoxIcon.Question) == DialogResult.Yes)
             {
-                Conexion con = new Conexion();
+
                 try
                 {
-
-                    con.strQuery = nombreStored;
-                    con.execute();
-                    con.command.CommandType = CommandType.StoredProcedure;
-
-                    con.command.Parameters.Add("@reserva", SqlDbType.Decimal).Value = Convert.ToDecimal(txt_CodReserva.Text);
-                    con.command.Parameters.Add("@usuario", SqlDbType.NVarChar).Value = usuario;
-                    con.command.Parameters.Add("@codigo", SqlDbType.Decimal).Direction = ParameterDirection.Output;
-
-                    con.openConection();
-                    con.command.ExecuteNonQuery();
-                    //con.closeConection();
-
-                    codigoEstadia = Convert.ToDecimal(con.command.Parameters["@codigo"].Value);
-                    txt_estadia.Text = codigoEstadia.ToString();
-
-                    //con.openConection();
-                    /*DataSet dataset = new DataSet();
-                    SqlDataAdapter da = new SqlDataAdapter(con.command);
-
-                    da.Fill(dataset);
-
-                    for (int i = 0; i < dataset.Tables[0].Rows.Count; i++)
+                    if(modoCheck == "IN")
                     {
-                        mensajeHab = mensajeHab + (dataset.Tables[0].Rows[i][0]).ToString() + " ";
-                    }
-                    MessageBox.Show("Las habitaciones que corresponden: " + mensajeHab, "FOUR SIZONS - FRBA Hoteles", MessageBoxButtons.OK, MessageBoxIcon.Information);
-                    */con.closeConection();
+                        Conexion con = new Conexion();
+                        con.strQuery = nombreStored;
+                        con.execute();
+                        con.command.CommandType = CommandType.StoredProcedure;
+
+                        con.command.Parameters.Add("@reserva", SqlDbType.Decimal).Value = Convert.ToDecimal(txt_CodReserva.Text);
+                        con.command.Parameters.Add("@usuario", SqlDbType.NVarChar).Value = usuario;
+                        con.command.Parameters.Add("@codigo", SqlDbType.Decimal).Direction = ParameterDirection.Output;
+
+                        con.openConection();
+
+                        DataSet dataset = new DataSet();
+                        SqlDataAdapter da = new SqlDataAdapter(con.command);
+
+                        da.Fill(dataset);
+
+                        for (int i = 0; i < dataset.Tables[0].Rows.Count; i++)
+                        {
+                            mensajeHab = mensajeHab + (dataset.Tables[0].Rows[i][0]).ToString() + " ";
+                        }
+
+                        codigoEstadia = Convert.ToDecimal(con.command.Parameters["@codigo"].Value);
+                        txt_estadia.Text = codigoEstadia.ToString();
+
+                        MessageBox.Show("Las habitaciones que corresponden: " + mensajeHab, "FOUR SIZONS - FRBA Hoteles", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                        con.closeConection();
 
 
-                    MessageBox.Show("Operación exitosa", "FOUR SIZONS - FRBA Hoteles", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                        MessageBox.Show("Operación exitosa", "FOUR SIZONS - FRBA Hoteles", MessageBoxButtons.OK, MessageBoxIcon.Information);
 
-                        try
+                        /*try
                         {
                             con.strQuery = "four_sizons.asignarHab";
                             con.execute();
@@ -133,14 +134,30 @@ namespace FrbaHotel.RegistrarEstadia
                         {
                             error = 1;
                             MessageBox.Show("Error al completar la operación. " + ex.Message, "FOUR SIZONS - FRBA Hoteles", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                        }
+                        }*/
+                    }else{
+                        Conexion con = new Conexion();
+                        con.strQuery = nombreStored;
+                        con.execute();
+                        con.command.CommandType = CommandType.StoredProcedure;
+
+                        con.command.Parameters.Add("@estadia", SqlDbType.Decimal).Value = codigoEstadia;
+                        con.command.Parameters.Add("@usuario", SqlDbType.NVarChar).Value = usuario;
+
+                        con.openConection();
+                        con.command.ExecuteNonQuery();
+
+                        con.closeConection();
+
+                        MessageBox.Show("Operación exitosa", "FOUR SIZONS - FRBA Hoteles", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                    }
+
                 }
                 catch (Exception ex)
-                    {
+                {
                     error = 1;
                     MessageBox.Show("Error al completar la operación. " + ex.Message, "FOUR SIZONS - FRBA Hoteles", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 }
-
             }
             else
             {
@@ -155,19 +172,18 @@ namespace FrbaHotel.RegistrarEstadia
             if (modoCheck == "IN")
             {
                 Conexion con = new Conexion();
-                con.strQuery = "SELECT * FROM FOUR_SIZONS.Reserva WHERE Reserva_Codigo = " + reserva;
+                con.strQuery = "SELECT H.Hotel_Codigo, H.Hotel_Nombre, R.Reserva_Codigo, R.Reserva_Estado " +
+                               " FROM FOUR_SIZONS.Reserva R" + 
+                               " JOIN FOUR_SIZONS.Hotel H ON H.Hotel_Codigo = R.Hotel_Codigo" +
+                               " WHERE R.Reserva_Codigo = " + reserva;
                 con.executeQuery();
 
                 if (con.reader())
                 {
-                    txt_CodReserva.Text = con.lector.GetDecimal(0).ToString();
-                    //dt_Fecha.Value = con.lector.GetDateTime(2);
-                    txt_hotel.Text = con.lector.GetDecimal(7).ToString();
-                    estadoReserva = con.lector.GetDecimal(10);
-
-                    //txt_hab.Text = con.lector.GetDecimal().ToString();
-                    //txt_Usuario.Text = con.lector.GetDecimal().ToString();
-
+                    hotel = con.lector.GetDecimal(0);
+                    txt_hotel.Text = con.lector.GetString(1);
+                    txt_CodReserva.Text = con.lector.GetDecimal(2).ToString();
+                    estadoReserva = con.lector.GetDecimal(3);
                     con.closeConection();
                 }
 
@@ -175,17 +191,19 @@ namespace FrbaHotel.RegistrarEstadia
             else
             {
                 Conexion con = new Conexion();
-                con.strQuery = " select * from FOUR_SIZONS.Estadia where Reserva_Codigo = " + reserva;
+                con.strQuery = "SELECT E.Estadia_Codigo, E.Reserva_Codigo, H.Hotel_Nombre" +
+                               " FROM FOUR_SIZONS.Estadia E" +
+                               " JOIN FOUR_SIZONS.Hotel H ON H.Hotel_Codigo = E.Hotel_Codigo" +
+                               " WHERE E.Reserva_Codigo = " + reserva;
                 con.executeQuery();
 
                 if (con.reader())
                 {
-                    txt_estadia.Text = con.lector.GetDecimal(0).ToString();
+                    codigoEstadia = con.lector.GetDecimal(0);
+                    txt_estadia.Text = codigoEstadia.ToString();
                     txt_CodReserva.Text = con.lector.GetDecimal(1).ToString();
-                    //dt_Fecha.Value = con.lector.GetDateTime(3);
-                    txt_hotel.Text = con.lector.GetDecimal(10).ToString();
-                    //txt_hab.Text = con.lector.GetDecimal(9).ToString();
-                    //txt_Usuario.Text = con.lector.GetDecimal(8).ToString();
+                    hotel = Convert.ToDecimal(con.lector.GetString(2));
+                    txt_hotel.Text = con.lector.GetString(2);
 
                     con.closeConection();
                 }
@@ -316,7 +334,7 @@ namespace FrbaHotel.RegistrarEstadia
         }
         private void btn_tarjeta_Click(object sender, EventArgs e)
         {
-                this.Hide();
+                //this.Hide();
                 AgregarTarjeta formTarjeta = new AgregarTarjeta(codigoEstadia);
                 formTarjeta.ShowDialog();
                 this.Show();
