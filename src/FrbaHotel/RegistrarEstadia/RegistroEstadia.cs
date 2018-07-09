@@ -40,6 +40,7 @@ namespace FrbaHotel.RegistrarEstadia
 
             txt_estadia.Enabled = false;
             txt_hotel.Enabled = false;
+            txt_CodReserva.Text = reserva.ToString();
 
             generarFactura = false;
             facturaGenerada = false;
@@ -191,7 +192,7 @@ namespace FrbaHotel.RegistrarEstadia
             else
             {
                 Conexion con = new Conexion();
-                con.strQuery = "SELECT E.Estadia_Codigo, E.Reserva_Codigo, H.Hotel_Nombre" +
+                con.strQuery = "SELECT E.Estadia_Codigo, H.Hotel_Codigo, H.Hotel_Nombre" +
                                " FROM FOUR_SIZONS.Estadia E" +
                                " JOIN FOUR_SIZONS.Hotel H ON H.Hotel_Codigo = E.Hotel_Codigo" +
                                " WHERE E.Reserva_Codigo = " + reserva;
@@ -200,11 +201,9 @@ namespace FrbaHotel.RegistrarEstadia
                 if (con.reader())
                 {
                     codigoEstadia = con.lector.GetDecimal(0);
-                    txt_estadia.Text = codigoEstadia.ToString();
-                    txt_CodReserva.Text = con.lector.GetDecimal(1).ToString();
-                    hotel = Convert.ToDecimal(con.lector.GetString(2));
+                    hotel = con.lector.GetDecimal(1);
                     txt_hotel.Text = con.lector.GetString(2);
-
+                    txt_estadia.Text = codigoEstadia.ToString();
                     con.closeConection();
                 }
             }
