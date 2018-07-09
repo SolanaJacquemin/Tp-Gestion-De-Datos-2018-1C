@@ -7,7 +7,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
-using FrbaHotel.RegistrarConsumible;
+//using FrbaHotel.RegistrarConsumible;
 
 namespace FrbaHotel.RegistrarEstadia
 {
@@ -157,12 +157,7 @@ namespace FrbaHotel.RegistrarEstadia
             else MessageBox.Show("Debe seleccionar una reserva de la grilla primero", "FOUR SIZONS - FRBA Hoteles", MessageBoxButtons.OK, MessageBoxIcon.Error);
         }
 
-        public void dgv_Reserva_CellClick(object sender, DataGridViewCellEventArgs e)
-        {
-            int index = e.RowIndex;
-            DataGridViewRow selectedRow = dgv_Reserva.Rows[index];
-            dgv_CodReserva = Convert.ToDecimal(selectedRow.Cells[0].Value.ToString());
-        }
+
 
         private void btn_Cerrar_Click(object sender, EventArgs e)
         {
@@ -182,19 +177,20 @@ namespace FrbaHotel.RegistrarEstadia
             }
         }
 
-        private void dgv_Reserva_CellContentClick(object sender, DataGridViewCellEventArgs e)
-        {
-            int index = e.RowIndex;
-            DataGridViewRow selectedRow = dgv_Reserva.Rows[index];
-            dgv_CodReserva = Convert.ToDecimal(selectedRow.Cells[0].Value.ToString());
-        }
 
         private void btn_consumibles_Click(object sender, EventArgs e)
         {
             this.Hide();
-            Consumible formConsumibles = new Consumible(dgv_CodReserva);
+            RegistrarConsumible formConsumibles = new RegistrarConsumible(dgv_CodReserva);
             formConsumibles.ShowDialog();
             this.Show();
+        }
+
+        private void dgv_Reserva_CellClick(object sender, DataGridViewCellEventArgs e)
+        {
+            int index = e.RowIndex;
+            DataGridViewRow selectedRow = dgv_Reserva.Rows[index];
+            dgv_CodReserva = Convert.ToDecimal(selectedRow.Cells[0].Value.ToString());
         }
 
     }

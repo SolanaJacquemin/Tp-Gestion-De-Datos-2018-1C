@@ -8,7 +8,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 
-namespace FrbaHotel.RegistrarConsumible
+namespace FrbaHotel.Consumible
 {
     public partial class Consumible : Form
     {

@@ -80,7 +80,7 @@
             // 
             this.label1.AutoSize = true;
             this.label1.Font = new System.Drawing.Font("Calibri", 15F);
-            this.label1.Location = new System.Drawing.Point(208, 30);
+            this.label1.Location = new System.Drawing.Point(242, 30);
             this.label1.Name = "label1";
             this.label1.Size = new System.Drawing.Size(174, 24);
             this.label1.TabIndex = 9;
@@ -194,56 +194,67 @@
             // 
             this.Reserva_Codigo.HeaderText = "Código de reserva";
             this.Reserva_Codigo.Name = "Reserva_Codigo";
+            this.Reserva_Codigo.ReadOnly = true;
             // 
             // Reserva_Fecha_Creacion
             // 
             this.Reserva_Fecha_Creacion.HeaderText = "Fecha de Creación";
             this.Reserva_Fecha_Creacion.Name = "Reserva_Fecha_Creacion";
+            this.Reserva_Fecha_Creacion.ReadOnly = true;
             // 
             // Reserva_Fecha_Inicio
             // 
             this.Reserva_Fecha_Inicio.HeaderText = "Fecha Inicio";
             this.Reserva_Fecha_Inicio.Name = "Reserva_Fecha_Inicio";
+            this.Reserva_Fecha_Inicio.ReadOnly = true;
             // 
             // Reserva_Fecha_Fin
             // 
             this.Reserva_Fecha_Fin.HeaderText = "Fecha Fin";
             this.Reserva_Fecha_Fin.Name = "Reserva_Fecha_Fin";
+            this.Reserva_Fecha_Fin.ReadOnly = true;
             // 
             // Reserva_Cant_Noches
             // 
             this.Reserva_Cant_Noches.HeaderText = "Cant. de noches";
             this.Reserva_Cant_Noches.Name = "Reserva_Cant_Noches";
+            this.Reserva_Cant_Noches.ReadOnly = true;
             // 
             // Reserva_Precio
             // 
             this.Reserva_Precio.HeaderText = "Precio";
             this.Reserva_Precio.Name = "Reserva_Precio";
+            this.Reserva_Precio.ReadOnly = true;
             // 
             // Usuario_ID
             // 
             this.Usuario_ID.HeaderText = "Usuario";
             this.Usuario_ID.Name = "Usuario_ID";
+            this.Usuario_ID.ReadOnly = true;
             // 
             // Hotel_Codigo
             // 
             this.Hotel_Codigo.HeaderText = "Hotel";
             this.Hotel_Codigo.Name = "Hotel_Codigo";
+            this.Hotel_Codigo.ReadOnly = true;
             // 
             // Cliente_Codigo
             // 
             this.Cliente_Codigo.HeaderText = "Código de Cliente";
             this.Cliente_Codigo.Name = "Cliente_Codigo";
+            this.Cliente_Codigo.ReadOnly = true;
             // 
             // Regimen_Codigo
             // 
             this.Regimen_Codigo.HeaderText = "Código de Régimen";
             this.Regimen_Codigo.Name = "Regimen_Codigo";
+            this.Regimen_Codigo.ReadOnly = true;
             // 
             // Reserva_Estado
             // 
             this.Reserva_Estado.HeaderText = "Estado";
             this.Reserva_Estado.Name = "Reserva_Estado";
+            this.Reserva_Estado.ReadOnly = true;
             // 
             // btn_consumibles
             // 

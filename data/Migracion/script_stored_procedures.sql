@@ -169,14 +169,8 @@ BEGIN
 END;
 
 IF (OBJECT_ID(N'FOUR_SIZONS.verificarDisp', 'FN' ) IS NOT NULL)
-
-
-
-
 BEGIN
-
     DROP FUNCTION FOUR_SIZONS.verificarDisp
-
 END;
 
 IF (OBJECT_ID('FOUR_SIZONS.calcEstadia', 'IF') IS NOT NULL)
@@ -233,6 +227,11 @@ END;
 IF (OBJECT_ID('FOUR_SIZONS.bajaUserxRol', 'P') IS NOT NULL)
 BEGIN
     DROP proc FOUR_SIZONS.bajaUserxRol
+END;
+
+IF (OBJECT_ID('FOUR_SIZONS.bajaConsXestadia', 'P') IS NOT NULL)
+BEGIN
+    DROP PROCEDURE FOUR_SIZONS.bajaConsXestadia
 END;
 
 GO
@@ -1941,6 +1940,65 @@ as begin tran
 	RAISERROR(@mensaje_de_error,11,1)
 	rollback tran 
 	end catch
+go
+
+create proc FOUR_SIZONS.bajaConsXestadia
+@cons nvarchar (255),
+@estadia numeric(18),
+@cant numeric(18)
+as begin tran
+begin try
+
+	declare @total numeric (18,2)
+ 	declare @monto numeric(18)
+	declare @consumibleId numeric(18)
+	declare @fact numeric(18) = (select Factura_Nro from FOUR_SIZONS.Factura where Estadia_Codigo=@estadia)
+	select @consumibleId = Consumible_Codigo, @monto = Consumible_Precio from FOUR_SIZONS.Consumible where Consumible_Descripcion = @cons
+	declare @numItem numeric(18)
+    set @numItem=(select f.Item_Factura_NroItem from FOUR_SIZONS.Item_Factura f where Factura_Nro= @fact and @cons = item_descripcion)
+
+
+	if(exists (select * from FOUR_SIZONS.EstadiaXConsumible where Estadia_Codigo=@estadia and Consumible_Codigo=@consumibleId))
+begin
+	
+		declare @cantActual numeric(18) = (select estXcons_cantidad from FOUR_SIZONS.EstadiaXConsumible where @consumibleId= Consumible_Codigo and Estadia_Codigo=@estadia)
+
+		if(@cantActual- @cant !=0 )
+			begin 
+			if (@cantActual-@cant <0)
+			raiserror('la cantidad ingresada es mayor a la cantidad de consumibles pedidos actual para esta estadia',16,1)
+			else 
+			update FOUR_SIZONS.EstadiaXConsumible
+			set estXcons_cantidad = estXcons_cantidad-@cant
+			where Consumible_Codigo=@consumibleId and Estadia_Codigo = @estadia
+
+			update FOUR_SIZONS.Item_Factura
+			set Item_Factura_Monto = Item_Factura_Monto - (@monto*@cant),
+			Item_Factura_Cant = Item_Factura_Cant+@cant
+			where Factura_Nro= @fact and Item_Factura_NroItem = @numItem
+			end
+		else
+		begin
+
+
+		delete FOUR_SIZONS.EstadiaXConsumible
+		where Estadia_Codigo=@estadia and Consumible_Codigo=@consumibleId
+		delete FOUR_SIZONS.Item_Factura
+		where Factura_Nro= @fact and Item_Factura_NroItem = @numItem
+		end
+
+end
+else 
+raiserror('no hay registro de un pedido de este consumible para esta estadia',16,1)
+
+commit tran 
+end try
+begin catch
+	declare @mensaje_de_error nvarchar(255)
+	set @mensaje_de_error = ERROR_MESSAGE()
+	RAISERROR(@mensaje_de_error,11,1)
+	rollback tran 
+end catch
 go
 
 --------------------------------------PROCEDURES PARA LISTADO ESTADISTICO---------------------------------------------

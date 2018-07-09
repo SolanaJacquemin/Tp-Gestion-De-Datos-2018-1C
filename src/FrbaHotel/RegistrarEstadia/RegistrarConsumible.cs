@@ -8,11 +8,11 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 
-namespace FrbaHotel.RegistrarConsumible
+namespace FrbaHotel.RegistrarEstadia
 {
-    public partial class Consumibles : Form
+    public partial class RegistrarConsumible : Form
     {
-        public decimal dgv_CodEstadia;
+        public decimal dgv_consumible_id;
         public int index;
         public decimal estadia;
         public decimal reserva;
@@ -20,36 +20,61 @@ namespace FrbaHotel.RegistrarConsumible
         public int error;
         public int cantAgr;
 
-        public Consumibles(decimal res)
+        public RegistrarConsumible(decimal res)
         {
             InitializeComponent();
             this.StartPosition = FormStartPosition.CenterScreen;
 
-            dgv_Estadia.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
-            dgv_Estadia.Rows.Clear();
-            
-            reserva=res;
+            dgv_consumibles.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
+            dgv_consumibles.Rows.Clear();
+            reserva = res;
 
-                    Conexion con = new Conexion();
-                    con.strQuery = "select Estadia_Codigo from FOUR_SIZONS.Estadia where Reserva_Codigo = " + reserva;
-                    con.executeQuery();
-                    if (con.reader())
-                    {
-                        estadia = con.lector.GetDecimal(0);
-                    }
-                    else
-                    {
-                        MessageBox.Show("No se ha encontrado la éstadía. Por favor, realice una nueva búsqueda", "FOUR SIZONS - FRBA Hoteles", MessageBoxButtons.OK, MessageBoxIcon.Information);
-                    }
+            txt_CodReserva.Enabled = false;
+            txt_Estadia.Enabled = false;
 
-            limpiar();
+            Conexion con = new Conexion();
+            con.strQuery = " select Estadia_Codigo from FOUR_SIZONS.Estadia where Reserva_Codigo = " + reserva;
+            con.executeQuery();
+
+            if (con.reader())
+            {
+                estadia = con.lector.GetDecimal(0);
+            }
+            else
+            {
+                MessageBox.Show("No se ha encontrado la estadía. Por favor, realice una nueva búsqueda", "FOUR SIZONS - FRBA Hoteles", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            }
+
+            //limpiar();
+
+            levantarGrilla();
+
             txt_Estadia.Text = estadia.ToString();
+            txt_CodReserva.Text = reserva.ToString();
+        }
+
+        public void levantarGrilla()
+        {
+            dgv_consumibles.Rows.Clear();
+            Conexion con = new Conexion();
+            con.strQuery = "SELECT C.Consumible_Codigo, C.Consumible_Descripcion, C.Consumible_Precio, EC.estXcons_cantidad FROM FOUR_SIZONS.EstadiaXConsumible EC" +
+                           " JOIN FOUR_SIZONS.Consumible C ON C.Consumible_Codigo = EC.Consumible_Codigo" +
+                           " WHERE EC.Estadia_Codigo =" + estadia;
+            con.executeQuery();
+
+            while (con.reader())
+            {
+                dgv_consumibles.Rows.Add(new Object[] { con.lector.GetDecimal(0), con.lector.GetString(1),
+                con.lector.GetDecimal(2), con.lector.GetDecimal(3)});
+            }
+            con.closeConection();
+
         }
 
         public void limpiar()
         {
 
-            txt_CodReserva.Text = "";
+            /*txt_CodReserva.Text = "";
             txt_Estadia.Text = "";
 
             dgv_Estadia.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
@@ -81,12 +106,12 @@ namespace FrbaHotel.RegistrarConsumible
             con.lector.GetDecimal(6), con.lector.GetString(7), con.lector.GetString(8), con.lector.GetDecimal(9),
             con.lector.GetDecimal(10), con.lector.GetBoolean(11)});
             }
-            con.closeConection();
+            con.closeConection();*/
         }
 
         private void buscar()
         {
-            dgv_Estadia.Rows.Clear();
+            dgv_consumibles.Rows.Clear();
 
             Conexion con = new Conexion();
             con.strQuery = " SELECT * FROM FOUR_SIZONS.Estadia WHERE 1=1 ";
@@ -106,7 +131,7 @@ namespace FrbaHotel.RegistrarConsumible
                 return;
             }
 
-            dgv_Estadia.Rows.Add(new Object[] { con.lector.GetDecimal(0), con.lector.GetDecimal(1),
+            dgv_consumibles.Rows.Add(new Object[] { con.lector.GetDecimal(0), con.lector.GetDecimal(1),
             con.lector.GetDateTime(2), con.lector.GetDateTime(3), con.lector.GetDecimal(4), con.lector.GetDecimal(5),
             con.lector.GetDecimal(6), con.lector.GetString(7), con.lector.GetString(8), con.lector.GetDecimal(9),
             con.lector.GetDecimal(10), con.lector.GetBoolean(11)});
@@ -115,7 +140,7 @@ namespace FrbaHotel.RegistrarConsumible
 
         }
 
-        private void Consumibles_Load(object sender, EventArgs e)
+        private void RegistrarConsumible_Load(object sender, EventArgs e)
         {
             Conexion con = new Conexion();
             con.strQuery = "SELECT * FROM FOUR_SIZONS.Consumible";
@@ -127,14 +152,13 @@ namespace FrbaHotel.RegistrarConsumible
                 con.closeConection();
                 return;
             }
-
         }
 
         public void ejecutarConsumible()
         {
 
 
-            if (MessageBox.Show("Está seguro que desea continuar con la operación?", "FOUR SIZONS - FRBA Hoteles", MessageBoxButtons.YesNo, MessageBoxIcon.Question) == DialogResult.Yes)
+            /*if (MessageBox.Show("Está seguro que desea continuar con la operación?", "FOUR SIZONS - FRBA Hoteles", MessageBoxButtons.YesNo, MessageBoxIcon.Question) == DialogResult.Yes)
             {
 
                 try
@@ -168,20 +192,25 @@ namespace FrbaHotel.RegistrarConsumible
             {
                 error = 1;
                 MessageBox.Show("No se ha completado la operación", "FOUR SIZONS - FRBA Hoteles", MessageBoxButtons.OK, MessageBoxIcon.Information);
-            }
+            }*/
         }
 
-        private void btn_Buscar_Click_1(object sender, EventArgs e)
+        private void btn_Buscar_Click(object sender, EventArgs e)
         {
             buscar();
         }
 
-        private void btn_Limpiar_Click_1(object sender, EventArgs e)
+        private void btn_Limpiar_Click(object sender, EventArgs e)
         {
             limpiar();
         }
 
-        private void boton_aceptar_Click_1(object sender, EventArgs e)
+        private void boton_volver_Click(object sender, EventArgs e)
+        {
+            this.Close();
+        }
+
+        private void boton_aceptar_Click(object sender, EventArgs e)
         {
             if (error == 0)
             {
@@ -190,14 +219,29 @@ namespace FrbaHotel.RegistrarConsumible
             }
         }
 
-        private void boton_volver_Click(object sender, EventArgs e)
+        private void dgv_consumibles_CellClick(object sender, DataGridViewCellEventArgs e)
         {
-            this.Close();
+            int index = e.RowIndex;
+            DataGridViewRow selectedRow = dgv_consumibles.Rows[index];
+            dgv_consumible_id = Convert.ToDecimal(selectedRow.Cells[0].Value.ToString());
         }
 
-        private void Form1_Load(object sender, EventArgs e)
+        private void btn_agregar_Click(object sender, EventArgs e)
         {
+            this.Hide();
+            ABMConsumible formConsumibles = new ABMConsumible("INS", estadia, dgv_consumible_id);
+            formConsumibles.ShowDialog();
+            this.Show();
+            levantarGrilla();
+        }
 
+        private void btn_modificar_Click(object sender, EventArgs e)
+        {
+            this.Hide();
+            ABMConsumible formConsumibles = new ABMConsumible("UPD", estadia, dgv_consumible_id);
+            formConsumibles.ShowDialog();
+            this.Show();
+            levantarGrilla();
         }
 
     }

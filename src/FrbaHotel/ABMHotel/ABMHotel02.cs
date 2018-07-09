@@ -9,6 +9,7 @@ using System.Threading.Tasks;
 using System.Windows.Forms;
 using FrbaHotel.Prompts;
 using System.Data.SqlClient;
+using FrbaHotel;
 
 namespace FrbaHotel.ABMHotel
 {
@@ -28,6 +29,8 @@ namespace FrbaHotel.ABMHotel
             this.StartPosition = FormStartPosition.CenterScreen;
             labelTitulo.AutoSize = false;
             btn_regimen.Enabled = false;
+
+            MessageBox.Show(readConfig.Config.fechaSystem().ToString());
 
             hotel = hotelId;
             modoABM = modo;
@@ -173,18 +176,6 @@ namespace FrbaHotel.ABMHotel
                     con.strQuery = nombreStored;
                     con.execute();
                     con.command.CommandType = CommandType.StoredProcedure;
-                    
-                   // if (modoABM != "INS")
-                    //{
-                       // con.command.Parameters.Add("@codigo", SqlDbType.Decimal).Value = hotel;
-                    //}
-                    /*var codigoHotel = new SqlParameter();
-
-                    codigoHotel.ParameterName = "@hotID";
-                    codigoHotel.SqlDbType = System.Data.SqlDbType.Decimal;
-                    codigoHotel.Direction = ParameterDirection.Output;
-                    codigoHotel.Size = 18;
-                    con.command.Parameters.Add(codigoHotel);*/
 
                     if (modoABM == "INS")
                     {
