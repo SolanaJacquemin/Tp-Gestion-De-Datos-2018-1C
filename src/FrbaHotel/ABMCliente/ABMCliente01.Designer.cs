@@ -102,6 +102,8 @@
             // 
             this.dgv_Clientes.AllowUserToAddRows = false;
             this.dgv_Clientes.AllowUserToDeleteRows = false;
+            this.dgv_Clientes.AllowUserToResizeColumns = false;
+            this.dgv_Clientes.AllowUserToResizeRows = false;
             this.dgv_Clientes.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             this.dgv_Clientes.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
             this.Cliente_Codigo,
@@ -120,7 +122,9 @@
             this.Cliente_Estado,
             this.Cliente_Consistente});
             this.dgv_Clientes.Location = new System.Drawing.Point(25, 173);
+            this.dgv_Clientes.MultiSelect = false;
             this.dgv_Clientes.Name = "dgv_Clientes";
+            this.dgv_Clientes.ReadOnly = true;
             this.dgv_Clientes.Size = new System.Drawing.Size(528, 226);
             this.dgv_Clientes.TabIndex = 21;
             this.dgv_Clientes.CellClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dgv_Clientes_CellClick);
@@ -129,76 +133,91 @@
             // 
             this.Cliente_Codigo.HeaderText = "Codigo";
             this.Cliente_Codigo.Name = "Cliente_Codigo";
+            this.Cliente_Codigo.ReadOnly = true;
             // 
             // Cliente_Nombre
             // 
             this.Cliente_Nombre.HeaderText = "Nombre";
             this.Cliente_Nombre.Name = "Cliente_Nombre";
+            this.Cliente_Nombre.ReadOnly = true;
             // 
             // Cliente_Apellido
             // 
             this.Cliente_Apellido.HeaderText = "Apellido";
             this.Cliente_Apellido.Name = "Cliente_Apellido";
+            this.Cliente_Apellido.ReadOnly = true;
             // 
             // Cliente_TipoDoc
             // 
             this.Cliente_TipoDoc.HeaderText = "Tipo Doc.";
             this.Cliente_TipoDoc.Name = "Cliente_TipoDoc";
+            this.Cliente_TipoDoc.ReadOnly = true;
             // 
             // Cliente_NumDoc
             // 
             this.Cliente_NumDoc.HeaderText = "Nro. Doc.";
             this.Cliente_NumDoc.Name = "Cliente_NumDoc";
+            this.Cliente_NumDoc.ReadOnly = true;
             // 
             // Cliente_Dom_Calle
             // 
             this.Cliente_Dom_Calle.HeaderText = "Dom. Calle";
             this.Cliente_Dom_Calle.Name = "Cliente_Dom_Calle";
+            this.Cliente_Dom_Calle.ReadOnly = true;
             // 
             // Cliente_Nro_calle
             // 
             this.Cliente_Nro_calle.HeaderText = "Nro. Calle";
             this.Cliente_Nro_calle.Name = "Cliente_Nro_calle";
+            this.Cliente_Nro_calle.ReadOnly = true;
             // 
             // Cliente_Piso
             // 
             this.Cliente_Piso.HeaderText = "Piso";
             this.Cliente_Piso.Name = "Cliente_Piso";
+            this.Cliente_Piso.ReadOnly = true;
             // 
             // Cliente_Depto
             // 
             this.Cliente_Depto.HeaderText = "Depto";
             this.Cliente_Depto.Name = "Cliente_Depto";
+            this.Cliente_Depto.ReadOnly = true;
             // 
             // Cliente_Mail
             // 
             this.Cliente_Mail.HeaderText = "Mail";
             this.Cliente_Mail.Name = "Cliente_Mail";
+            this.Cliente_Mail.ReadOnly = true;
             // 
             // Cliente_Nacionalidad
             // 
             this.Cliente_Nacionalidad.HeaderText = "Nacionalidad";
             this.Cliente_Nacionalidad.Name = "Cliente_Nacionalidad";
+            this.Cliente_Nacionalidad.ReadOnly = true;
             // 
             // Cliente_Fecha_Nac
             // 
             this.Cliente_Fecha_Nac.HeaderText = "Fecha Nac.";
             this.Cliente_Fecha_Nac.Name = "Cliente_Fecha_Nac";
+            this.Cliente_Fecha_Nac.ReadOnly = true;
             // 
             // Cliente_Puntos
             // 
             this.Cliente_Puntos.HeaderText = "Puntos";
             this.Cliente_Puntos.Name = "Cliente_Puntos";
+            this.Cliente_Puntos.ReadOnly = true;
             // 
             // Cliente_Estado
             // 
             this.Cliente_Estado.HeaderText = "Estado";
             this.Cliente_Estado.Name = "Cliente_Estado";
+            this.Cliente_Estado.ReadOnly = true;
             // 
             // Cliente_Consistente
             // 
             this.Cliente_Consistente.HeaderText = "Consistente";
             this.Cliente_Consistente.Name = "Cliente_Consistente";
+            this.Cliente_Consistente.ReadOnly = true;
             // 
             // btn_volver
             // 

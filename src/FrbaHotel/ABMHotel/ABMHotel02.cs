@@ -30,8 +30,6 @@ namespace FrbaHotel.ABMHotel
             labelTitulo.AutoSize = false;
             btn_regimen.Enabled = false;
 
-            MessageBox.Show(readConfig.Config.fechaSystem().ToString());
-
             hotel = hotelId;
             modoABM = modo;
 
@@ -195,7 +193,7 @@ namespace FrbaHotel.ABMHotel
                     con.command.Parameters.Add("@recarga_estrella", SqlDbType.Decimal).Value = txt_recargaEstrella.Text;
                     con.command.Parameters.Add("@ciudad", SqlDbType.NVarChar).Value = txt_ciudad.Text;
                     con.command.Parameters.Add("@pais", SqlDbType.NVarChar).Value = txt_pais.Text;
-                    con.command.Parameters.Add("@fechaCreacion", SqlDbType.DateTime).Value = dt_fecha_cre.Value.ToString();
+                    con.command.Parameters.Add("@fechaCreacion", SqlDbType.DateTime).Value = readConfig.Config.fechaSystem().ToString();
                     if (modoABM == "DLT")
                     {
                         con.command.Parameters.Add("@estado", SqlDbType.Bit).Value = 0;

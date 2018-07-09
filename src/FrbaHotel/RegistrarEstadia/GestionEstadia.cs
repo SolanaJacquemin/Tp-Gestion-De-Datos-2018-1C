@@ -13,7 +13,6 @@ namespace FrbaHotel.RegistrarEstadia
 {
     public partial class GestionEstadias : Form
     {
-
         public decimal dgv_CodReserva;
         public int index;
         public decimal reserva;
@@ -29,31 +28,20 @@ namespace FrbaHotel.RegistrarEstadia
             dgv_Reserva.Rows.Clear();
             user = userID;
 
-            limpiar();
+            levantarDatos();
             refrescarGrid();
 
         }
 
         private void refrescarGrid()
         {
-            dgv_Reserva.ClearSelection();
-            foreach (DataGridViewRow row in dgv_Reserva.Rows)
-            {
-                if (Convert.ToDecimal(row.Cells[10].Value) == 6)
-                {
-                    row.DefaultCellStyle.BackColor = Color.Green;
-                }
-                if (Convert.ToDecimal(row.Cells[10].Value) == 3||Convert.ToDecimal(row.Cells[10].Value) == 4||Convert.ToDecimal(row.Cells[10].Value) == 5)
-                {
-                    row.DefaultCellStyle.BackColor = Color.Red;
-                }
-            }
+
         }
 
         private void GestionEstadia_Load(object sender, EventArgs e)
         {
             dgv_Reserva.Rows.Clear();
-            limpiar();
+            levantarDatos();
             refrescarGrid();
         }
 
@@ -95,17 +83,27 @@ namespace FrbaHotel.RegistrarEstadia
             con.lector.GetString(6), con.lector.GetDecimal(7), con.lector.GetDecimal(8), con.lector.GetDecimal(9),
             con.lector.GetDecimal(10)});
 
+            while (con.reader())
+            {
+                dgv_Reserva.Rows.Add(new Object[] { con.lector.GetDecimal(0), con.lector.GetDateTime(1),
+                con.lector.GetDateTime(2), con.lector.GetDateTime(3), con.lector.GetDecimal(4), con.lector.GetDecimal(5),
+                con.lector.GetString(6), con.lector.GetDecimal(7), con.lector.GetDecimal(8), con.lector.GetDecimal(9),
+                con.lector.GetDecimal(10)});
+            }
+
+
+
             con.closeConection();
 
         }
 
         private void btn_limpiar_Click(object sender, EventArgs e)
         {
-            limpiar();
+            levantarDatos();
 
         }
 
-        public void limpiar()
+        public void levantarDatos()
         {
 
             dgv_Reserva.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
@@ -139,6 +137,19 @@ namespace FrbaHotel.RegistrarEstadia
             con.lector.GetString(6), con.lector.GetDecimal(7), con.lector.GetDecimal(8), con.lector.GetDecimal(9),
             con.lector.GetDecimal(10)});
             }
+
+            foreach (DataGridViewRow row in dgv_Reserva.Rows)
+            {
+                if (Convert.ToDecimal(row.Cells[10].Value) == 6)
+                {
+                    row.DefaultCellStyle.BackColor = Color.Green;
+                }
+                if (Convert.ToDecimal(row.Cells[10].Value) == 3 || Convert.ToDecimal(row.Cells[10].Value) == 4 || Convert.ToDecimal(row.Cells[10].Value) == 5)
+                {
+                    row.DefaultCellStyle.BackColor = Color.Red;
+                }
+            }
+            dgv_Reserva.ClearSelection();
             con.closeConection();
         }
 
@@ -168,8 +179,8 @@ namespace FrbaHotel.RegistrarEstadia
                 RegistrarEstadia formRegistrarEstadia = new RegistrarEstadia(modo, dgv_CodReserva, user);
                 formRegistrarEstadia.ShowDialog();
                 this.Show();
-                //  this.buscar();
-                //    this.refrescarGrid();
+                // this.buscar();
+                // this.refrescarGrid();
             }
             else
             {

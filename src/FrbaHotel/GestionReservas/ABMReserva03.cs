@@ -8,6 +8,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using FrbaHotel.Prompts;
+using FrbaHotel;
 
 namespace FrbaHotel.GestionReservas
 {
@@ -177,6 +178,7 @@ namespace FrbaHotel.GestionReservas
                 }
 
                 con.command.Parameters.Add("@canthab", SqlDbType.Decimal).Value = Convert.ToDecimal(txt_cantHab.Text);
+                con.command.Parameters.Add("@fechaCambio", SqlDbType.DateTime).Value = readConfig.Config.fechaSystem().ToString();
 
                 con.openConection();
                 con.command.ExecuteNonQuery();

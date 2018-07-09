@@ -229,17 +229,11 @@
     <Compile Include="RegistrarEstadia\ABMConsumible.Designer.cs">
       <DependentUpon>ABMConsumible.cs</DependentUpon>
     </Compile>
-    <Compile Include="RegistrarEstadia\Consumible.cs">
+    <Compile Include="RegistrarEstadia\ABMTarjeta.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="RegistrarEstadia\Consumible.designer.cs">
-      <DependentUpon>Consumible.cs</DependentUpon>
-    </Compile>
-    <Compile Include="RegistrarEstadia\AgregarTarjeta.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="RegistrarEstadia\AgregarTarjeta.Designer.cs">
-      <DependentUpon>AgregarTarjeta.cs</DependentUpon>
+    <Compile Include="RegistrarEstadia\ABMTarjeta.Designer.cs">
+      <DependentUpon>ABMTarjeta.cs</DependentUpon>
     </Compile>
     <Compile Include="RegistrarEstadia\GestionEstadia.cs">
       <SubType>Form</SubType>
@@ -258,6 +252,18 @@
     </Compile>
     <Compile Include="RegistrarEstadia\RegistroEstadia.designer.cs">
       <DependentUpon>RegistroEstadia.cs</DependentUpon>
+    </Compile>
+    <Compile Include="RegistrarEstadia\RegistroTarjeta.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="RegistrarEstadia\RegistroTarjeta.Designer.cs">
+      <DependentUpon>RegistroTarjeta.cs</DependentUpon>
+    </Compile>
+    <Compile Include="RegistrarEstadia\RegistroClientes.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="RegistrarEstadia\RegistroClientes.Designer.cs">
+      <DependentUpon>RegistroClientes.cs</DependentUpon>
     </Compile>
     <EmbeddedResource Include="ABMCliente\ABMCliente01.resx">
       <DependentUpon>ABMCliente01.cs</DependentUpon>
@@ -358,11 +364,8 @@
     <EmbeddedResource Include="RegistrarEstadia\ABMConsumible.resx">
       <DependentUpon>ABMConsumible.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="RegistrarEstadia\Consumible.resx">
-      <DependentUpon>Consumible.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="RegistrarEstadia\AgregarTarjeta.resx">
-      <DependentUpon>AgregarTarjeta.cs</DependentUpon>
+    <EmbeddedResource Include="RegistrarEstadia\ABMTarjeta.resx">
+      <DependentUpon>ABMTarjeta.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="RegistrarEstadia\GestionEstadia.resx">
       <DependentUpon>GestionEstadia.cs</DependentUpon>
@@ -372,6 +375,12 @@
     </EmbeddedResource>
     <EmbeddedResource Include="RegistrarEstadia\RegistroEstadia.resx">
       <DependentUpon>RegistroEstadia.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="RegistrarEstadia\RegistroTarjeta.resx">
+      <DependentUpon>RegistroTarjeta.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="RegistrarEstadia\RegistroClientes.resx">
+      <DependentUpon>RegistroClientes.cs</DependentUpon>
     </EmbeddedResource>
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>

@@ -229,9 +229,9 @@ BEGIN
     DROP proc FOUR_SIZONS.bajaUserxRol
 END;
 
-IF (OBJECT_ID('FOUR_SIZONS.bajaConsXestadia', 'P') IS NOT NULL)
+IF (OBJECT_ID('FOUR_SIZONS.bajaModifConsXestadia', 'P') IS NOT NULL)
 BEGIN
-    DROP PROCEDURE FOUR_SIZONS.bajaConsXestadia
+    DROP PROCEDURE FOUR_SIZONS.bajaModifConsXestadia
 END;
 
 GO
@@ -601,7 +601,8 @@ end catch
 go
 
 ------------------------------------------------ABM CLIENTE------------------------------------------------------------
-create procedure four_sizons.AltaCliente
+alter procedure four_sizons.AltaCliente
+@codigo numeric(18) output,
 @nombre nvarchar(50),
 @apellido nvarchar(50),
 @numDoc numeric (18),
@@ -630,6 +631,7 @@ if(not exists (select cliente_codigo from cliente where @mail = Cliente_Mail))
 								Cliente_Nacionalidad,Cliente_Fecha_Nac,Cliente_Puntos,Cliente_Estado,Cliente_Consistente)
 								values (@nombre,@apellido,@tipoDoc,@numDoc,@calle,@numCalle,@piso,@depto,@localidad,@mail,@telefono,
 								@pais,@ciudad,@nacionalidad,@fechaNac,0,1,1)
+				set @codigo= (select top 1 Cliente_Codigo from FOUR_SIZONS.Cliente order by Cliente_Codigo desc)
 			end 
 
 		else RAISERROR('El tipo y número de documento ya figura en el sistema, por favor ingrese otro.',16,1)
@@ -1171,7 +1173,7 @@ as begin
 end
 go
 
-create procedure four_sizons.GenerarReserva
+alter procedure four_sizons.GenerarReserva
 @fechaInicio datetime,
 @fechaFin datetime,
 @userId nvarchar(15),
@@ -1180,7 +1182,8 @@ create procedure four_sizons.GenerarReserva
 @regId numeric(18),
 @cantHab numeric(18),
 @tipoHabDesc nvarchar(50),
-@precio decimal(12)
+@precio decimal(12),
+@fechaCreacion datetime
 
 as begin tran
 begin try
@@ -1193,9 +1196,9 @@ declare @tipoHab numeric(18) = (select Habitacion_Tipo_Codigo from FOUR_SIZONS.H
 set @cantidadNoches = DATEDIFF(day, @fechaInicio, @fechaFin)
 
 insert into FOUR_SIZONS.Reserva(Reserva_Codigo,Reserva_Fecha_Inicio,Reserva_Fecha_Fin,Reserva_Cant_Noches,
-								Reserva_Precio,Usuario_ID,Hotel_Codigo,Cliente_Codigo,Regimen_Codigo,Reserva_Estado,habitacion_tipo_codigo,reserva_cant_hab)
+								Reserva_Precio,Usuario_ID,Hotel_Codigo,Cliente_Codigo,Regimen_Codigo,Reserva_Estado,habitacion_tipo_codigo,reserva_cant_hab,Reserva_FechaCreacion)
 								values((NEXT VALUE FOR sec_cod_reserva),@fechaInicio,@fechaFin,@cantidadNoches,
-								@precio,@userId,@hotId,@cliId,@regId,1,@tipohab,@canthab)
+								@precio,@userId,@hotId,@cliId,@regId,1,@tipohab,@canthab,convert(datetime,@fechaCreacion,121))
 
 
 --aca baja la disponibilidad
@@ -1225,7 +1228,7 @@ end catch
 
 go
 
-create procedure four_sizons.ModificarReserva
+alter procedure four_sizons.ModificarReserva
 	@codigoReserva numeric(18),
 	@fechaInicio datetime,
 	@fechaFin datetime,
@@ -1391,7 +1394,7 @@ end
 	end catch
 go
 
-create procedure four_sizons.AgregarTarjeta
+alter procedure four_sizons.AgregarTarjeta
 	@Tarjeta_Numero numeric(18),
 	@Tarjeta_Venc datetime,
 	@Tarjeta_Cod numeric(3),
@@ -1604,7 +1607,7 @@ end
 GO
 
 --------------------------------------------------------------
-create procedure FOUR_SIZONS.ModificarFactura 
+alter procedure FOUR_SIZONS.ModificarFactura 
 @estadia numeric(18),
 @formaPago nvarchar(50),
 @fechaI datetime,
@@ -1647,7 +1650,7 @@ end catch
 end
 GO
 ------------------------------------------------------------------------------------------------
-create procedure FOUR_SIZONS.RegistrarEstadiaXCliente
+alter procedure FOUR_SIZONS.RegistrarEstadiaXCliente
 @cliente numeric(18),
 @estadia numeric(18)
 as 
@@ -1680,7 +1683,7 @@ as begin tran
 begin try
 
 declare @estado decimal = 0 
-set @fecha = convert(datetime,@fecha,121)
+set @fecha = convert(datetime,@fecha,103)
 --verifica que el momento del checkin sea el mismo que el dia de ingreso que dice la reserva
 
 if(not exists (select Reserva_Codigo from Reserva where Reserva_Codigo=@reserva ))
@@ -1798,7 +1801,7 @@ end catch
 
 GO
 
-create proc FOUR_SIZONS.registrarCheckOut
+alter proc FOUR_SIZONS.registrarCheckOut
 @estadia numeric(18),
 @usuario nvarchar(15),
 @fecha datetime
@@ -1942,9 +1945,9 @@ as begin tran
 	end catch
 go
 
-create proc FOUR_SIZONS.bajaConsXestadia
-@cons nvarchar (255),
+alter proc FOUR_SIZONS.bajaModifConsXestadia
 @estadia numeric(18),
+@consumible nvarchar(255),
 @cant numeric(18)
 as begin tran
 begin try
@@ -1953,9 +1956,9 @@ begin try
  	declare @monto numeric(18)
 	declare @consumibleId numeric(18)
 	declare @fact numeric(18) = (select Factura_Nro from FOUR_SIZONS.Factura where Estadia_Codigo=@estadia)
-	select @consumibleId = Consumible_Codigo, @monto = Consumible_Precio from FOUR_SIZONS.Consumible where Consumible_Descripcion = @cons
+	select @consumibleId = Consumible_Codigo, @monto = Consumible_Precio from FOUR_SIZONS.Consumible where Consumible_Descripcion = @consumible
 	declare @numItem numeric(18)
-    set @numItem=(select f.Item_Factura_NroItem from FOUR_SIZONS.Item_Factura f where Factura_Nro= @fact and @cons = item_descripcion)
+    set @numItem=(select f.Item_Factura_NroItem from FOUR_SIZONS.Item_Factura f where Factura_Nro= @fact and @consumible = item_descripcion)
 
 
 	if(exists (select * from FOUR_SIZONS.EstadiaXConsumible where Estadia_Codigo=@estadia and Consumible_Codigo=@consumibleId))
@@ -1966,7 +1969,7 @@ begin
 		if(@cantActual- @cant !=0 )
 			begin 
 			if (@cantActual-@cant <0)
-			raiserror('la cantidad ingresada es mayor a la cantidad de consumibles pedidos actual para esta estadia',16,1)
+			raiserror('La cantidad ingresada es mayor a la cantidad de consumibles pedidos actual para esta estadia',16,1)
 			else 
 			update FOUR_SIZONS.EstadiaXConsumible
 			set estXcons_cantidad = estXcons_cantidad-@cant
@@ -1989,7 +1992,7 @@ begin
 
 end
 else 
-raiserror('no hay registro de un pedido de este consumible para esta estadia',16,1)
+raiserror('No hay registro de un pedido de este consumible para esta estadia',16,1)
 
 commit tran 
 end try

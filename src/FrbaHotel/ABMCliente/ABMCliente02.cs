@@ -18,16 +18,20 @@ namespace FrbaHotel.ABMCliente
         public static string modoABM;
         public string nombre_sp;
         public int error;
-        public decimal cliente;
         public bool abm_valido;
+        public decimal cliente;
+        public decimal estadia;
+        public string tipoDoc;
+        public decimal nroDoc;
+        public string mail;
 
-        public ABMCliente02(string modo, decimal clie)
+        public ABMCliente02(string modo, decimal clienteID, decimal estadiaCheckin, string tipoDocCheckin, decimal nroDocCheckin, string mailCheckin)
         {
             InitializeComponent();
             this.StartPosition = FormStartPosition.CenterScreen;
 
             modoABM = modo;
-            cliente = clie;
+            cliente = clienteID;
             cb_tipo_doc.DropDownStyle = ComboBoxStyle.DropDownList;
 
             switch (modoABM)
@@ -38,6 +42,21 @@ namespace FrbaHotel.ABMCliente
                     lpuntos.Visible = false;
                     lbl_estado.Visible = false;
                     txt_estado.Visible = false;
+                    break;
+
+                case "INSCHECKIN":
+                    labelTitulo.Text = "Alta de Cliente";
+                    txt_puntos.Visible = false;
+                    lpuntos.Visible = false;
+                    lbl_estado.Visible = false;
+                    txt_estado.Visible = false;
+                    estadia = estadiaCheckin;
+                    tipoDoc = tipoDocCheckin;
+                    nroDoc = nroDocCheckin;
+                    mail = mailCheckin;
+                    cb_tipo_doc.Text = tipoDoc;
+                    txt_nro_doc.Text = nroDoc.ToString();
+                    txt_mail.Text = mail;
                     break;
 
                 case "DLT":
@@ -174,7 +193,6 @@ namespace FrbaHotel.ABMCliente
             switch (modoABM)
             {
                 case "INS":
-           
                     nombre_sp = "FOUR_SIZONS.AltaCliente";
                     break;
 
@@ -191,8 +209,68 @@ namespace FrbaHotel.ABMCliente
 
             if (error == 0)
             {
-                ejecutarABMCliente(nombre_sp);
-                this.Close();
+                if (modoABM != "INSCHECKIN")
+                {
+                    ejecutarABMCliente(nombre_sp);
+                    this.Close();
+                }
+                else 
+                {
+                    ejecutarABMClienteCheckIn();
+                }
+            }
+        }
+
+        private void ejecutarABMClienteCheckIn()
+        {
+            try
+            {
+                Conexion con = new Conexion();
+                con.strQuery = "FOUR_SIZONS.AltaCliente";
+                con.execute();
+                con.command.CommandType = CommandType.StoredProcedure;
+
+                con.command.Parameters.Add("@codigo", SqlDbType.Decimal).Direction = ParameterDirection.Output;
+                con.command.Parameters.Add("@nombre", SqlDbType.NVarChar).Value = txt_nombre.Text;
+                con.command.Parameters.Add("@apellido", SqlDbType.NVarChar).Value = txt_apellido.Text;
+                con.command.Parameters.Add("@numDoc", SqlDbType.Decimal).Value = Convert.ToDecimal(txt_nro_doc.Text);
+                con.command.Parameters.Add("@tipoDoc", SqlDbType.NVarChar).Value = cb_tipo_doc.Text;
+                con.command.Parameters.Add("@mail", SqlDbType.NVarChar).Value = txt_mail.Text;
+                con.command.Parameters.Add("@telefono", SqlDbType.NVarChar).Value = txt_telefono.Text;
+                con.command.Parameters.Add("@pais", SqlDbType.NVarChar).Value = txt_pais.Text;
+                con.command.Parameters.Add("@ciudad", SqlDbType.NVarChar).Value = txt_ciudad.Text;
+                con.command.Parameters.Add("@calle", SqlDbType.NVarChar).Value = txt_direccion.Text;
+                con.command.Parameters.Add("@numCalle", SqlDbType.Decimal).Value = Convert.ToDecimal(txt_nro_calle.Text);
+                con.command.Parameters.Add("@piso", SqlDbType.Decimal).Value = Convert.ToDecimal(txt_piso.Text);
+                con.command.Parameters.Add("@depto", SqlDbType.NVarChar).Value = txt_departamento.Text;
+                con.command.Parameters.Add("@localidad", SqlDbType.NVarChar).Value = txt_localidad.Text;
+                con.command.Parameters.Add("@nacionalidad", SqlDbType.NVarChar).Value = txt_nacionalidad.Text;
+                con.command.Parameters.Add("@fechaNac", SqlDbType.DateTime).Value = dt_fecha_nac.Value.ToString();
+
+                con.openConection();
+                con.command.ExecuteNonQuery();
+
+                cliente = Convert.ToDecimal(con.command.Parameters["@codigo"].Value);
+
+                con.closeConection();
+
+                con.strQuery = "four_sizons.RegistrarEstadiaXCliente";
+                con.execute();
+                con.command.CommandType = CommandType.StoredProcedure;
+
+                con.command.Parameters.Add("@cliente", SqlDbType.Decimal).Value = cliente;
+                con.command.Parameters.Add("@estadia", SqlDbType.Decimal).Value = estadia;
+
+                con.openConection();
+                con.command.ExecuteNonQuery();
+                con.closeConection();
+
+                MessageBox.Show("Operación exitosa", "FOUR SIZONS - FRBA Hoteles", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            }
+            catch (Exception ex)
+            {
+                error = 1;
+                MessageBox.Show("Error al completar la operación. " + ex.Message, "FOUR SIZONS - FRBA Hoteles", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
 
@@ -222,23 +300,45 @@ namespace FrbaHotel.ABMCliente
             };
             if (error == 0)
             {
-                nombre_sp = "FOUR_SIZONS.AltaCliente";
-                ejecutarABMCliente(nombre_sp);
-                cb_tipo_doc.Text = "";
-                txt_nro_doc.Text = "";
-                txt_direccion.Text = "";
-                txt_telefono.Text = "";
-                txt_mail.Text = "";
-                txt_nombre.Text = "";
-                txt_piso.Text = "";
-                txt_nro_calle.Text = "";
-                txt_apellido.Text = "";
-                txt_nacionalidad.Text = "";
-                txt_localidad.Text = "";
-                txt_pais.Text = "";
-                txt_ciudad.Text = "";
 
-                cb_tipo_doc.Items.Clear();
+                if (modoABM != "INSCHECKIN")
+                {
+                    nombre_sp = "FOUR_SIZONS.AltaCliente";
+                    ejecutarABMCliente(nombre_sp);
+                    cb_tipo_doc.Text = "";
+                    txt_nro_doc.Text = "";
+                    txt_direccion.Text = "";
+                    txt_telefono.Text = "";
+                    txt_mail.Text = "";
+                    txt_nombre.Text = "";
+                    txt_piso.Text = "";
+                    txt_nro_calle.Text = "";
+                    txt_apellido.Text = "";
+                    txt_nacionalidad.Text = "";
+                    txt_localidad.Text = "";
+                    txt_pais.Text = "";
+                    txt_ciudad.Text = "";
+                    cb_tipo_doc.Items.Clear();
+                }
+                else
+                {
+                    ejecutarABMClienteCheckIn();
+                    cb_tipo_doc.Text = "";
+                    txt_nro_doc.Text = "";
+                    txt_direccion.Text = "";
+                    txt_telefono.Text = "";
+                    txt_mail.Text = "";
+                    txt_nombre.Text = "";
+                    txt_piso.Text = "";
+                    txt_nro_calle.Text = "";
+                    txt_apellido.Text = "";
+                    txt_nacionalidad.Text = "";
+                    txt_localidad.Text = "";
+                    txt_pais.Text = "";
+                    txt_ciudad.Text = "";
+                    cb_tipo_doc.Items.Clear();
+                }
+
             }
         }
 
@@ -297,9 +397,13 @@ namespace FrbaHotel.ABMCliente
                             con.execute();
                             con.command.CommandType = CommandType.StoredProcedure;
 
-                            if (modoABM != "INS")
+                            if (modoABM == "INS")
                             {
-                                con.command.Parameters.Add("@codigo", SqlDbType.Decimal).Value = cliente;
+                                con.command.Parameters.Add("@codigo", SqlDbType.Decimal).Direction = ParameterDirection.Output;
+                            }
+                            else
+                            {
+                                con.command.Parameters.Add("@codigo", SqlDbType.NVarChar).Value = cliente;
                             }
                             con.command.Parameters.Add("@nombre", SqlDbType.NVarChar).Value = txt_nombre.Text;
                             con.command.Parameters.Add("@apellido", SqlDbType.NVarChar).Value = txt_apellido.Text;

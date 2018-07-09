@@ -29,7 +29,6 @@
         private void InitializeComponent()
         {
             this.btn_Aceptar = new System.Windows.Forms.Button();
-            this.button2 = new System.Windows.Forms.Button();
             this.gb_Titulo = new System.Windows.Forms.GroupBox();
             this.cb_medioPago = new System.Windows.Forms.ComboBox();
             this.txt_hotel = new System.Windows.Forms.TextBox();
@@ -45,28 +44,19 @@
             this.btn_factura = new System.Windows.Forms.Button();
             this.btn_tarjeta = new System.Windows.Forms.Button();
             this.labelTitulo = new System.Windows.Forms.Label();
+            this.btn_regClientes = new System.Windows.Forms.Button();
             this.gb_Titulo.SuspendLayout();
             this.SuspendLayout();
             // 
             // btn_Aceptar
             // 
-            this.btn_Aceptar.Location = new System.Drawing.Point(25, 267);
+            this.btn_Aceptar.Location = new System.Drawing.Point(16, 192);
             this.btn_Aceptar.Name = "btn_Aceptar";
-            this.btn_Aceptar.Size = new System.Drawing.Size(105, 23);
+            this.btn_Aceptar.Size = new System.Drawing.Size(100, 23);
             this.btn_Aceptar.TabIndex = 0;
             this.btn_Aceptar.Text = "Aceptar";
             this.btn_Aceptar.UseVisualStyleBackColor = true;
             this.btn_Aceptar.Click += new System.EventHandler(this.btn_Aceptar_Click);
-            // 
-            // button2
-            // 
-            this.button2.Location = new System.Drawing.Point(418, 267);
-            this.button2.Name = "button2";
-            this.button2.Size = new System.Drawing.Size(100, 23);
-            this.button2.TabIndex = 0;
-            this.button2.Text = "Volver";
-            this.button2.UseVisualStyleBackColor = true;
-            this.button2.Click += new System.EventHandler(this.btn_Volver_Click);
             // 
             // gb_Titulo
             // 
@@ -78,37 +68,37 @@
             this.gb_Titulo.Controls.Add(this.label3);
             this.gb_Titulo.Controls.Add(this.lbl_estadia);
             this.gb_Titulo.Controls.Add(this.lbl_CodReserva);
-            this.gb_Titulo.Location = new System.Drawing.Point(32, 61);
+            this.gb_Titulo.Location = new System.Drawing.Point(16, 61);
             this.gb_Titulo.Name = "gb_Titulo";
-            this.gb_Titulo.Size = new System.Drawing.Size(385, 169);
+            this.gb_Titulo.Size = new System.Drawing.Size(494, 84);
             this.gb_Titulo.TabIndex = 1;
             this.gb_Titulo.TabStop = false;
             // 
             // cb_medioPago
             // 
             this.cb_medioPago.FormattingEnabled = true;
-            this.cb_medioPago.Location = new System.Drawing.Point(146, 136);
+            this.cb_medioPago.Location = new System.Drawing.Point(346, 52);
             this.cb_medioPago.Name = "cb_medioPago";
             this.cb_medioPago.Size = new System.Drawing.Size(121, 21);
             this.cb_medioPago.TabIndex = 30;
             // 
             // txt_hotel
             // 
-            this.txt_hotel.Location = new System.Drawing.Point(146, 100);
+            this.txt_hotel.Location = new System.Drawing.Point(109, 52);
             this.txt_hotel.Name = "txt_hotel";
             this.txt_hotel.Size = new System.Drawing.Size(121, 20);
             this.txt_hotel.TabIndex = 3;
             // 
             // txt_estadia
             // 
-            this.txt_estadia.Location = new System.Drawing.Point(146, 64);
+            this.txt_estadia.Location = new System.Drawing.Point(346, 16);
             this.txt_estadia.Name = "txt_estadia";
             this.txt_estadia.Size = new System.Drawing.Size(121, 20);
             this.txt_estadia.TabIndex = 3;
             // 
             // txt_CodReserva
             // 
-            this.txt_CodReserva.Location = new System.Drawing.Point(146, 29);
+            this.txt_CodReserva.Location = new System.Drawing.Point(109, 16);
             this.txt_CodReserva.Name = "txt_CodReserva";
             this.txt_CodReserva.Size = new System.Drawing.Size(121, 20);
             this.txt_CodReserva.TabIndex = 3;
@@ -116,7 +106,7 @@
             // label1
             // 
             this.label1.AutoSize = true;
-            this.label1.Location = new System.Drawing.Point(42, 139);
+            this.label1.Location = new System.Drawing.Point(262, 56);
             this.label1.Name = "label1";
             this.label1.Size = new System.Drawing.Size(78, 13);
             this.label1.TabIndex = 2;
@@ -125,7 +115,7 @@
             // label3
             // 
             this.label3.AutoSize = true;
-            this.label3.Location = new System.Drawing.Point(42, 103);
+            this.label3.Location = new System.Drawing.Point(73, 55);
             this.label3.Name = "label3";
             this.label3.Size = new System.Drawing.Size(32, 13);
             this.label3.TabIndex = 2;
@@ -134,7 +124,7 @@
             // lbl_estadia
             // 
             this.lbl_estadia.AutoSize = true;
-            this.lbl_estadia.Location = new System.Drawing.Point(42, 67);
+            this.lbl_estadia.Location = new System.Drawing.Point(247, 19);
             this.lbl_estadia.Name = "lbl_estadia";
             this.lbl_estadia.Size = new System.Drawing.Size(95, 13);
             this.lbl_estadia.TabIndex = 2;
@@ -143,7 +133,7 @@
             // lbl_CodReserva
             // 
             this.lbl_CodReserva.AutoSize = true;
-            this.lbl_CodReserva.Location = new System.Drawing.Point(42, 32);
+            this.lbl_CodReserva.Location = new System.Drawing.Point(7, 19);
             this.lbl_CodReserva.Name = "lbl_CodReserva";
             this.lbl_CodReserva.Size = new System.Drawing.Size(98, 13);
             this.lbl_CodReserva.TabIndex = 2;
@@ -172,7 +162,7 @@
             // lbl_camposObligatorios
             // 
             this.lbl_camposObligatorios.AutoSize = true;
-            this.lbl_camposObligatorios.Location = new System.Drawing.Point(29, 242);
+            this.lbl_camposObligatorios.Location = new System.Drawing.Point(13, 158);
             this.lbl_camposObligatorios.Name = "lbl_camposObligatorios";
             this.lbl_camposObligatorios.Size = new System.Drawing.Size(172, 13);
             this.lbl_camposObligatorios.TabIndex = 45;
@@ -180,7 +170,7 @@
             // 
             // btn_factura
             // 
-            this.btn_factura.Location = new System.Drawing.Point(424, 68);
+            this.btn_factura.Location = new System.Drawing.Point(197, 192);
             this.btn_factura.Name = "btn_factura";
             this.btn_factura.Size = new System.Drawing.Size(100, 23);
             this.btn_factura.TabIndex = 46;
@@ -190,7 +180,7 @@
             // 
             // btn_tarjeta
             // 
-            this.btn_tarjeta.Location = new System.Drawing.Point(424, 97);
+            this.btn_tarjeta.Location = new System.Drawing.Point(304, 192);
             this.btn_tarjeta.Name = "btn_tarjeta";
             this.btn_tarjeta.Size = new System.Drawing.Size(100, 23);
             this.btn_tarjeta.TabIndex = 46;
@@ -201,16 +191,27 @@
             // labelTitulo
             // 
             this.labelTitulo.Font = new System.Drawing.Font("Calibri", 20F);
-            this.labelTitulo.Location = new System.Drawing.Point(126, 12);
+            this.labelTitulo.Location = new System.Drawing.Point(115, 12);
             this.labelTitulo.Name = "labelTitulo";
             this.labelTitulo.Size = new System.Drawing.Size(350, 33);
             this.labelTitulo.TabIndex = 53;
             this.labelTitulo.Text = "Título de pantalla";
             this.labelTitulo.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
             // 
+            // btn_regClientes
+            // 
+            this.btn_regClientes.Location = new System.Drawing.Point(410, 192);
+            this.btn_regClientes.Name = "btn_regClientes";
+            this.btn_regClientes.Size = new System.Drawing.Size(100, 23);
+            this.btn_regClientes.TabIndex = 54;
+            this.btn_regClientes.Text = "Registrar Clientes";
+            this.btn_regClientes.UseVisualStyleBackColor = true;
+            this.btn_regClientes.Click += new System.EventHandler(this.btn_regClientes_Click);
+            // 
             // RegistrarEstadia
             // 
-            this.ClientSize = new System.Drawing.Size(530, 292);
+            this.ClientSize = new System.Drawing.Size(530, 224);
+            this.Controls.Add(this.btn_regClientes);
             this.Controls.Add(this.labelTitulo);
             this.Controls.Add(this.btn_tarjeta);
             this.Controls.Add(this.btn_factura);
@@ -218,7 +219,6 @@
             this.Controls.Add(this.label8);
             this.Controls.Add(this.label9);
             this.Controls.Add(this.gb_Titulo);
-            this.Controls.Add(this.button2);
             this.Controls.Add(this.btn_Aceptar);
             this.Name = "RegistrarEstadia";
             this.Load += new System.EventHandler(this.RegistrarEstadia_Load_1);
@@ -232,7 +232,6 @@
         #endregion
 
         private System.Windows.Forms.Button btn_Aceptar;
-        private System.Windows.Forms.Button button2;
         private System.Windows.Forms.GroupBox gb_Titulo;
         private System.Windows.Forms.TextBox txt_CodReserva;
         private System.Windows.Forms.Label lbl_CodReserva;
@@ -248,5 +247,6 @@
         private System.Windows.Forms.Label lbl_estadia;
         private System.Windows.Forms.ComboBox cb_medioPago;
         private System.Windows.Forms.Label labelTitulo;
+        private System.Windows.Forms.Button btn_regClientes;
     }
 }

@@ -153,7 +153,7 @@ namespace FrbaHotel.AbmCliente
         {         
             string modo = "INS";
             this.Hide();
-            ABMCliente02 formABMCliente02 = new ABMCliente02(modo, dgv_cliente_ID);
+            ABMCliente02 formABMCliente02 = new ABMCliente02(modo, dgv_cliente_ID, 0, "", 0, "");
             formABMCliente02.ShowDialog();
             this.Show();
             limpiar();
@@ -168,7 +168,7 @@ namespace FrbaHotel.AbmCliente
             {
                 string modo = "DLT";
                 this.Hide();
-                ABMCliente02 formABMCliente02 = new ABMCliente02(modo, dgv_cliente_ID);
+                ABMCliente02 formABMCliente02 = new ABMCliente02(modo, dgv_cliente_ID, 0, "", 0, "");
                 formABMCliente02.ShowDialog();
                 this.Show();
                 this.limpiar();
@@ -191,7 +191,7 @@ namespace FrbaHotel.AbmCliente
                     {
                         string modo = "UPD";
                         this.Hide();
-                        ABMCliente02 formABMCliente02 = new ABMCliente02(modo, dgv_cliente_ID);
+                        ABMCliente02 formABMCliente02 = new ABMCliente02(modo, dgv_cliente_ID, 0, "", 0, "");
                         formABMCliente02.ShowDialog();
                         this.Show();
                         limpiar();
