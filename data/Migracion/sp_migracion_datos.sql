@@ -395,7 +395,7 @@ BEGIN
 	BEGIN
 		CREATE TABLE FOUR_SIZONS.Reserva (
 			Reserva_Codigo numeric(18),
-			Reserva_FechaCreacion datetime default GETDATE(),
+			Reserva_FechaCreacion datetime ,
 			Reserva_Fecha_Inicio datetime,
 			Reserva_Fecha_Fin datetime,
 			Reserva_Cant_Noches numeric(18),
@@ -434,7 +434,7 @@ BEGIN
 			Reserva_Codigo numeric(18),
 			Usuario_ID nvarchar(15),
 			ResMod_Detalle nvarchar(255),
-			ResMod_Fecha datetime default GETDATE(),
+			ResMod_Fecha datetime,
 			
 			CONSTRAINT FK_ReservaMod_1 FOREIGN KEY (Reserva_Codigo) REFERENCES FOUR_SIZONS.Reserva(Reserva_Codigo),
 			CONSTRAINT FK_ReservaMod_2 FOREIGN KEY (Usuario_ID) REFERENCES FOUR_SIZONS.Usuario(Usuario_ID),
@@ -449,7 +449,7 @@ BEGIN
 			Estadia_Codigo numeric(18) IDENTITY(1,1),
 			Reserva_Codigo numeric(18), 
 			Estadia_FechaInicio datetime,
-			Estadia_FechaFin datetime default GETDATE(),
+			Estadia_FechaFin datetime,
 			Estadia_CantNoches numeric(18),
 			Estadia_DiasRest numeric(18) default 0,
 			Estadia_PreXNoche numeric(18) ,
@@ -640,7 +640,7 @@ BEGIN
 	INSERT INTO FOUR_SIZONS.Hotel (Hotel_Nombre, Hotel_Mail, Hotel_Telefono, Hotel_Calle, Hotel_Nro_Calle, Hotel_CantEstrella, 
 	Hotel_Recarga_Estrella, Hotel_Ciudad, Hotel_Pais, Hotel_FechaCreacion, Hotel_Estado) 
 	SELECT DISTINCT '', '', '', Hotel_Calle, Hotel_Nro_Calle, Hotel_CantEstrella, Hotel_Recarga_Estrella, Hotel_Ciudad, 'Argentina',
-	GETDATE(), 1
+	convert(datetime,'01/01/2017',121), 1
 	FROM GD1C2018.gd_esquema.Maestra
 
 	-- RegXHotel
@@ -699,11 +699,11 @@ BEGIN
 	-- Usuario
 	-- Inserta usuarios
 	INSERT INTO FOUR_SIZONS.Usuario
-	VALUES ('SYSADM', '3GGQyLOZ4EO537rLsNN/KiZF4z+ZOEkdJLJOApjZzRc=', 'Administrador', '', '', 0, '', '', GETDATE(), '',1,0)
+	VALUES ('SYSADM', '3GGQyLOZ4EO537rLsNN/KiZF4z+ZOEkdJLJOApjZzRc=', 'Administrador', '', '', 0, '', '', convert(datetime,'01/01/2017',121), '',1,0)
 	INSERT INTO FOUR_SIZONS.Usuario
-	VALUES ('GUEST', '3GGQyLOZ4EO537rLsNN/KiZF4z+ZOEkdJLJOApjZzRc=', 'Guest', '', '', 0, '', '', GETDATE(), '',1,0)
+	VALUES ('GUEST', '3GGQyLOZ4EO537rLsNN/KiZF4z+ZOEkdJLJOApjZzRc=', 'Guest', '', '', 0, '', '', convert(datetime,'01/01/2017',121), '',1,0)
 	INSERT INTO FOUR_SIZONS.Usuario
-	VALUES ('admin', '5rhwUL/LgUP8uNsBcKTcntANkE3dPipK0bHo3A/cm+c=', 'Administrador', '', '', 0, '', '', GETDATE(), '',1,0)
+	VALUES ('admin', '5rhwUL/LgUP8uNsBcKTcntANkE3dPipK0bHo3A/cm+c=', 'Administrador', '', '', 0, '', '', convert(datetime,'01/01/2017',121), '',1,0)
 
 	--UsuarioXRol
 	INSERT INTO FOUR_SIZONS.UsuarioXRol VALUES ('SYSADM', 1, 1)
