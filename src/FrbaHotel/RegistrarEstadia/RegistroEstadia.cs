@@ -17,6 +17,7 @@ namespace FrbaHotel.RegistrarEstadia
     public partial class RegistrarEstadia : Form
     {
         public bool altaValida;
+        public bool clieResRegistrado;
         public decimal reserva;
         public string modoCheck;
         public int error;
@@ -66,6 +67,7 @@ namespace FrbaHotel.RegistrarEstadia
                     labelTitulo.Text = "Cerrar Estadía";
                     gb_Titulo.Text = "Check-out";
                     txt_CodReserva.ReadOnly = true;
+                    btn_regClientes.Visible = false;
 
                     break;
 
@@ -264,7 +266,6 @@ namespace FrbaHotel.RegistrarEstadia
                         case "IN":
                             nombreSp = "FOUR_SIZONS.RegistrarCheckIn";
                             //this.Hide();
-                            //   COMO HAGO PARA QUE ENTRE A NUEVOCLIENTE?? 
 
                             break;
 
@@ -351,7 +352,7 @@ namespace FrbaHotel.RegistrarEstadia
                     con.command.Parameters.Add("@estadia", SqlDbType.Decimal).Value = codigoEstadia;
                     con.command.Parameters.Add("@formaPago", SqlDbType.NVarChar).Value = formaPago;
                     con.command.Parameters.Add("@fechaI", SqlDbType.DateTime).Value = DateTime.Now.ToString("dd/MM/yyyy");
-                    con.command.Parameters.Add("@estado", SqlDbType.Bit).Value = 1;
+                    con.command.Parameters.Add("@estado", SqlDbType.Decimal).Value = 1;
 
                     con.openConection();
                     con.command.ExecuteNonQuery();
@@ -375,28 +376,41 @@ namespace FrbaHotel.RegistrarEstadia
 
         private void btn_regClientes_Click(object sender, EventArgs e)
         {
-            try
+            if (clieResRegistrado == true)
             {
-                Conexion con = new Conexion();
-                con.strQuery = "four_sizons.RegistrarEstadiaXCliente";
-                con.execute();
-                con.command.CommandType = CommandType.StoredProcedure;
-
-                con.command.Parameters.Add("@cliente", SqlDbType.Decimal).Value = cliente;
-                con.command.Parameters.Add("@estadia", SqlDbType.Decimal).Value = codigoEstadia;
-
-                con.openConection();
-                con.command.ExecuteNonQuery();
-                con.closeConection();
-
                 if (MessageBox.Show("Cliente de la reserva registrado. Desea registrar más clientes?", "FOUR SIZONS - FRBA Hoteles", MessageBoxButtons.YesNo, MessageBoxIcon.Question) == DialogResult.Yes)
                 {
-
+                    RegistroClientes formRegisClie = new RegistroClientes(codigoEstadia);
+                    formRegisClie.ShowDialog();
                 }
             }
-            catch (Exception ex)
+            else
             {
-                MessageBox.Show("Error al completar la operación. " + ex.Message, "FOUR SIZONS - FRBA Hoteles", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                try
+                {
+                    Conexion con = new Conexion();
+                    con.strQuery = "four_sizons.RegistrarEstadiaXCliente";
+                    con.execute();
+                    con.command.CommandType = CommandType.StoredProcedure;
+
+                    con.command.Parameters.Add("@cliente", SqlDbType.Decimal).Value = cliente;
+                    con.command.Parameters.Add("@estadia", SqlDbType.Decimal).Value = codigoEstadia;
+
+                    con.openConection();
+                    con.command.ExecuteNonQuery();
+                    con.closeConection();
+
+                    if (MessageBox.Show("Cliente de la reserva registrado. Desea registrar más clientes?", "FOUR SIZONS - FRBA Hoteles", MessageBoxButtons.YesNo, MessageBoxIcon.Question) == DialogResult.Yes)
+                    {
+                        RegistroClientes formRegisClie = new RegistroClientes(codigoEstadia);
+                        formRegisClie.ShowDialog();
+                        clieResRegistrado = true;
+                    }
+                }
+                catch (Exception ex)
+                {
+                    MessageBox.Show("Error al completar la operación. " + ex.Message, "FOUR SIZONS - FRBA Hoteles", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                }
             }
         }
 

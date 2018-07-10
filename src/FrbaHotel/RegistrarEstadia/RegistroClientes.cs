@@ -74,7 +74,7 @@ namespace FrbaHotel.RegistrarEstadia
                 + " AND Cliente_NumDoc = " + txt_nro_documento.Text
                 + " AND Cliente_Mail = '" + txt_mail.Text + "'";
                 con.executeQuery();
-                con.closeConection();
+                //con.closeConection();
 
                 if (!con.reader())
                 {

@@ -266,6 +266,7 @@ namespace FrbaHotel.ABMCliente
                 con.closeConection();
 
                 MessageBox.Show("Operación exitosa", "FOUR SIZONS - FRBA Hoteles", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                this.Close();
             }
             catch (Exception ex)
             {

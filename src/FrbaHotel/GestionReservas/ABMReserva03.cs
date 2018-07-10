@@ -170,11 +170,11 @@ namespace FrbaHotel.GestionReservas
                 
                 if (modoABM == "DLT")
                 {
-                    con.command.Parameters.Add("@estado", SqlDbType.Bit).Value = 0;
+                    con.command.Parameters.Add("@estado", SqlDbType.Decimal).Value = 0;
                 }
                 else if (modoABM == "UPD")
                 {
-                    con.command.Parameters.Add("@estado", SqlDbType.Bit).Value = 1;
+                    con.command.Parameters.Add("@estado", SqlDbType.Decimal).Value = 1;
                 }
 
                 con.command.Parameters.Add("@canthab", SqlDbType.Decimal).Value = Convert.ToDecimal(txt_cantHab.Text);
