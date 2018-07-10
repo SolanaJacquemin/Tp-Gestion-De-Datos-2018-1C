@@ -33,6 +33,7 @@ namespace FrbaHotel.ABMCliente
             modoABM = modo;
             cliente = clienteID;
             cb_tipo_doc.DropDownStyle = ComboBoxStyle.DropDownList;
+            levantarCombos();
 
             switch (modoABM)
             {
@@ -117,16 +118,9 @@ namespace FrbaHotel.ABMCliente
 
         private void ABMCliente02_Load(object sender, EventArgs e)
         {
-
+            cb_tipo_doc.Items.Clear();
+            levantarCombos();
             Conexion con = new Conexion();
-            con.strQuery = "SELECT Parametro_Descripcion FROM FOUR_SIZONS.Parametros WHERE Parametro_Codigo = 'DOCUMENTO'";
-            con.executeQuery();
-            while (con.reader())
-            {
-                cb_tipo_doc.Items.Add(con.lector.GetString(0));
-            }
-            con.closeConection();
-            
             if (modoABM != "INS")
             {
 
@@ -339,7 +333,6 @@ namespace FrbaHotel.ABMCliente
                     txt_localidad.Text = "";
                     txt_pais.Text = "";
                     txt_ciudad.Text = "";
-                    cb_tipo_doc.Items.Clear();
                 }
                 else
                 {
@@ -357,7 +350,6 @@ namespace FrbaHotel.ABMCliente
                     txt_localidad.Text = "";
                     txt_pais.Text = "";
                     txt_ciudad.Text = "";
-                    cb_tipo_doc.Items.Clear();
                 }
 
             }
@@ -377,6 +369,7 @@ namespace FrbaHotel.ABMCliente
             if (txt_nro_calle.Text == "") abm_valido = false;
             if (txt_mail.Text == "") abm_valido = false;
             if (txt_nacionalidad.Text == "") abm_valido = false;
+            if (txt_piso.Text == "") txt_piso.Text = "0";
 
             return abm_valido;
         }

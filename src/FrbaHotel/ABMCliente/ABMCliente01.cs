@@ -70,7 +70,6 @@ namespace FrbaHotel.AbmCliente
         public void limpiar()
         {
             dgv_Clientes.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
-            dgv_Clientes.Rows.Clear();
             txt_nombre.Text = "";
             txt_apellido.Text = "";
             txt_mail.Text = "";
@@ -78,6 +77,19 @@ namespace FrbaHotel.AbmCliente
             dgv_Clientes.Rows.Clear();
             iniciarGrilla();
             refrescarGrid();
+            levantarCombos();
+        }
+
+        private void levantarCombos()
+        {
+            Conexion con = new Conexion();
+            con.strQuery = "SELECT Parametro_Descripcion FROM FOUR_SIZONS.Parametros WHERE Parametro_Codigo = 'DOCUMENTO'";
+            con.executeQuery();
+            while (con.reader())
+            {
+                cb_tipo_doc.Items.Add(con.lector.GetString(0));
+            }
+            con.closeConection();
         }
 
         private void buscar()
