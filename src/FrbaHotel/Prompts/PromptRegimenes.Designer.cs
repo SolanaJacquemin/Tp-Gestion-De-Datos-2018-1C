@@ -150,6 +150,7 @@
             this.Controls.Add(this.txt_aux_regimenid);
             this.Name = "PromptRegimenes";
             this.Text = "PromptRegimenes";
+            this.Load += new System.EventHandler(this.PromptRegimenes_Load);
             ((System.ComponentModel.ISupportInitialize)(this.dgvRegimenPrompt)).EndInit();
             this.groupBox1.ResumeLayout(false);
             this.groupBox1.PerformLayout();

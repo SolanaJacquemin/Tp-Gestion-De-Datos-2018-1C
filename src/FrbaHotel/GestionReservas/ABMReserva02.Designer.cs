@@ -429,7 +429,7 @@
             // label12
             // 
             this.label12.AutoSize = true;
-            this.label12.Location = new System.Drawing.Point(41, 150);
+            this.label12.Location = new System.Drawing.Point(42, 185);
             this.label12.Name = "label12";
             this.label12.Size = new System.Drawing.Size(88, 13);
             this.label12.TabIndex = 3;
@@ -437,7 +437,7 @@
             // 
             // txt_regimen
             // 
-            this.txt_regimen.Location = new System.Drawing.Point(141, 149);
+            this.txt_regimen.Location = new System.Drawing.Point(142, 184);
             this.txt_regimen.Name = "txt_regimen";
             this.txt_regimen.Size = new System.Drawing.Size(94, 20);
             this.txt_regimen.TabIndex = 4;
@@ -468,7 +468,7 @@
             // label18
             // 
             this.label18.AutoSize = true;
-            this.label18.Location = new System.Drawing.Point(96, 185);
+            this.label18.Location = new System.Drawing.Point(95, 152);
             this.label18.Name = "label18";
             this.label18.Size = new System.Drawing.Size(32, 13);
             this.label18.TabIndex = 3;
@@ -476,14 +476,14 @@
             // 
             // txt_hotel
             // 
-            this.txt_hotel.Location = new System.Drawing.Point(141, 178);
+            this.txt_hotel.Location = new System.Drawing.Point(141, 150);
             this.txt_hotel.Name = "txt_hotel";
             this.txt_hotel.Size = new System.Drawing.Size(94, 20);
             this.txt_hotel.TabIndex = 6;
             // 
             // btn_hotel
             // 
-            this.btn_hotel.Location = new System.Drawing.Point(236, 177);
+            this.btn_hotel.Location = new System.Drawing.Point(236, 149);
             this.btn_hotel.Name = "btn_hotel";
             this.btn_hotel.Size = new System.Drawing.Size(25, 23);
             this.btn_hotel.TabIndex = 26;
@@ -493,7 +493,7 @@
             // 
             // btn_regimen
             // 
-            this.btn_regimen.Location = new System.Drawing.Point(236, 148);
+            this.btn_regimen.Location = new System.Drawing.Point(237, 183);
             this.btn_regimen.Name = "btn_regimen";
             this.btn_regimen.Size = new System.Drawing.Size(25, 23);
             this.btn_regimen.TabIndex = 26;
@@ -543,13 +543,13 @@
             this.Controls.Add(this.boton_aceptar);
             this.Controls.Add(this.boton_volver);
             this.Controls.Add(this.label18);
-            this.Controls.Add(this.label12);
             this.Controls.Add(this.txt_cantHab);
             this.Controls.Add(this.txt_costoTotal);
+            this.Controls.Add(this.label12);
             this.Controls.Add(this.txt_hotel);
-            this.Controls.Add(this.txt_regimen);
             this.Controls.Add(this.txt_fechaCreacion);
             this.Controls.Add(this.label4);
+            this.Controls.Add(this.txt_regimen);
             this.Controls.Add(this.label19);
             this.Controls.Add(this.label16);
             this.Controls.Add(this.label15);

@@ -149,8 +149,8 @@ namespace FrbaHotel.ABMRol
         private void boton_modificacion_Click(object sender, EventArgs e)
         {
             if (dgv_Roles.SelectedRows.Count > 0)
-            {    
-                if(estado==false)
+            {
+                if (estado == false)
                 {
                     if (MessageBox.Show("El rol se encuentra inhabilitado, desea darle de alta?", "FOUR SIZONS - FRBA Hoteles", MessageBoxButtons.YesNo, MessageBoxIcon.Question) == DialogResult.Yes)
                     {
@@ -162,6 +162,16 @@ namespace FrbaHotel.ABMRol
                         this.buscar();
                         this.refrescarGrid();
                     }
+                }
+                else
+                {
+                    string modo = "UPD";
+                    this.Hide();
+                    ABMRol02 formABMRol02 = new ABMRol02(modo, dgv_Roles_Id);
+                    formABMRol02.ShowDialog();
+                    this.Show();
+                    this.buscar();
+                    this.refrescarGrid();
                 }
             }
             else

@@ -389,17 +389,22 @@ namespace FrbaHotel.GestionReservas
 
         private void btn_regimen_Click(object sender, EventArgs e)
         {
-            using (PromptRegimenes formPromptRegimen01 = new PromptRegimenes())
+            if (txt_hotel.Text != "")
             {
-                formPromptRegimen01.ShowDialog();
-                if (formPromptRegimen01.TextBox1.Text != "")
+                using (PromptRegimenes formPromptRegimen01 = new PromptRegimenes(hotelID))
                 {
-                    regimenID = Convert.ToDecimal(formPromptRegimen01.TextBox1.Text);
-                    txt_regimen.Text = formPromptRegimen01.TextBox2.Text;
+                    formPromptRegimen01.ShowDialog();
+                    if (formPromptRegimen01.TextBox1.Text != "")
+                    {
+                        regimenID = Convert.ToDecimal(formPromptRegimen01.TextBox1.Text);
+                        txt_regimen.Text = formPromptRegimen01.TextBox2.Text;
+                    }
+                    formPromptRegimen01.Close();
                 }
-                formPromptRegimen01.Close();
+                this.Show();
             }
-            this.Show();
+            else MessageBox.Show("Debe seleccionar un hotel primero para poder ofrecerle los regímenes", "FOUR SIZONS - FRBA Hoteles", MessageBoxButtons.OK, MessageBoxIcon.Information);
+
         }
 
         private void btn_aceptar_nuevo_Click(object sender, EventArgs e)

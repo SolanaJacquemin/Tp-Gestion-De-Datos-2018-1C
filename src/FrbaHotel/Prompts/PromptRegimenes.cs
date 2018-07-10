@@ -12,18 +12,22 @@ namespace FrbaHotel.Prompts
 {
     public partial class PromptRegimenes : Form
     {
-        public PromptRegimenes()
+        public decimal hotel;
+        public PromptRegimenes(decimal hot)
         {
             InitializeComponent();
             this.StartPosition = FormStartPosition.CenterScreen;
             txt_aux_regimenid.Visible = false;
             txt_aux_regimennombre.Visible = false;
             dgvRegimenPrompt.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
+            hotel = hot;
 
             dgvRegimenPrompt.Rows.Clear();
 
             Conexion con = new Conexion();
-            con.strQuery = "SELECT Regimen_Codigo, Regimen_Descripcion FROM FOUR_SIZONS.Regimen ORDER BY Regimen_Codigo";
+            con.strQuery = "SELECT R.Regimen_Codigo, R.Regimen_Descripcion FROM FOUR_SIZONS.Regimen R JOIN FOUR_SIZONS.RegXHotel H on " +
+                               "R.Regimen_Codigo = H.Regimen_Codigo AND H.Hotel_Codigo = " + hotel;
+
             con.executeQuery();
             if (!con.reader())
             {
@@ -98,6 +102,11 @@ namespace FrbaHotel.Prompts
             txt_aux_regimennombre.Text = dgv_regimen_nombre;
 
             this.Hide();
+        }
+
+        private void PromptRegimenes_Load(object sender, EventArgs e)
+        {
+
         }
 
 

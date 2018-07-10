@@ -138,7 +138,7 @@ namespace FrbaHotel.GestionReservas
 
         private void btn_regimen_Click(object sender, EventArgs e)
         {
-            using (PromptRegimenes formPromptRegimen01 = new PromptRegimenes())
+            using (PromptRegimenes formPromptRegimen01 = new PromptRegimenes(hotelID))
             {
                 formPromptRegimen01.ShowDialog();
                 if (formPromptRegimen01.TextBox1.Text != "")
