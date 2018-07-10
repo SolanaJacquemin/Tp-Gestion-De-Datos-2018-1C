@@ -83,6 +83,7 @@
             this.label4 = new System.Windows.Forms.Label();
             this.label3 = new System.Windows.Forms.Label();
             this.lbl_obligacion = new System.Windows.Forms.Label();
+            this.a1 = new System.Windows.Forms.Label();
             this.groupBox1.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -607,11 +608,21 @@
             // lbl_obligacion
             // 
             this.lbl_obligacion.AutoSize = true;
-            this.lbl_obligacion.Location = new System.Drawing.Point(27, 498);
+            this.lbl_obligacion.Location = new System.Drawing.Point(40, 498);
             this.lbl_obligacion.Name = "lbl_obligacion";
-            this.lbl_obligacion.Size = new System.Drawing.Size(108, 13);
+            this.lbl_obligacion.Size = new System.Drawing.Size(101, 13);
             this.lbl_obligacion.TabIndex = 45;
-            this.lbl_obligacion.Text = "* Campos obligatorios";
+            this.lbl_obligacion.Text = "Campos obligatorios";
+            // 
+            // a1
+            // 
+            this.a1.AutoSize = true;
+            this.a1.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.a1.Location = new System.Drawing.Point(21, 498);
+            this.a1.Name = "a1";
+            this.a1.Size = new System.Drawing.Size(15, 20);
+            this.a1.TabIndex = 46;
+            this.a1.Text = "*";
             // 
             // ABMCliente02
             // 
@@ -626,6 +637,7 @@
             this.Controls.Add(this.btn_volver);
             this.Controls.Add(this.label1);
             this.Controls.Add(this.label11);
+            this.Controls.Add(this.a1);
             this.Name = "ABMCliente02";
             this.Text = "Alta Cliente";
             this.Load += new System.EventHandler(this.ABMCliente02_Load);
@@ -693,5 +705,6 @@
         private System.Windows.Forms.Label a6;
         private System.Windows.Forms.Label a5;
         private System.Windows.Forms.Label a4;
+        private System.Windows.Forms.Label a1;
     }
 }

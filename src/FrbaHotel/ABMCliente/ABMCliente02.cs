@@ -80,6 +80,7 @@ namespace FrbaHotel.ABMCliente
                     txt_puntos.Enabled = false;
                     txt_estado.Enabled = false;
                     lbl_obligacion.Visible = false;
+                    sacarAsteriscos();
                     break;
 
                 case "UPD":
@@ -88,11 +89,30 @@ namespace FrbaHotel.ABMCliente
                     labelTitulo.Text = "Modificación de Cliente";
                     btn_aceptar_nuevo.Visible = false;
                     lbl_obligacion.Visible = false;
+                    sacarAsteriscos();
                     break;
             }
 
             dt_fecha_nac.Format = DateTimePickerFormat.Custom;
             dt_fecha_nac.CustomFormat = "dd/MM/yyyy";
+        }
+
+        public void sacarAsteriscos()
+        {
+            a1.Visible = false;
+            a2.Visible = false;
+            a3.Visible = false;
+            a4.Visible = false;
+            a5.Visible = false;
+            a6.Visible = false;
+            a7.Visible = false;
+            a8.Visible = false;
+            a9.Visible = false;
+            a10.Visible = false;
+            a11.Visible = false;
+            a12.Visible = false;
+            a13.Visible = false;
+            a14.Visible = false;
         }
 
         private void ABMCliente02_Load(object sender, EventArgs e)
