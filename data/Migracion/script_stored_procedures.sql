@@ -1,18 +1,16 @@
 -------------------------------------------------------Comienzo de procedures--------------------------------------------------------------
-go 
+go
 -- Borrado de procedures en la base 
 IF (OBJECT_ID('FOUR_SIZONS.ValidarUsuario', 'P') IS NOT NULL)
 BEGIN
     DROP PROCEDURE FOUR_SIZONS.ValidarUsuario
 END;
 
-
 IF (OBJECT_ID('FOUR_SIZONS.modificarRegXhot', 'P') IS NOT NULL)
 BEGIN
 
     DROP PROCEDURE FOUR_SIZONS.modificarRegXhot
 END;
-
 
 IF (OBJECT_ID('FOUR_SIZONS.asignarHab', 'P') IS NOT NULL)
 BEGIN
@@ -29,7 +27,6 @@ IF (OBJECT_ID('FOUR_SIZONS.altaUserXHot', 'P') IS NOT NULL)
 BEGIN
     DROP PROCEDURE FOUR_SIZONS.altaUserXHot
 END;
-
 
 IF (OBJECT_ID('FOUR_SIZONS.ModificacionUsuario', 'P') IS NOT NULL)
 BEGIN
