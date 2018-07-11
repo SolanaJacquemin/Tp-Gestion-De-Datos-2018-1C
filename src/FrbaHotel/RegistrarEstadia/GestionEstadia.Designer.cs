@@ -104,14 +104,14 @@
             this.txt_CodReserva.Location = new System.Drawing.Point(161, 28);
             this.txt_CodReserva.Name = "txt_CodReserva";
             this.txt_CodReserva.Size = new System.Drawing.Size(100, 20);
-            this.txt_CodReserva.TabIndex = 1;
+            this.txt_CodReserva.TabIndex = 0;
             // 
             // btn_limpiar
             // 
             this.btn_limpiar.Location = new System.Drawing.Point(161, 71);
             this.btn_limpiar.Name = "btn_limpiar";
             this.btn_limpiar.Size = new System.Drawing.Size(75, 23);
-            this.btn_limpiar.TabIndex = 13;
+            this.btn_limpiar.TabIndex = 2;
             this.btn_limpiar.Text = "Limpiar";
             this.btn_limpiar.UseVisualStyleBackColor = true;
             this.btn_limpiar.Click += new System.EventHandler(this.btn_limpiar_Click);
@@ -121,7 +121,7 @@
             this.btn_buscar.Location = new System.Drawing.Point(63, 71);
             this.btn_buscar.Name = "btn_buscar";
             this.btn_buscar.Size = new System.Drawing.Size(75, 23);
-            this.btn_buscar.TabIndex = 13;
+            this.btn_buscar.TabIndex = 1;
             this.btn_buscar.Text = "Buscar";
             this.btn_buscar.UseVisualStyleBackColor = true;
             this.btn_buscar.Click += new System.EventHandler(this.btn_buscar_Click);
@@ -140,7 +140,7 @@
             this.btn_Cerrar.Location = new System.Drawing.Point(385, 131);
             this.btn_Cerrar.Name = "btn_Cerrar";
             this.btn_Cerrar.Size = new System.Drawing.Size(125, 23);
-            this.btn_Cerrar.TabIndex = 13;
+            this.btn_Cerrar.TabIndex = 4;
             this.btn_Cerrar.Text = "Realizar Check-Out";
             this.btn_Cerrar.UseVisualStyleBackColor = true;
             this.btn_Cerrar.Click += new System.EventHandler(this.btn_Cerrar_Click);
@@ -150,7 +150,7 @@
             this.btn_volver.Location = new System.Drawing.Point(482, 391);
             this.btn_volver.Name = "btn_volver";
             this.btn_volver.Size = new System.Drawing.Size(75, 23);
-            this.btn_volver.TabIndex = 13;
+            this.btn_volver.TabIndex = 7;
             this.btn_volver.Text = "Volver";
             this.btn_volver.UseVisualStyleBackColor = true;
             this.btn_volver.Click += new System.EventHandler(this.btn_volver_Click);
@@ -160,7 +160,7 @@
             this.btn_Abrir.Location = new System.Drawing.Point(385, 102);
             this.btn_Abrir.Name = "btn_Abrir";
             this.btn_Abrir.Size = new System.Drawing.Size(125, 23);
-            this.btn_Abrir.TabIndex = 13;
+            this.btn_Abrir.TabIndex = 3;
             this.btn_Abrir.Text = "Realizar Check-In";
             this.btn_Abrir.UseVisualStyleBackColor = true;
             this.btn_Abrir.Click += new System.EventHandler(this.btn_Abrir_Click);
@@ -169,6 +169,8 @@
             // 
             this.dgv_Reserva.AllowUserToAddRows = false;
             this.dgv_Reserva.AllowUserToDeleteRows = false;
+            this.dgv_Reserva.AllowUserToResizeColumns = false;
+            this.dgv_Reserva.AllowUserToResizeRows = false;
             this.dgv_Reserva.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             this.dgv_Reserva.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
             this.Reserva_Codigo,
@@ -187,7 +189,7 @@
             this.dgv_Reserva.Name = "dgv_Reserva";
             this.dgv_Reserva.ReadOnly = true;
             this.dgv_Reserva.Size = new System.Drawing.Size(531, 150);
-            this.dgv_Reserva.TabIndex = 14;
+            this.dgv_Reserva.TabIndex = 6;
             this.dgv_Reserva.CellClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dgv_Reserva_CellClick);
             // 
             // Reserva_Codigo
@@ -261,7 +263,7 @@
             this.btn_consumibles.Location = new System.Drawing.Point(385, 160);
             this.btn_consumibles.Name = "btn_consumibles";
             this.btn_consumibles.Size = new System.Drawing.Size(125, 23);
-            this.btn_consumibles.TabIndex = 13;
+            this.btn_consumibles.TabIndex = 5;
             this.btn_consumibles.Text = "Registrar Consumible";
             this.btn_consumibles.UseVisualStyleBackColor = true;
             this.btn_consumibles.Click += new System.EventHandler(this.btn_consumibles_Click);

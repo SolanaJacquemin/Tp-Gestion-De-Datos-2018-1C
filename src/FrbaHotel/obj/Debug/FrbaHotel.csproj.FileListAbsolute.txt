@@ -200,3 +200,4 @@ C:\Users\Janice\TP ACTUALIZADO 2\Tp-Gestion-De-Datos-2018-1C\src\FrbaHotel\obj\D
 C:\Users\Janice\TP ACTUALIZADO 2\Tp-Gestion-De-Datos-2018-1C\src\FrbaHotel\obj\Debug\FrbaHotel.RegistrarEstadia.RegistrarConsumible.resources
 C:\Users\Janice\TP ACTUALIZADO 2\Tp-Gestion-De-Datos-2018-1C\src\FrbaHotel\obj\Debug\FrbaHotel.RegistrarEstadia.RegistroTarjeta.resources
 C:\Users\Janice\TP ACTUALIZADO 2\Tp-Gestion-De-Datos-2018-1C\src\FrbaHotel\obj\Debug\FrbaHotel.RegistrarEstadia.RegistroClientes.resources
+C:\Users\Nicolas\Desktop\Gestion de Datos\Tp-Gestion-De-Datos-2018-1C\src\FrbaHotel\obj\Debug\FrbaHotel.csprojResolveAssemblyReference.cache

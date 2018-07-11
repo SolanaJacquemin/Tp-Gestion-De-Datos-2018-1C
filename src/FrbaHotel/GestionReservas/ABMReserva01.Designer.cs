@@ -194,6 +194,7 @@
             this.btn_limpiar.TabIndex = 5;
             this.btn_limpiar.Text = "Limpiar";
             this.btn_limpiar.UseVisualStyleBackColor = true;
+            this.btn_limpiar.Click += new System.EventHandler(this.btn_limpiar_Click);
             // 
             // btn_buscar
             // 
@@ -225,6 +226,9 @@
             // dgv_Reservas
             // 
             this.dgv_Reservas.AllowUserToAddRows = false;
+            this.dgv_Reservas.AllowUserToDeleteRows = false;
+            this.dgv_Reservas.AllowUserToResizeColumns = false;
+            this.dgv_Reservas.AllowUserToResizeRows = false;
             this.dgv_Reservas.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             this.dgv_Reservas.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
             this.Reserva_Codigo,
@@ -236,6 +240,7 @@
             this.Reserva_Estado});
             this.dgv_Reservas.Location = new System.Drawing.Point(25, 150);
             this.dgv_Reservas.Name = "dgv_Reservas";
+            this.dgv_Reservas.ReadOnly = true;
             this.dgv_Reservas.Size = new System.Drawing.Size(519, 244);
             this.dgv_Reservas.TabIndex = 14;
             this.dgv_Reservas.CellClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dgv_Reservas_CellClick);

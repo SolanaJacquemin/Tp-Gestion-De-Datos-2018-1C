@@ -33,6 +33,7 @@ namespace FrbaHotel.RegistrarEstadia
         public decimal codigoEstadia;
         public decimal cliente;
 
+
         public RegistrarEstadia(string modo, decimal res, string user)
         {
             InitializeComponent();
@@ -402,9 +403,11 @@ namespace FrbaHotel.RegistrarEstadia
 
                     if (MessageBox.Show("Cliente de la reserva registrado. Desea registrar más clientes?", "FOUR SIZONS - FRBA Hoteles", MessageBoxButtons.YesNo, MessageBoxIcon.Question) == DialogResult.Yes)
                     {
+                        this.Hide();
                         RegistroClientes formRegisClie = new RegistroClientes(codigoEstadia);
                         formRegisClie.ShowDialog();
                         clieResRegistrado = true;
+                        this.Show();
                     }
                 }
                 catch (Exception ex)

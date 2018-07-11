@@ -118,8 +118,7 @@ namespace FrbaHotel.ABMCliente
 
         private void ABMCliente02_Load(object sender, EventArgs e)
         {
-            cb_tipo_doc.Items.Clear();
-            levantarCombos();
+            //levantarCombos();
             Conexion con = new Conexion();
             if (modoABM != "INS")
             {
@@ -393,6 +392,8 @@ namespace FrbaHotel.ABMCliente
             Conexion con = new Conexion();
             con.strQuery = "SELECT Parametro_Descripcion FROM FOUR_SIZONS.Parametros WHERE Parametro_Codigo = 'DOCUMENTO'";
             con.executeQuery();
+
+            cb_tipo_doc.Items.Clear();
             while (con.reader())
             {
                 cb_tipo_doc.Items.Add(con.lector.GetString(0));

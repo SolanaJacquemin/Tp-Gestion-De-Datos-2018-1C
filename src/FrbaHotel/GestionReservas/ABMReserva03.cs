@@ -44,10 +44,14 @@ namespace FrbaHotel.GestionReservas
                     dt_fechaDesde.Enabled = false;
                     dt_fechaHasta.Enabled = false;
                     cb_tipoHabitacion.Enabled = false;
-                    txt_reservaID.ReadOnly = true;
-                    txt_regimen.ReadOnly = true;
-                    txt_hotel.ReadOnly = true;
-                    txt_detalle.ReadOnly = false;
+                    txt_reservaID.Enabled = false;
+                    txt_regimen.Enabled = false;
+                    txt_hotel.Enabled = false;
+                    txt_cantHab.Enabled = false;
+                    btn_disponibilidad.Visible = false;
+                    btn_hotel.Visible = false;
+                    btn_regimen.Visible = false;
+                    boton_aceptar.Enabled = true;
                     break;
                 case "UPD":
                     labelTitulo.Text = "Modificación de Reserva";
@@ -55,10 +59,10 @@ namespace FrbaHotel.GestionReservas
                     dt_fechaDesde.Enabled = true;
                     dt_fechaHasta.Enabled = true;
                     cb_tipoHabitacion.Enabled = true;
-                    txt_reservaID.ReadOnly = false;
-                    txt_regimen.ReadOnly = false;
-                    txt_hotel.ReadOnly = false;
-                    txt_detalle.ReadOnly = false;
+                    txt_reservaID.Enabled = true;
+                    txt_regimen.Enabled = true;
+                    txt_hotel.Enabled = true;
+                    txt_detalle.Enabled = true;
                     break;
             }
             dt_fechaDesde.Format = DateTimePickerFormat.Custom;

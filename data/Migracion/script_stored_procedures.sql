@@ -1212,7 +1212,8 @@ begin
 set @aux2= @aux
 update FOUR_SIZONS.Disponibilidad
 	set Disp_HabDisponibles = Disp_HabDisponibles - @cantHab
-		where Disp_Fecha= @aux and Hotel_Codigo = @hotId and Habitacion_Tipo_Codigo = @tipohab
+		--where Disp_Fecha= @aux and Hotel_Codigo = @hotId and Habitacion_Tipo_Codigo = @tipohab
+		where datediff(day,Disp_Fecha,@aux)=0 and Hotel_Codigo = @hotId and Habitacion_Tipo_Codigo = @tipohab
 set @aux = DATEADD(day, 1, @aux2)
 end
 

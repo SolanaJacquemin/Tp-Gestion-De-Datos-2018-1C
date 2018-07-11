@@ -15,6 +15,7 @@ namespace FrbaHotel.RegistrarEstadia
     {
         public decimal estadia;
         public decimal error;
+        public decimal cliente;
 
         public RegistroClientes(decimal estadiaID)
         {
@@ -74,9 +75,13 @@ namespace FrbaHotel.RegistrarEstadia
                 + " AND Cliente_NumDoc = " + txt_nro_documento.Text
                 + " AND Cliente_Mail = '" + txt_mail.Text + "'";
                 con.executeQuery();
-                //con.closeConection();
+                if (con.reader())
+                {
+                    cliente = con.lector.GetDecimal(0);
+                }
+                con.closeConection();
 
-                if (!con.reader())
+                if (cliente == 0)
                 {
                     //Llama a ABMCliente02
                     string tipoDoc = cb_tipoDocumento.Text;
@@ -89,19 +94,36 @@ namespace FrbaHotel.RegistrarEstadia
                 }
                 else
                 {
-                    decimal cliente = con.lector.GetDecimal(0);
-                    con.strQuery = "four_sizons.RegistrarEstadiaXCliente";
-                    con.execute();
-                    con.command.CommandType = CommandType.StoredProcedure;
+                    try
+                    {
+                        Conexion con2 = new Conexion();
 
-                    con.command.Parameters.Add("@cliente", SqlDbType.Decimal).Value = cliente;
-                    con.command.Parameters.Add("@estadia", SqlDbType.Decimal).Value = estadia;
+                        con2.strQuery = "four_sizons.RegistrarEstadiaXCliente";
+                        con2.execute();
+                        con2.command.CommandType = CommandType.StoredProcedure;
 
-                    con.openConection();
-                    con.command.ExecuteNonQuery();
-                    con.closeConection();
+                        con2.command.Parameters.Add("@cliente", SqlDbType.Decimal).Value = cliente;
+                        con2.command.Parameters.Add("@estadia", SqlDbType.Decimal).Value = estadia;
 
-                    MessageBox.Show("Operación exitosa", "FOUR SIZONS - FRBA Hoteles", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                        con2.openConection();
+                        con2.command.ExecuteNonQuery();
+                        con2.closeConection();
+                        MessageBox.Show("Operación exitosa", "FOUR SIZONS - FRBA Hoteles", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                        if (MessageBox.Show("Cliente registrado. Desea registrar más clientes?", "FOUR SIZONS - FRBA Hoteles", MessageBoxButtons.YesNo, MessageBoxIcon.Question) == DialogResult.Yes)
+                        {
+                            txt_mail.Clear();
+                            cb_tipoDocumento.Text = "";
+                            txt_nro_documento.Text = "";
+                        }
+                        else
+                        {
+                            this.Close();
+                        }
+                    }
+                    catch (Exception ex)
+                    {
+                        MessageBox.Show("Error al completar la operación. " + ex.Message, "FOUR SIZONS - FRBA Hoteles", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    }
                 }
 
             }

@@ -200,8 +200,11 @@ namespace FrbaHotel.RegistrarEstadia
         private void dgv_Reserva_CellClick(object sender, DataGridViewCellEventArgs e)
         {
             int index = e.RowIndex;
-            DataGridViewRow selectedRow = dgv_Reserva.Rows[index];
-            dgv_CodReserva = Convert.ToDecimal(selectedRow.Cells[0].Value.ToString());
+            if(index >= 0)
+            {
+                DataGridViewRow selectedRow = dgv_Reserva.Rows[index];
+                dgv_CodReserva = Convert.ToDecimal(selectedRow.Cells[0].Value.ToString());
+            }
         }
 
     }
