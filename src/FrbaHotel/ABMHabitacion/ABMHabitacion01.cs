@@ -262,7 +262,7 @@ namespace FrbaHotel.ABMHabitacion
         public void dgv_Habitaciones_CellClick(object sender, DataGridViewCellEventArgs e)
         {
             int index = e.RowIndex;
-            if (index > -1) 
+            if (index >= 0) 
             {
                 error = 0;
                 DataGridViewRow selectedRow = dgv_Habitaciones.Rows[index];

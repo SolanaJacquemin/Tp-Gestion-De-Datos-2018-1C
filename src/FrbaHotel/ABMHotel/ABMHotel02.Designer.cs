@@ -36,11 +36,10 @@
             this.l_estado = new System.Windows.Forms.Label();
             this.txt_estado = new System.Windows.Forms.TextBox();
             this.groupBox1 = new System.Windows.Forms.GroupBox();
+            this.btn_regimen = new System.Windows.Forms.Button();
             this.txt_nombre_hotel = new System.Windows.Forms.TextBox();
-            this.dt_fecha_cre = new System.Windows.Forms.DateTimePicker();
             this.cb_estrellas = new System.Windows.Forms.ComboBox();
             this.label5 = new System.Windows.Forms.Label();
-            this.label12 = new System.Windows.Forms.Label();
             this.label8 = new System.Windows.Forms.Label();
             this.label2 = new System.Windows.Forms.Label();
             this.label6 = new System.Windows.Forms.Label();
@@ -57,7 +56,6 @@
             this.txt_telefono = new System.Windows.Forms.TextBox();
             this.txt_recargaEstrella = new System.Windows.Forms.TextBox();
             this.lbl_obligacion = new System.Windows.Forms.Label();
-            this.btn_regimen = new System.Windows.Forms.Button();
             this.groupBox1.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -131,14 +129,11 @@
             // 
             // groupBox1
             // 
-            this.groupBox1.Controls.Add(this.btn_regimen);
             this.groupBox1.Controls.Add(this.txt_nombre_hotel);
-            this.groupBox1.Controls.Add(this.dt_fecha_cre);
             this.groupBox1.Controls.Add(this.l_estado);
             this.groupBox1.Controls.Add(this.txt_estado);
             this.groupBox1.Controls.Add(this.cb_estrellas);
             this.groupBox1.Controls.Add(this.label5);
-            this.groupBox1.Controls.Add(this.label12);
             this.groupBox1.Controls.Add(this.label8);
             this.groupBox1.Controls.Add(this.label2);
             this.groupBox1.Controls.Add(this.label6);
@@ -160,20 +155,22 @@
             this.groupBox1.TabIndex = 32;
             this.groupBox1.TabStop = false;
             // 
+            // btn_regimen
+            // 
+            this.btn_regimen.Location = new System.Drawing.Point(431, 284);
+            this.btn_regimen.Name = "btn_regimen";
+            this.btn_regimen.Size = new System.Drawing.Size(89, 23);
+            this.btn_regimen.TabIndex = 47;
+            this.btn_regimen.Text = "Regímenes";
+            this.btn_regimen.UseVisualStyleBackColor = true;
+            this.btn_regimen.Click += new System.EventHandler(this.btn_regimen_Click);
+            // 
             // txt_nombre_hotel
             // 
             this.txt_nombre_hotel.Location = new System.Drawing.Point(63, 46);
             this.txt_nombre_hotel.Name = "txt_nombre_hotel";
             this.txt_nombre_hotel.Size = new System.Drawing.Size(191, 20);
             this.txt_nombre_hotel.TabIndex = 44;
-            // 
-            // dt_fecha_cre
-            // 
-            this.dt_fecha_cre.Location = new System.Drawing.Point(376, 152);
-            this.dt_fecha_cre.Name = "dt_fecha_cre";
-            this.dt_fecha_cre.Size = new System.Drawing.Size(121, 20);
-            this.dt_fecha_cre.TabIndex = 12;
-            this.dt_fecha_cre.Value = new System.DateTime(2018, 6, 3, 0, 0, 0, 0);
             // 
             // cb_estrellas
             // 
@@ -191,15 +188,6 @@
             this.label5.Size = new System.Drawing.Size(49, 13);
             this.label5.TabIndex = 27;
             this.label5.Text = "Teléfono";
-            // 
-            // label12
-            // 
-            this.label12.AutoSize = true;
-            this.label12.Location = new System.Drawing.Point(288, 154);
-            this.label12.Name = "label12";
-            this.label12.Size = new System.Drawing.Size(82, 13);
-            this.label12.TabIndex = 43;
-            this.label12.Text = "Fecha Creación";
             // 
             // label8
             // 
@@ -331,21 +319,12 @@
             this.lbl_obligacion.TabIndex = 46;
             this.lbl_obligacion.Text = "Todos los campos son obligatorios";
             // 
-            // btn_regimen
-            // 
-            this.btn_regimen.Location = new System.Drawing.Point(327, 16);
-            this.btn_regimen.Name = "btn_regimen";
-            this.btn_regimen.Size = new System.Drawing.Size(89, 23);
-            this.btn_regimen.TabIndex = 47;
-            this.btn_regimen.Text = "Regímenes";
-            this.btn_regimen.UseVisualStyleBackColor = true;
-            this.btn_regimen.Click += new System.EventHandler(this.btn_regimen_Click);
-            // 
             // ABMHotel02
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(609, 319);
+            this.Controls.Add(this.btn_regimen);
             this.Controls.Add(this.lbl_obligacion);
             this.Controls.Add(this.groupBox1);
             this.Controls.Add(this.boton_volver);
@@ -390,8 +369,6 @@
         private System.Windows.Forms.TextBox txt_ciudad;
         private System.Windows.Forms.TextBox txt_telefono;
         private System.Windows.Forms.TextBox txt_recargaEstrella;
-        private System.Windows.Forms.DateTimePicker dt_fecha_cre;
-        private System.Windows.Forms.Label label12;
         private System.Windows.Forms.Label lbl_obligacion;
         private System.Windows.Forms.TextBox txt_nombre_hotel;
         private System.Windows.Forms.Button btn_regimen;

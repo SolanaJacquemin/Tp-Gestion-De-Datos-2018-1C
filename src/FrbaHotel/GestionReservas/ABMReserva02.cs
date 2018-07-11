@@ -28,8 +28,9 @@ namespace FrbaHotel.GestionReservas
         public bool tieneDisponibilidad;
         public decimal reservaID;
         public string busqueda;
+        public decimal hotel;
 
-        public ABMReserva02(string modo, string user)
+        public ABMReserva02(string modo, string user, decimal hotelID)
         {
             InitializeComponent();
             this.StartPosition = FormStartPosition.CenterScreen;
@@ -37,6 +38,8 @@ namespace FrbaHotel.GestionReservas
 
             usuario = user;
             modoABM = modo;
+
+            hotel = hotelID;
 
             cb_tipoDocumento.DropDownStyle = ComboBoxStyle.DropDownList;
             cb_tipoHabitacion.DropDownStyle = ComboBoxStyle.DropDownList;
@@ -69,6 +72,21 @@ namespace FrbaHotel.GestionReservas
             tieneDisponibilidad = false;
             check_doc.Enabled = false;
             check_mail.Enabled = false;
+
+            if (hotel != 0)
+            {
+                Conexion con = new Conexion();
+                con.strQuery = "SELECT Hotel_Nombre FROM FOUR_SIZONS.Hotel WHERE Hotel_Codigo = " + hotel;
+                con.executeQuery();
+
+                while (con.reader())
+                {
+                    txt_hotel.Text = con.lector.GetString(0);
+                    btn_hotel.Visible = false;
+                    txt_hotel.Enabled = false;
+                }
+                con.closeConection();
+            }
 
             
         }
@@ -274,6 +292,7 @@ namespace FrbaHotel.GestionReservas
                 con2.strQuery = "four_sizons.AltaCliente";
                 con2.execute();
                 con2.command.CommandType = CommandType.StoredProcedure;
+                con2.command.Parameters.Add("@codigo", SqlDbType.Decimal).Direction = ParameterDirection.Output;
                 con2.command.Parameters.Add("@nombre", SqlDbType.NVarChar).Value = txt_nombre.Text;
                 con2.command.Parameters.Add("@apellido", SqlDbType.NVarChar).Value = txt_apellido.Text;
                 con2.command.Parameters.Add("@numDoc", SqlDbType.Decimal).Value = Convert.ToDecimal(txt_nro_documento.Text);
@@ -291,19 +310,9 @@ namespace FrbaHotel.GestionReservas
                 con2.command.Parameters.Add("@fechaNac", SqlDbType.DateTime).Value = "01-01-1990";
                 con2.openConection();
                 con2.command.ExecuteNonQuery();
+
+                clienteID = Convert.ToDecimal(con2.command.Parameters["@codigo"].Value);
                 con2.closeConection();
-
-                Conexion con3 = new Conexion();
-
-                con3.strQuery = "SELECT Cliente_Codigo FROM FOUR_SIZONS.Cliente WHERE Cliente_NumDoc = " + txt_nro_documento.Text;
-                con3.executeQuery();
-
-                if (con3.reader())
-                {
-                    clienteID = Convert.ToDecimal(con3.lector.GetDecimal(0).ToString());
-                }
-
-                con3.closeConection();
             }
             catch (Exception ex)
             {
@@ -389,6 +398,7 @@ namespace FrbaHotel.GestionReservas
                 }
                 formPromptHotel01.Close();
             }
+            txt_regimen.Clear();
             this.Show();
         }
 
@@ -458,7 +468,7 @@ namespace FrbaHotel.GestionReservas
                     con.closeConection();
 
                     txt_costoTotal.Text = con.command.Parameters["@precio"].Value.ToString();
-                    MessageBox.Show("Existe disponbilidad y el precio es de: " + txt_costoTotal.Text, "FOUR SIZONS - FRBA Hoteles", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                    MessageBox.Show("Existe disponbilidad y el precio es de: U$S " + txt_costoTotal.Text, "FOUR SIZONS - FRBA Hoteles", MessageBoxButtons.OK, MessageBoxIcon.Information);
                     tieneDisponibilidad = true;
                     
 

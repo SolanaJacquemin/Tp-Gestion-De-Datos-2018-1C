@@ -22,6 +22,8 @@ namespace FrbaHotel.ABMHotel
         public string nombreHotel;
         public int error;
         public decimal codigoHotel;
+        public bool regimenCreado;
+        public bool crearRegimen;
 
         public ABMHotel02(string modo, decimal hotelId)
         {
@@ -30,6 +32,8 @@ namespace FrbaHotel.ABMHotel
             labelTitulo.AutoSize = false;
             btn_regimen.Enabled = false;
 
+            crearRegimen = false;
+            regimenCreado = false;
             hotel = hotelId;
             modoABM = modo;
 
@@ -52,7 +56,6 @@ namespace FrbaHotel.ABMHotel
                     txt_ciudad.Enabled = false;
                     txt_pais.Enabled = false;
                     txt_recargaEstrella.Enabled = false;
-                    dt_fecha_cre.Enabled = false;
                     cb_estrellas.Enabled = false;
                     txt_estado.Visible = false;
                     l_estado.Visible = false;
@@ -67,7 +70,6 @@ namespace FrbaHotel.ABMHotel
                     txt_ciudad.ReadOnly = false;
                     txt_pais.ReadOnly = false;
                     txt_recargaEstrella.ReadOnly = false;
-                    dt_fecha_cre.Enabled = true;
                     cb_estrellas.Enabled = true;
                     txt_estado.Visible = false;
                     l_estado.Visible = false;
@@ -79,9 +81,6 @@ namespace FrbaHotel.ABMHotel
             cb_estrellas.Items.Add("3");
             cb_estrellas.Items.Add("4");
             cb_estrellas.Items.Add("5");
-
-            dt_fecha_cre.Format = DateTimePickerFormat.Custom;
-            dt_fecha_cre.CustomFormat = "dd/MM/yyyy";
 
         }
 
@@ -116,7 +115,6 @@ namespace FrbaHotel.ABMHotel
                     txt_recargaEstrella.Text = con.lector.GetDecimal(7).ToString();
                     txt_ciudad.Text = con.lector.GetString(8);
                     txt_pais.Text = con.lector.GetString(9);
-                    dt_fecha_cre.Value = con.lector.GetDateTime(10);
                     if (con.lector.GetBoolean(11))
                     {
                         txt_estado.Text = "ACTIVO";
@@ -240,7 +238,6 @@ namespace FrbaHotel.ABMHotel
             if (txt_mail.Text == "") abm_valido = false;
             if (txt_recargaEstrella.Text == "") abm_valido = false;
             if (cb_estrellas.Text == "") abm_valido = false;
-            if (dt_fecha_cre.Text == "") abm_valido = false;
 
             return abm_valido;
         }
@@ -262,7 +259,7 @@ namespace FrbaHotel.ABMHotel
         private void boton_aceptar_Click(object sender, EventArgs e)
         {
             error = 0;
-            if (modoABM != "DLT") 
+            if (((modoABM == "INS") && (!regimenCreado)) || (modoABM == "UPD")) 
             {
                 if (verificarObligatorios() == false)
                 {
@@ -287,28 +284,45 @@ namespace FrbaHotel.ABMHotel
                 };
             }
 
-            switch (modoABM)
-            {
-                case "INS":
-                    nombreSP = "FOUR_SIZONS.AltaHotel";
-                    break;
-
-                case "UPD":
-                    nombreSP = "FOUR_SIZONS.ModificarHotel";
-                    break;
-
-                case "DLT":
-                    // Baja lógica - Se pone estado en 0
-                    nombreSP = "FOUR_SIZONS.ModificarHotel";
-                    break;
-            }
-            
             if (error == 0)
-            {   
-                ejecutarABMHotel(nombreSP);
-                btn_regimen.Enabled = true; 
-                MessageBox.Show("Cree regímenes para el hotel para continuar", "FOUR SIZONS - FRBA Hoteles", MessageBoxButtons.OK, MessageBoxIcon.Information);
-                //this.Close();
+            {
+                switch (modoABM)
+                {
+                    case "INS":
+                        nombreSP = "FOUR_SIZONS.AltaHotel";
+                        break;
+
+                    case "UPD":
+                        nombreSP = "FOUR_SIZONS.ModificarHotel";
+                        break;
+
+                    case "DLT":
+                        // Baja lógica - Se pone estado en 0
+                        nombreSP = "FOUR_SIZONS.ModificarHotel";
+                        break;
+                }
+                if ((modoABM == "INS" && (!crearRegimen)))
+                {
+                    ejecutarABMHotel(nombreSP);
+                    btn_regimen.Enabled = true;
+                    crearRegimen = true;
+                    MessageBox.Show("Cree regímenes para el hotel para continuar", "FOUR SIZONS - FRBA Hoteles", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                }
+
+                if ((modoABM == "INS" && (regimenCreado)))
+                {
+                    this.Close();
+                }
+                else
+                {
+                    MessageBox.Show("Cree regímenes para el hotel para continuar", "FOUR SIZONS - FRBA Hoteles", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                }
+
+                if (modoABM != "INS")
+                {
+                    this.Close();
+                }
+
             }
 
         }
@@ -333,7 +347,6 @@ namespace FrbaHotel.ABMHotel
                 txt_ciudad.Text = "";
                 txt_pais.Text = "";
                 txt_recargaEstrella.Text = "";
-                dt_fecha_cre.Text = "";
                 cb_estrellas.Items.Clear();
             }
         }
@@ -357,6 +370,7 @@ namespace FrbaHotel.ABMHotel
             this.Hide();
             ABMHotel04 formABMHotel04 = new ABMHotel04(modoABM, codigoHotel);
             formABMHotel04.ShowDialog();
+            regimenCreado = true;
             this.Show();
         }
     }

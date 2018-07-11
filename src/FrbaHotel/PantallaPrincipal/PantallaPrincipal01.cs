@@ -78,7 +78,7 @@ namespace FrbaHotel.PantallaPrincipal
         private void btn_hoteles_Click(object sender, EventArgs e)
         {
             this.Hide();
-            ABMHotel01 formABMHotel01 = new ABMHotel01(hotel);
+            ABMHotel01 formABMHotel01 = new ABMHotel01(hotel, usuario);
             formABMHotel01.ShowDialog();
             this.Show();
         }

@@ -71,7 +71,7 @@ namespace FrbaHotel.ABMHotel
             if (error == 0)
             {
                 ejecutarABMRol(nombreSP);
-                //this.Close();
+                this.Close();
             }
         }
 

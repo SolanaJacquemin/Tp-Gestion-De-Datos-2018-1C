@@ -16,13 +16,26 @@ namespace FrbaHotel.ABMHotel
         public string dgv_hotel_codigo;
         public int index;
         public decimal hotel;
+        public string usuario;
+        public bool esAdminGral;
 
-        public ABMHotel01(decimal hotelID)
+        public ABMHotel01(decimal hotelID, string userID)
         {
             InitializeComponent();
             this.StartPosition = FormStartPosition.CenterScreen;
 
             hotel = hotelID;
+            usuario = userID;
+            esAdminGral = false;
+
+            Conexion con = new Conexion();
+            con.strQuery = "select Rol_Codigo from FOUR_SIZONS.UsuarioXRol Where Usuario_ID = '" + usuario + "'";
+            con.executeQuery();
+            if (con.reader())
+            {
+                esAdminGral = true;
+            }
+            con.closeConection();
 
             dgv_Hoteles.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
             dgv_Hoteles.Rows.Clear();
@@ -38,21 +51,11 @@ namespace FrbaHotel.ABMHotel
             txt_codigo.Enabled = false;
         }
 
-        private void refrescarGrid()
-        {
-            dgv_Hoteles.ClearSelection();
-            foreach (DataGridViewRow row in dgv_Hoteles.Rows)
-            if (Convert.ToBoolean(row.Cells[11].Value) == false)
-            {
-                row.DefaultCellStyle.BackColor = Color.Red;
-            }
-        }
-
         public void iniciarGrilla()
         {
             Conexion con = new Conexion();
             con.strQuery = "SELECT * FROM FOUR_SIZONS.Hotel ";
-            if (hotel != 0)
+            if ((hotel != 0) && (esAdminGral == false))
             {
                 con.strQuery = con.strQuery + " WHERE Hotel_Codigo = " + hotel;
             }
@@ -79,6 +82,13 @@ namespace FrbaHotel.ABMHotel
                 con.lector.GetDateTime(10), con.lector.GetBoolean(11)});
             }
             con.closeConection();
+
+            dgv_Hoteles.ClearSelection();
+            foreach (DataGridViewRow row in dgv_Hoteles.Rows)
+                if (Convert.ToBoolean(row.Cells[11].Value) == false)
+                {
+                    row.DefaultCellStyle.BackColor = Color.Red;
+                }
         }
 
         private void buscar()
@@ -127,6 +137,13 @@ namespace FrbaHotel.ABMHotel
                 con.lector.GetDateTime(10), con.lector.GetBoolean(11)});
             }
             con.closeConection();
+
+            dgv_Hoteles.ClearSelection();
+            foreach (DataGridViewRow row in dgv_Hoteles.Rows)
+                if (Convert.ToBoolean(row.Cells[11].Value) == false)
+                {
+                    row.DefaultCellStyle.BackColor = Color.Red;
+                }
         }
 
           public void limpiar()
@@ -141,7 +158,6 @@ namespace FrbaHotel.ABMHotel
             txt_ciudad.Text = "";
             txt_pais.Text = "";
             iniciarGrilla();
-            refrescarGrid();
         }         
 
         private void ABMHotel_Load(object sender, EventArgs e)
@@ -202,7 +218,6 @@ namespace FrbaHotel.ABMHotel
             formABMUsuario02.ShowDialog();
             this.Show();
             this.buscar();
-            this.refrescarGrid();
         }
 
         private void boton_baja_Click(object sender, EventArgs e)
@@ -215,7 +230,6 @@ namespace FrbaHotel.ABMHotel
             formABMUsuario02.ShowDialog();
             this.Show();
             this.buscar();
-            this.refrescarGrid();
             }
             else
             {
@@ -233,7 +247,6 @@ namespace FrbaHotel.ABMHotel
             formABMUsuario02.ShowDialog();
             this.Show();
             this.buscar();
-            this.refrescarGrid();
             }
             else
             {
@@ -257,7 +270,6 @@ namespace FrbaHotel.ABMHotel
             formABMHotel03.ShowDialog();
             this.Show();
             this.buscar();
-            this.refrescarGrid();
             }
             else
             {
@@ -290,7 +302,6 @@ namespace FrbaHotel.ABMHotel
                 formABMHotel04.ShowDialog();
                 this.Show();
                 this.buscar();
-                this.refrescarGrid();
             }
             else
             {

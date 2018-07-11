@@ -111,7 +111,7 @@
             this.boton_aceptar.Location = new System.Drawing.Point(25, 692);
             this.boton_aceptar.Name = "boton_aceptar";
             this.boton_aceptar.Size = new System.Drawing.Size(75, 23);
-            this.boton_aceptar.TabIndex = 21;
+            this.boton_aceptar.TabIndex = 23;
             this.boton_aceptar.Text = "Aceptar";
             this.boton_aceptar.UseVisualStyleBackColor = true;
             this.boton_aceptar.Click += new System.EventHandler(this.boton_aceptar_Click);
@@ -129,7 +129,7 @@
             this.boton_volver.Location = new System.Drawing.Point(425, 692);
             this.boton_volver.Name = "boton_volver";
             this.boton_volver.Size = new System.Drawing.Size(75, 23);
-            this.boton_volver.TabIndex = 22;
+            this.boton_volver.TabIndex = 24;
             this.boton_volver.Text = "Volver";
             this.boton_volver.UseVisualStyleBackColor = true;
             this.boton_volver.Click += new System.EventHandler(this.boton_volver_Click);
@@ -274,63 +274,63 @@
             this.txt_ciudad.Location = new System.Drawing.Point(139, 244);
             this.txt_ciudad.Name = "txt_ciudad";
             this.txt_ciudad.Size = new System.Drawing.Size(200, 20);
-            this.txt_ciudad.TabIndex = 37;
+            this.txt_ciudad.TabIndex = 21;
             // 
             // txt_pais
             // 
             this.txt_pais.Location = new System.Drawing.Point(139, 276);
             this.txt_pais.Name = "txt_pais";
             this.txt_pais.Size = new System.Drawing.Size(200, 20);
-            this.txt_pais.TabIndex = 38;
+            this.txt_pais.TabIndex = 22;
             // 
             // txt_depto
             // 
             this.txt_depto.Location = new System.Drawing.Point(139, 217);
             this.txt_depto.Name = "txt_depto";
             this.txt_depto.Size = new System.Drawing.Size(72, 20);
-            this.txt_depto.TabIndex = 36;
+            this.txt_depto.TabIndex = 20;
             // 
             // txt_piso
             // 
             this.txt_piso.Location = new System.Drawing.Point(139, 188);
             this.txt_piso.Name = "txt_piso";
             this.txt_piso.Size = new System.Drawing.Size(199, 20);
-            this.txt_piso.TabIndex = 35;
+            this.txt_piso.TabIndex = 19;
             // 
             // txt_nroCalle
             // 
             this.txt_nroCalle.Location = new System.Drawing.Point(139, 160);
             this.txt_nroCalle.Name = "txt_nroCalle";
             this.txt_nroCalle.Size = new System.Drawing.Size(72, 20);
-            this.txt_nroCalle.TabIndex = 34;
+            this.txt_nroCalle.TabIndex = 18;
             // 
             // txt_calle
             // 
             this.txt_calle.Location = new System.Drawing.Point(139, 127);
             this.txt_calle.Name = "txt_calle";
             this.txt_calle.Size = new System.Drawing.Size(199, 20);
-            this.txt_calle.TabIndex = 33;
+            this.txt_calle.TabIndex = 17;
             // 
             // txt_telefono
             // 
             this.txt_telefono.Location = new System.Drawing.Point(139, 97);
             this.txt_telefono.Name = "txt_telefono";
             this.txt_telefono.Size = new System.Drawing.Size(200, 20);
-            this.txt_telefono.TabIndex = 32;
+            this.txt_telefono.TabIndex = 16;
             // 
             // txt_apellido
             // 
             this.txt_apellido.Location = new System.Drawing.Point(139, 64);
             this.txt_apellido.Name = "txt_apellido";
             this.txt_apellido.Size = new System.Drawing.Size(200, 20);
-            this.txt_apellido.TabIndex = 31;
+            this.txt_apellido.TabIndex = 15;
             // 
             // txt_nombre
             // 
             this.txt_nombre.Location = new System.Drawing.Point(139, 32);
             this.txt_nombre.Name = "txt_nombre";
             this.txt_nombre.Size = new System.Drawing.Size(200, 20);
-            this.txt_nombre.TabIndex = 30;
+            this.txt_nombre.TabIndex = 14;
             // 
             // labelTitulo
             // 
@@ -379,7 +379,7 @@
             this.txt_regimen.Location = new System.Drawing.Point(142, 184);
             this.txt_regimen.Name = "txt_regimen";
             this.txt_regimen.Size = new System.Drawing.Size(94, 20);
-            this.txt_regimen.TabIndex = 4;
+            this.txt_regimen.TabIndex = 6;
             // 
             // label16
             // 
@@ -418,7 +418,7 @@
             this.txt_hotel.Location = new System.Drawing.Point(141, 150);
             this.txt_hotel.Name = "txt_hotel";
             this.txt_hotel.Size = new System.Drawing.Size(94, 20);
-            this.txt_hotel.TabIndex = 6;
+            this.txt_hotel.TabIndex = 4;
             // 
             // btn_hotel
             // 
@@ -472,7 +472,7 @@
             this.cb_tipoDocumento.Location = new System.Drawing.Point(139, 34);
             this.cb_tipoDocumento.Name = "cb_tipoDocumento";
             this.cb_tipoDocumento.Size = new System.Drawing.Size(95, 21);
-            this.cb_tipoDocumento.TabIndex = 30;
+            this.cb_tipoDocumento.TabIndex = 10;
             // 
             // label13
             // 
@@ -488,7 +488,7 @@
             this.btn_buscarCliente.Location = new System.Drawing.Point(352, 92);
             this.btn_buscarCliente.Name = "btn_buscarCliente";
             this.btn_buscarCliente.Size = new System.Drawing.Size(96, 27);
-            this.btn_buscarCliente.TabIndex = 33;
+            this.btn_buscarCliente.TabIndex = 13;
             this.btn_buscarCliente.Text = "Buscar Cliente";
             this.btn_buscarCliente.UseVisualStyleBackColor = true;
             this.btn_buscarCliente.Click += new System.EventHandler(this.btn_buscarCliente_Click_1);
@@ -516,14 +516,14 @@
             this.txt_mail.Location = new System.Drawing.Point(139, 96);
             this.txt_mail.Name = "txt_mail";
             this.txt_mail.Size = new System.Drawing.Size(197, 20);
-            this.txt_mail.TabIndex = 32;
+            this.txt_mail.TabIndex = 12;
             // 
             // txt_nro_documento
             // 
             this.txt_nro_documento.Location = new System.Drawing.Point(139, 65);
             this.txt_nro_documento.Name = "txt_nro_documento";
             this.txt_nro_documento.Size = new System.Drawing.Size(121, 20);
-            this.txt_nro_documento.TabIndex = 31;
+            this.txt_nro_documento.TabIndex = 11;
             // 
             // groupBox2
             // 
@@ -550,7 +550,7 @@
             this.check_mail.Location = new System.Drawing.Point(352, 67);
             this.check_mail.Name = "check_mail";
             this.check_mail.Size = new System.Drawing.Size(45, 17);
-            this.check_mail.TabIndex = 34;
+            this.check_mail.TabIndex = 9;
             this.check_mail.Text = "Mail";
             this.check_mail.UseVisualStyleBackColor = true;
             this.check_mail.CheckedChanged += new System.EventHandler(this.check_mail_CheckedChanged);
@@ -561,7 +561,7 @@
             this.check_doc.Location = new System.Drawing.Point(352, 44);
             this.check_doc.Name = "check_doc";
             this.check_doc.Size = new System.Drawing.Size(115, 17);
-            this.check_doc.TabIndex = 35;
+            this.check_doc.TabIndex = 8;
             this.check_doc.Text = "Tipo y nro. de doc.";
             this.check_doc.UseVisualStyleBackColor = true;
             this.check_doc.CheckedChanged += new System.EventHandler(this.check_doc_CheckedChanged);

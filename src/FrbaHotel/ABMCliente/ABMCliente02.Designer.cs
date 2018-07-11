@@ -207,7 +207,7 @@
             this.txt_estado.Location = new System.Drawing.Point(285, 310);
             this.txt_estado.Name = "txt_estado";
             this.txt_estado.Size = new System.Drawing.Size(121, 20);
-            this.txt_estado.TabIndex = 70;
+            this.txt_estado.TabIndex = 13;
             // 
             // lbl_estado
             // 
@@ -223,7 +223,7 @@
             this.dt_fecha_nac.Location = new System.Drawing.Point(89, 371);
             this.dt_fecha_nac.Name = "dt_fecha_nac";
             this.dt_fecha_nac.Size = new System.Drawing.Size(235, 20);
-            this.dt_fecha_nac.TabIndex = 52;
+            this.dt_fecha_nac.TabIndex = 15;
             // 
             // label16
             // 
@@ -266,7 +266,7 @@
             this.txt_nro_doc.Location = new System.Drawing.Point(285, 60);
             this.txt_nro_doc.Name = "txt_nro_doc";
             this.txt_nro_doc.Size = new System.Drawing.Size(121, 20);
-            this.txt_nro_doc.TabIndex = 41;
+            this.txt_nro_doc.TabIndex = 3;
             // 
             // a3
             // 
@@ -403,84 +403,84 @@
             this.txt_apellido.Location = new System.Drawing.Point(285, 22);
             this.txt_apellido.Name = "txt_apellido";
             this.txt_apellido.Size = new System.Drawing.Size(121, 20);
-            this.txt_apellido.TabIndex = 39;
+            this.txt_apellido.TabIndex = 1;
             // 
             // txt_ciudad
             // 
             this.txt_ciudad.Location = new System.Drawing.Point(89, 169);
             this.txt_ciudad.Name = "txt_ciudad";
             this.txt_ciudad.Size = new System.Drawing.Size(235, 20);
-            this.txt_ciudad.TabIndex = 45;
+            this.txt_ciudad.TabIndex = 7;
             // 
             // txt_pais
             // 
             this.txt_pais.Location = new System.Drawing.Point(89, 132);
             this.txt_pais.Name = "txt_pais";
             this.txt_pais.Size = new System.Drawing.Size(235, 20);
-            this.txt_pais.TabIndex = 44;
+            this.txt_pais.TabIndex = 6;
             // 
             // txt_piso
             // 
             this.txt_piso.Location = new System.Drawing.Point(89, 272);
             this.txt_piso.Name = "txt_piso";
             this.txt_piso.Size = new System.Drawing.Size(121, 20);
-            this.txt_piso.TabIndex = 48;
+            this.txt_piso.TabIndex = 10;
             // 
             // txt_nro_calle
             // 
             this.txt_nro_calle.Location = new System.Drawing.Point(89, 239);
             this.txt_nro_calle.Name = "txt_nro_calle";
             this.txt_nro_calle.Size = new System.Drawing.Size(121, 20);
-            this.txt_nro_calle.TabIndex = 47;
+            this.txt_nro_calle.TabIndex = 9;
             // 
             // txt_direccion
             // 
             this.txt_direccion.Location = new System.Drawing.Point(89, 206);
             this.txt_direccion.Name = "txt_direccion";
             this.txt_direccion.Size = new System.Drawing.Size(235, 20);
-            this.txt_direccion.TabIndex = 46;
+            this.txt_direccion.TabIndex = 8;
             // 
             // txt_telefono
             // 
             this.txt_telefono.Location = new System.Drawing.Point(284, 96);
             this.txt_telefono.Name = "txt_telefono";
             this.txt_telefono.Size = new System.Drawing.Size(121, 20);
-            this.txt_telefono.TabIndex = 43;
+            this.txt_telefono.TabIndex = 5;
             // 
             // txt_departamento
             // 
             this.txt_departamento.Location = new System.Drawing.Point(285, 275);
             this.txt_departamento.Name = "txt_departamento";
             this.txt_departamento.Size = new System.Drawing.Size(121, 20);
-            this.txt_departamento.TabIndex = 49;
+            this.txt_departamento.TabIndex = 11;
             // 
             // txt_localidad
             // 
             this.txt_localidad.Location = new System.Drawing.Point(89, 307);
             this.txt_localidad.Name = "txt_localidad";
             this.txt_localidad.Size = new System.Drawing.Size(121, 20);
-            this.txt_localidad.TabIndex = 50;
+            this.txt_localidad.TabIndex = 12;
             // 
             // txt_puntos
             // 
             this.txt_puntos.Location = new System.Drawing.Point(89, 404);
             this.txt_puntos.Name = "txt_puntos";
             this.txt_puntos.Size = new System.Drawing.Size(121, 20);
-            this.txt_puntos.TabIndex = 53;
+            this.txt_puntos.TabIndex = 16;
             // 
             // txt_nacionalidad
             // 
             this.txt_nacionalidad.Location = new System.Drawing.Point(89, 342);
             this.txt_nacionalidad.Name = "txt_nacionalidad";
             this.txt_nacionalidad.Size = new System.Drawing.Size(121, 20);
-            this.txt_nacionalidad.TabIndex = 51;
+            this.txt_nacionalidad.TabIndex = 14;
             // 
             // txt_mail
             // 
             this.txt_mail.Location = new System.Drawing.Point(89, 96);
             this.txt_mail.Name = "txt_mail";
             this.txt_mail.Size = new System.Drawing.Size(121, 20);
-            this.txt_mail.TabIndex = 42;
+            this.txt_mail.TabIndex = 4;
             // 
             // label9
             // 
@@ -496,7 +496,7 @@
             this.txt_nombre.Location = new System.Drawing.Point(89, 23);
             this.txt_nombre.Name = "txt_nombre";
             this.txt_nombre.Size = new System.Drawing.Size(121, 20);
-            this.txt_nombre.TabIndex = 38;
+            this.txt_nombre.TabIndex = 0;
             // 
             // label15
             // 
@@ -549,7 +549,7 @@
             this.cb_tipo_doc.Location = new System.Drawing.Point(89, 59);
             this.cb_tipo_doc.Name = "cb_tipo_doc";
             this.cb_tipo_doc.Size = new System.Drawing.Size(121, 21);
-            this.cb_tipo_doc.TabIndex = 40;
+            this.cb_tipo_doc.TabIndex = 2;
             // 
             // label13
             // 

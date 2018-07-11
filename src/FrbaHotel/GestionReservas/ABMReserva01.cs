@@ -128,7 +128,7 @@ namespace FrbaHotel.GestionReservas
         {
             string modo = "INS";
             this.Hide();
-            ABMReserva02 formABMReserva02 = new ABMReserva02(modo, usuario);
+            ABMReserva02 formABMReserva02 = new ABMReserva02(modo, usuario, hotel);
             formABMReserva02.ShowDialog();
             this.Show();
         }

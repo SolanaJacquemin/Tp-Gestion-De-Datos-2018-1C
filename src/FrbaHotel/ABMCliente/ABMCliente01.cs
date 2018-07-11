@@ -250,9 +250,12 @@ namespace FrbaHotel.AbmCliente
         private void dgv_Clientes_CellClick(object sender, DataGridViewCellEventArgs e)
         {
             int index = e.RowIndex;
-            DataGridViewRow selectedRow = dgv_Clientes.Rows[index];
-            dgv_cliente_ID = Convert.ToDecimal(selectedRow.Cells[0].Value.ToString());
-            estado = Convert.ToBoolean(selectedRow.Cells[13].Value);
+            if (index >= 0) 
+            {
+                DataGridViewRow selectedRow = dgv_Clientes.Rows[index];
+                dgv_cliente_ID = Convert.ToDecimal(selectedRow.Cells[0].Value.ToString());
+                estado = Convert.ToBoolean(selectedRow.Cells[13].Value);
+            }
         }
     }
 }
