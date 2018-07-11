@@ -264,6 +264,8 @@ create procedure four_sizons.altaUserxRol
 @rolId numeric(18)
 as begin tran
 begin try
+	if((select Usuario_Estado from FOUR_SIZONS.Usuario where Usuario_ID = @userID) = 1)
+	begin
 	if(exists (select UsuarioXRol_Estado from FOUR_SIZONS.UsuarioXRol where Usuario_ID=@userID and Rol_Codigo=@rolId))
 	begin 
 		update FOUR_SIZONS.UsuarioXRol
@@ -275,6 +277,8 @@ begin try
 		insert into FOUR_SIZONS.UsuarioXRol(Rol_Codigo,Usuario_ID,UsuarioXRol_Estado) 
 									values (@rolID,@userID,1)
 	end
+	end
+	else raiserror('no se puede asignar el rol ya que el usuario se encuentra inhabilitado',16,1)
 	commit tran 
 	end try
 	begin catch
@@ -515,6 +519,9 @@ create procedure four_sizons.altaUserXHot
 	--declare @hotID numeric (18)
 
 	--set @hotId = (select hotel_codigo from FOUR_SIZONS.hotel where @hotel = hotel_nombre)
+	if((select Usuario_Estado from FOUR_SIZONS.Usuario where Usuario_ID = @usuario) = 1)
+	begin
+
 
 	if(exists (select Usuario_ID  from FOUR_SIZONS.UsuarioXHotel where @usuario = Usuario_ID and @hotID = Hotel_Codigo))
 	update FOUR_SIZONS.UsuarioXHotel 
@@ -523,6 +530,8 @@ create procedure four_sizons.altaUserXHot
 
 	else
 	insert into FOUR_SIZONS.UsuarioXHotel(Hotel_Codigo,Usuario_ID,UsuarioXHotel_Estado) values (@hotId,@usuario,1)
+	end
+	else raiserror('no se puede asignar un hotel ya que el usuario esta deshabilitado',16,1)
 	commit tran
 	end try
 	begin catch 
@@ -1059,7 +1068,7 @@ declare @TipoHabID numeric(18)
 							set @aux2= @aux 
 							update FOUR_SIZONS.Disponibilidad
 							set Disp_HabDisponibles= Disp_HabDisponibles+1
-							where @TipoHabID=Habitacion_Tipo_Codigo and @aux= Disp_Fecha and Hotel_Codigo =@HotelId
+							where @TipoHabID=Habitacion_Tipo_Codigo and datediff(day,Disp_Fecha,@aux)=0 and Hotel_Codigo =@HotelId
 							set @aux = DATEADD(day, 1, @aux2)
 						end
 					end
@@ -1203,7 +1212,7 @@ declare @aux datetime = convert(datetime,@fechaInicio,121 )
 declare @aux2 datetime,
 		@aux3 datetime 
 set @aux3=DATEADD(day, 1, @fechaFin)
-while(@aux!= convert(datetime,@aux3, 121))
+
 while(datediff(day,@aux,@aux3)!=0 )
 begin
 set @aux2= @aux
@@ -1265,6 +1274,8 @@ if(@estadoActual !=6)
 							where Habitacion_Tipo_Codigo=@tipo and Hotel_Codigo=@hotel 
 							set @aux3=dateadd(day,1,@aux4)
 						end
+					commit tran 
+					begin tran
 					raiserror('La reserva fue cancelada por NO-SHOW',16,1)
 				end
 				ELSE
@@ -1391,37 +1402,7 @@ end catch
 go
 -- este no va mas xq no es bueno ejecutar un proc dentro de otro proc
 
-create proc four_sizons.bajarDisponibilidad
-@inicio datetime,
-@fin datetime,
 
-@hab_tipo numeric(18),
-@Hotel numeric(18),
-@cantHab numeric(18)
-
-as begin tran 
-begin try
-declare @aux datetime = convert(datetime,@inicio,121 )
-declare @aux2 datetime 
-while(@aux!= convert(datetime,@fin, 121))
-begin
-set @aux2= @aux
-
-update FOUR_SIZONS.Disponibilidad
-	set Disp_HabDisponibles = Disp_HabDisponibles - @cantHab
-	where Disp_Fecha= @aux and Hotel_Codigo = @hotel and Habitacion_Tipo_Codigo = @hab_tipo
-set @aux = DATEADD(day, 1, @aux2)
-end
-
-	commit tran
-	end try
-	begin catch
-	declare @mensaje_de_error nvarchar(255)
-	set @mensaje_de_error = ERROR_MESSAGE()
-	RAISERROR(@mensaje_de_error,11,1)
-	rollback tran 
-	end catch
-go
 
 create procedure four_sizons.AgregarTarjeta
 	@Tarjeta_Numero numeric(18),
@@ -1655,6 +1636,7 @@ begin tran ta
 begin try
 		set @reserva = ( select Reserva_Codigo from FOUR_SIZONS.Estadia where Estadia_Codigo = @estadia);
 		set @fact_Nro = (select Factura_Nro from FOUR_SIZONS.Factura where Estadia_Codigo = @estadia);
+		set @estadoA = (select Factura_Estado from FOUR_SIZONS.Factura where Factura_Nro=@fact_Nro)
 		if ( @estadoA != 1)
 
 		begin
@@ -1902,7 +1884,7 @@ begin
 			set @habi=@habi-1
 		end
 end
-else raiserror('La estadía no está activa, no se puede realizar el check out.',16,1)
+else raiserror('ya se ha realizado el checkout de esta estadia anteriormente',16,1)
 
 commit tran 
 end try
@@ -1928,13 +1910,14 @@ as begin tran
 	declare @consumibleId numeric(18)
 
 	--set  = (select Consumible_Codigo from FOUR_SIZONS.Consumible where @consumible = Consumible_Descripcion)
-
+	
 	select @consumibleId = Consumible_Codigo, @monto = Consumible_Precio from FOUR_SIZONS.Consumible where Consumible_Descripcion = @consumible
 
 	set @factura=(select f.Factura_Nro from FOUR_SIZONS.Factura f where @estadia = f.Estadia_Codigo)
 	--set @desc=(select Consumible_Descripcion from FOUR_SIZONS.Consumible where @consumibleId = Consumible_Codigo)
 	--set @monto =(select Consumible_Precio from FOUR_SIZONS.Consumible where @consumible = Consumible_Codigo)
-
+	if((select Estadia_Estado from FOUR_SIZONS.Estadia where Estadia_Codigo=@estadia)!=0)
+	begin
 
 	if(not exists (select Estadia_Codigo from FOUR_SIZONS.EstadiaXConsumible where Estadia_Codigo= @estadia and Consumible_Codigo = @consumibleId))
 		begin
@@ -1964,6 +1947,11 @@ as begin tran
 
 
 		end
+	end 
+	else 
+	begin
+	raiserror('no se puede registrar el consumible ya que se ha realizado el check-out anteriormente',16,1)
+	end
 	commit tran
 	end try
 	begin catch
@@ -2193,7 +2181,7 @@ as begin
 
 if(not exists (select * from four_sizons.Factura where  (Factura_Fecha between @inicio and @fin) and Factura_Estado=1 ))
 	begin
-		raiserror('No hay datos de consumibles facturados para ese trimestre',13,1)
+		raiserror('No hay clientes con puntos en ese trimestre',13,1)
 	end
 else 
 

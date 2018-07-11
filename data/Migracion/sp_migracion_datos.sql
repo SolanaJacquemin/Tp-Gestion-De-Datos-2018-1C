@@ -518,7 +518,7 @@ BEGIN
 			Factura_Fecha datetime,
 			Factura_Total decimal(18,2),
 			Factura_FormaPago nvarchar(50),
-			Factura_Estado bit default 0,
+			Factura_Estado bit default 1,
 			Factura_Consistencia bit default 1,
 			Usuario_ID nvarchar(15),
 			Estadia_Codigo numeric(18),
