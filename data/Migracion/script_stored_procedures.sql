@@ -791,21 +791,42 @@ go
 create procedure four_sizons.modificarRegXhot
 @hotel numeric(18),
 @reg nvarchar(50),
-@estado bit
+@estado bit,
+@fechaMod datetime
 as begin tran 
 begin try
 
 	declare @regID numeric(18)	
 	
 	set @regID = (select Regimen_Codigo from FOUR_SIZONS.regimen where Regimen_Descripcion = @reg)
+	set @fechaMod = convert(datetime,@fechaMod,121)
+	
 	
 	if exists(select * from FOUR_SIZONS.RegXHotel where Hotel_Codigo=@hotel and Regimen_Codigo=@regID)
-	
-	begin
-		update FOUR_SIZONS.RegXHotel
-			set RegXHotel_Estado = @estado
-		where Regimen_Codigo=@regID and Hotel_Codigo=@hotel
-	end
+		begin
+			if(@estado!=0)
+				begin
+					update FOUR_SIZONS.RegXHotel
+					set RegXHotel_Estado = @estado
+					where Regimen_Codigo=@regID and Hotel_Codigo=@hotel
+				end
+			else
+				begin 
+					if(exists(select Reserva_Codigo from Reserva 
+								where Hotel_Codigo=@hotel and Regimen_Codigo=@regID and @fechaMod between Reserva_Fecha_Inicio and Reserva_Fecha_Fin)--Que no hayan estadias
+								or exists(select Reserva_Codigo from Reserva 
+								where Hotel_Codigo=@hotel and Regimen_Codigo=@regID and Reserva_Estado=1 or Reserva_Estado=1))--que no hayan reservas activas
+						begin
+							raiserror ('No se puede realizar la mod ya que hay reservas con este regimen',16,1)
+						end
+					else
+						begin
+							update FOUR_SIZONS.RegXHotel
+							set RegXHotel_Estado = @estado
+							where Regimen_Codigo=@regID and Hotel_Codigo=@hotel
+						end
+				end
+		end
 	else
 	begin
 		exec four_sizons.altaRegXHotel @reg, @hotel
@@ -896,9 +917,21 @@ create procedure FOUR_SIZONS.ModificacionRol
 		begin
 			if (not exists (select Rol_Codigo from FOUR_SIZONS.Rol where Rol_Codigo!=@codigo and Rol_Nombre=@rolname))
 				begin
-					update FOUR_SIZONS.Rol
-					set Rol_Nombre= @rolname,Rol_Estado= @estado
-					where Rol_Codigo=@codigo
+					IF(@estado!=0)
+					begin
+						update FOUR_SIZONS.Rol
+						set Rol_Nombre= @rolname,Rol_Estado= @estado
+						where Rol_Codigo=@codigo
+					end
+					else
+					begin
+						update FOUR_SIZONS.Rol
+						set Rol_Nombre= @rolname,Rol_Estado= @estado
+						where Rol_Codigo=@codigo
+						update FOUR_SIZONS.UsuarioXRol
+						set UsuarioXRol_Estado=0
+						where Rol_Codigo=@codigo
+					end
 				end
 			else raiserror('Ya existe un rol con este nombre, por favor ingrese otro.',16,1)
 		end
@@ -912,9 +945,6 @@ create procedure FOUR_SIZONS.ModificacionRol
 	rollback tran 
 	end catch
 go
-
-
-
 
 create procedure four_sizons.altaRolxFunc
 @rolname nvarchar(50),
@@ -1193,6 +1223,11 @@ create procedure four_sizons.GenerarReserva
 
 as begin tran
 begin try
+
+
+if((select Cliente_Estado from FOUR_SIZONS.Cliente where Cliente_Codigo = @cliId)=1)
+begin
+
 declare @cantidadNoches numeric(2)
 
 declare @tipoHab numeric(18) = (select Habitacion_Tipo_Codigo from FOUR_SIZONS.Habitacion_Tipo where Habitacion_Tipo_Descripcion=@tipoHabDesc)
@@ -1222,7 +1257,9 @@ update FOUR_SIZONS.Disponibilidad
 		where datediff(day,Disp_Fecha,@aux)=0 and Hotel_Codigo = @hotId and Habitacion_Tipo_Codigo = @tipohab
 set @aux = DATEADD(day, 1, @aux2)
 end
+end
 
+else raiserror ('el cliente esta deshabilitado, no puede hospedarse en los hoteles',16,1)
 commit tran 
 end try
 
@@ -1246,8 +1283,8 @@ CREATE procedure four_sizons.ModificarReserva
 	@regId numeric(18),
 	@estado numeric(1),
 	@canthab numeric(18),
-	@fechaCambio datetime
-
+	@fechaCambio datetime,
+	@clie numeric(18)
 	as begin tran
 	begin try 
 	set @fechaCambio = convert(datetime,@fechaCambio,121)
@@ -1256,8 +1293,10 @@ CREATE procedure four_sizons.ModificarReserva
 	declare @tipo numeric(18)=(select habitacion_tipo_codigo from four_sizons.Reserva where Reserva_Codigo=@codigoReserva)
 	declare @hotel numeric(18)=(select Hotel_Codigo from four_sizons.Reserva where Reserva_Codigo=@codigoReserva)
 	declare @CANTIDAD numeric(18)=(select Reserva_cant_hab from four_sizons.Reserva where Reserva_Codigo=@codigoReserva)
+	declare @ClieA numeric(18)=(select Cliente_Codigo from four_sizons.Reserva where Reserva_Codigo=@codigoReserva)
 	declare @fechaAcF datetime =convert(datetime,(select Reserva_Fecha_Fin from four_sizons.Reserva where Reserva_Codigo=@codigoReserva),121)
-
+if(@ClieA=@clie)
+begin
 if(@estadoActual !=6)
 	begin
 		if(@estadoActual=1 or @estadoActual=2)
@@ -1391,6 +1430,8 @@ else
 	begin
 		raiserror ('La reserva ya fue efectivizada, no puede ser modificada.',13,1)
 	end
+end
+else raiserror ('No es la reserva de ese cliente.',13,1)
 commit tran
 end try
 begin catch
@@ -1703,6 +1744,9 @@ if(not exists (select Reserva_Codigo from Reserva where Reserva_Codigo=@reserva 
 	end
 else 
 
+
+
+
 begin
 declare @fechaInicio datetime = (select convert(datetime,Reserva_Fecha_Inicio,121) from FOUR_SIZONS.Reserva where Reserva_Codigo= @reserva )
 	
@@ -1730,6 +1774,13 @@ declare @fechaInicio datetime = (select convert(datetime,Reserva_Fecha_Inicio,12
 				set @aux3=dateadd(day,1,@aux4)
 				end
 		end
+
+		commit tran 
+		begin tran
+
+if(( select c.Cliente_Estado from FOUR_SIZONS.Reserva r, FOUR_SIZONS.Cliente c where r.Reserva_Codigo=@reserva and c.Cliente_Codigo= r.Cliente_Codigo)=1)
+begin
+
 	if((select datediff(day,@fechaInicio,@fecha))<0 and (@estado = 1 or @estado = 2 ))
 	begin
 		set @estado=7
@@ -1796,11 +1847,12 @@ declare @fechaInicio datetime = (select convert(datetime,Reserva_Fecha_Inicio,12
 	update FOUR_SIZONS.Habitacion 
 	set Habitacion_Estado=0
 	where Habitacion_Numero in (select hab_codigo from @hab_asign) and Hotel_Codigo = @hotel2 and Habitacion_Tipo_Codigo=@tipo_Hab
-	
+end
 
 	
-	end
-end				
+	end	else raiserror('no se puede realizar el check-in porque el cliente esta deshabilitado',16,1) 
+end	
+			
 commit tran 
 end try
 begin catch
@@ -1811,7 +1863,6 @@ rollback tran
 end catch
 
 GO
-
 create proc FOUR_SIZONS.registrarCheckOut
 @estadia numeric(18),
 @usuario nvarchar(15),
@@ -1976,7 +2027,8 @@ begin try
 	select @consumibleId = Consumible_Codigo, @monto = Consumible_Precio from FOUR_SIZONS.Consumible where Consumible_Descripcion = @consumible
 	declare @numItem numeric(18)
     set @numItem=(select f.Item_Factura_NroItem from FOUR_SIZONS.Item_Factura f where Factura_Nro= @fact and @consumible = item_descripcion)
-
+	if((select Estadia_Estado from FOUR_SIZONS.Estadia where Estadia_Codigo=@estadia)!=0)
+	begin
 
 	if(exists (select * from FOUR_SIZONS.EstadiaXConsumible where Estadia_Codigo=@estadia and Consumible_Codigo=@consumibleId))
 begin
@@ -2010,7 +2062,8 @@ begin
 end
 else 
 raiserror('No hay registro de un pedido de este consumible para esta estadia',16,1)
-
+end
+else raiserror ('no se puede realizar la operacion ya que se ha realizado el check-out anteriormente',16,1)
 commit tran 
 end try
 begin catch
@@ -2020,6 +2073,7 @@ begin catch
 	rollback tran 
 end catch
 go
+
 
 --------------------------------------PROCEDURES PARA LISTADO ESTADISTICO---------------------------------------------
 

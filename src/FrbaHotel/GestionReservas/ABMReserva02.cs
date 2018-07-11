@@ -19,6 +19,7 @@ namespace FrbaHotel.GestionReservas
         public string nombreSP;
         public string usuario;
         public int error;
+        public int errorBusqueda;
         public decimal hotelID;
         public decimal regimenID;
         public decimal clienteID;
@@ -26,6 +27,7 @@ namespace FrbaHotel.GestionReservas
         public bool buscoCliente;
         public bool tieneDisponibilidad;
         public decimal reservaID;
+        public string busqueda;
 
         public ABMReserva02(string modo, string user)
         {
@@ -63,15 +65,18 @@ namespace FrbaHotel.GestionReservas
             txt_piso.Enabled = false;
             txt_depto.Enabled = false;
             btn_buscarCliente.Enabled = false;
-
             buscoCliente = false;
             tieneDisponibilidad = false;
+            check_doc.Enabled = false;
+            check_mail.Enabled = false;
+
             
         }
 
         private void btn_buscarCliente_Click(object sender, EventArgs e)
         {
-            error = 0;
+            
+            /*error = 0;
             if (cb_tipoDocumento.Text == "")
             {
                 error = 1;
@@ -87,7 +92,7 @@ namespace FrbaHotel.GestionReservas
                 error = 1;
                 MessageBox.Show("El campo Nro de Documento no puede contener carácteres", "FOUR SIZONS - FRBA Hoteles", MessageBoxButtons.OK, MessageBoxIcon.Information);
             }
-            if (txt_mail.Text == "")
+           /* if (txt_mail.Text == "")
             {
                 error = 1;
                 MessageBox.Show("El campo Mail no puede estar vacío", "FOUR SIZONS - FRBA Hoteles", MessageBoxButtons.OK, MessageBoxIcon.Information);
@@ -133,7 +138,7 @@ namespace FrbaHotel.GestionReservas
 
                 con.closeConection();
                 buscoCliente = true;
-            }
+            }*/
 
         }
 
@@ -414,30 +419,16 @@ namespace FrbaHotel.GestionReservas
 
         private void verificarCampos()
         {
-            if (cb_tipoHabitacion.Text == "")
+            if (cb_tipoHabitacion.Text == "" || txt_cantHab.Text == ""||txt_hotel.Text=="")
             {
                 error = 1;
-                MessageBox.Show("El campo Tipo de Habitación no puede estar vacío", "FOUR SIZONS - FRBA Hoteles", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                MessageBox.Show("Por favor, complete todos los campos.", "FOUR SIZONS - FRBA Hoteles", MessageBoxButtons.OK, MessageBoxIcon.Information);
             }
-            if (txt_cantHab.Text == "")
-            {
-                error = 1;
-                MessageBox.Show("El campo Cantidad de Habitaciones no puede estar vacío", "FOUR SIZONS - FRBA Hoteles", MessageBoxButtons.OK, MessageBoxIcon.Information);
-            }
+            
             if (dt_fechaHasta.Value < dt_fechaDesde.Value)
             {
                 error = 1;
                 MessageBox.Show("El campo Fecha Desde no puede ser igual o posterior a Fecha Hasta", "FOUR SIZONS - FRBA Hoteles", MessageBoxButtons.OK, MessageBoxIcon.Information);
-            }
-            if (regimenID == 0)
-            {
-                error = 1;
-                MessageBox.Show("El campo Régimen no puede estar vacío", "FOUR SIZONS - FRBA Hoteles", MessageBoxButtons.OK, MessageBoxIcon.Information);
-            }
-            if (hotelID == 0)
-            {
-                error = 1;
-                MessageBox.Show("El campo Hotel no puede estar vacío", "FOUR SIZONS - FRBA Hoteles", MessageBoxButtons.OK, MessageBoxIcon.Information);
             }
         }
 
@@ -468,11 +459,15 @@ namespace FrbaHotel.GestionReservas
 
                     txt_costoTotal.Text = con.command.Parameters["@precio"].Value.ToString();
                     MessageBox.Show("Existe disponbilidad y el precio es de: " + txt_costoTotal.Text, "FOUR SIZONS - FRBA Hoteles", MessageBoxButtons.OK, MessageBoxIcon.Information);
-                    cb_tipoDocumento.Enabled = true;
-                    txt_nro_documento.Enabled = true;
-                    txt_mail.Enabled = true;
                     tieneDisponibilidad = true;
-                    btn_buscarCliente.Enabled = true;
+                    
+
+                    if (tieneDisponibilidad)
+                    {
+                        btn_buscarCliente.Enabled = true;
+                        check_doc.Enabled = true;
+                        check_mail.Enabled = true; 
+                    } 
                 }
                 catch (Exception ex)
                 {
@@ -481,5 +476,163 @@ namespace FrbaHotel.GestionReservas
                 }
             }
         }
+
+        private void btn_buscarCliente_Click_1(object sender, EventArgs e)
+        {
+            if (check_doc.Checked || check_mail.Checked)
+            {
+                switch (busqueda)
+                {
+                    case "doc":
+                        if (IsNumber(txt_nro_documento.Text) == false)
+                        {
+                            MessageBox.Show("El número de documento debe ser un dato numérico.", "FOUR SIZONS - FRBA Hoteles", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                        }
+                        else
+                        {
+                            if (txt_nro_documento.Text != "" && cb_tipoDocumento.Text != "")
+                            {
+                                Conexion con = new Conexion();
+                                con.strQuery = "SELECT Cliente_Codigo, Cliente_Nombre, Cliente_Apellido, Cliente_Telefono, Cliente_Dom_Calle, Cliente_Ciudad, Cliente_Pais, Cliente_mail"
+                                + " FROM FOUR_SIZONS.Cliente WHERE Cliente_TipoDoc = '" + cb_tipoDocumento.Text + "'"
+                                + " AND Cliente_NumDoc = " + txt_nro_documento.Text;
+                                con.executeQuery();
+
+                                if (!con.reader())
+                                {
+                                    esCliente = false;
+                                    DialogResult dr = MessageBox.Show("No se ha encontrado sus datos en el sistema. Desea darse de alta?", "FOUR SIZONS - FRBA Hoteles", MessageBoxButtons.YesNo, MessageBoxIcon.Information);
+                                    if (dr == DialogResult.Yes)
+                                    {
+                                        con.strQuery = "";
+                                        txt_nombre.Enabled = true;
+                                        txt_apellido.Enabled = true;
+                                        txt_telefono.Enabled = true;
+                                        txt_calle.Enabled = true;
+                                        txt_pais.Enabled = true;
+                                        txt_ciudad.Enabled = true;
+                                        txt_nroCalle.Enabled = true;
+                                        txt_piso.Enabled = true;
+                                        txt_depto.Enabled = true;
+                                        txt_mail.Enabled = true;
+                                    }
+                                    else if (dr == DialogResult.No)
+                                    {
+                                        MessageBox.Show("Por favor revise sus datos y vuelva a intentar", "FOUR SIZONS - FRBA Hoteles", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                                    }
+                                }
+                                else
+                                {
+                                    clienteID = Convert.ToDecimal(con.lector.GetDecimal(0).ToString());
+                                    txt_nombre.Text = con.lector.GetString(1);
+                                    txt_apellido.Text = con.lector.GetString(2);
+                                    txt_telefono.Text = con.lector.GetString(3);
+                                    txt_calle.Text = con.lector.GetString(4);
+                                    txt_ciudad.Text = con.lector.GetString(5);
+                                    txt_pais.Text = con.lector.GetString(6);
+                                    txt_mail.Text = con.lector.GetString(7);
+                                    esCliente = true;
+                                }
+
+                                con.closeConection();
+                                buscoCliente = true;
+                                check_mail.Enabled = false;
+                                check_doc.Enabled = false;
+                            }
+                            else
+                            {
+                                MessageBox.Show("Por favor, ingrese tipo y número de documento.", "FOUR SIZONS - FRBA Hoteles", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                            }
+                        }
+                        break;
+
+                    case "mail":
+                        if (txt_mail.Text != "")
+                        {
+                            Conexion con = new Conexion();
+                            con.strQuery = "SELECT Cliente_Codigo, Cliente_Nombre, Cliente_Apellido, Cliente_Telefono, Cliente_Dom_Calle, Cliente_Ciudad, Cliente_Pais, Cliente_TipoDoc, Cliente_NumDoc"
+                            + " FROM FOUR_SIZONS.Cliente WHERE Cliente_Mail = '" + txt_mail.Text + "'";
+
+                            con.executeQuery();
+
+                            if (!con.reader())
+                            {
+                                esCliente = false;
+                                DialogResult dr = MessageBox.Show("No se ha encontrado sus datos en el sistema. Desea darse de alta?", "FOUR SIZONS - FRBA Hoteles", MessageBoxButtons.YesNo, MessageBoxIcon.Information);
+                                if (dr == DialogResult.Yes)
+                                {
+                                    con.strQuery = "";
+                                    txt_nombre.Enabled = true;
+                                    txt_apellido.Enabled = true;
+                                    txt_telefono.Enabled = true;
+                                    txt_calle.Enabled = true;
+                                    txt_pais.Enabled = true;
+                                    txt_ciudad.Enabled = true;
+                                    txt_nroCalle.Enabled = true;
+                                    txt_piso.Enabled = true;
+                                    txt_nro_documento.Enabled = true;
+                                    cb_tipoDocumento.Enabled = true;
+                                    txt_depto.Enabled = true;
+                                }
+                                else if (dr == DialogResult.No)
+                                {
+                                    MessageBox.Show("Por favor revise sus datos y vuelva a intentar", "FOUR SIZONS - FRBA Hoteles", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                                }
+                            }
+                            else
+                            {
+                                clienteID = Convert.ToDecimal(con.lector.GetDecimal(0).ToString());
+                                txt_nombre.Text = con.lector.GetString(1);
+                                txt_apellido.Text = con.lector.GetString(2);
+                                txt_telefono.Text = con.lector.GetString(3);
+                                txt_calle.Text = con.lector.GetString(4);
+                                txt_ciudad.Text = con.lector.GetString(5);
+                                txt_pais.Text = con.lector.GetString(6);
+                                cb_tipoDocumento.Text=con.lector.GetString(7);
+                                txt_nro_documento.Text=con.lector.GetDecimal(8).ToString();
+                                esCliente = true;
+                            }
+
+                            con.closeConection();
+                            buscoCliente = true;
+                            check_mail.Enabled = false;
+                            check_doc.Enabled = false;
+                        }
+                        else
+                        {
+                            MessageBox.Show("Por favor, ingrese su mail.", "FOUR SIZONS - FRBA Hoteles", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                        }
+                        break;
+                }
+            }
+            else MessageBox.Show("Por favor, seleccione algún tipo de búsqueda.", "FOUR SIZONS - FRBA Hoteles", MessageBoxButtons.OK, MessageBoxIcon.Information);
+        }
+
+        private void check_doc_CheckedChanged(object sender, EventArgs e)
+        {
+            if (check_doc.Checked)
+            {
+                check_mail.Checked = false;
+                txt_mail.Enabled = false;
+                txt_nro_documento.Enabled = true;
+                cb_tipoDocumento.Enabled = true;
+                busqueda = "doc";
+            }
+        }
+
+        private void check_mail_CheckedChanged(object sender, EventArgs e)
+        {
+            if (check_mail.Checked)
+            {
+                check_doc.Checked = false;
+                txt_mail.Enabled = true;
+                txt_nro_documento.Enabled = false;
+                cb_tipoDocumento.Enabled = false;
+                busqueda = "mail";
+            }
+        }
+
+
+
     }
 }
