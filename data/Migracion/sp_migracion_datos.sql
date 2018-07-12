@@ -712,43 +712,22 @@ BEGIN
 
 	-- disponibilidad
 
-
-	declare @tipohab numeric = 1001
-while(@tipohab<1006)
-begin
-declare @hotel numeric = 1
-
-
-while(@hotel <16)
 begin
 declare @aux datetime = convert(datetime, '01-01-2017' ,121)
-
 declare @aux2 datetime
 declare @fin datetime= convert(datetime, '01-01-2021' ,121)
-declare @cantHab numeric(18) = isnull((select count(h.Habitacion_Numero) from FOUR_SIZONS.Hotel ho , FOUR_SIZONS.Habitacion_Tipo ht , FOUR_SIZONS.Habitacion h where ho.Hotel_Codigo=@hotel and h.Hotel_Codigo= ho.Hotel_Codigo and h.Habitacion_Tipo_Codigo= ht.Habitacion_Tipo_Codigo and ht.Habitacion_Tipo_Codigo=@tipohab group by ho.Hotel_Codigo,ht.Habitacion_Tipo_Descripcion),0)
-
-
 while (@aux != @fin)
 begin
 set @aux2= @aux 
-insert into FOUR_SIZONS.Disponibilidad(Disp_Fecha,Disp_HabDisponibles,Habitacion_Tipo_Codigo,Hotel_Codigo)
-								values(@aux , @cantHab,@tipohab,@hotel)
+insert into FOUR_SIZONS.Disponibilidad(Hotel_Codigo,Disp_Fecha,Habitacion_Tipo_Codigo,Disp_HabDisponibles)
+select h.Hotel_Codigo , @aux, ht.Habitacion_Tipo_Codigo ,isnull(count(hab.Habitacion_Numero),0) 
+from FOUR_SIZONS.Hotel h 
+join FOUR_SIZONS.Habitacion hab on Hab.Hotel_Codigo = h.Hotel_Codigo
+join FOUR_SIZONS.Habitacion_Tipo ht on hab.Habitacion_Tipo_Codigo = ht.Habitacion_Tipo_Codigo
+group by h.Hotel_Codigo , ht.Habitacion_Tipo_Codigo
 set @aux = DATEADD(day, 1, @aux2)
 end
-
-set @hotel = @hotel+1
 end
-set @tipohab = @tipohab+1
-end
-
-
-
-
-
-
-
-
-
 
 
 
@@ -851,4 +830,12 @@ set Hotel_Nombre = 'four sizons '+@h1
 where Hotel_Codigo=@h1
 set @h1 = @h1+1
 end
+
+
+update FOUR_SIZONS.Disponibilidad 
+						set Disp_HabDisponibles = Disp_HabDisponibles - 1
+						from FOUR_SIZONS.Reserva r , FOUR_SIZONS.Disponibilidad d
+						where (Disp_Fecha between Reserva_Fecha_Inicio and Reserva_Fecha_Fin) and r.Hotel_Codigo = d.Hotel_Codigo and d.Habitacion_Tipo_Codigo = r.habitacion_tipo_codigo
+
+
 END
