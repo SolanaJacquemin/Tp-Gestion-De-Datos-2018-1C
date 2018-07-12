@@ -256,6 +256,12 @@ namespace FrbaHotel.GestionReservas
 
         private void boton_cancelar_Click(object sender, EventArgs e)
         {
+            dgv_reserva_Fecha = dgv_reserva_Fecha.Date;
+            if (dgv_reserva_Fecha == hoy)
+            {
+                MessageBox.Show("No se puede cancelar una reserva el mismo día del inicio de la misma", "FOUR SIZONS - FRBA Hoteles", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+            else
             if (dgv_Reservas.SelectedRows.Count > 0)
             {
                 string modo = "DLT";
