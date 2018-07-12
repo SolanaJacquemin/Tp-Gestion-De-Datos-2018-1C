@@ -16,6 +16,7 @@ namespace FrbaHotel.ABMHotel
         public string nombreSP;
         public decimal hotel;
         public int error;
+        public DateTime hoy;
         public string regimen_nombre;
         public decimal regimen_codigo;
         public bool altaValida;
@@ -28,6 +29,7 @@ namespace FrbaHotel.ABMHotel
 
             hotel = HotelID;
             modoABM = modo;
+            hoy = DateTime.Today;
 
             switch (modoABM)
             {
@@ -55,11 +57,28 @@ namespace FrbaHotel.ABMHotel
             switch (modoABM)
             {
                 case "INS":
-                    nombreSP = "FOUR_SIZONS.altaRegXHotel";
+                    if (lb_regimen_usralta.Items.Count != 0)
+                    {
+                        nombreSP = "FOUR_SIZONS.altaRegXHotel";
+                    }
+                    else
+                    {
+                        error = 1;
+                        MessageBox.Show("El hotel no puede no tener regímenes.", "FOUR SIZONS - FRBA Hoteles", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                    }
                     break;
 
                 case "UPD":
-                    nombreSP = "FOUR_SIZONS.modificarRegXhot";
+                    if (lb_regimen_usralta.Items.Count != 0)
+                    {
+                        nombreSP = "FOUR_SIZONS.modificarRegXhot";
+                    }
+                    else
+                    {
+                        error = 1;
+                        MessageBox.Show("El hotel no puede no tener regímenes.", "FOUR SIZONS - FRBA Hoteles", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                    }
+                    
                     break;
 
                 case "DLT":
@@ -113,6 +132,8 @@ namespace FrbaHotel.ABMHotel
 
                             con.command.Parameters.Add("@hotel", SqlDbType.Decimal).Value = hotel;
                             con.command.Parameters.Add("@reg", SqlDbType.NVarChar).Value = lb_regimen_usralta.Items[i].ToString();
+                            con.command.Parameters.Add("@fechaMod", SqlDbType.DateTime).Value = hoy;
+                            
                             string msg = lb_regimen_usralta.Items[i].ToString();
 
                             con.command.Parameters.Add("@estado", SqlDbType.Bit).Value = 1;
@@ -127,6 +148,8 @@ namespace FrbaHotel.ABMHotel
 
                             con.command.Parameters.Add("@hotel", SqlDbType.Decimal).Value = hotel;
                             con.command.Parameters.Add("@reg", SqlDbType.NVarChar).Value = lb_regimen_usralta.Items[i].ToString();
+                            con.command.Parameters.Add("@fechaMod", SqlDbType.DateTime).Value = hoy;
+
                             string msg = lb_regimen_usralta.Items[i].ToString();
 
                             con.command.Parameters.Add("@estado", SqlDbType.Bit).Value = 0;
@@ -211,6 +234,7 @@ namespace FrbaHotel.ABMHotel
             if (con.reader())
             {
                 txt_nombre.Text = con.lector.GetString(0);
+                txt_nombre.Enabled = false;
             }
             con.closeConection();
 
@@ -218,7 +242,7 @@ namespace FrbaHotel.ABMHotel
             con.executeQuery();
             if (!con.reader())
             {
-                MessageBox.Show("No se han encontrado usuarios. Revise los criterios de búsqueda", "FOUR SIZONS - FRBA Hoteles", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                MessageBox.Show("No se han encontrado hoteles. Revise los criterios de búsqueda", "FOUR SIZONS - FRBA Hoteles", MessageBoxButtons.OK, MessageBoxIcon.Information);
                 con.strQuery = "";
                 con.closeConection();
                 return;

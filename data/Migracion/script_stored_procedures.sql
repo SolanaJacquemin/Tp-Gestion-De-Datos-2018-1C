@@ -1100,9 +1100,12 @@ if(1=(select Hotel_Estado from FOUR_SIZONS.Hotel where Hotel_Codigo=@HotelId))
 				declare @aux datetime = convert(datetime, '01-01-2017' ,121)
 				declare @aux2 datetime
 				declare @fin datetime= convert(datetime, '01-01-2021' ,121)
+				select @aux , @fin
+
+
 				if(exists (select * from FOUR_SIZONS.Disponibilidad where Hotel_Codigo=@HotelId and Habitacion_Tipo_Codigo=@TipoHabID))
 					begin
-						while (@aux != @fin)
+						while (datediff(day,@fin,@aux)=0)
 							begin
 								set @aux2= @aux 
 								update FOUR_SIZONS.Disponibilidad
@@ -1113,7 +1116,7 @@ if(1=(select Hotel_Estado from FOUR_SIZONS.Hotel where Hotel_Codigo=@HotelId))
 					end
 				else 
 					begin
-						while (@aux != @fin)
+						while (datediff(day,@fin,@aux)=0)
 							begin
 								set @aux2= @aux 
 								insert into FOUR_SIZONS.Disponibilidad	(Disp_HabDisponibles,Habitacion_Tipo_Codigo,Disp_Fecha,Hotel_Codigo) values(1,@TipoHabID,@aux,@HotelId)
@@ -1123,10 +1126,10 @@ if(1=(select Hotel_Estado from FOUR_SIZONS.Hotel where Hotel_Codigo=@HotelId))
 			end
 		else 
 			begin
-				RAISERROR('el numero de habitacion ya figura en ese hotel, ingrese otro por favor',16,1)
+				RAISERROR('El número de habitacion ya figura en ese hotel, ingrese otro por favor.',16,1)
 			end
 	end
-else RAISERROR('No se puede agregar una habitacion a un hotel cerrado',16,1)
+else RAISERROR('No se puede agregar una habitación a un hotel cerrado.',16,1)
 commit tran 
 end try
 begin catch

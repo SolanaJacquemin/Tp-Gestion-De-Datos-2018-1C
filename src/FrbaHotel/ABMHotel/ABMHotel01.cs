@@ -223,7 +223,7 @@ namespace FrbaHotel.ABMHotel
 
         private void boton_baja_Click(object sender, EventArgs e)
         {
-            if (dgv_Hoteles.SelectedRows.Count > 0)
+            if (dgv_Hoteles.SelectedRows.Count > 0 && estado==true)
             {
                 if (!estado)
                 {
@@ -242,7 +242,7 @@ namespace FrbaHotel.ABMHotel
             }
             else
             {
-                MessageBox.Show("Debe seleccionar un hotel de la grilla", "FOUR SIZONS - FRBA Hoteles", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                MessageBox.Show("Debe seleccionar un hotel habilitado de la grilla", "FOUR SIZONS - FRBA Hoteles", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
 
@@ -250,12 +250,27 @@ namespace FrbaHotel.ABMHotel
         {
             if (dgv_Hoteles.SelectedRows.Count > 0)
             {
-            string modo = "UPD";
-            this.Hide();
-            ABMHotel02 formABMUsuario02 = new ABMHotel02(modo, Convert.ToDecimal(dgv_hotel_codigo));
-            formABMUsuario02.ShowDialog();
-            this.Show();
-            this.buscar();
+                if (estado == false)
+                {
+                    if (MessageBox.Show("El rol se encuentra inhabilitado, desea darle de alta?", "FOUR SIZONS - FRBA Hoteles", MessageBoxButtons.YesNo, MessageBoxIcon.Question) == DialogResult.Yes)
+                    {
+                        string modo = "UPD";
+                        this.Hide();
+                        ABMHotel02 formABMUsuario02 = new ABMHotel02(modo, Convert.ToDecimal(dgv_hotel_codigo));
+                        formABMUsuario02.ShowDialog();
+                        this.Show();
+                        this.buscar();
+                    }
+                }
+                else
+                {
+                    string modo = "UPD";
+                    this.Hide();
+                    ABMHotel02 formABMUsuario02 = new ABMHotel02(modo, Convert.ToDecimal(dgv_hotel_codigo));
+                    formABMUsuario02.ShowDialog();
+                    this.Show();
+                    this.buscar();
+                }
             }
             else
             {

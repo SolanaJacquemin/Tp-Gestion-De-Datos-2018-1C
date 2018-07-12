@@ -22,7 +22,8 @@ namespace FrbaHotel.ABMHotel
         public string nombreHotel;
         public int error;
         public decimal codigoHotel;
-        public bool regimenCreado;
+        public bool regimenCreado=false;
+        public bool hotelSinRegimenCreado=false;
         public bool crearRegimen;
 
         public ABMHotel02(string modo, decimal hotelId)
@@ -62,7 +63,6 @@ namespace FrbaHotel.ABMHotel
                     break;
                 case "UPD":
                     labelTitulo.Text = "Modificación de Hotel";
-                    txt_nombre_hotel.Enabled = false;
                     txt_mail.ReadOnly = false;
                     txt_telefono.ReadOnly = false;
                     txt_calle.ReadOnly = false;
@@ -158,7 +158,11 @@ namespace FrbaHotel.ABMHotel
 
         private void boton_volver_Click(object sender, EventArgs e)
         {
-            this.Close();
+            if (modoABM == "INS"&&hotelSinRegimenCreado && !regimenCreado)
+            {
+                MessageBox.Show("Cree regímenes para el hotel para continuar", "FOUR SIZONS - FRBA Hoteles", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            }
+            else this.Close();
         }
 
         public void ejecutarABMHotel(string nombreStored)
@@ -207,9 +211,12 @@ namespace FrbaHotel.ABMHotel
                     if (modoABM == "INS") 
                     {
                         codigoHotel = Convert.ToDecimal(con.command.Parameters["@codigo"].Value);
+                        hotelSinRegimenCreado = true;
+                        btn_regimen.Enabled = true;
                     }
 
                     MessageBox.Show("Operación exitosa", "FOUR SIZONS - FRBA Hoteles", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                    
                 }
                 catch (Exception ex)
                 {
@@ -259,36 +266,49 @@ namespace FrbaHotel.ABMHotel
         private void boton_aceptar_Click(object sender, EventArgs e)
         {
             error = 0;
-            if (((modoABM == "INS") && (!regimenCreado)) || (modoABM == "UPD")) 
-            {
-                if (verificarObligatorios() == false)
-                {
-                    error = 1;
-                    MessageBox.Show("Por favor, complete los campos obligatorios", "FOUR SIZONS - FRBA Hoteles", MessageBoxButtons.OK, MessageBoxIcon.Information);
-                };
 
-                if (IsNumber(cb_estrellas.Text) == false)
-                {
-                    error = 1;
-                    MessageBox.Show("Por favor, el número de documento debe ser un dato numérico", "FOUR SIZONS - FRBA Hoteles", MessageBoxButtons.OK, MessageBoxIcon.Information);
-                };
-                if (IsNumber(txt_recargaEstrella.Text) == false)
-                {
-                    error = 1;
-                    MessageBox.Show("Por favor, el piso debe ser un dato numérico", "FOUR SIZONS - FRBA Hoteles", MessageBoxButtons.OK, MessageBoxIcon.Information);
-                };
-                if (IsNumber(txt_nroCalle.Text) == false)
-                {
-                    error = 1;
-                    MessageBox.Show("Por favor, el número de calle debe ser un dato numérico", "FOUR SIZONS - FRBA Hoteles", MessageBoxButtons.OK, MessageBoxIcon.Information);
-                };
-            }
-
-            if (error == 0)
-            {
                 switch (modoABM)
                 {
                     case "INS":
+                    if (!hotelSinRegimenCreado && !regimenCreado)
+                    {
+                        if (verificarObligatorios() == false)
+                        {
+                            error = 1;
+                            MessageBox.Show("Por favor, complete los campos obligatorios", "FOUR SIZONS - FRBA Hoteles", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                        }
+    
+                        if (IsNumber(cb_estrellas.Text) == false)
+                        {
+                            error = 1;
+                            MessageBox.Show("Por favor, el número de documento debe ser un dato numérico", "FOUR SIZONS - FRBA Hoteles", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                        }
+                        if (IsNumber(txt_recargaEstrella.Text) == false)
+                        {
+                            error = 1;
+                            MessageBox.Show("Por favor, la recarga de estrella debe ser un dato numérico", "FOUR SIZONS - FRBA Hoteles", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                        }
+                        if (IsNumber(txt_telefono.Text) == false)
+                        {
+                            error = 1;
+                            MessageBox.Show("Por favor, el teléfono debe ser un dato numérico", "FOUR SIZONS - FRBA Hoteles", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                        }
+                        if (IsNumber(txt_nroCalle.Text) == false)
+                        {
+                            error = 1;
+                            MessageBox.Show("Por favor, el número de calle debe ser un dato numérico", "FOUR SIZONS - FRBA Hoteles", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                        }
+                    }
+                    if (hotelSinRegimenCreado && !regimenCreado)
+                    {
+                        error = 1;
+                        MessageBox.Show("Hotel ya creado, agregue regímenes para poder continuar", "FOUR SIZONS - FRBA Hoteles", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                    }
+                    if (hotelSinRegimenCreado && regimenCreado)
+                    {
+                        error = 1;
+                        this.Close();
+                    }
                         nombreSP = "FOUR_SIZONS.AltaHotel";
                         break;
 
@@ -301,29 +321,11 @@ namespace FrbaHotel.ABMHotel
                         nombreSP = "FOUR_SIZONS.ModificarHotel";
                         break;
                 }
-                if ((modoABM == "INS" && (!crearRegimen)))
+                if (error == 0)
                 {
                     ejecutarABMHotel(nombreSP);
-                    btn_regimen.Enabled = true;
-                    crearRegimen = true;
-                    MessageBox.Show("Cree regímenes para el hotel para continuar", "FOUR SIZONS - FRBA Hoteles", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                    if(modoABM!="INS") this.Close();
                 }
-
-                if ((modoABM == "INS" && (regimenCreado)))
-                {
-                    this.Close();
-                }
-                else
-                {
-                    MessageBox.Show("Cree regímenes para el hotel para continuar", "FOUR SIZONS - FRBA Hoteles", MessageBoxButtons.OK, MessageBoxIcon.Information);
-                }
-
-                if (modoABM != "INS")
-                {
-                    this.Close();
-                }
-
-            }
 
         }
 
@@ -371,6 +373,7 @@ namespace FrbaHotel.ABMHotel
             ABMHotel04 formABMHotel04 = new ABMHotel04(modoABM, codigoHotel);
             formABMHotel04.ShowDialog();
             regimenCreado = true;
+            btn_regimen.Enabled = false;
             this.Show();
         }
     }

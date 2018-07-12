@@ -92,7 +92,6 @@ namespace FrbaHotel.GestionReservas
         }
 
 
-
         bool IsNumber(string s)
         {
             if (s != "")
@@ -371,6 +370,7 @@ namespace FrbaHotel.GestionReservas
                 if (formPromptHotel01.TextBox1.Text != "")
                 {
                     hotelID = Convert.ToDecimal(formPromptHotel01.TextBox1.Text);
+                    hotel = 0;
                     txt_hotel.Text = formPromptHotel01.TextBox2.Text;
                 }
                 formPromptHotel01.Close();
@@ -383,6 +383,10 @@ namespace FrbaHotel.GestionReservas
         {
             if (txt_hotel.Text != "")
             {
+                if (hotel == 0) 
+                {
+                    hotel = hotelID;
+                }
                 using (PromptRegimenes formPromptRegimen01 = new PromptRegimenes(hotel))
                 {
                     formPromptRegimen01.ShowDialog();
