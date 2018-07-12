@@ -87,9 +87,12 @@ namespace FrbaHotel.ABMRol
         public void dgv_Roles_CellClick(object sender, DataGridViewCellEventArgs e)
         {
             int index = e.RowIndex;
-            DataGridViewRow selectedRow = dgv_Roles.Rows[index];
-            dgv_Roles_Id = selectedRow.Cells[0].Value.ToString();
-            estado = Convert.ToBoolean(selectedRow.Cells[2].Value);
+            if (index >= 0) 
+            {
+                DataGridViewRow selectedRow = dgv_Roles.Rows[index];
+                dgv_Roles_Id = selectedRow.Cells[0].Value.ToString();
+                estado = Convert.ToBoolean(selectedRow.Cells[2].Value);
+            }
         }
 
         private void refrescarGrid()

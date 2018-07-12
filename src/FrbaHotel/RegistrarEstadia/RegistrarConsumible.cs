@@ -222,8 +222,11 @@ namespace FrbaHotel.RegistrarEstadia
         private void dgv_consumibles_CellClick(object sender, DataGridViewCellEventArgs e)
         {
             int index = e.RowIndex;
-            DataGridViewRow selectedRow = dgv_consumibles.Rows[index];
-            dgv_consumible_id = Convert.ToDecimal(selectedRow.Cells[0].Value.ToString());
+            if(index >= 0)
+            {
+                DataGridViewRow selectedRow = dgv_consumibles.Rows[index];
+                dgv_consumible_id = Convert.ToDecimal(selectedRow.Cells[0].Value.ToString());
+            }
         }
 
         private void btn_agregar_Click(object sender, EventArgs e)

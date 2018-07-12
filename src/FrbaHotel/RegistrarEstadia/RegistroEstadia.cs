@@ -61,7 +61,7 @@ namespace FrbaHotel.RegistrarEstadia
                     txt_CodReserva.ReadOnly = true;
                     txt_estadia.Visible = false;
                     lbl_estadia.Visible = false;
-                  
+                    cb_medioPago.DropDownStyle = ComboBoxStyle.DropDownList;
                     break;
 
                 case "OUT":
@@ -69,7 +69,7 @@ namespace FrbaHotel.RegistrarEstadia
                     gb_Titulo.Text = "Check-out";
                     txt_CodReserva.ReadOnly = true;
                     btn_regClientes.Visible = false;
-
+                    cb_medioPago.DropDownStyle = ComboBoxStyle.DropDownList;
                     break;
 
             }

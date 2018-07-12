@@ -30,15 +30,14 @@ namespace FrbaHotel.ABMHabitacion
 
             modoABM = modo;
 
-            cb_tipoFrente.DropDownStyle = ComboBoxStyle.DropDownList;
-            cb_tipohab.DropDownStyle = ComboBoxStyle.DropDownList;
-
             switch (modoABM)
             {
                 case "INS":
                     labelTitulo.Text = "Alta de Habitación";
                     txt_estado.Visible = false;
                     l_estado.Visible = false;
+                    cb_tipoFrente.DropDownStyle = ComboBoxStyle.DropDownList;
+                    cb_tipohab.DropDownStyle = ComboBoxStyle.DropDownList;
                     break;
                 case "DLT":
                     labelTitulo.Text = "Baja de Habitación";
@@ -51,7 +50,6 @@ namespace FrbaHotel.ABMHabitacion
                     cb_tipoFrente.Enabled = false;
                     cb_tipohab.Enabled = false;
                     txt_descripcion.ReadOnly = true;
-                    btn_aceptar_nuevo.Visible = false;
                     break;
                 case "UPD":
                     labelTitulo.Text = "Modificación de Habitación";
@@ -63,7 +61,6 @@ namespace FrbaHotel.ABMHabitacion
                     txt_piso.ReadOnly = true;
                     cb_tipoFrente.Enabled = false;
                     cb_tipohab.Enabled = false;
-                    btn_aceptar_nuevo.Visible = false;
                     break;
             }
             //dt_fecha_nac.Format = DateTimePickerFormat.Custom;

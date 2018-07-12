@@ -75,6 +75,8 @@ namespace FrbaHotel.ABMUsuario
                     lhotel.Visible = false;
                     txt_hotel.Visible = false;
                     btn_promptHotel.Visible = false;
+                    cb_tipo_documento.DropDownStyle = ComboBoxStyle.DropDownList;
+                    cb_rol.DropDownStyle = ComboBoxStyle.DropDownList;
                     break;
             }
             dt_fecha_nac.Format = DateTimePickerFormat.Custom;

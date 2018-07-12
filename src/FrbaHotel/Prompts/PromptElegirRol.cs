@@ -58,13 +58,15 @@ namespace FrbaHotel.Prompts
         private void dgvRolesPrompt_CellClick(object sender, DataGridViewCellEventArgs e)
         {
             int index = e.RowIndex;
-            DataGridViewRow selectedRow = dgvRolesPrompt.Rows[index];
-            string dgv_roles_ID = selectedRow.Cells[0].Value.ToString();
-            string dgv_roles_nombre = selectedRow.Cells[1].Value.ToString();
+            if (index >= 0)
+            {
+                DataGridViewRow selectedRow = dgvRolesPrompt.Rows[index];
+                string dgv_roles_ID = selectedRow.Cells[0].Value.ToString();
+                string dgv_roles_nombre = selectedRow.Cells[1].Value.ToString();
 
-            txt_aux_rolid.Text = dgv_roles_ID;
-            txt_aux_rolnombre.Text = dgv_roles_nombre;
-
+                txt_aux_rolid.Text = dgv_roles_ID;
+                txt_aux_rolnombre.Text = dgv_roles_nombre;
+            }
             this.Hide();
         }
 

@@ -92,8 +92,11 @@ namespace FrbaHotel.ABMUsuario
         private void dgv_Hoteles_CellClick(object sender, DataGridViewCellEventArgs e)
         {
             int index = e.RowIndex;
-            DataGridViewRow selectedRow = dgv_Hoteles.Rows[index];
-            dgv_Hoteles_ID = Convert.ToDecimal(selectedRow.Cells[0].Value.ToString());
+            if (index >= 0)
+            {
+                DataGridViewRow selectedRow = dgv_Hoteles.Rows[index];
+                dgv_Hoteles_ID = Convert.ToDecimal(selectedRow.Cells[0].Value.ToString());
+            }
         }
     }
 }

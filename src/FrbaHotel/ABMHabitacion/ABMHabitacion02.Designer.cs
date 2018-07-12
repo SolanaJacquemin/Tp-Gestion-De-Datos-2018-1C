@@ -32,7 +32,6 @@
             this.label11 = new System.Windows.Forms.Label();
             this.boton_aceptar = new System.Windows.Forms.Button();
             this.boton_volver = new System.Windows.Forms.Button();
-            this.btn_aceptar_nuevo = new System.Windows.Forms.Button();
             this.labelTitulo = new System.Windows.Forms.Label();
             this.groupBox1 = new System.Windows.Forms.GroupBox();
             this.btn_promptHotel = new System.Windows.Forms.Button();
@@ -93,15 +92,6 @@
             this.boton_volver.Text = "Volver";
             this.boton_volver.UseVisualStyleBackColor = true;
             this.boton_volver.Click += new System.EventHandler(this.boton_volver_Click);
-            // 
-            // btn_aceptar_nuevo
-            // 
-            this.btn_aceptar_nuevo.Location = new System.Drawing.Point(110, 315);
-            this.btn_aceptar_nuevo.Name = "btn_aceptar_nuevo";
-            this.btn_aceptar_nuevo.Size = new System.Drawing.Size(108, 23);
-            this.btn_aceptar_nuevo.TabIndex = 9;
-            this.btn_aceptar_nuevo.Text = "Aceptar y Nuevo";
-            this.btn_aceptar_nuevo.UseVisualStyleBackColor = true;
             // 
             // labelTitulo
             // 
@@ -175,7 +165,7 @@
             this.cb_tipohab.FormattingEnabled = true;
             this.cb_tipohab.Location = new System.Drawing.Point(69, 50);
             this.cb_tipohab.Name = "cb_tipohab";
-            this.cb_tipohab.Size = new System.Drawing.Size(78, 21);
+            this.cb_tipohab.Size = new System.Drawing.Size(120, 21);
             this.cb_tipohab.TabIndex = 2;
             // 
             // label6
@@ -282,7 +272,6 @@
             this.Controls.Add(this.label11);
             this.Controls.Add(this.boton_aceptar);
             this.Controls.Add(this.boton_volver);
-            this.Controls.Add(this.btn_aceptar_nuevo);
             this.Controls.Add(this.labelTitulo);
             this.Name = "ABMHabitacion02";
             this.Text = "ABMHabitacion02";
@@ -300,7 +289,6 @@
         private System.Windows.Forms.Label label11;
         private System.Windows.Forms.Button boton_aceptar;
         private System.Windows.Forms.Button boton_volver;
-        private System.Windows.Forms.Button btn_aceptar_nuevo;
         private System.Windows.Forms.Label labelTitulo;
         private System.Windows.Forms.GroupBox groupBox1;
         private System.Windows.Forms.ComboBox cb_tipoFrente;

@@ -19,6 +19,7 @@ namespace FrbaHotel.ABMUsuario
         public decimal hotel_id;
         public string usuario;
         public bool esAdminGral;
+        public string dgv_usuario_Estado;
 
         public ABMUsuario01(string user, decimal HotelID)
         {
@@ -122,55 +123,75 @@ namespace FrbaHotel.ABMUsuario
 
         private void boton_hoteles_Click(object sender, EventArgs e)
         {
-            if (dgv_Usuarios.SelectedRows.Count > 0)
+            if (dgv_usuario_Estado == "False")
             {
-                this.Hide();
-                ABMUsuario03 formABMUsuario03 = new ABMUsuario03(dgv_usuario_ID, hotel_id);
-                formABMUsuario03.ShowDialog();
-                this.Show();
-                this.buscar();
-                this.refrescarGrid();
+                MessageBox.Show("El usuario está deshabilitado. Operación cancelada", "FOUR SIZONS - FRBA Hoteles", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
             else
             {
-                MessageBox.Show("Debe seleccionar un usuario de la grilla", "FOUR SIZONS - FRBA Hoteles", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                if (dgv_Usuarios.SelectedRows.Count > 0)
+                {
+                    this.Hide();
+                    ABMUsuario03 formABMUsuario03 = new ABMUsuario03(dgv_usuario_ID, hotel_id);
+                    formABMUsuario03.ShowDialog();
+                    this.Show();
+                    this.buscar();
+                    this.refrescarGrid();
+                }
+                else
+                {
+                    MessageBox.Show("Debe seleccionar un usuario de la grilla", "FOUR SIZONS - FRBA Hoteles", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                }
             }
         }
 
         private void boton_baja_Click(object sender, EventArgs e)
         {
-            if (dgv_Usuarios.SelectedRows.Count > 0)
+            if (dgv_usuario_Estado == "False")
             {
-                string modo = "DLT";
-                this.Hide();
-                ABMUsuario02 formABMUsuario02 = new ABMUsuario02(modo, dgv_usuario_ID, hotel_id);
-                formABMUsuario02.ShowDialog();
-                this.Show();
-                this.buscar();
-                this.refrescarGrid();
+                MessageBox.Show("No puede dar de baja a un usuario dado de baja", "FOUR SIZONS - FRBA Hoteles", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
             else
             {
-                MessageBox.Show("Debe seleccionar un usuario de la grilla", "FOUR SIZONS - FRBA Hoteles", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                if (dgv_Usuarios.SelectedRows.Count > 0)
+                {
+                    string modo = "DLT";
+                    this.Hide();
+                    ABMUsuario02 formABMUsuario02 = new ABMUsuario02(modo, dgv_usuario_ID, hotel_id);
+                    formABMUsuario02.ShowDialog();
+                    this.Show();
+                    this.buscar();
+                    this.refrescarGrid();
+                }
+                else
+                {
+                    MessageBox.Show("Debe seleccionar un usuario de la grilla", "FOUR SIZONS - FRBA Hoteles", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                }
             }
-
         }
 
         private void boton_modificacion_Click(object sender, EventArgs e)
         {
-            if (dgv_Usuarios.SelectedRows.Count > 0)
+            if (dgv_usuario_Estado == "False")
             {
-                string modo = "UPD";
-                this.Hide();
-                ABMUsuario02 formABMUsuario02 = new ABMUsuario02(modo, dgv_usuario_ID, hotel_id);
-                formABMUsuario02.ShowDialog();
-                this.Show();
-                this.buscar();
-                this.refrescarGrid();
+                MessageBox.Show("No puede modificar un usuario dado de baja", "FOUR SIZONS - FRBA Hoteles", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
             else
             {
-                MessageBox.Show("Debe seleccionar un usuario de la grilla", "FOUR SIZONS - FRBA Hoteles", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                if (dgv_Usuarios.SelectedRows.Count > 0)
+                {
+                    string modo = "UPD";
+                    this.Hide();
+                    ABMUsuario02 formABMUsuario02 = new ABMUsuario02(modo, dgv_usuario_ID, hotel_id);
+                    formABMUsuario02.ShowDialog();
+                    this.Show();
+                    this.buscar();
+                    this.refrescarGrid();
+                }
+                else
+                {
+                    MessageBox.Show("Debe seleccionar un usuario de la grilla", "FOUR SIZONS - FRBA Hoteles", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                }
             }
         }
 
@@ -277,8 +298,12 @@ namespace FrbaHotel.ABMUsuario
         public void dgv_Usuarios_CellClick(object sender, DataGridViewCellEventArgs e)
         {
             int index = e.RowIndex;
-            DataGridViewRow selectedRow = dgv_Usuarios.Rows[index];
-            dgv_usuario_ID = selectedRow.Cells[0].Value.ToString();
+            if(index >= 0)
+            {
+                DataGridViewRow selectedRow = dgv_Usuarios.Rows[index];
+                dgv_usuario_ID = selectedRow.Cells[0].Value.ToString();
+                dgv_usuario_Estado = selectedRow.Cells[9].Value.ToString();
+            }
         }
 
         private void refrescarGrid()
@@ -314,18 +339,25 @@ namespace FrbaHotel.ABMUsuario
 
         private void btn_roles_Click(object sender, EventArgs e)
         {
-            if (dgv_Usuarios.SelectedRows.Count > 0)
+            if (dgv_usuario_Estado == "False")
             {
-                this.Hide();
-                ABMUsuario05 formABMUsuario05 = new ABMUsuario05(dgv_usuario_ID);
-                formABMUsuario05.ShowDialog();
-                this.Show();
-                this.buscar();
-                this.refrescarGrid();
+                MessageBox.Show("El usuario está deshabilitado. Operación cancelada", "FOUR SIZONS - FRBA Hoteles", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
             else
             {
-                MessageBox.Show("Debe seleccionar un usuario de la grilla", "FOUR SIZONS - FRBA Hoteles", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                if (dgv_Usuarios.SelectedRows.Count > 0)
+                {
+                    this.Hide();
+                    ABMUsuario05 formABMUsuario05 = new ABMUsuario05(dgv_usuario_ID);
+                    formABMUsuario05.ShowDialog();
+                    this.Show();
+                    this.buscar();
+                    this.refrescarGrid();
+                }
+                else
+                {
+                    MessageBox.Show("Debe seleccionar un usuario de la grilla", "FOUR SIZONS - FRBA Hoteles", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                }
             }
         }
 

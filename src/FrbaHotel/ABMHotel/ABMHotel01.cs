@@ -257,8 +257,11 @@ namespace FrbaHotel.ABMHotel
         public void dgv_Hoteles_CellClick(object sender, DataGridViewCellEventArgs e)
         {
             int index = e.RowIndex;
-            DataGridViewRow selectedRow = dgv_Hoteles.Rows[index];
-            dgv_hotel_codigo = selectedRow.Cells[0].Value.ToString();
+            if (index >= 0) 
+            {
+                DataGridViewRow selectedRow = dgv_Hoteles.Rows[index];
+                dgv_hotel_codigo = selectedRow.Cells[0].Value.ToString();
+            }
         }
 
         private void btn_cerrar_Click(object sender, EventArgs e)

@@ -191,10 +191,17 @@ namespace FrbaHotel.RegistrarEstadia
 
         private void btn_consumibles_Click(object sender, EventArgs e)
         {
-            this.Hide();
-            RegistrarConsumible formConsumibles = new RegistrarConsumible(dgv_CodReserva);
-            formConsumibles.ShowDialog();
-            this.Show();
+            if (dgv_Reserva.SelectedRows.Count == 1)
+            {
+                this.Hide();
+                RegistrarConsumible formConsumibles = new RegistrarConsumible(dgv_CodReserva);
+                formConsumibles.ShowDialog();
+                this.Show();
+            }
+            else
+            {
+                MessageBox.Show("Debe seleccionar una reserva de la grilla primero", "FOUR SIZONS - FRBA Hoteles", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
         }
 
         private void dgv_Reserva_CellClick(object sender, DataGridViewCellEventArgs e)

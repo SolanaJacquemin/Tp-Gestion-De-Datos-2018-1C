@@ -57,13 +57,15 @@ namespace FrbaHotel.Prompts
         private void dgvHotelesPrompt_CellClick(object sender, DataGridViewCellEventArgs e)
         {
             int index = e.RowIndex;
-            DataGridViewRow selectedRow = dgvHotelesPrompt.Rows[index];
-            string dgv_hotel_ID = selectedRow.Cells[0].Value.ToString();
-            string dgv_hotel_nombre = selectedRow.Cells[1].Value.ToString();
+            if (index >= 0)
+            {
+                DataGridViewRow selectedRow = dgvHotelesPrompt.Rows[index];
+                string dgv_hotel_ID = selectedRow.Cells[0].Value.ToString();
+                string dgv_hotel_nombre = selectedRow.Cells[1].Value.ToString();
 
-            txt_aux_hotelid.Text = dgv_hotel_ID;
-            txt_aux_hotelnombre.Text = dgv_hotel_nombre;
-
+                txt_aux_hotelid.Text = dgv_hotel_ID;
+                txt_aux_hotelnombre.Text = dgv_hotel_nombre;
+            }
             this.Hide();
         }
 

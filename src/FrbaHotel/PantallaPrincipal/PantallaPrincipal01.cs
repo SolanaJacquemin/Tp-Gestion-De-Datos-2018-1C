@@ -86,7 +86,7 @@ namespace FrbaHotel.PantallaPrincipal
         private void btn_habitaciones_Click(object sender, EventArgs e)
         {
             this.Hide();
-            ABMHabitacion01 formABMHabitacion01 = new ABMHabitacion01(hotel);
+            ABMHabitacion01 formABMHabitacion01 = new ABMHabitacion01(hotel, usuario);
             formABMHabitacion01.ShowDialog();
             this.Show();
         }
@@ -155,6 +155,7 @@ namespace FrbaHotel.PantallaPrincipal
             if (con.reader())
             {
                 esAdminGral = true;
+                hotel = 0;
             }
 
             con.closeConection();

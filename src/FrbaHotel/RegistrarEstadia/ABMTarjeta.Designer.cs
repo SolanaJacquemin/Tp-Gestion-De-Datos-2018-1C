@@ -31,7 +31,6 @@
             this.labelTitulo = new System.Windows.Forms.Label();
             this.dt_fecha_venc = new System.Windows.Forms.DateTimePicker();
             this.cb_marcaTarj = new System.Windows.Forms.ComboBox();
-            this.label11 = new System.Windows.Forms.Label();
             this.boton_confirmar = new System.Windows.Forms.Button();
             this.label10 = new System.Windows.Forms.Label();
             this.label6 = new System.Windows.Forms.Label();
@@ -40,7 +39,6 @@
             this.btn_volver = new System.Windows.Forms.Button();
             this.label9 = new System.Windows.Forms.Label();
             this.label2 = new System.Windows.Forms.Label();
-            this.txt_codigoCli = new System.Windows.Forms.TextBox();
             this.txt_codigoTarj = new System.Windows.Forms.TextBox();
             this.txt_numero = new System.Windows.Forms.TextBox();
             this.groupBox1 = new System.Windows.Forms.GroupBox();
@@ -78,18 +76,9 @@
             this.cb_marcaTarj.Size = new System.Drawing.Size(126, 21);
             this.cb_marcaTarj.TabIndex = 50;
             // 
-            // label11
-            // 
-            this.label11.AutoSize = true;
-            this.label11.Location = new System.Drawing.Point(30, 160);
-            this.label11.Name = "label11";
-            this.label11.Size = new System.Drawing.Size(75, 13);
-            this.label11.TabIndex = 44;
-            this.label11.Text = "Código Cliente";
-            // 
             // boton_confirmar
             // 
-            this.boton_confirmar.Location = new System.Drawing.Point(18, 296);
+            this.boton_confirmar.Location = new System.Drawing.Point(18, 242);
             this.boton_confirmar.Name = "boton_confirmar";
             this.boton_confirmar.Size = new System.Drawing.Size(89, 23);
             this.boton_confirmar.TabIndex = 63;
@@ -135,7 +124,7 @@
             // 
             // btn_volver
             // 
-            this.btn_volver.Location = new System.Drawing.Point(280, 296);
+            this.btn_volver.Location = new System.Drawing.Point(280, 242);
             this.btn_volver.Name = "btn_volver";
             this.btn_volver.Size = new System.Drawing.Size(89, 23);
             this.btn_volver.TabIndex = 64;
@@ -162,13 +151,6 @@
             this.label2.TabIndex = 49;
             this.label2.Text = "Número";
             // 
-            // txt_codigoCli
-            // 
-            this.txt_codigoCli.Location = new System.Drawing.Point(116, 157);
-            this.txt_codigoCli.Name = "txt_codigoCli";
-            this.txt_codigoCli.Size = new System.Drawing.Size(93, 20);
-            this.txt_codigoCli.TabIndex = 40;
-            // 
             // txt_codigoTarj
             // 
             this.txt_codigoTarj.Location = new System.Drawing.Point(116, 79);
@@ -188,19 +170,17 @@
             // 
             this.groupBox1.Controls.Add(this.dt_fecha_venc);
             this.groupBox1.Controls.Add(this.cb_marcaTarj);
-            this.groupBox1.Controls.Add(this.label11);
             this.groupBox1.Controls.Add(this.label10);
             this.groupBox1.Controls.Add(this.label6);
             this.groupBox1.Controls.Add(this.label5);
             this.groupBox1.Controls.Add(this.label4);
             this.groupBox1.Controls.Add(this.label2);
-            this.groupBox1.Controls.Add(this.txt_codigoCli);
             this.groupBox1.Controls.Add(this.txt_titular);
             this.groupBox1.Controls.Add(this.txt_codigoTarj);
             this.groupBox1.Controls.Add(this.txt_numero);
             this.groupBox1.Location = new System.Drawing.Point(18, 53);
             this.groupBox1.Name = "groupBox1";
-            this.groupBox1.Size = new System.Drawing.Size(351, 204);
+            this.groupBox1.Size = new System.Drawing.Size(351, 161);
             this.groupBox1.TabIndex = 65;
             this.groupBox1.TabStop = false;
             this.groupBox1.Text = "Datos de la Tarjeta";
@@ -225,7 +205,7 @@
             // label3
             // 
             this.label3.AutoSize = true;
-            this.label3.Location = new System.Drawing.Point(15, 269);
+            this.label3.Location = new System.Drawing.Point(15, 217);
             this.label3.Name = "label3";
             this.label3.Size = new System.Drawing.Size(172, 13);
             this.label3.TabIndex = 66;
@@ -235,7 +215,7 @@
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(377, 323);
+            this.ClientSize = new System.Drawing.Size(377, 268);
             this.Controls.Add(this.boton_confirmar);
             this.Controls.Add(this.btn_volver);
             this.Controls.Add(this.label9);
@@ -258,7 +238,6 @@
         private System.Windows.Forms.Label labelTitulo;
         private System.Windows.Forms.DateTimePicker dt_fecha_venc;
         private System.Windows.Forms.ComboBox cb_marcaTarj;
-        private System.Windows.Forms.Label label11;
         private System.Windows.Forms.Button boton_confirmar;
         private System.Windows.Forms.Label label10;
         private System.Windows.Forms.Label label6;
@@ -267,7 +246,6 @@
         private System.Windows.Forms.Button btn_volver;
         private System.Windows.Forms.Label label9;
         private System.Windows.Forms.Label label2;
-        private System.Windows.Forms.TextBox txt_codigoCli;
         private System.Windows.Forms.TextBox txt_codigoTarj;
         private System.Windows.Forms.TextBox txt_numero;
         private System.Windows.Forms.GroupBox groupBox1;

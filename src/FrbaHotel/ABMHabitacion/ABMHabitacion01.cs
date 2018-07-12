@@ -18,13 +18,16 @@ namespace FrbaHotel.ABMHabitacion
         public int index;
         public decimal hotel;
         public decimal error;
+        public bool esAdminGral;
+        public string usuario;
 
-        public ABMHabitacion01(decimal hotelID)
+        public ABMHabitacion01(decimal hotelID, string usuarioID)
         {
             InitializeComponent();
             this.StartPosition = FormStartPosition.CenterScreen;
             error = 0;
             hotel = hotelID;
+            usuario = usuarioID;
 
             cb_tipoFrente.DropDownStyle = ComboBoxStyle.DropDownList;
             cb_tipohab.DropDownStyle = ComboBoxStyle.DropDownList;
@@ -42,11 +45,69 @@ namespace FrbaHotel.ABMHabitacion
 
             cb_tipoFrente.Items.Add("S");
             cb_tipoFrente.Items.Add("N");
+
+            con.strQuery = "SELECT U.Usuario_ID, U.Usuario_Nombre, U.Usuario_Apellido, U.Usuario_TipoDoc, U.Usuario_NroDoc, U.Usuario_Telefono, U.Usuario_Direccion, U.Usuario_Fec_Nac, U.Usuario_Mail, U.Usuario_Estado, U.Usuario_FallaLog" +
+                           " FROM FOUR_SIZONS.Usuario U" +
+                           " JOIN FOUR_SIZONS.UsuarioXRol UR ON UR.Usuario_ID = U.Usuario_ID" +
+                           " WHERE UR.Rol_Codigo = 1 AND U.Usuario_ID = '" + usuario + "'";
+
+            con.executeQuery();
+
+            esAdminGral = false;
+            if (con.reader())
+            {
+                esAdminGral = true;
+            }
+            con.closeConection();
+
         }
 
 
         public void iniciarGrilla()
         {
+
+            dgv_Habitaciones.Rows.Clear();
+
+            Conexion con = new Conexion();
+            con.strQuery = "select Ho.Hotel_Nombre, Ha.Hotel_Codigo, Ha.Habitacion_Numero, Ha.Habitacion_Piso, HT.Habitacion_Tipo_Descripcion, " +
+            "Ha.Habitacion_Frente, Ha.Habitacion_Estado from FOUR_SIZONS.Habitacion as Ha JOIN FOUR_SIZONS.Hotel " +
+            "as Ho on Ho.Hotel_Codigo = Ha.Hotel_Codigo JOIN FOUR_SIZONS.Habitacion_Tipo as HT on " +
+            "HT.Habitacion_Tipo_Codigo = Ha.Habitacion_Tipo_Codigo" +
+                            " WHERE 1=1";
+            if ((hotel != 0) && (!esAdminGral))
+            {
+                con.strQuery = con.strQuery + " AND HO.Hotel_Codigo = " + txt_hotel.Text;
+            }
+            con.strQuery = con.strQuery + " ORDER BY Ho.Hotel_Codigo, Ha.Habitacion_Numero";
+            con.executeQuery();
+            if (!con.reader())
+            {
+                MessageBox.Show("No se han encontrado habitaciones. Revise los criterios de búsqueda", "FOUR SIZONS - FRBA Hoteles", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                con.strQuery = "";
+                con.closeConection();
+                return;
+            }
+
+            dgv_Habitaciones.Rows.Add(new Object[] { con.lector.GetString(0), con.lector.GetDecimal(1),
+            con.lector.GetDecimal(2), con.lector.GetDecimal(3), con.lector.GetString(4), con.lector.GetString(5),
+            con.lector.GetBoolean(6)});
+
+            while (con.reader())
+            {
+                dgv_Habitaciones.Rows.Add(new Object[] { con.lector.GetString(0), con.lector.GetDecimal(1),
+                con.lector.GetDecimal(2), con.lector.GetDecimal(3), con.lector.GetString(4), con.lector.GetString(5),
+                con.lector.GetBoolean(6)});
+            }
+            con.closeConection();
+
+            dgv_Habitaciones.ClearSelection();
+            foreach (DataGridViewRow row in dgv_Habitaciones.Rows)
+                if (Convert.ToBoolean(row.Cells[6].Value) == false)
+                {
+                    row.DefaultCellStyle.BackColor = Color.Red;
+                }
+
+            /*
             Conexion con = new Conexion();
             con.strQuery = "SELECT * FROM FOUR_SIZONS.Habitacion";
             con.executeQuery();
@@ -74,7 +135,7 @@ namespace FrbaHotel.ABMHabitacion
                 if (Convert.ToBoolean(row.Cells[6].Value) == false)
                 {
                     row.DefaultCellStyle.BackColor = Color.Red;
-                }
+                }*/
         }
 
         public void limpiar()
@@ -105,6 +166,10 @@ namespace FrbaHotel.ABMHabitacion
                 con.strQuery = con.strQuery + "AND Habitacion_Numero = " + txt_nro_hab.Text + " ";
             if (txt_piso.Text != "")
                 con.strQuery = con.strQuery + "AND Ha.Habitacion_Piso = " + txt_piso.Text + " ";
+            if (cb_tipoFrente.Text != "")
+                con.strQuery = con.strQuery + "AND Ha.Habitacion_Frente = '" + cb_tipoFrente.Text + "' ";
+            if (cb_tipohab.Text != "")
+                con.strQuery = con.strQuery + "AND HT.Habitacion_Tipo_Descripcion = '" + cb_tipohab.Text + "' ";
             if (hotel != 0)
             {
                 con.strQuery = con.strQuery + " AND HO.Hotel_Codigo = " + hotel;
@@ -230,7 +295,23 @@ namespace FrbaHotel.ABMHabitacion
                 return;
             }
 
-            iniciarGrilla();
+            dgv_Habitaciones.Rows.Add(new Object[] { con.lector.GetString(0), con.lector.GetDecimal(1),
+            con.lector.GetDecimal(2), con.lector.GetDecimal(3), con.lector.GetString(4), con.lector.GetString(5),
+            con.lector.GetBoolean(6)});
+
+            while (con.reader())
+            {
+                dgv_Habitaciones.Rows.Add(new Object[] { con.lector.GetString(0), con.lector.GetDecimal(1),
+                con.lector.GetDecimal(2), con.lector.GetDecimal(3), con.lector.GetString(4), con.lector.GetString(5),
+                con.lector.GetBoolean(6)});
+            }
+
+            dgv_Habitaciones.ClearSelection();
+            foreach (DataGridViewRow row in dgv_Habitaciones.Rows)
+                if (Convert.ToBoolean(row.Cells[6].Value) == false)
+                {
+                    row.DefaultCellStyle.BackColor = Color.Red;
+                }
 
         }
 

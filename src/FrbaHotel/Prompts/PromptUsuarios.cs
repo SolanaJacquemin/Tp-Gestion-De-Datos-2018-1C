@@ -83,12 +83,12 @@ namespace FrbaHotel.Prompts
         private void dgvUsuariosPrompt_CellClick(object sender, DataGridViewCellEventArgs e)
         {
             int index = e.RowIndex;
-            DataGridViewRow selectedRow = dgvUsuariosPrompt.Rows[index];
-            string dgv_usuario_ID = selectedRow.Cells[0].Value.ToString();
-
-
-            txt_aux_hotelid.Text = dgv_usuario_ID;
-
+            if (index >= 0) 
+            {
+                DataGridViewRow selectedRow = dgvUsuariosPrompt.Rows[index];
+                string dgv_usuario_ID = selectedRow.Cells[0].Value.ToString();
+                txt_aux_hotelid.Text = dgv_usuario_ID;
+            }
             this.Hide();
         }
 

@@ -94,13 +94,15 @@ namespace FrbaHotel.Prompts
         private void dgvRegimenPrompt_CellClick(object sender, DataGridViewCellEventArgs e)
         {
             int index = e.RowIndex;
-            DataGridViewRow selectedRow = dgvRegimenPrompt.Rows[index];
-            string dgv_regimen_ID = selectedRow.Cells[0].Value.ToString();
-            string dgv_regimen_nombre = selectedRow.Cells[1].Value.ToString();
+            if (index >= 0)
+            {
+                DataGridViewRow selectedRow = dgvRegimenPrompt.Rows[index];
+                string dgv_regimen_ID = selectedRow.Cells[0].Value.ToString();
+                string dgv_regimen_nombre = selectedRow.Cells[1].Value.ToString();
 
-            txt_aux_regimenid.Text = dgv_regimen_ID;
-            txt_aux_regimennombre.Text = dgv_regimen_nombre;
-
+                txt_aux_regimenid.Text = dgv_regimen_ID;
+                txt_aux_regimennombre.Text = dgv_regimen_nombre;
+            }
             this.Hide();
         }
 
