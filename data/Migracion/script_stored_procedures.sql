@@ -859,13 +859,25 @@ create procedure four_sizons.modificarHotel
 as 
 begin tran 
 begin try
+IF(@estado!=0)
+	begin
+		update FOUR_SIZONS.Hotel
+		set Hotel_Nombre= @nombre,Hotel_Mail= @mail,Hotel_Telefono=@telefono,Hotel_Calle=@calle ,
+			Hotel_Nro_Calle=@numCalle,Hotel_CantEstrella=@cantEstrellas,Hotel_Recarga_Estrella=@recarga_estrella,
+			Hotel_Ciudad=@ciudad,Hotel_Pais=@pais,Hotel_FechaCreacion=@fechaCreacion,Hotel_Estado=@estado
 
-update FOUR_SIZONS.Hotel
-set Hotel_Nombre= @nombre,Hotel_Mail= @mail,Hotel_Telefono=@telefono,Hotel_Calle=@calle ,
-	Hotel_Nro_Calle=@numCalle,Hotel_CantEstrella=@cantEstrellas,Hotel_Recarga_Estrella=@recarga_estrella,
-	Hotel_Ciudad=@ciudad,Hotel_Pais=@pais,Hotel_FechaCreacion=@fechaCreacion,Hotel_Estado=@estado
-
-	where Hotel_Codigo=@codigo
+		where Hotel_Codigo=@codigo
+	end
+else
+	begin
+		update FOUR_SIZONS.Hotel
+		set Hotel_Estado=0
+		where Hotel_Codigo=@codigo
+	
+		update FOUR_SIZONS.Reserva
+		set Reserva_Estado=3
+		where Hotel_Codigo=@codigo and (Reserva_Estado=2 or Reserva_Estado=1)
+	end
 commit tran 
 end try
 begin catch
@@ -885,9 +897,11 @@ create proc FOUR_SIZONS.InsertarRol
 		as
 		BEGIN TRY
 		BEGIN TRANSACTION
-		
-		insert into FOUR_SIZONS.Rol (rol_nombre,rol_estado) values(@rolname,@estado);
-		
+		if(not exists(select Rol_Codigo from FOUR_SIZONS.Rol where Rol_Nombre=@rolname))
+			begin
+				insert into FOUR_SIZONS.Rol (rol_nombre,rol_estado) values(@rolname,@estado);
+			end
+		else raiserror ('ya existe un rol con ese nombre, ingrese otro',16,1)
 		COMMIT TRANSACTION
 		END TRY
 		BEGIN CATCH
@@ -1072,51 +1086,47 @@ create procedure four_sizons.AltaHabitacion
 as begin try
 begin tran 
 declare @TipoHabID numeric(18)
-	
-
-
-		set @TipoHabID = (select Habitacion_Tipo_Codigo from FOUR_SIZONS.Habitacion_Tipo where @TipoHab = Habitacion_Tipo_Descripcion)
+set @TipoHabID = (select Habitacion_Tipo_Codigo from FOUR_SIZONS.Habitacion_Tipo where @TipoHab = Habitacion_Tipo_Descripcion)
 		
 		--Valida que no haya dos hab con el mismo numero en el mismo hotel		
-
+if(1=(select Hotel_Estado from FOUR_SIZONS.Hotel where Hotel_Codigo=@HotelId))
+	begin
 		if (not exists (select Habitacion_Numero from Habitacion where Hotel_Codigo=@HotelId and Habitacion_Numero= @numero))
-				begin
-						insert into FOUR_SIZONS.Habitacion(Habitacion_Numero,Hotel_Codigo,Habitacion_Piso,Habitacion_Frente,Habitacion_Tipo_Codigo,
+			begin
+				insert into FOUR_SIZONS.Habitacion(Habitacion_Numero,Hotel_Codigo,Habitacion_Piso,Habitacion_Frente,Habitacion_Tipo_Codigo,
 						Habitacion_Descripcion,Habitacion_Estado)
 						values (@numero,@HotelId,@piso,@frente,@TipoHabID,@descripcion,1)
 		
-						declare @aux datetime = convert(datetime, '01-01-2017' ,121)
-
-						declare @aux2 datetime
-						declare @fin datetime= convert(datetime, '01-01-2021' ,121)
-
-
-					if(exists (select * from FOUR_SIZONS.Disponibilidad where Hotel_Codigo=@HotelId and Habitacion_Tipo_Codigo=@TipoHabID))
+				declare @aux datetime = convert(datetime, '01-01-2017' ,121)
+				declare @aux2 datetime
+				declare @fin datetime= convert(datetime, '01-01-2021' ,121)
+				if(exists (select * from FOUR_SIZONS.Disponibilidad where Hotel_Codigo=@HotelId and Habitacion_Tipo_Codigo=@TipoHabID))
 					begin
-					while (@aux != @fin)
-						begin
-							set @aux2= @aux 
-							update FOUR_SIZONS.Disponibilidad
-							set Disp_HabDisponibles= Disp_HabDisponibles+1
-							where @TipoHabID=Habitacion_Tipo_Codigo and datediff(day,Disp_Fecha,@aux)=0 and Hotel_Codigo =@HotelId
-							set @aux = DATEADD(day, 1, @aux2)
-						end
-					end
-					else 
-						begin
-							while (@aux != @fin)
+						while (@aux != @fin)
 							begin
-							set @aux2= @aux 
-							insert into FOUR_SIZONS.Disponibilidad	(Disp_HabDisponibles,Habitacion_Tipo_Codigo,Disp_Fecha,Hotel_Codigo) values(1,@TipoHabID,@aux,@HotelId)
-							set @aux = DATEADD(day, 1, @aux2)
+								set @aux2= @aux 
+								update FOUR_SIZONS.Disponibilidad
+								set Disp_HabDisponibles= Disp_HabDisponibles+1
+								where @TipoHabID=Habitacion_Tipo_Codigo and datediff(day,Disp_Fecha,@aux)=0 and Hotel_Codigo =@HotelId
+								set @aux = DATEADD(day, 1, @aux2)
 							end
-						end
-				end
-					else 
-						begin
-						RAISERROR('el numero de habitacion ya figura en ese hotel, ingrese otro por favor',16,1)
-
-						end
+					end
+				else 
+					begin
+						while (@aux != @fin)
+							begin
+								set @aux2= @aux 
+								insert into FOUR_SIZONS.Disponibilidad	(Disp_HabDisponibles,Habitacion_Tipo_Codigo,Disp_Fecha,Hotel_Codigo) values(1,@TipoHabID,@aux,@HotelId)
+								set @aux = DATEADD(day, 1, @aux2)
+							end
+					end
+			end
+		else 
+			begin
+				RAISERROR('el numero de habitacion ya figura en ese hotel, ingrese otro por favor',16,1)
+			end
+	end
+else RAISERROR('No se puede agregar una habitacion a un hotel cerrado',16,1)
 commit tran 
 end try
 begin catch
@@ -1224,45 +1234,42 @@ create procedure four_sizons.GenerarReserva
 as begin tran
 begin try
 
+if(not exists(select Cerrado_codigo from FOUR_SIZONS.Hotel_Cerrado where Hotel_Codigo=@hotId and @fechaInicio between Cerrado_FechaI and Cerrado_FechaF
+															or @fechaFin between Cerrado_FechaI and Cerrado_FechaF))
+	begin
+		if((select Cliente_Estado from FOUR_SIZONS.Cliente where Cliente_Codigo = @cliId)=1)
+			begin
 
-if((select Cliente_Estado from FOUR_SIZONS.Cliente where Cliente_Codigo = @cliId)=1)
-begin
-
-declare @cantidadNoches numeric(2)
-
-declare @tipoHab numeric(18) = (select Habitacion_Tipo_Codigo from FOUR_SIZONS.Habitacion_Tipo where Habitacion_Tipo_Descripcion=@tipoHabDesc)
-
-
-
-set @cantidadNoches = DATEDIFF(day, @fechaInicio, @fechaFin)
-
-insert into FOUR_SIZONS.Reserva(Reserva_Codigo,Reserva_Fecha_Inicio,Reserva_Fecha_Fin,Reserva_Cant_Noches,
+				declare @cantidadNoches numeric(2)
+				declare @tipoHab numeric(18) = (select Habitacion_Tipo_Codigo from FOUR_SIZONS.Habitacion_Tipo where Habitacion_Tipo_Descripcion=@tipoHabDesc)
+				set @cantidadNoches = DATEDIFF(day, @fechaInicio, @fechaFin)
+				insert into FOUR_SIZONS.Reserva(Reserva_Codigo,Reserva_Fecha_Inicio,Reserva_Fecha_Fin,Reserva_Cant_Noches,
 								Reserva_Precio,Usuario_ID,Hotel_Codigo,Cliente_Codigo,Regimen_Codigo,Reserva_Estado,habitacion_tipo_codigo,reserva_cant_hab,Reserva_FechaCreacion)
 								values((NEXT VALUE FOR sec_cod_reserva),@fechaInicio,@fechaFin,@cantidadNoches,
 								@precio,@userId,@hotId,@cliId,@regId,1,@tipohab,@canthab,convert(datetime,@fechaCreacion,121))
+				--aca baja la disponibilidad
+				declare @aux datetime = convert(datetime,@fechaInicio,121 )
+				declare @aux2 datetime,
+						@aux3 datetime 
+				set @aux3=DATEADD(day, 1, @fechaFin)
+				while(datediff(day,@aux,@aux3)!=0 )
+					begin
+						set @aux2= @aux
+						update FOUR_SIZONS.Disponibilidad
+						set Disp_HabDisponibles = Disp_HabDisponibles - @cantHab
+						--where Disp_Fecha= @aux and Hotel_Codigo = @hotId and Habitacion_Tipo_Codigo = @tipohab
+						where datediff(day,Disp_Fecha,@aux)=0 and Hotel_Codigo = @hotId and Habitacion_Tipo_Codigo = @tipohab
+						set @aux = DATEADD(day, 1, @aux2)
+					end
+			end
 
+		else raiserror ('el cliente esta deshabilitado, no puede hospedarse en los hoteles',16,1)
+		
+	end
+else raiserror ('el hotel se encuentra cerrado para esas fechas',16,1)
 
---aca baja la disponibilidad
-declare @aux datetime = convert(datetime,@fechaInicio,121 )
-declare @aux2 datetime,
-		@aux3 datetime 
-set @aux3=DATEADD(day, 1, @fechaFin)
-
-while(datediff(day,@aux,@aux3)!=0 )
-begin
-set @aux2= @aux
-update FOUR_SIZONS.Disponibilidad
-	set Disp_HabDisponibles = Disp_HabDisponibles - @cantHab
-		--where Disp_Fecha= @aux and Hotel_Codigo = @hotId and Habitacion_Tipo_Codigo = @tipohab
-		where datediff(day,Disp_Fecha,@aux)=0 and Hotel_Codigo = @hotId and Habitacion_Tipo_Codigo = @tipohab
-set @aux = DATEADD(day, 1, @aux2)
-end
-end
-
-else raiserror ('el cliente esta deshabilitado, no puede hospedarse en los hoteles',16,1)
 commit tran 
 end try
-
 begin catch
 declare @mensaje_de_error nvarchar(255)
 	set @mensaje_de_error = ERROR_MESSAGE()
@@ -1503,14 +1510,18 @@ create proc four_sizons.cerrarHotel
 
 	as begin tran 
 	begin try
-
-	insert into FOUR_SIZONS.Hotel_Cerrado(Cerrado_Detalle, Cerrado_FechaF ,Cerrado_FechaI , Hotel_Codigo)
+	if(not exists(select Reserva_Codigo from four_sizons.Reserva where Hotel_Codigo=@Hotel_Codigo and 
+																(@Cerrado_FechaI between Reserva_Fecha_Inicio and Reserva_Fecha_Fin
+																or @Cerrado_FechaF between Reserva_Fecha_Inicio and Reserva_Fecha_Fin)))
+		begin
+			insert into FOUR_SIZONS.Hotel_Cerrado(Cerrado_Detalle, Cerrado_FechaF ,Cerrado_FechaI , Hotel_Codigo)
 									values (@Cerrado_Detalle,@Cerrado_FechaF,@Cerrado_FechaI,@Hotel_Codigo)
 
-	update FOUR_SIZONS.Hotel 
-	 set Hotel_Estado = '0'
-	 where Hotel_Codigo = @Hotel_Codigo
-
+			update FOUR_SIZONS.Hotel 
+			set Hotel_Estado = '0'
+			where Hotel_Codigo = @Hotel_Codigo
+		 end
+	else raiserror ('El hotel tiene reservas entre esas fechas',16,1)
 	commit tran
 	end try
 	begin catch
