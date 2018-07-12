@@ -49,6 +49,8 @@ namespace FrbaHotel.RegistrarEstadia
 
             generarFactura = false;
             facturaGenerada = false;
+
+            btn_tarjeta.Visible = false;
             cb_medioPago.Items.Add("EFECTIVO");
             cb_medioPago.Items.Add("TARJETA");
 
@@ -417,7 +419,18 @@ namespace FrbaHotel.RegistrarEstadia
             }
         }
 
+        private void cb_medioPago_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            if (cb_medioPago.Text == "TARJETA")
+            {
+                btn_tarjeta.Visible = true;
+            }
+            else
+            {
+                btn_tarjeta.Visible = false;
+            }
+        }
+
     }
 
 }
-

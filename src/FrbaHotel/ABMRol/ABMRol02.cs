@@ -141,11 +141,30 @@ namespace FrbaHotel.ABMRol
         {
             if (lb_func.SelectedItem != null)
             {
-                lb_func_usralta.Items.Add(lb_func.SelectedItem);
+                error = 0;
+                string func1 = lb_func.SelectedItem.ToString();
+                string func2;
+                for (int i = 0; i < lb_func_usralta.Items.Count; i++)
+                {
+                    func2 = lb_func_usralta.Items[i].ToString();
+                    if (func1 == func2)
+                    {
+                        error = 1;
+                    }
+                        
+                }
+                if (error == 0) 
+                {
+                    lb_func_usralta.Items.Add(lb_func.SelectedItem);
+                }
+                else
+                {
+                    MessageBox.Show("La funcionalidad " + func1 + " ya ha sido agregada en la lista", "FOUR SIZONS - FRBA Hoteles", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                }
             }
             else
             {
-                MessageBox.Show("No hay ítem seleccionado");
+                MessageBox.Show("No hay ítem seleccionado", "FOUR SIZONS - FRBA Hoteles", MessageBoxButtons.OK, MessageBoxIcon.Information);
             }
         }
 
@@ -160,7 +179,7 @@ namespace FrbaHotel.ABMRol
             }
             else
             {
-                MessageBox.Show("No hay ítem seleccionado");
+                MessageBox.Show("No hay ítem seleccionado", "FOUR SIZONS - FRBA Hoteles", MessageBoxButtons.OK, MessageBoxIcon.Information);
             }
         }
 
@@ -168,8 +187,38 @@ namespace FrbaHotel.ABMRol
         {
             for (int i = 0; i < lb_func.Items.Count; i++)
             {
-                lb_func_usralta.Items.Add(lb_func.Items[i].ToString());
+                //lb_func_usralta.Items.Add(lb_func.Items[i].ToString());
+            
+                error = 0;
+                string func1 = lb_func.Items[i].ToString();
+                string func2;
+                for (int j = 0; j < lb_func_usralta.Items.Count; j++)
+                {
+                    if (error != 1)
+                    {
+                        func2 = lb_func_usralta.Items[j].ToString();
+                        if (func1 == func2)
+                        {
+                            error = 1;
+                        }
+                    }
+                    else 
+                    {
+                        break;
+                    }  
+                }
+                if (error == 0) 
+                {
+                    lb_func_usralta.Items.Add(func1);
+                }
+                else
+                {
+                    MessageBox.Show("La funcionalidad " + func1 + " ya ha sido agregada en la lista", "FOUR SIZONS - FRBA Hoteles", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                }
+                
             }
+
+
         }
 
         private void btn_eliminarTodo_Click(object sender, EventArgs e)

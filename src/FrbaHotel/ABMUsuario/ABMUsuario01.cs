@@ -172,26 +172,19 @@ namespace FrbaHotel.ABMUsuario
 
         private void boton_modificacion_Click(object sender, EventArgs e)
         {
-            if (dgv_usuario_Estado == "False")
+            if (dgv_Usuarios.SelectedRows.Count > 0)
             {
-                MessageBox.Show("No puede modificar un usuario dado de baja", "FOUR SIZONS - FRBA Hoteles", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                string modo = "UPD";
+                this.Hide();
+                ABMUsuario02 formABMUsuario02 = new ABMUsuario02(modo, dgv_usuario_ID, hotel_id);
+                formABMUsuario02.ShowDialog();
+                this.Show();
+                this.buscar();
+                this.refrescarGrid();
             }
             else
             {
-                if (dgv_Usuarios.SelectedRows.Count > 0)
-                {
-                    string modo = "UPD";
-                    this.Hide();
-                    ABMUsuario02 formABMUsuario02 = new ABMUsuario02(modo, dgv_usuario_ID, hotel_id);
-                    formABMUsuario02.ShowDialog();
-                    this.Show();
-                    this.buscar();
-                    this.refrescarGrid();
-                }
-                else
-                {
-                    MessageBox.Show("Debe seleccionar un usuario de la grilla", "FOUR SIZONS - FRBA Hoteles", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                }
+                MessageBox.Show("Debe seleccionar un usuario de la grilla", "FOUR SIZONS - FRBA Hoteles", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
 

@@ -18,6 +18,7 @@ namespace FrbaHotel.ABMHotel
         public decimal hotel;
         public string usuario;
         public bool esAdminGral;
+        public bool estado;
 
         public ABMHotel01(decimal hotelID, string userID)
         {
@@ -224,12 +225,20 @@ namespace FrbaHotel.ABMHotel
         {
             if (dgv_Hoteles.SelectedRows.Count > 0)
             {
-            string modo = "DLT";
-            this.Hide();
-            ABMHotel02 formABMUsuario02 = new ABMHotel02(modo, Convert.ToDecimal(dgv_hotel_codigo));
-            formABMUsuario02.ShowDialog();
-            this.Show();
-            this.buscar();
+                if (!estado)
+                {
+                    MessageBox.Show("No puede dar de baja a un hotel cerrado o dada de baja", "FOUR SIZONS - FRBA Hoteles", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                }
+                else
+                {
+                string modo = "DLT";
+                this.Hide();
+                ABMHotel02 formABMUsuario02 = new ABMHotel02(modo, Convert.ToDecimal(dgv_hotel_codigo));
+                formABMUsuario02.ShowDialog();
+                this.Show();
+                this.buscar();
+                }
+
             }
             else
             {
@@ -261,6 +270,7 @@ namespace FrbaHotel.ABMHotel
             {
                 DataGridViewRow selectedRow = dgv_Hoteles.Rows[index];
                 dgv_hotel_codigo = selectedRow.Cells[0].Value.ToString();
+                estado = Convert.ToBoolean(selectedRow.Cells[11].Value);
             }
         }
 

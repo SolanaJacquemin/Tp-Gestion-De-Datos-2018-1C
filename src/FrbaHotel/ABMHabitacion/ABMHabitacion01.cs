@@ -20,6 +20,7 @@ namespace FrbaHotel.ABMHabitacion
         public decimal error;
         public bool esAdminGral;
         public string usuario;
+        public bool estado;
 
         public ABMHabitacion01(decimal hotelID, string usuarioID)
         {
@@ -106,36 +107,6 @@ namespace FrbaHotel.ABMHabitacion
                 {
                     row.DefaultCellStyle.BackColor = Color.Red;
                 }
-
-            /*
-            Conexion con = new Conexion();
-            con.strQuery = "SELECT * FROM FOUR_SIZONS.Habitacion";
-            con.executeQuery();
-            if (!con.reader())
-            {
-                MessageBox.Show("No se han encontrado clientes. Revise los criterios de búsqueda", "FOUR SIZONS - FRBA Hoteles", MessageBoxButtons.OK, MessageBoxIcon.Information);
-                con.strQuery = "";
-                con.closeConection();
-                return;
-            }
-
-            dgv_Habitaciones.Rows.Add(new Object[] { con.lector.GetDecimal(0), con.lector.GetDecimal(1),
-            con.lector.GetDecimal(2), con.lector.GetString(3), con.lector.GetDecimal(4), con.lector.GetString(5),
-            con.lector.GetBoolean(6)});
-
-            while (con.reader())
-            {
-                dgv_Habitaciones.Rows.Add(new Object[] { con.lector.GetDecimal(0), con.lector.GetDecimal(1),
-            con.lector.GetDecimal(2), con.lector.GetString(3), con.lector.GetDecimal(4), con.lector.GetString(5),
-            con.lector.GetBoolean(6)});
-            }
-            con.closeConection();
-            dgv_Habitaciones.ClearSelection();
-            foreach (DataGridViewRow row in dgv_Habitaciones.Rows)
-                if (Convert.ToBoolean(row.Cells[6].Value) == false)
-                {
-                    row.DefaultCellStyle.BackColor = Color.Red;
-                }*/
         }
 
         public void limpiar()
@@ -223,13 +194,20 @@ namespace FrbaHotel.ABMHabitacion
         {
             if (dgv_Habitaciones.SelectedRows.Count > 0)
             {
-                string modo = "DLT";
-                this.Hide();
-                ABMHabitacion02 formABMHabitacion02 = new ABMHabitacion02(modo, dgv_hotel_ID, dgv_habitacion_ID);
-                formABMHabitacion02.ShowDialog();
-                this.Show();
-                this.buscar();
-                this.iniciarGrilla();
+                if (!estado)
+                {
+                    MessageBox.Show("No puede dar de baja a una habitación dada de baja", "FOUR SIZONS - FRBA Hoteles", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                }
+                else
+                {
+                        string modo = "DLT";
+                        this.Hide();
+                        ABMHabitacion02 formABMHabitacion02 = new ABMHabitacion02(modo, dgv_hotel_ID, dgv_habitacion_ID);
+                        formABMHabitacion02.ShowDialog();
+                        this.Show();
+                        this.buscar();
+                        this.iniciarGrilla();
+                }
             }
             else
             {
@@ -349,6 +327,7 @@ namespace FrbaHotel.ABMHabitacion
                 DataGridViewRow selectedRow = dgv_Habitaciones.Rows[index];
                 dgv_hotel_ID = Convert.ToDecimal(selectedRow.Cells[1].Value.ToString());
                 dgv_habitacion_ID = Convert.ToDecimal(selectedRow.Cells[2].Value.ToString());
+                estado = Convert.ToBoolean(selectedRow.Cells[6].Value);
             }
             else
             {

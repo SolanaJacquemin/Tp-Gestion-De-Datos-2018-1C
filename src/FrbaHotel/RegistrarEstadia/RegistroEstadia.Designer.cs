@@ -81,6 +81,7 @@
             this.cb_medioPago.Name = "cb_medioPago";
             this.cb_medioPago.Size = new System.Drawing.Size(121, 21);
             this.cb_medioPago.TabIndex = 30;
+            this.cb_medioPago.SelectedIndexChanged += new System.EventHandler(this.cb_medioPago_SelectedIndexChanged);
             // 
             // txt_hotel
             // 

@@ -37,7 +37,6 @@ namespace FrbaHotel.RegistrarEstadia
             if (txt_titular.Text == "") valido = false;
             if (cb_marcaTarj.Text == "") valido = false;
             if (txt_codigoTarj.Text == "") valido = false;
-            if (txt_codigoCli.Text == "") valido = false;
 
             return valido;
         }
@@ -58,7 +57,7 @@ namespace FrbaHotel.RegistrarEstadia
                     con.command.Parameters.Add("@Tarjeta_Cod", SqlDbType.Decimal).Value = Convert.ToDecimal(txt_codigoTarj.Text);
                     con.command.Parameters.Add("@Tarjeta_Titular", SqlDbType.NVarChar).Value = txt_titular.Text;
                     con.command.Parameters.Add("@Tarjeta_Marca", SqlDbType.NVarChar).Value = cb_marcaTarj.Text;
-                    con.command.Parameters.Add("@Cliente_Codigo", SqlDbType.Decimal).Value = Convert.ToDecimal(txt_codigoCli.Text);
+                    con.command.Parameters.Add("@Cliente_Codigo", SqlDbType.Decimal).Value = Convert.ToDecimal(cliente);
 
                     con.openConection();
                     con.command.ExecuteNonQuery();

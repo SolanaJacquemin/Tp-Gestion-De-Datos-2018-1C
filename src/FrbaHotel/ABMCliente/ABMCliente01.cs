@@ -175,22 +175,31 @@ namespace FrbaHotel.AbmCliente
         
         private void btn_baja_Click(object sender, EventArgs e)
         {
-            
-            if (dgv_Clientes.SelectedRows.Count > 0 && estado==true)
+            if (dgv_Clientes.SelectedRows.Count > 0)
             {
-                string modo = "DLT";
-                this.Hide();
-                ABMCliente02 formABMCliente02 = new ABMCliente02(modo, dgv_cliente_ID, 0, "", 0, "");
-                formABMCliente02.ShowDialog();
-                this.Show();
-                this.limpiar();
-                this.refrescarGrid();
+                if (!estado)
+                {
+                    MessageBox.Show("No puede dar de baja a un cliente dada de baja", "FOUR SIZONS - FRBA Hoteles", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                }
+                else
+                {
+                    if (dgv_Clientes.SelectedRows.Count > 0)
+                    {
+                        string modo = "DLT";
+                        this.Hide();
+                        ABMCliente02 formABMCliente02 = new ABMCliente02(modo, dgv_cliente_ID, 0, "", 0, "");
+                        formABMCliente02.ShowDialog();
+                        this.Show();
+                        this.limpiar();
+                        this.refrescarGrid();
+                    }
+                    else
+                    {
+                        MessageBox.Show("Por favor, seleccione un cliente que se encuentre habilitado de la grilla", "FOUR SIZONS - FRBA Hoteles", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    }
+                }
+
             }
-            else
-            {
-                MessageBox.Show("Por favor, seleccione un cliente que se encuentre habilitado de la grilla", "FOUR SIZONS - FRBA Hoteles", MessageBoxButtons.OK, MessageBoxIcon.Error);
-            }
-           
         }
 
         private void btn_Modificacion_Click(object sender, EventArgs e)
