@@ -1189,6 +1189,8 @@ create proc four_sizons.DisponibilidadyPrecio
 @tipoHabDesc nvarchar(50)
 as begin 
 	declare @cantidadNoches numeric(2)
+	set @fechaInicio= convert(datetime,@fechaInicio,103)
+	set @fechafin= convert(datetime,@fechafin,103)
 	declare @preReg decimal(12)  = (select Regimen_Precio from four_sizons.regimen where Regimen_Codigo=@regId)
 	declare @recarga decimal(12) = (select Hotel_CantEstrella*Hotel_Recarga_Estrella from FOUR_SIZONS.Hotel where Hotel_Codigo=@hotId)
 	declare @tipoHab numeric(18) = (select Habitacion_Tipo_Codigo from FOUR_SIZONS.Habitacion_Tipo where Habitacion_Tipo_Descripcion=@tipoHabDesc)
@@ -1201,7 +1203,7 @@ as begin
 
 	if(@regId=0)
 	begin
-		select r.Regimen_Codigo, Regimen_Descripcion,Regimen_Precio*@porcentual+@recarga,@cantidadNoches * @cantHab*(Regimen_Precio*@porcentual+@recarga)
+		select r.Regimen_Descripcion,r.Regimen_Precio*@porcentual+@recarga,@cantidadNoches * @cantHab*(r.Regimen_Precio*@porcentual+@recarga)
 		from FOUR_SIZONS.Regimen r, RegXHotel rh 
 		where r.Regimen_Codigo = rh.Regimen_Codigo and rh.Hotel_Codigo=@hotid
 		order by r.Regimen_Codigo
@@ -1209,7 +1211,8 @@ as begin
 	else
 	begin
 		declare @regdesc nvarchar(255) = (select Regimen_Descripcion from FOUR_SIZONS.Regimen where Regimen_Codigo=@regId)
-		select  @regdesc, @regId*@porcentual+@recarga,@cantidadNoches * @cantHab*(@regId*@porcentual+@recarga)
+		declare @precio numeric(18)= (select Regimen_Precio from FOUR_SIZONS.Regimen where Regimen_Codigo=@regId)
+		select  @regdesc, @precio*@porcentual+@recarga,@cantidadNoches * @cantHab*(@precio*@porcentual+@recarga)
 	end
 
 	end
@@ -1903,7 +1906,7 @@ declare @cantDias numeric(18),
 	set @precioXNoche = (select Estadia_PreXNoche from FOUR_SIZONS.Estadia where Estadia_Codigo = @Estadia);
 	
 	declare @inicio datetime = (select Reserva_Fecha_Inicio from FOUR_SIZONS.Reserva where Reserva_Codigo = @Reserva)
-
+	set identity_insert four_sizons.item_factura on
 
 
 if(@estadoActual!=0)
@@ -1924,23 +1927,28 @@ begin
 	set @regimen=(select Regimen_Codigo from Reserva where Reserva_Codigo=@Reserva)
 	if((select Regimen_Descripcion from Regimen where Regimen_Codigo=@regimen)='ALL INCLUSIVE')
 	begin
-		insert into FOUR_SIZONS.Item_Factura(Factura_Nro,item_descripcion,Item_Factura_Cant,Item_Factura_Monto)
-					values(@fact,'Descuento Por Regimen',1, FOUR_SIZONS.calcConsumible(@Estadia,1)*-1)
+		
+		declare @nitem numeric(18) = isnull((select top 1 Item_Factura_NroItem  from FOUR_SIZONS.Item_Factura where Factura_Nro=@fact order by Item_Factura_NroItem desc),0)+1
+		insert into FOUR_SIZONS.Item_Factura(Factura_Nro,item_descripcion,Item_Factura_Cant,Item_Factura_Monto,Item_Factura_NroItem)
+					values(@fact,'Descuento Por Regimen',1, FOUR_SIZONS.calcConsumible(@Estadia,1)*-1,@nitem)
+		
 	end
 	if(@difDates=0)
 		begin
-			insert into FOUR_SIZONS.Item_Factura(Factura_Nro,item_descripcion,Item_Factura_Cant,Item_Factura_Monto)
+		declare @nitem2 numeric(18) = isnull((select top 1 Item_Factura_NroItem  from FOUR_SIZONS.Item_Factura where Factura_Nro=@fact order by Item_Factura_NroItem desc),0)+1
+			insert into FOUR_SIZONS.Item_Factura(Factura_Nro,item_descripcion,Item_Factura_Cant,Item_Factura_Monto,Item_Factura_NroItem)
 
-				values(@fact,'Estadia',(@cantDias), @monto)
+				values(@fact,'Estadia',(@cantDias), @monto,@nitem2)
 				----- EN CANTIDAD DE ESTADIA PONGO LA CANTIDAD DE NOCHES QUE SE QUEDA
 				---- EL -1 SE DEBE A QUE EL DIA EN EL QUE SE RETIRAN NO SE COBRA SUPONGO, YA QUE NO PASAN LA NOCHE EN EL HOTEL
 		end
 	else 
 		begin
-			insert into FOUR_SIZONS.Item_Factura(Factura_Nro,item_descripcion,Item_Factura_Cant,Item_Factura_Monto)
-				values(@fact,'Estadia',@cantDias, (@cantDias)*@precioXNoche)
-			insert into FOUR_SIZONS.Item_Factura(Factura_Nro,item_descripcion,Item_Factura_Cant,Item_Factura_Monto)
-				values(@fact,'Recargo de estadia',(@difDates),( @difDates)*@precioXNoche)
+		declare @nitem3 numeric(18) = isnull((select top 1 Item_Factura_NroItem  from FOUR_SIZONS.Item_Factura where Factura_Nro=@fact order by Item_Factura_NroItem desc),0)+1
+			insert into FOUR_SIZONS.Item_Factura(Factura_Nro,item_descripcion,Item_Factura_Cant,Item_Factura_Monto,Item_Factura_NroItem)
+				values(@fact,'Estadia',@cantDias, (@cantDias)*@precioXNoche,@nitem3)
+			insert into FOUR_SIZONS.Item_Factura(Factura_Nro,item_descripcion,Item_Factura_Cant,Item_Factura_Monto,Item_Factura_NroItem)
+				values(@fact,'Recargo de estadia',(@difDates),( @difDates)*@precioXNoche,@nitem3+1)
 		end
 		declare @habi numeric(18),
 				@hotel numeric(18),
@@ -1963,7 +1971,7 @@ end
 else raiserror('ya se ha realizado el checkout de esta estadia anteriormente',16,1)
 
 
-
+set identity_insert four_sizons.item_factura off
 commit tran 
 end try
 begin catch
@@ -2002,7 +2010,7 @@ as begin tran
 			insert into FOUR_SIZONS.EstadiaXConsumible(Estadia_Codigo,estXcons_cantidad,Consumible_Codigo)
 										values(@estadia,@cant,@consumibleId)
 			set identity_insert FOUR_SIZONS.Item_Factura on
-			declare @nItem numeric(18)= (select top 1 isnull(Item_Factura_NroItem,0)from FOUR_SIZONS.Item_Factura where Factura_Nro=@factura order by Item_Factura_NroItem desc)+1
+			declare @nItem numeric(18)= isnull((select top 1 Item_Factura_NroItem from FOUR_SIZONS.Item_Factura where Factura_Nro=@factura order by Item_Factura_NroItem desc),0)+1
 			insert into FOUR_SIZONS.Item_Factura(Factura_Nro , item_descripcion , Item_Factura_Cant , Item_Factura_Monto , Item_Factura_NroItem)
 								values(@factura,@consumible,@cant,@monto*@cant , @nItem)
 			set identity_insert FOUR_SIZONS.Item_Factura off
@@ -2083,8 +2091,15 @@ begin
 
 		delete FOUR_SIZONS.EstadiaXConsumible
 		where Estadia_Codigo=@estadia and Consumible_Codigo=@consumibleId
-		delete FOUR_SIZONS.Item_Factura
-		where Factura_Nro= @fact and Item_Factura_NroItem = @numItem
+		set identity_insert FOUR_SIZONS.Item_Factura on
+
+		declare @nItem numeric(18) = isnull((select top 1 Item_Factura_NroItem from FOUR_SIZONS.Item_Factura where Factura_Nro=@fact order by Item_Factura_NroItem desc),0) +1
+		declare @precio decimal(18,2) = (select Item_Factura_Monto from FOUR_SIZONS.Item_Factura where Item_Factura_NroItem=@numItem and Factura_Nro=@fact)
+
+		insert into FOUR_SIZONS.Item_Factura (Factura_Nro,item_descripcion,Item_Factura_Cant,Item_Factura_Monto,Item_Factura_NroItem)
+								values (@fact,@consumible,-@cant,-@precio,@nItem)
+
+		set identity_insert FOUR_SIZONS.Item_Factura off
 		end
 
 end
