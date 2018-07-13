@@ -840,11 +840,26 @@ create procedure four_sizons.modificarHotel
 @ciudad nvarchar(50),
 @pais nvarchar(50),
 @fechaCreacion datetime,
-@estado bit
+@estado bit,
+@fechaCambio datetime
 as 
 begin tran 
 begin try
 
+if(@estado=1 and exists (select * from FOUR_SIZONS.Hotel_Cerrado where Hotel_Codigo=@codigo and (@fechaCambio between Cerrado_FechaI and Cerrado_FechaF)) and (select Hotel_Estado from FOUR_SIZONS.Hotel where @codigo=Hotel_Codigo)=0)
+begin
+		update FOUR_SIZONS.Hotel
+		set Hotel_Nombre= @nombre,Hotel_Mail= @mail,Hotel_Telefono=@telefono,Hotel_Calle=@calle ,
+			Hotel_Nro_Calle=@numCalle,Hotel_CantEstrella=@cantEstrellas,Hotel_Recarga_Estrella=@recarga_estrella,
+			Hotel_Ciudad=@ciudad,Hotel_Pais=@pais,Hotel_FechaCreacion=@fechaCreacion,Hotel_Estado=@estado
+
+		where Hotel_Codigo=@codigo
+
+		update FOUR_SIZONS.Hotel_Cerrado
+		set Cerrado_FechaF=@fechaCambio
+		where Hotel_Codigo=@codigo and (@fechaCambio between Cerrado_FechaI and Cerrado_FechaF)
+end
+else 
 		update FOUR_SIZONS.Hotel
 		set Hotel_Nombre= @nombre,Hotel_Mail= @mail,Hotel_Telefono=@telefono,Hotel_Calle=@calle ,
 			Hotel_Nro_Calle=@numCalle,Hotel_CantEstrella=@cantEstrellas,Hotel_Recarga_Estrella=@recarga_estrella,
@@ -1070,8 +1085,6 @@ declare @TipoHabID numeric(18)
 set @TipoHabID = (select Habitacion_Tipo_Codigo from FOUR_SIZONS.Habitacion_Tipo where @TipoHab = Habitacion_Tipo_Descripcion)
 		
 		--Valida que no haya dos hab con el mismo numero en el mismo hotel		
-if(1=(select Hotel_Estado from FOUR_SIZONS.Hotel where Hotel_Codigo=@HotelId))
-	begin
 		if (not exists (select Habitacion_Numero from Habitacion where Hotel_Codigo=@HotelId and Habitacion_Numero= @numero))
 			begin
 				insert into FOUR_SIZONS.Habitacion(Habitacion_Numero,Hotel_Codigo,Habitacion_Piso,Habitacion_Frente,Habitacion_Tipo_Codigo,
@@ -1102,8 +1115,7 @@ if(1=(select Hotel_Estado from FOUR_SIZONS.Hotel where Hotel_Codigo=@HotelId))
 			begin
 				RAISERROR('el numero de habitacion ya figura en ese hotel, ingrese otro por favor',16,1)
 			end
-	end
-else RAISERROR('No se puede agregar una habitacion a un hotel cerrado',16,1)
+	
 commit tran 
 end try
 begin catch
@@ -1189,8 +1201,8 @@ as begin
 	declare @recarga decimal(12) = (select Hotel_CantEstrella*Hotel_Recarga_Estrella from FOUR_SIZONS.Hotel where Hotel_Codigo=@hotId)
 	declare @tipoHab numeric(18) = (select Habitacion_Tipo_Codigo from FOUR_SIZONS.Habitacion_Tipo where Habitacion_Tipo_Descripcion=@tipoHabDesc)
 	declare @porcentual decimal(12) = (select Habitacion_Tipo_Porcentual from FOUR_SIZONS.Habitacion_Tipo where Habitacion_Tipo_Codigo =@tipoHab)
-
-
+	if(not exists(select * from FOUR_SIZONS.Hotel_Cerrado where Hotel_Codigo=@hotid and ((@fechaInicio between Cerrado_FechaI and Cerrado_FechaF)or (@fechaFin between Cerrado_FechaI and Cerrado_FechaF))))
+	begin
 	if(1= four_sizons.verificarDisp(@fechaInicio, @fechaFin,@hotId, @tipoHab,@cantHab))
 	begin
 	set @cantidadNoches = DATEDIFF(day, @fechaInicio, @fechaFin)
@@ -1211,7 +1223,8 @@ as begin
 	end
 
 	else RAISERROR('No hay lugar en este hotel para estas fechas, intente nuevamente',16,1) 
-
+	end
+	else raiserror('no hay disponibilidad, el hotel esta cerrado entre esas fechas',16,1)
 end
 go
 
@@ -1230,8 +1243,7 @@ create procedure four_sizons.GenerarReserva
 as begin tran
 begin try
 
-if(not exists(select Cerrado_codigo from FOUR_SIZONS.Hotel_Cerrado where Hotel_Codigo=@hotId and @fechaInicio between Cerrado_FechaI and Cerrado_FechaF
-															or @fechaFin between Cerrado_FechaI and Cerrado_FechaF))
+
 	begin
 		if((select Cliente_Estado from FOUR_SIZONS.Cliente where Cliente_Codigo = @cliId)=1)
 			begin
@@ -1262,7 +1274,7 @@ if(not exists(select Cerrado_codigo from FOUR_SIZONS.Hotel_Cerrado where Hotel_C
 		else raiserror ('El cliente esta deshabilitado, no puede hospedarse en los hoteles',16,1)
 		
 	end
-else raiserror ('El hotel se encuentra cerrado para esas fechas',16,1)
+
 
 commit tran 
 end try
@@ -1348,8 +1360,7 @@ if(@estadoActual !=6)
 						
 						if(@canthab != @canth or @tipohab != @thab or @hotid!=@hotel)
 							begin
-								if(1= four_sizons.verificarDisp(@fechaInicio, @fechaFin,@hotId, @tipoHab,@cantHab))
-									begin
+									
 										
 										update FOUR_SIZONS.Reserva
 										set Reserva_Fecha_Inicio= @fechaInicio,
@@ -1377,9 +1388,8 @@ if(@estadoActual !=6)
 
 												insert into FOUR_SIZONS.ReservaMod (ResMod_Codigo,Reserva_Codigo,Usuario_ID, ResMod_Detalle,ResMod_Fecha)
 																				values (@mod_numero,@codigoReserva,@userId,@detalle,convert(datetime,@fechaCambio,121))
-									end
+									
 
-								else RAISERROR('No hay lugar en este hotel para estas fechas, intente nuevamente.',16,1)
 	
 							end
 
