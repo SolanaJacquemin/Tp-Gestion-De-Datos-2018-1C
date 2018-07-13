@@ -28,7 +28,7 @@ namespace FrbaHotel.RegistrarEstadia
             modoABM = modo;
             consumible = consumibleID;
             estadia = estadiaID;
-
+            cb_consumibles.DropDownStyle = ComboBoxStyle.DropDownList;
             switch (modoABM)
             {
 

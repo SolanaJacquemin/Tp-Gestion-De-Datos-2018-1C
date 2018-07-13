@@ -18,6 +18,7 @@ namespace FrbaHotel.ABMHabitacion
         public decimal habitacion;
         public decimal hotel;
         public int error;
+        public bool valido;
 
         public ABMHabitacion02(string modo, decimal hotelID, decimal hab)
         {
@@ -27,8 +28,12 @@ namespace FrbaHotel.ABMHabitacion
 
             hotel = hotelID;
             habitacion = hab;
-
             modoABM = modo;
+
+            cb_tipohab.DropDownStyle = ComboBoxStyle.DropDownList;
+            cb_tipoFrente.DropDownStyle = ComboBoxStyle.DropDownList;
+
+            levantarCombos();
 
             switch (modoABM)
             {
@@ -61,12 +66,15 @@ namespace FrbaHotel.ABMHabitacion
                     txt_piso.Enabled = true;
                     cb_tipoFrente.Enabled = true;
                     cb_tipohab.Enabled = false;
+                    l_estado.Enabled = false;
+                    txt_estado.Enabled = false;
+                    txt_nro_hab.Enabled = false;
                     break;
             }
             //dt_fecha_nac.Format = DateTimePickerFormat.Custom;
             //dt_fecha_nac.CustomFormat = "dd/MM/yyyy";
 
-            //levantarCombos();
+            
         }
 
         private void levantarCombos() 
@@ -141,17 +149,6 @@ namespace FrbaHotel.ABMHabitacion
 
                 con.closeConection();
 
-                /*con.strQuery = "SELECT R.Rol_Nombre FROM FOUR_SIZONS.UsuarioXRol AS UR" +
-                " JOIN FOUR_SIZONS.Rol AS R ON UR.Rol_Codigo= R.Rol_Codigo" +
-                " WHERE UR.Usuario_ID = '" + usuario + "'";
-                con.executeQuery();
-
-                while (con.reader())
-                {
-                    cb_rol.Text = con.lector.GetString(0);
-                }
-                con.closeConection();*/
-
             }
 
 
@@ -160,9 +157,11 @@ namespace FrbaHotel.ABMHabitacion
         private void boton_aceptar_Click(object sender, EventArgs e)
         {
             error = 0;
+            txt_hotel.Enabled = false;
             switch (modoABM)
             {
                 case "INS":
+                    verificarObligatorios();
                     nombreSP = "FOUR_SIZONS.AltaHabitacion";
                     break;
 
@@ -175,11 +174,20 @@ namespace FrbaHotel.ABMHabitacion
                     nombreSP = "FOUR_SIZONS.ModificarHabitacion";
                     break;
             }
-            ejecutarABMHabitacion(nombreSP);
+            
             if (error == 0)
-            {
+            {   
+                ejecutarABMHabitacion(nombreSP);
                 this.Close();
+                levantarCombos();
             }
+        }
+
+        public bool verificarObligatorios()
+        {
+
+
+            return valido;
         }
 
         public void ejecutarABMHabitacion(string nombreStored)
@@ -230,7 +238,6 @@ namespace FrbaHotel.ABMHabitacion
                     error = 1;
                     MessageBox.Show("Error al completar la operación. " + ex.Message, "FOUR SIZONS - FRBA Hoteles", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 }
-
 
             }
             else

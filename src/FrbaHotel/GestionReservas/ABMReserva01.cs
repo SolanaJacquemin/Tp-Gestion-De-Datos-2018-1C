@@ -202,7 +202,7 @@ namespace FrbaHotel.GestionReservas
             foreach (DataGridViewRow row in dgv_Reservas.Rows)
             {
                 estado = Convert.ToDecimal(row.Cells[6].Value);
-                if (estado != 1)
+                if (estado ==3||estado==4 ||estado==5)
                 {
                     row.DefaultCellStyle.BackColor = Color.Red;
                 }
