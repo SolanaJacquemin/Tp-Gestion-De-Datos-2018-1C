@@ -1272,8 +1272,8 @@ CREATE procedure four_sizons.ModificarReserva
 	@regId numeric(18),
 	@estado numeric(1),
 	@canthab numeric(18),
-	@fechaCambio datetime,
-	@clie numeric(18)
+	@fechaCambio datetime
+	--@clie numeric(18)
 	as begin tran
 	begin try 
 	set @fechaCambio = convert(datetime,@fechaCambio,121)
@@ -1286,7 +1286,7 @@ CREATE procedure four_sizons.ModificarReserva
 
 	declare @mod_numero decimal(18)
 	select @mod_numero = isnull(count(*),0)+1 from FOUR_SIZONS.ReservaMod where Reserva_Codigo = @codigoReserva
-if(@ClieA=@clie)
+--if(@ClieA=@clie)
 begin
 if(@estadoActual !=6)
 	begin
@@ -1413,7 +1413,7 @@ else
 		raiserror ('La reserva ya fue efectivizada, no puede ser modificada.',13,1)
 	end
 end
-else raiserror ('No es la reserva de ese cliente.',13,1)
+--else raiserror ('No es la reserva de ese cliente.',13,1)
 commit tran
 end try
 begin catch
