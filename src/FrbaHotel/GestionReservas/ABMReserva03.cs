@@ -21,6 +21,7 @@ namespace FrbaHotel.GestionReservas
         public decimal hotelID;
         public decimal regimenID;
         public int error;
+        public decimal cliente;
 
         public ABMReserva03(string modo, string user, decimal reservaID)
         {
@@ -36,10 +37,15 @@ namespace FrbaHotel.GestionReservas
             boton_aceptar.Enabled = false;
             txt_costoTotal.Enabled = false;
 
+            txt_fecCambio.Text = DateTime.Today.ToString("dd/MM/yyyy");
+            txt_usuario.Text = usuario;
+
             switch (modoABM)
             {
                 case "DLT":
                     labelTitulo.Text = "Cancelar Reserva";
+                    txt_usuario.Enabled = false;
+                    txt_fecCambio.Enabled = false;
                     txt_reservaID.Enabled = false;
                     dt_fechaDesde.Enabled = false;
                     dt_fechaHasta.Enabled = false;
@@ -55,6 +61,8 @@ namespace FrbaHotel.GestionReservas
                     break;
                 case "UPD":
                     labelTitulo.Text = "Modificación de Reserva";
+                    txt_usuario.Enabled = false;
+                    txt_fecCambio.Enabled = false;
                     txt_reservaID.Enabled = false;
                     dt_fechaDesde.Enabled = true;
                     dt_fechaHasta.Enabled = true;
@@ -85,7 +93,7 @@ namespace FrbaHotel.GestionReservas
             con.closeConection();
 
             con.strQuery = "SELECT HT.Habitacion_Tipo_Descripcion, R.Reserva_Fecha_Inicio, R.Reserva_Fecha_Fin, H.Hotel_Codigo," +
-                           " H.Hotel_Nombre, R.Regimen_Codigo, REG.Regimen_Descripcion, R.Reserva_Cant_Hab, R.Reserva_Precio" +
+                           " H.Hotel_Nombre, R.Regimen_Codigo, REG.Regimen_Descripcion, R.Reserva_Cant_Hab, R.Reserva_Precio, R.Cliente_Codigo" +
                            " FROM FOUR_SIZONS.Reserva R" +
                            //" JOIN FOUR_SIZONS.Habitacion_TipoXReser HTR ON HTR.Reserva_Codigo = R.Reserva_Codigo" +
                            //" JOIN FOUR_SIZONS.Habitacion_Tipo HT ON HT.Habitacion_Tipo_Codigo = HTR.Habitacion_Tipo_Codigo" +
@@ -106,6 +114,7 @@ namespace FrbaHotel.GestionReservas
                 txt_regimen.Text = con.lector.GetString(6);
                 txt_cantHab.Text = con.lector.GetDecimal(7).ToString();
                 txt_costoTotal.Text = con.lector.GetDecimal(8).ToString();
+                cliente = con.lector.GetDecimal(9);
             }
             con.closeConection();
 
@@ -182,7 +191,9 @@ namespace FrbaHotel.GestionReservas
                 }
 
                 con.command.Parameters.Add("@canthab", SqlDbType.Decimal).Value = Convert.ToDecimal(txt_cantHab.Text);
-                con.command.Parameters.Add("@fechaCambio", SqlDbType.DateTime).Value = readConfig.Config.fechaSystem().ToString();
+                //con.command.Parameters.Add("@fechaCambio", SqlDbType.DateTime).Value = readConfig.Config.fechaSystem().ToString();
+                con.command.Parameters.Add("@fechaCambio", SqlDbType.DateTime).Value = DateTime.Today.ToString();
+                con.command.Parameters.Add("@clie", SqlDbType.Decimal).Value = cliente;
 
                 con.openConection();
                 con.command.ExecuteNonQuery();
