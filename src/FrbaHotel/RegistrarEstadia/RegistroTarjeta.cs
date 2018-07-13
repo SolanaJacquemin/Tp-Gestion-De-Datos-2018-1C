@@ -35,12 +35,33 @@ namespace FrbaHotel.RegistrarEstadia
             this.Hide();
             ABMTarjeta formTarjeta = new ABMTarjeta(cliente);
             formTarjeta.ShowDialog();
+            this.levantarGrilla();
             this.Show();
         }
 
         private void btn_eliminar_Click(object sender, EventArgs e)
         {
 
+        }
+
+        private void levantarGrilla() 
+        {
+            dgv_tarjetas.Rows.Clear();
+            Conexion con = new Conexion();
+
+            con.strQuery = "SELECT T.Tarjeta_Numero, T.Tarjeta_Titular, T.Tarjeta_Marca, T.Tarjeta_Venc" +
+                " FROM FOUR_SIZONS.Tarjeta T JOIN FOUR_SIZONS.Cliente C ON C.Cliente_Codigo = T.Cliente_Codigo" +
+                " WHERE C.Cliente_Codigo = " + cliente;
+
+            con.executeQuery();
+
+
+            while (con.reader())
+            {
+                dgv_tarjetas.Rows.Add(new Object[] { con.lector.GetDecimal(0), con.lector.GetString(1),
+                con.lector.GetString(2), con.lector.GetDateTime(3)});
+            }
+            con.closeConection();
         }
 
         private void RegistroTarjeta_Load(object sender, EventArgs e)

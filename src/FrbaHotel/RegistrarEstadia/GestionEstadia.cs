@@ -18,6 +18,7 @@ namespace FrbaHotel.RegistrarEstadia
         public decimal reserva;
         public string usuario;
         public decimal hotel;
+        public bool esAdminGral;
 
         public GestionEstadias(decimal hotelID, string userID)
         {
@@ -27,6 +28,21 @@ namespace FrbaHotel.RegistrarEstadia
             dgv_Reserva.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
             dgv_Reserva.Rows.Clear();
             usuario = userID;
+            esAdminGral = false;
+            Conexion con = new Conexion();
+            con.strQuery = "SELECT U.Usuario_ID, U.Usuario_Nombre, U.Usuario_Apellido, U.Usuario_TipoDoc, U.Usuario_NroDoc, U.Usuario_Telefono, U.Usuario_Direccion, U.Usuario_Fec_Nac, U.Usuario_Mail, U.Usuario_Estado, U.Usuario_FallaLog" +
+                           " FROM FOUR_SIZONS.Usuario U" +
+                           " JOIN FOUR_SIZONS.UsuarioXRol UR ON UR.Usuario_ID = U.Usuario_ID" +
+                           " WHERE UR.Rol_Codigo = 1 AND U.Usuario_ID = '" + usuario + "'";
+
+            con.executeQuery();
+
+
+            if (con.reader())
+            {
+                esAdminGral = true;
+            }
+
 
             levantarDatos();
             refrescarGrid();
@@ -61,13 +77,23 @@ namespace FrbaHotel.RegistrarEstadia
             dgv_Reserva.Rows.Clear();
 
             Conexion con = new Conexion();
-            con.strQuery = "SELECT TOP 100 R.Reserva_Codigo, R.Reserva_FechaCreacion, R.Reserva_Fecha_Inicio, R.Reserva_Fecha_Fin, R.Reserva_Cant_Noches," +
-                           " R.Reserva_Precio, R.Usuario_ID, R.Hotel_Codigo, R.Cliente_Codigo, R.Regimen_Codigo, R.Reserva_Estado" +
-                           " FROM FOUR_SIZONS.Reserva R JOIN FOUR_SIZONS.UsuarioXHotel UH ON UH.Hotel_Codigo = R.Hotel_Codigo" +
-                           " WHERE UH.Usuario_ID = '" + usuario + "'";
+
+            if (!esAdminGral)
+            {
+                con.strQuery = "SELECT TOP 100 R.Reserva_Codigo, R.Reserva_FechaCreacion, R.Reserva_Fecha_Inicio, R.Reserva_Fecha_Fin, R.Reserva_Cant_Noches," +
+                               " R.Reserva_Precio, R.Usuario_ID, R.Hotel_Codigo, R.Cliente_Codigo, R.Regimen_Codigo, R.Reserva_Estado" +
+                               " FROM FOUR_SIZONS.Reserva R JOIN FOUR_SIZONS.UsuarioXHotel UH ON UH.Hotel_Codigo = R.Hotel_Codigo" +
+                               " WHERE UH.Usuario_ID = '" + usuario + "'";
+            }
+            else
+            {
+                con.strQuery = "SELECT TOP 100 R.Reserva_Codigo, R.Reserva_FechaCreacion, R.Reserva_Fecha_Inicio, R.Reserva_Fecha_Fin, R.Reserva_Cant_Noches," +
+                               " R.Reserva_Precio, R.Usuario_ID, R.Hotel_Codigo, R.Cliente_Codigo, R.Regimen_Codigo, R.Reserva_Estado" +
+                               " FROM FOUR_SIZONS.Reserva R WHERE 1=1";
+            }
 
             if (txt_CodReserva.Text != "")
-                con.strQuery = con.strQuery + " AND Reserva_Codigo = " + txt_CodReserva.Text;
+                con.strQuery = con.strQuery + " AND R.Reserva_Codigo = " + txt_CodReserva.Text;
 
             con.executeQuery();
 
@@ -112,10 +138,20 @@ namespace FrbaHotel.RegistrarEstadia
             txt_CodReserva.Text = "";
 
             Conexion con = new Conexion();
-            con.strQuery = "SELECT TOP 100 R.Reserva_Codigo, R.Reserva_FechaCreacion, R.Reserva_Fecha_Inicio, R.Reserva_Fecha_Fin, R.Reserva_Cant_Noches," +
-                           " R.Reserva_Precio, R.Usuario_ID, R.Hotel_Codigo, R.Cliente_Codigo, R.Regimen_Codigo, R.Reserva_Estado" +
-                           " FROM FOUR_SIZONS.Reserva R JOIN FOUR_SIZONS.UsuarioXHotel UH ON UH.Hotel_Codigo = R.Hotel_Codigo" +
-                           " WHERE UH.Usuario_ID = '" + usuario + "'";
+            if (!esAdminGral)
+            {
+                con.strQuery = "SELECT TOP 100 R.Reserva_Codigo, R.Reserva_FechaCreacion, R.Reserva_Fecha_Inicio, R.Reserva_Fecha_Fin, R.Reserva_Cant_Noches," +
+               " R.Reserva_Precio, R.Usuario_ID, R.Hotel_Codigo, R.Cliente_Codigo, R.Regimen_Codigo, R.Reserva_Estado" +
+               " FROM FOUR_SIZONS.Reserva R JOIN FOUR_SIZONS.UsuarioXHotel UH ON UH.Hotel_Codigo = R.Hotel_Codigo" +
+               " WHERE UH.Usuario_ID = '" + usuario + "'";
+            }
+            else 
+            {
+                con.strQuery = "SELECT TOP 100 R.Reserva_Codigo, R.Reserva_FechaCreacion, R.Reserva_Fecha_Inicio, R.Reserva_Fecha_Fin, R.Reserva_Cant_Noches," +
+                " R.Reserva_Precio, R.Usuario_ID, R.Hotel_Codigo, R.Cliente_Codigo, R.Regimen_Codigo, R.Reserva_Estado" +
+                " FROM FOUR_SIZONS.Reserva R";
+            }
+
 
             con.executeQuery();
 

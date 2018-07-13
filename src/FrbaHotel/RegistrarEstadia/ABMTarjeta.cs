@@ -72,6 +72,11 @@ namespace FrbaHotel.RegistrarEstadia
                 }
             }
             else MessageBox.Show("Por favor, complete los campos obligatorios", "FOUR SIZONS - FRBA Hoteles", MessageBoxButtons.OK, MessageBoxIcon.Information);
+
+            if (error == 0) 
+            {
+                this.Close();
+            }
         }
 
         private void btn_volver_Click(object sender, EventArgs e)

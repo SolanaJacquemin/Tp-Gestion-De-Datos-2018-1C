@@ -171,7 +171,7 @@
             // 
             // btn_factura
             // 
-            this.btn_factura.Location = new System.Drawing.Point(197, 192);
+            this.btn_factura.Location = new System.Drawing.Point(410, 192);
             this.btn_factura.Name = "btn_factura";
             this.btn_factura.Size = new System.Drawing.Size(100, 23);
             this.btn_factura.TabIndex = 46;
@@ -201,7 +201,7 @@
             // 
             // btn_regClientes
             // 
-            this.btn_regClientes.Location = new System.Drawing.Point(410, 192);
+            this.btn_regClientes.Location = new System.Drawing.Point(125, 192);
             this.btn_regClientes.Name = "btn_regClientes";
             this.btn_regClientes.Size = new System.Drawing.Size(100, 23);
             this.btn_regClientes.TabIndex = 54;

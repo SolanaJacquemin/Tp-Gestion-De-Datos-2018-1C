@@ -390,8 +390,6 @@ namespace FrbaHotel.ABMRol
                                 con.execute();
                                 con.command.CommandType = CommandType.StoredProcedure;
 
-                                MessageBox.Show(lb_func_usrbaja.Items[i].ToString());
-
                                 con.command.Parameters.Add("@rolname", SqlDbType.NVarChar).Value = txt_nombreRol.Text;
                                 con.command.Parameters.Add("@func", SqlDbType.NVarChar).Value = lb_func_usrbaja.Items[i].ToString();
                                 con.command.Parameters.Add("@estado", SqlDbType.Bit).Value = 0;

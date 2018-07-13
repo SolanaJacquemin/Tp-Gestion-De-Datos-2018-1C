@@ -136,7 +136,7 @@ namespace FrbaHotel.ABMHotel
 
                 con.closeConection();
             }
-            txt_nombre_hotel.Clear();
+            
         }
 
         private void txt_estado_TextChanged(object sender, EventArgs e)
