@@ -844,25 +844,14 @@ create procedure four_sizons.modificarHotel
 as 
 begin tran 
 begin try
-IF(@estado!=0)
-	begin
+
 		update FOUR_SIZONS.Hotel
 		set Hotel_Nombre= @nombre,Hotel_Mail= @mail,Hotel_Telefono=@telefono,Hotel_Calle=@calle ,
 			Hotel_Nro_Calle=@numCalle,Hotel_CantEstrella=@cantEstrellas,Hotel_Recarga_Estrella=@recarga_estrella,
 			Hotel_Ciudad=@ciudad,Hotel_Pais=@pais,Hotel_FechaCreacion=@fechaCreacion,Hotel_Estado=@estado
 
 		where Hotel_Codigo=@codigo
-	end
-else
-	begin
-		update FOUR_SIZONS.Hotel
-		set Hotel_Estado=0
-		where Hotel_Codigo=@codigo
-	
-		update FOUR_SIZONS.Reserva
-		set Reserva_Estado=3
-		where Hotel_Codigo=@codigo and (Reserva_Estado=2 or Reserva_Estado=1)
-	end
+
 commit tran 
 end try
 begin catch
@@ -1179,8 +1168,7 @@ create proc four_sizons.DisponibilidadyPrecio
 @hotid numeric (18),
 @regId numeric(18),
 @canthab numeric(18),
-@tipoHabDesc nvarchar(50),
-@precio decimal(12) output
+@tipoHabDesc nvarchar(50)
 as begin 
 	declare @cantidadNoches numeric(2)
 	declare @preReg decimal(12)  = (select Regimen_Precio from four_sizons.regimen where Regimen_Codigo=@regId)
@@ -1192,7 +1180,19 @@ as begin
 	if(1= four_sizons.verificarDisp(@fechaInicio, @fechaFin,@hotId, @tipoHab,@cantHab))
 	begin
 	set @cantidadNoches = DATEDIFF(day, @fechaInicio, @fechaFin)
-	set @precio = @cantidadNoches * @cantHab*(@preReg*@porcentual+@recarga)
+
+	if(@regId=0)
+	begin
+	select Regimen_Precio*@porcentual+@recarga,@cantidadNoches * @cantHab*(Regimen_Precio*@porcentual+@recarga)
+	from FOUR_SIZONS.Regimen r, RegXHotel rh 
+	where r.Regimen_Codigo = rh.Regimen_Codigo and rh.Hotel_Codigo=@hotid
+	order by r.Regimen_Codigo
+	end
+	else
+	begin
+	select @regId*@porcentual+@recarga,@cantidadNoches * @cantHab*(@regId*@porcentual+@recarga)
+	end
+
 	end
 
 	else RAISERROR('No hay lugar en este hotel para estas fechas, intente nuevamente',16,1) 

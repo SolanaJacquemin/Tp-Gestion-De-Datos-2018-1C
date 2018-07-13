@@ -639,7 +639,7 @@ BEGIN
 	-- Hoteles
 	INSERT INTO FOUR_SIZONS.Hotel (Hotel_Nombre, Hotel_Mail, Hotel_Telefono, Hotel_Calle, Hotel_Nro_Calle, Hotel_CantEstrella, 
 	Hotel_Recarga_Estrella, Hotel_Ciudad, Hotel_Pais, Hotel_FechaCreacion, Hotel_Estado) 
-	SELECT DISTINCT '', '', '', Hotel_Calle, Hotel_Nro_Calle, Hotel_CantEstrella, Hotel_Recarga_Estrella, Hotel_Ciudad, 'Argentina',
+	SELECT DISTINCT concat(hotel_calle,' ',Hotel_Nro_Calle), '', '', Hotel_Calle, Hotel_Nro_Calle, Hotel_CantEstrella, Hotel_Recarga_Estrella, Hotel_Ciudad, 'Argentina',
 	convert(datetime,'01/01/2017',121), 1
 	FROM GD1C2018.gd_esquema.Maestra
 
@@ -822,14 +822,7 @@ end
 	SET Factura_Consistencia = 0
 	WHERE Factura_Nro IN (select facturaI from @facturaInc)
 
-	declare @h1 nvarchar(2) = 1
-while (@h1<16)
-begin
-update FOUR_SIZONS.Hotel 
-set Hotel_Nombre = 'four sizons '+@h1
-where Hotel_Codigo=@h1
-set @h1 = @h1+1
-end
+	
 
 
 update FOUR_SIZONS.Disponibilidad 
