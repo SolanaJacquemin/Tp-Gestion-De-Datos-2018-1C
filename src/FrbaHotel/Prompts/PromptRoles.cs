@@ -12,7 +12,9 @@ namespace FrbaHotel.Prompts
 {
     public partial class PromptRoles : Form
     {
-        public PromptRoles()
+        public string user;
+        public decimal estado;
+        public PromptRoles(string us)
         {
             InitializeComponent();
             this.StartPosition = FormStartPosition.CenterScreen;
@@ -21,10 +23,12 @@ namespace FrbaHotel.Prompts
             dgvRolesPrompt.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
 
             dgvRolesPrompt.Rows.Clear();
+            user=us;
 
             Conexion con = new Conexion();
-            con.strQuery = "SELECT Rol_Codigo, Rol_Nombre " +
-                           "FROM FOUR_SIZONS.Rol ORDER BY Rol_Codigo";
+            con.strQuery = "select r.Rol_Codigo, r.Rol_Nombre from FOUR_SIZONS.Rol r where r.Rol_Codigo "+
+                "not in (select ur.Rol_Codigo from FOUR_SIZONS.UsuarioXRol ur where '" + user +"' = ur.Usuario_ID "+
+                "and ur.UsuarioXRol_Estado=1) and r.Rol_Estado=1 ORDER BY Rol_Codigo";
             con.executeQuery();
             if (!con.reader())
             {
@@ -59,7 +63,7 @@ namespace FrbaHotel.Prompts
 
         private void btn_buscar_Click(object sender, EventArgs e)
         {
-            dgvRolesPrompt.Rows.Clear();
+         /*   dgvRolesPrompt.Rows.Clear();
 
             Conexion con = new Conexion();
             con.strQuery = "SELECT Rol_Codigo, Rol_Nombre FROM FOUR_SIZONS.Rol WHERE 1=1";
@@ -84,7 +88,7 @@ namespace FrbaHotel.Prompts
                 dgvRolesPrompt.Rows.Add(new Object[] { con.lector.GetDecimal(0), con.lector.GetString(1) });
             }
 
-            con.closeConection();
+            con.closeConection();*/
         }
 
         public TextBox TextBox1

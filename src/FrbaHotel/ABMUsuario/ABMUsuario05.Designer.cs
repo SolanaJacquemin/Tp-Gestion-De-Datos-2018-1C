@@ -124,7 +124,7 @@
             this.btn_eliminar.TabIndex = 30;
             this.btn_eliminar.Text = "Eliminar";
             this.btn_eliminar.UseVisualStyleBackColor = true;
-            this.btn_eliminar.Click += new System.EventHandler(this.button1_Click);
+            this.btn_eliminar.Click += new System.EventHandler(this.boto_eliminar_Click);
             // 
             // ABMUsuario05
             // 

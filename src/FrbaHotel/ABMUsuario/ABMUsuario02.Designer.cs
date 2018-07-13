@@ -63,6 +63,7 @@
             this.btn_promptHotel = new System.Windows.Forms.Button();
             this.lhotel = new System.Windows.Forms.Label();
             this.txt_hotel = new System.Windows.Forms.TextBox();
+            this.lbl_obligacion = new System.Windows.Forms.Label();
             this.groupBox1.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -268,7 +269,7 @@
             // 
             // boton_aceptar
             // 
-            this.boton_aceptar.Location = new System.Drawing.Point(25, 429);
+            this.boton_aceptar.Location = new System.Drawing.Point(25, 450);
             this.boton_aceptar.Name = "boton_aceptar";
             this.boton_aceptar.Size = new System.Drawing.Size(75, 23);
             this.boton_aceptar.TabIndex = 13;
@@ -278,7 +279,7 @@
             // 
             // boton_volver
             // 
-            this.boton_volver.Location = new System.Drawing.Point(345, 429);
+            this.boton_volver.Location = new System.Drawing.Point(345, 450);
             this.boton_volver.Name = "boton_volver";
             this.boton_volver.Size = new System.Drawing.Size(75, 23);
             this.boton_volver.TabIndex = 15;
@@ -381,11 +382,21 @@
             this.txt_hotel.Size = new System.Drawing.Size(121, 20);
             this.txt_hotel.TabIndex = 17;
             // 
+            // lbl_obligacion
+            // 
+            this.lbl_obligacion.AutoSize = true;
+            this.lbl_obligacion.Location = new System.Drawing.Point(37, 426);
+            this.lbl_obligacion.Name = "lbl_obligacion";
+            this.lbl_obligacion.Size = new System.Drawing.Size(169, 13);
+            this.lbl_obligacion.TabIndex = 47;
+            this.lbl_obligacion.Text = "Todos los campos son obligatorios";
+            // 
             // ABMUsuario02
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(437, 458);
+            this.ClientSize = new System.Drawing.Size(437, 485);
+            this.Controls.Add(this.lbl_obligacion);
             this.Controls.Add(this.btn_promptHotel);
             this.Controls.Add(this.lhotel);
             this.Controls.Add(this.txt_hotel);
@@ -452,5 +463,6 @@
         private System.Windows.Forms.Button btn_promptHotel;
         private System.Windows.Forms.Label lhotel;
         private System.Windows.Forms.TextBox txt_hotel;
+        private System.Windows.Forms.Label lbl_obligacion;
     }
 }

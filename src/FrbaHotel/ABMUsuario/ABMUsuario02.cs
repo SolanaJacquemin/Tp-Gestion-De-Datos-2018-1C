@@ -66,6 +66,7 @@ namespace FrbaHotel.ABMUsuario
                     lhotel.Visible = false;
                     txt_hotel.Visible = false;
                     btn_promptHotel.Visible = false;
+                    lbl_obligacion.Visible = false;
                     break;
                 case "UPD":
                     labelTitulo.Text = "Modificación de Usuario";
@@ -195,7 +196,7 @@ namespace FrbaHotel.ABMUsuario
                             con.strQuery = nombreStored;
                             con.execute();
                             con.command.CommandType = CommandType.StoredProcedure;
-                            
+
                             con.command.Parameters.Add("@username", SqlDbType.NVarChar).Value = txt_usuario.Text;
                             string msg = encriptor.Encrypt(txt_password.Text);
                             con.command.Parameters.Add("@password", SqlDbType.NVarChar).Value = encriptor.Encrypt(txt_password.Text);
@@ -212,7 +213,8 @@ namespace FrbaHotel.ABMUsuario
                             if (modoABM == "DLT")
                             {
                                 con.command.Parameters.Add("@estado", SqlDbType.Bit).Value = 0;
-                            }else if (modoABM == "UPD")
+                            }
+                            else if (modoABM == "UPD")
                             {
                                 con.command.Parameters.Add("@estado", SqlDbType.Bit).Value = 1;
                             }
@@ -221,12 +223,12 @@ namespace FrbaHotel.ABMUsuario
                             con.command.ExecuteNonQuery();
                             con.closeConection();
 
-                            if (modoABM == "INS") 
+                            if (modoABM == "INS")
                             {
                                 con.strQuery = "FOUR_SIZONS.altaUserXHot";
                                 con.execute();
                                 con.command.CommandType = CommandType.StoredProcedure;
-                                if (hotel == 0) 
+                                if (hotel == 0)
                                 {
                                     hotel = hotelppal;
                                 }
@@ -251,8 +253,6 @@ namespace FrbaHotel.ABMUsuario
                             error = 1;
                             MessageBox.Show("Error al completar la operación. " + ex.Message, "FOUR SIZONS - FRBA Hoteles", MessageBoxButtons.OK, MessageBoxIcon.Error);
                         }
-
-
                     }
                     else
                     {
@@ -334,61 +334,18 @@ namespace FrbaHotel.ABMUsuario
 
         private void verificarCampos()
         {
-            if(txt_usuario.Text == "")
+            if(txt_usuario.Text == ""||cb_rol.Text==""||txt_password.Text==""||txt_nombre.Text==""||txt_apellido.Text==""||cb_tipo_documento.Text==""||txt_nro_documento.Text==""||txt_telefono.Text==""||txt_direccion.Text==""||txt_mail.Text==""||txt_hotel.Text=="")
             {
                 error = 1;
-                MessageBox.Show("El campo Usuario no puede estar vacío", "FOUR SIZONS - FRBA Hoteles", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                MessageBox.Show("Por favor, complete todos los datos obligatorios.", "FOUR SIZONS - FRBA Hoteles", MessageBoxButtons.OK, MessageBoxIcon.Information);
             }
-            if (cb_rol.Text == "")
-            {
-                error = 1;
-                MessageBox.Show("El campo Rol no puede estar vacío", "FOUR SIZONS - FRBA Hoteles", MessageBoxButtons.OK, MessageBoxIcon.Information);
-            }
-            if (txt_password.Text == "")
-            {
-                error = 1;
-                MessageBox.Show("El campo Contraseña no puede estar vacío", "FOUR SIZONS - FRBA Hoteles", MessageBoxButtons.OK, MessageBoxIcon.Information);
-            }
-            if (txt_nombre.Text == "")
-            {
-                error = 1;
-                MessageBox.Show("El campo Nombre no puede estar vacío", "FOUR SIZONS - FRBA Hoteles", MessageBoxButtons.OK, MessageBoxIcon.Information);
-            }
-            if (txt_apellido.Text == "")
-            {
-                error = 1;
-                MessageBox.Show("El campo Apellido no puede estar vacío", "FOUR SIZONS - FRBA Hoteles", MessageBoxButtons.OK, MessageBoxIcon.Information);
-            }
-            if (cb_tipo_documento.Text == "")
-            {
-                error = 1;
-                MessageBox.Show("El campo Tipo de Documento no puede estar vacío", "FOUR SIZONS - FRBA Hoteles", MessageBoxButtons.OK, MessageBoxIcon.Information);
-            }
-            if (txt_nro_documento.Text == "")
-            {
-                error = 1;
-                MessageBox.Show("El campo Nro de Documento no puede estar vacío", "FOUR SIZONS - FRBA Hoteles", MessageBoxButtons.OK, MessageBoxIcon.Information);
-            }
+            
             if (IsNumber(txt_nro_documento.Text) == false)
             {
                 error = 1;
-                MessageBox.Show("El campo Nro de Documento no puede contener carácteres", "FOUR SIZONS - FRBA Hoteles", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                MessageBox.Show("El campo Nro. de Documento debe ser un dato numérico.", "FOUR SIZONS - FRBA Hoteles", MessageBoxButtons.OK, MessageBoxIcon.Information);
             }
-            if (IsNumber(txt_telefono.Text) == false)
-            {
-                error = 1;
-                MessageBox.Show("El campo Teléfono debe ser un dato numérico", "FOUR SIZONS - FRBA Hoteles", MessageBoxButtons.OK, MessageBoxIcon.Information);
-            }
-            if (txt_direccion.Text == "")
-            {
-                error = 1;
-                MessageBox.Show("El campo Dirección no puede estar vacío", "FOUR SIZONS - FRBA Hoteles", MessageBoxButtons.OK, MessageBoxIcon.Information);
-            }
-            if (txt_mail.Text == "")
-            {
-                error = 1;
-                MessageBox.Show("El campo Mail no puede estar vacío", "FOUR SIZONS - FRBA Hoteles", MessageBoxButtons.OK, MessageBoxIcon.Information);
-            }
+            
         }
 
         bool IsNumber(string s)

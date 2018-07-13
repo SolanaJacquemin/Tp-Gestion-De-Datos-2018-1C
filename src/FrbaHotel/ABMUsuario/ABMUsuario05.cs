@@ -86,14 +86,18 @@ namespace FrbaHotel.ABMUsuario
 
         }
 
-        private void button1_Click(object sender, EventArgs e)
+        private void boto_eliminar_Click(object sender, EventArgs e)
         {
+            if(dgv_Roles.SelectedRows.Count>0)
+            {
             string modo = "DLT";
             this.Hide();
             ABMUsuario06 formABMUsuario06 = new ABMUsuario06(modo, usuario, dgv_rol_ID);
             formABMUsuario06.ShowDialog();
             this.Show();
             this.buscar();
+            }
+            else MessageBox.Show("Debe seleccionar un rol de la grilla primero", "FOUR SIZONS - FRBA Hoteles", MessageBoxButtons.OK, MessageBoxIcon.Information);
         }
 
         private void btn_agregar_Click(object sender, EventArgs e)

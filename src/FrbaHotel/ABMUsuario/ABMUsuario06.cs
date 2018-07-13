@@ -41,8 +41,8 @@ namespace FrbaHotel.ABMUsuario
 
         private void btn_promptUsu_Click(object sender, EventArgs e)
         {
-            using (PromptRoles prompt = new PromptRoles())
-            {
+            PromptRoles prompt = new PromptRoles(usuario);
+            
                 prompt.ShowDialog();
                 if (prompt.TextBox1.Text != "")
                 {
@@ -50,7 +50,7 @@ namespace FrbaHotel.ABMUsuario
                     txt_rol.Text = prompt.TextBox2.Text;
                 }
                 prompt.Close();
-            }
+            
             this.Show();
         }
 
