@@ -175,7 +175,7 @@
             this.btn_factura.Name = "btn_factura";
             this.btn_factura.Size = new System.Drawing.Size(100, 23);
             this.btn_factura.TabIndex = 46;
-            this.btn_factura.Text = "Generar Factura";
+            this.btn_factura.Text = "Facturar";
             this.btn_factura.UseVisualStyleBackColor = true;
             this.btn_factura.Click += new System.EventHandler(this.btn_factura_Click);
             // 

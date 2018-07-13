@@ -437,10 +437,11 @@ namespace FrbaHotel.GestionReservas
                     con.strQuery = "four_sizons.DisponibilidadyPrecio";
                     con.execute();
                     con.command.CommandType = CommandType.StoredProcedure;
-
+                    string newS = "EXEC " + "four_sizons.DisponibilidadyPrecio" + " " + dt_fechaDesde.Value.ToString() + "," + dt_fechaHasta.Value.ToString() + "," + hotelID.ToString() + ","
+                        + regimenID.ToString() +"," + txt_cantHab.Text + "," + cb_tipoHabitacion.Text;
                     con.command.Parameters.Add("@fechaInicio", SqlDbType.DateTime).Value = dt_fechaDesde.Value.ToString();
                     con.command.Parameters.Add("@fechaFin", SqlDbType.DateTime).Value = dt_fechaHasta.Value.ToString();
-                    con.command.Parameters.Add("@hotId", SqlDbType.Decimal).Value = hotelID;
+                    con.command.Parameters.Add("@hotId", SqlDbType.Decimal).Value = hotel;
                     con.command.Parameters.Add("@regId", SqlDbType.Decimal).Value = regimenID;
                     con.command.Parameters.Add("@canthab", SqlDbType.Decimal).Value = txt_cantHab.Text;
                     con.command.Parameters.Add("@tipoHabDesc", SqlDbType.NVarChar).Value = cb_tipoHabitacion.Text;

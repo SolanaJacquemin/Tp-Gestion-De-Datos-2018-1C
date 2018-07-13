@@ -45,12 +45,6 @@ namespace FrbaHotel.RegistrarEstadia
 
 
             levantarDatos();
-            refrescarGrid();
-
-        }
-
-        private void refrescarGrid()
-        {
 
         }
 
@@ -58,7 +52,6 @@ namespace FrbaHotel.RegistrarEstadia
         {
             dgv_Reserva.Rows.Clear();
             levantarDatos();
-            refrescarGrid();
         }
 
         private void btn_volver_Click(object sender, EventArgs e)
@@ -118,9 +111,8 @@ namespace FrbaHotel.RegistrarEstadia
                 con.lector.GetDecimal(10)});
             }
 
-
-
             con.closeConection();
+            dgv_Reserva.ClearSelection();
 
         }
 
@@ -193,15 +185,14 @@ namespace FrbaHotel.RegistrarEstadia
 
         private void btn_Abrir_Click(object sender, EventArgs e)
         {
-            if (dgv_Reserva.SelectedRows.Count == 1)
+            if (dgv_Reserva.SelectedRows.Count > 0)
             {
                 string modo = "IN";
                 this.Hide();
                 RegistrarEstadia formRegistrarEstadia = new RegistrarEstadia(modo, dgv_CodReserva, usuario);
                 formRegistrarEstadia.ShowDialog();
                 this.Show();
-                //  this.buscar();
-                //  this.refrescarGrid();
+                dgv_Reserva.ClearSelection();
             }
             else MessageBox.Show("Debe seleccionar una reserva de la grilla primero", "FOUR SIZONS - FRBA Hoteles", MessageBoxButtons.OK, MessageBoxIcon.Error);
         }
@@ -217,8 +208,6 @@ namespace FrbaHotel.RegistrarEstadia
                 RegistrarEstadia formRegistrarEstadia = new RegistrarEstadia(modo, dgv_CodReserva, usuario);
                 formRegistrarEstadia.ShowDialog();
                 this.Show();
-                // this.buscar();
-                // this.refrescarGrid();
             }
             else
             {

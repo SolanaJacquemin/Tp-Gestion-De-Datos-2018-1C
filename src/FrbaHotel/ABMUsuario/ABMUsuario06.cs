@@ -89,7 +89,7 @@ namespace FrbaHotel.ABMUsuario
             Conexion con = new Conexion();
             con.strQuery = "SELECT R.Rol_Nombre FROM FOUR_SIZONS.UsuarioXRol UR " +
                            "JOIN FOUR_SIZONS.Rol R ON R.Rol_Codigo = UR.Rol_Codigo " +
-                           "WHERE UR.Usuario_ID = '" + usuario + "' AND R.Rol_Codigo = " + rol;
+                           "WHERE R.Rol_Estado = 1 AND UR.Usuario_ID = '" + usuario + "' AND R.Rol_Codigo = " + rol;
             con.executeQuery();
 
             if (con.reader())
