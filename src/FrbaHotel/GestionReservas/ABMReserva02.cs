@@ -137,17 +137,6 @@ namespace FrbaHotel.GestionReservas
                 }
                 else
                 {
-                    error = 0;
-                    if (txt_regimen.Text == "")
-                    {
-                        error = 1;
-                        MessageBox.Show("Por favor, elija un tipo de régimen de la grilla", "FOUR SIZONS - FRBA Hoteles", MessageBoxButtons.OK, MessageBoxIcon.Information);
-                        abrirTipoRegimen();
-                        if (txt_regimen.Text != "") 
-                        {
-                            error = 0;
-                        }
-                    }
                     if (!esCliente)
                     {
                         if (verificarObligatorios() == false)
@@ -391,7 +380,7 @@ namespace FrbaHotel.GestionReservas
             this.Show();
         }
 
-        private void abrirTipoRegimen() 
+        private void btn_regimen_Click(object sender, EventArgs e)
         {
             if (txt_hotel.Text != "")
             {
@@ -412,11 +401,6 @@ namespace FrbaHotel.GestionReservas
                 this.Show();
             }
             else MessageBox.Show("Debe seleccionar un hotel primero para poder ofrecerle los regímenes", "FOUR SIZONS - FRBA Hoteles", MessageBoxButtons.OK, MessageBoxIcon.Information);
-        }
-
-        private void btn_regimen_Click(object sender, EventArgs e)
-        {
-            abrirTipoRegimen();
         }
 
         private void btn_aceptar_nuevo_Click(object sender, EventArgs e)
@@ -458,29 +442,52 @@ namespace FrbaHotel.GestionReservas
                     con.command.Parameters.Add("@regId", SqlDbType.Decimal).Value = regimenID;
                     con.command.Parameters.Add("@canthab", SqlDbType.Decimal).Value = txt_cantHab.Text;
                     con.command.Parameters.Add("@tipoHabDesc", SqlDbType.NVarChar).Value = cb_tipoHabitacion.Text;
-                    con.command.Parameters.Add("@precio", SqlDbType.Decimal).Direction = ParameterDirection.Output;
-
-                    con.openConection();
-                    con.command.ExecuteNonQuery();
-                    con.closeConection();
+                    //con.command.Parameters.Add("@precio", SqlDbType.Decimal).Direction = ParameterDirection.Output;
 
                     /*con.openConection();
+                    con.command.ExecuteNonQuery();
+                    con.closeConection();*/
+
+                    con.openConection();
                     DataSet dataset = new DataSet();
                     SqlDataAdapter da = new SqlDataAdapter(con.command);
 
                     da.Fill(dataset);
 
-                    for (int i = 0; i < dataset.Tables[0].Rows.Count; i++)
+                    if (txt_regimen.Text == "")
                     {
-                        mensaje = mensaje + (dataset.Tables[0].Rows[i][0]).ToString() + " ";
+                        using (PromptElegirRegimenXReserva promptRXR = new PromptElegirRegimenXReserva(dataset))
+                        {
+                            promptRXR.ShowDialog();
+                            txt_regimen.Text = promptRXR.TextBox1.Text;
+                            txt_costoTotal.Text = promptRXR.TextBox2.Text;
+                            if (txt_costoTotal.Text != "")
+                                MessageBox.Show("El precio total de su estadía es de: U$S " + txt_costoTotal.Text, "FOUR SIZONS - FRBA Hoteles", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                        }
+                    }
+                    else
+                    {                        
+                        txt_regimen.Text = (dataset.Tables[0].Rows[0][0]).ToString();
+                        txt_costoTotal.Text = (dataset.Tables[0].Rows[0][2]).ToString();
+                        MessageBox.Show("Existe disponbilidad y el precio total de su estadía es de: U$S " + txt_costoTotal.Text, "FOUR SIZONS - FRBA Hoteles", MessageBoxButtons.OK, MessageBoxIcon.Information);
                     }
 
-                    txt_costoTotal.Text = con.command.Parameters["@precio"].Value.ToString();
 
-                    con.closeConection();*/
+                    /*for (int i = 0; i < dataset.Tables[0].Rows.Count; i++)
+                    {
+                        mensaje = mensaje + (dataset.Tables[0].Rows[i][0]).ToString() + " - " + (dataset.Tables[0].Rows[i][1]).ToString() + " - " + (dataset.Tables[0].Rows[i][2]).ToString();
+                    }
 
-                    txt_costoTotal.Text = con.command.Parameters["@precio"].Value.ToString();
-                    MessageBox.Show("Existe disponbilidad y el precio es de: U$S " + txt_costoTotal.Text, "FOUR SIZONS - FRBA Hoteles", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                    MessageBox.Show(mensaje);*/
+
+
+
+                    //txt_costoTotal.Text = con.command.Parameters["@precio"].Value.ToString();
+
+                    con.closeConection();
+
+                    //txt_costoTotal.Text = con.command.Parameters["@precio"].Value.ToString();
+                    
                     tieneDisponibilidad = true;
 
 
@@ -666,6 +673,25 @@ namespace FrbaHotel.GestionReservas
                 cb_tipoDocumento.Enabled = false;
                 busqueda = "mail";
             }
+        }
+
+        private void limpiar_Click(object sender, EventArgs e)
+        {
+            txt_cantHab.Clear();
+            txt_apellido.Clear();
+            txt_calle.Clear();
+            txt_ciudad.Clear();
+            txt_costoTotal.Clear();
+            txt_depto.Clear();
+            txt_hotel.Clear();
+            txt_mail.Clear();
+            txt_nombre.Clear();
+            txt_nro_documento.Clear();
+            txt_nroCalle.Clear();
+            txt_pais.Clear();
+            txt_piso.Clear();
+            txt_regimen.Clear();
+            txt_telefono.Clear();
         }
 
 

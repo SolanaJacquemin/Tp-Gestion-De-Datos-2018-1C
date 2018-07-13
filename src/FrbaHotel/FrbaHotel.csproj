@@ -192,6 +192,12 @@
     <Compile Include="Prompts\PromptElegirHotel.Designer.cs">
       <DependentUpon>PromptElegirHotel.cs</DependentUpon>
     </Compile>
+    <Compile Include="Prompts\PromptElegirRegimenXReserva.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Prompts\PromptElegirRegimenXReserva.Designer.cs">
+      <DependentUpon>PromptElegirRegimenXReserva.cs</DependentUpon>
+    </Compile>
     <Compile Include="Prompts\PromptElegirRol.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -336,6 +342,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Prompts\PromptElegirHotel.resx">
       <DependentUpon>PromptElegirHotel.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Prompts\PromptElegirRegimenXReserva.resx">
+      <DependentUpon>PromptElegirRegimenXReserva.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Prompts\PromptElegirRol.resx">
       <DependentUpon>PromptElegirRol.cs</DependentUpon>

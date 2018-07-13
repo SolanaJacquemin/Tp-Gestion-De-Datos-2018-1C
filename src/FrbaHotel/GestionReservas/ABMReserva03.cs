@@ -9,6 +9,7 @@ using System.Threading.Tasks;
 using System.Windows.Forms;
 using FrbaHotel.Prompts;
 using FrbaHotel;
+using System.Data.SqlClient;
 
 namespace FrbaHotel.GestionReservas
 {
@@ -193,7 +194,7 @@ namespace FrbaHotel.GestionReservas
                 con.command.Parameters.Add("@canthab", SqlDbType.Decimal).Value = Convert.ToDecimal(txt_cantHab.Text);
                 //con.command.Parameters.Add("@fechaCambio", SqlDbType.DateTime).Value = readConfig.Config.fechaSystem().ToString();
                 con.command.Parameters.Add("@fechaCambio", SqlDbType.DateTime).Value = DateTime.Today.ToString();
-                con.command.Parameters.Add("@clie", SqlDbType.Decimal).Value = cliente;
+                //con.command.Parameters.Add("@clie", SqlDbType.Decimal).Value = cliente;
 
                 con.openConection();
                 con.command.ExecuteNonQuery();
@@ -225,17 +226,42 @@ namespace FrbaHotel.GestionReservas
                     con.command.Parameters.Add("@fechaInicio", SqlDbType.DateTime).Value = dt_fechaDesde.Value.ToString();
                     con.command.Parameters.Add("@fechaFin", SqlDbType.DateTime).Value = dt_fechaHasta.Value.ToString();
                     con.command.Parameters.Add("@hotId", SqlDbType.Decimal).Value = hotelID;
+                    if (txt_regimen.Text == "")
+                    {
+                        regimenID = 0;
+                    }
                     con.command.Parameters.Add("@regId", SqlDbType.Decimal).Value = regimenID;
                     con.command.Parameters.Add("@canthab", SqlDbType.Decimal).Value = txt_cantHab.Text;
                     con.command.Parameters.Add("@tipoHabDesc", SqlDbType.NVarChar).Value = cb_tipoHabitacion.Text;
-                    con.command.Parameters.Add("@precio", SqlDbType.Decimal).Direction = ParameterDirection.Output;
+                    //con.command.Parameters.Add("@precio", SqlDbType.Decimal).Direction = ParameterDirection.Output;
+
+                    /*con.openConection();
+                    con.command.ExecuteNonQuery();
+                    con.closeConection();*/
 
                     con.openConection();
-                    con.command.ExecuteNonQuery();
-                    con.closeConection();
+                    DataSet dataset = new DataSet();
+                    SqlDataAdapter da = new SqlDataAdapter(con.command);
 
-                    txt_costoTotal.Text = con.command.Parameters["@precio"].Value.ToString();
-                    MessageBox.Show("Existe disponbilidad y el precio es de: " + txt_costoTotal.Text, "FOUR SIZONS - FRBA Hoteles", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                    da.Fill(dataset);
+
+                    if (txt_regimen.Text == "")
+                    {
+                        using (PromptElegirRegimenXReserva promptRXR = new PromptElegirRegimenXReserva(dataset))
+                        {
+                            promptRXR.ShowDialog();
+                            txt_regimen.Text = promptRXR.TextBox1.Text;
+                            txt_costoTotal.Text = promptRXR.TextBox2.Text;
+                            if (txt_costoTotal.Text != "")
+                                MessageBox.Show("El precio total de su estadía es de: U$S " + txt_costoTotal.Text, "FOUR SIZONS - FRBA Hoteles", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                        }
+                    }
+                    else
+                    {
+                        txt_regimen.Text = (dataset.Tables[0].Rows[0][0]).ToString();
+                        txt_costoTotal.Text = (dataset.Tables[0].Rows[0][2]).ToString();
+                        MessageBox.Show("Existe disponbilidad y el precio total de su estadía es de: U$S " + txt_costoTotal.Text, "FOUR SIZONS - FRBA Hoteles", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                    }
                     boton_aceptar.Enabled = true;
                 }
                 catch (Exception ex)

@@ -143,7 +143,7 @@
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(288, 308);
+            this.ClientSize = new System.Drawing.Size(288, 309);
             this.Controls.Add(this.dgvRegimenPrompt);
             this.Controls.Add(this.groupBox1);
             this.Controls.Add(this.txt_aux_regimennombre);
