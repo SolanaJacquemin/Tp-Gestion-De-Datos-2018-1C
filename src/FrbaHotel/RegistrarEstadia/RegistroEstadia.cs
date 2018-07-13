@@ -65,6 +65,8 @@ namespace FrbaHotel.RegistrarEstadia
                     lbl_estadia.Visible = false;
                     cb_medioPago.DropDownStyle = ComboBoxStyle.DropDownList;
                     dt_fechaSalida.Visible = false;
+                    label2.Visible = false;
+                    btn_factura.Text = "Generar Factura";
                     break;
 
                 case "OUT":

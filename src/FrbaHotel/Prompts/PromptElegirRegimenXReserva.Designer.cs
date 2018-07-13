@@ -29,14 +29,14 @@
         private void InitializeComponent()
         {
             this.dgvRegimenPrompt = new System.Windows.Forms.DataGridView();
-            this.txt_aux_regimenpreciototal = new System.Windows.Forms.TextBox();
-            this.txt_aux_regimennombre = new System.Windows.Forms.TextBox();
-            this.label1 = new System.Windows.Forms.Label();
-            this.txt_aux_regimenid = new System.Windows.Forms.TextBox();
             this.Regimen_ID = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.Regimen_Descripcion = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.Precio_dia = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.Precio_Total = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.txt_aux_regimenpreciototal = new System.Windows.Forms.TextBox();
+            this.txt_aux_regimennombre = new System.Windows.Forms.TextBox();
+            this.label1 = new System.Windows.Forms.Label();
+            this.txt_aux_regimenid = new System.Windows.Forms.TextBox();
             ((System.ComponentModel.ISupportInitialize)(this.dgvRegimenPrompt)).BeginInit();
             this.SuspendLayout();
             // 
@@ -55,6 +55,30 @@
             this.dgvRegimenPrompt.Size = new System.Drawing.Size(232, 169);
             this.dgvRegimenPrompt.TabIndex = 9;
             this.dgvRegimenPrompt.CellClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dgvRegimenPrompt_CellClick);
+            // 
+            // Regimen_ID
+            // 
+            this.Regimen_ID.HeaderText = "ID";
+            this.Regimen_ID.Name = "Regimen_ID";
+            this.Regimen_ID.Visible = false;
+            // 
+            // Regimen_Descripcion
+            // 
+            this.Regimen_Descripcion.HeaderText = "Descripción";
+            this.Regimen_Descripcion.Name = "Regimen_Descripcion";
+            this.Regimen_Descripcion.ReadOnly = true;
+            // 
+            // Precio_dia
+            // 
+            this.Precio_dia.HeaderText = "Precio X Día";
+            this.Precio_dia.Name = "Precio_dia";
+            this.Precio_dia.ReadOnly = true;
+            // 
+            // Precio_Total
+            // 
+            this.Precio_Total.HeaderText = "Precio Total";
+            this.Precio_Total.Name = "Precio_Total";
+            this.Precio_Total.Visible = false;
             // 
             // txt_aux_regimenpreciototal
             // 
@@ -87,30 +111,6 @@
             this.txt_aux_regimenid.Size = new System.Drawing.Size(100, 20);
             this.txt_aux_regimenid.TabIndex = 13;
             // 
-            // Regimen_ID
-            // 
-            this.Regimen_ID.HeaderText = "ID";
-            this.Regimen_ID.Name = "Regimen_ID";
-            this.Regimen_ID.Visible = false;
-            // 
-            // Regimen_Descripcion
-            // 
-            this.Regimen_Descripcion.HeaderText = "Descripción";
-            this.Regimen_Descripcion.Name = "Regimen_Descripcion";
-            this.Regimen_Descripcion.ReadOnly = true;
-            // 
-            // Precio_dia
-            // 
-            this.Precio_dia.HeaderText = "Precio X Día";
-            this.Precio_dia.Name = "Precio_dia";
-            this.Precio_dia.ReadOnly = true;
-            // 
-            // Precio_Total
-            // 
-            this.Precio_Total.HeaderText = "Precio Total";
-            this.Precio_Total.Name = "Precio_Total";
-            this.Precio_Total.Visible = false;
-            // 
             // PromptElegirRegimenXReserva
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -123,6 +123,7 @@
             this.Controls.Add(this.dgvRegimenPrompt);
             this.Name = "PromptElegirRegimenXReserva";
             this.Text = "PromptElegirRegimenXReserva";
+            this.Load += new System.EventHandler(this.PromptElegirRegimenXReserva_Load);
             ((System.ComponentModel.ISupportInitialize)(this.dgvRegimenPrompt)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();

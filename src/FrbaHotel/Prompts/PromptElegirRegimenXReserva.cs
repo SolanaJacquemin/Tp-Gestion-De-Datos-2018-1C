@@ -66,13 +66,18 @@ namespace FrbaHotel.Prompts
                 DataGridViewRow selectedRow = dgvRegimenPrompt.Rows[index];
                 string dgv_regimen_ID = selectedRow.Cells[0].Value.ToString();
                 string dgv_regimen_nombre = selectedRow.Cells[1].Value.ToString();
-                decimal dgv_regimen_preciototal = Convert.ToDecimal(selectedRow.Cells[3].Value.ToString());
+                decimal dgv_regimen_preciototal = Convert.ToDecimal(selectedRow.Cells[3].Value);//.ToString());
 
                 txt_aux_regimenid.Text = dgv_regimen_ID;
                 txt_aux_regimennombre.Text = dgv_regimen_nombre;
                 txt_aux_regimenpreciototal.Text = dgv_regimen_preciototal.ToString();
             }
             this.Hide();
+        }
+
+        private void PromptElegirRegimenXReserva_Load(object sender, EventArgs e)
+        {
+
         }
     }
 }
