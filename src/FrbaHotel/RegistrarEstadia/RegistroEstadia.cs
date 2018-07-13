@@ -64,6 +64,7 @@ namespace FrbaHotel.RegistrarEstadia
                     txt_estadia.Visible = false;
                     lbl_estadia.Visible = false;
                     cb_medioPago.DropDownStyle = ComboBoxStyle.DropDownList;
+                    dt_fechaSalida.Visible = false;
                     break;
 
                 case "OUT":
@@ -72,9 +73,12 @@ namespace FrbaHotel.RegistrarEstadia
                     txt_CodReserva.ReadOnly = true;
                     btn_regClientes.Visible = false;
                     cb_medioPago.DropDownStyle = ComboBoxStyle.DropDownList;
+                    dt_fechaSalida.Format = DateTimePickerFormat.Custom;
+                    dt_fechaSalida.CustomFormat = "dd/MM/yyyy";
                     break;
 
             }
+
         }
 
         public void ejecutarRegistrarEstadia(string nombreStored)
@@ -152,7 +156,7 @@ namespace FrbaHotel.RegistrarEstadia
 
                         con.command.Parameters.Add("@estadia", SqlDbType.Decimal).Value = codigoEstadia;
                         con.command.Parameters.Add("@usuario", SqlDbType.NVarChar).Value = usuario;
-                        con.command.Parameters.Add("@fecha", SqlDbType.DateTime).Value = DateTime.Now.ToString("dd/MM/yyyy");
+                        con.command.Parameters.Add("@fecha", SqlDbType.DateTime).Value = dt_fechaSalida.Value.ToString();
 
                         con.openConection();
                         con.command.ExecuteNonQuery();
@@ -370,7 +374,7 @@ namespace FrbaHotel.RegistrarEstadia
                         con.openConection();
                         con.command.ExecuteNonQuery();
                         con.closeConection();
-                        //facturaGenerada = true;
+                        facturaGenerada = true;
                         MessageBox.Show("Operación exitosa", "FOUR SIZONS - FRBA Hoteles", MessageBoxButtons.OK, MessageBoxIcon.Information);
                     }
                     catch (Exception ex)

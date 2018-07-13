@@ -45,12 +45,14 @@
             this.btn_tarjeta = new System.Windows.Forms.Button();
             this.labelTitulo = new System.Windows.Forms.Label();
             this.btn_regClientes = new System.Windows.Forms.Button();
+            this.dt_fechaSalida = new System.Windows.Forms.DateTimePicker();
+            this.label2 = new System.Windows.Forms.Label();
             this.gb_Titulo.SuspendLayout();
             this.SuspendLayout();
             // 
             // btn_Aceptar
             // 
-            this.btn_Aceptar.Location = new System.Drawing.Point(16, 192);
+            this.btn_Aceptar.Location = new System.Drawing.Point(16, 215);
             this.btn_Aceptar.Name = "btn_Aceptar";
             this.btn_Aceptar.Size = new System.Drawing.Size(100, 23);
             this.btn_Aceptar.TabIndex = 0;
@@ -60,24 +62,26 @@
             // 
             // gb_Titulo
             // 
+            this.gb_Titulo.Controls.Add(this.dt_fechaSalida);
             this.gb_Titulo.Controls.Add(this.cb_medioPago);
             this.gb_Titulo.Controls.Add(this.txt_hotel);
             this.gb_Titulo.Controls.Add(this.txt_estadia);
             this.gb_Titulo.Controls.Add(this.txt_CodReserva);
             this.gb_Titulo.Controls.Add(this.label1);
             this.gb_Titulo.Controls.Add(this.label3);
+            this.gb_Titulo.Controls.Add(this.label2);
             this.gb_Titulo.Controls.Add(this.lbl_estadia);
             this.gb_Titulo.Controls.Add(this.lbl_CodReserva);
             this.gb_Titulo.Location = new System.Drawing.Point(16, 61);
             this.gb_Titulo.Name = "gb_Titulo";
-            this.gb_Titulo.Size = new System.Drawing.Size(494, 84);
+            this.gb_Titulo.Size = new System.Drawing.Size(494, 127);
             this.gb_Titulo.TabIndex = 1;
             this.gb_Titulo.TabStop = false;
             // 
             // cb_medioPago
             // 
             this.cb_medioPago.FormattingEnabled = true;
-            this.cb_medioPago.Location = new System.Drawing.Point(346, 52);
+            this.cb_medioPago.Location = new System.Drawing.Point(109, 90);
             this.cb_medioPago.Name = "cb_medioPago";
             this.cb_medioPago.Size = new System.Drawing.Size(121, 21);
             this.cb_medioPago.TabIndex = 30;
@@ -107,7 +111,7 @@
             // label1
             // 
             this.label1.AutoSize = true;
-            this.label1.Location = new System.Drawing.Point(262, 56);
+            this.label1.Location = new System.Drawing.Point(27, 93);
             this.label1.Name = "label1";
             this.label1.Size = new System.Drawing.Size(78, 13);
             this.label1.TabIndex = 2;
@@ -163,7 +167,7 @@
             // lbl_camposObligatorios
             // 
             this.lbl_camposObligatorios.AutoSize = true;
-            this.lbl_camposObligatorios.Location = new System.Drawing.Point(13, 158);
+            this.lbl_camposObligatorios.Location = new System.Drawing.Point(13, 191);
             this.lbl_camposObligatorios.Name = "lbl_camposObligatorios";
             this.lbl_camposObligatorios.Size = new System.Drawing.Size(172, 13);
             this.lbl_camposObligatorios.TabIndex = 45;
@@ -171,7 +175,7 @@
             // 
             // btn_factura
             // 
-            this.btn_factura.Location = new System.Drawing.Point(410, 192);
+            this.btn_factura.Location = new System.Drawing.Point(410, 215);
             this.btn_factura.Name = "btn_factura";
             this.btn_factura.Size = new System.Drawing.Size(100, 23);
             this.btn_factura.TabIndex = 46;
@@ -181,7 +185,7 @@
             // 
             // btn_tarjeta
             // 
-            this.btn_tarjeta.Location = new System.Drawing.Point(304, 192);
+            this.btn_tarjeta.Location = new System.Drawing.Point(304, 215);
             this.btn_tarjeta.Name = "btn_tarjeta";
             this.btn_tarjeta.Size = new System.Drawing.Size(100, 23);
             this.btn_tarjeta.TabIndex = 46;
@@ -201,7 +205,7 @@
             // 
             // btn_regClientes
             // 
-            this.btn_regClientes.Location = new System.Drawing.Point(125, 192);
+            this.btn_regClientes.Location = new System.Drawing.Point(125, 215);
             this.btn_regClientes.Name = "btn_regClientes";
             this.btn_regClientes.Size = new System.Drawing.Size(100, 23);
             this.btn_regClientes.TabIndex = 54;
@@ -209,9 +213,25 @@
             this.btn_regClientes.UseVisualStyleBackColor = true;
             this.btn_regClientes.Click += new System.EventHandler(this.btn_regClientes_Click);
             // 
+            // dt_fechaSalida
+            // 
+            this.dt_fechaSalida.Location = new System.Drawing.Point(346, 49);
+            this.dt_fechaSalida.Name = "dt_fechaSalida";
+            this.dt_fechaSalida.Size = new System.Drawing.Size(121, 20);
+            this.dt_fechaSalida.TabIndex = 31;
+            // 
+            // label2
+            // 
+            this.label2.AutoSize = true;
+            this.label2.Location = new System.Drawing.Point(258, 52);
+            this.label2.Name = "label2";
+            this.label2.Size = new System.Drawing.Size(84, 13);
+            this.label2.TabIndex = 2;
+            this.label2.Text = "Fecha de Salida";
+            // 
             // RegistrarEstadia
             // 
-            this.ClientSize = new System.Drawing.Size(530, 224);
+            this.ClientSize = new System.Drawing.Size(530, 244);
             this.Controls.Add(this.btn_regClientes);
             this.Controls.Add(this.labelTitulo);
             this.Controls.Add(this.btn_tarjeta);
@@ -249,5 +269,7 @@
         private System.Windows.Forms.ComboBox cb_medioPago;
         private System.Windows.Forms.Label labelTitulo;
         private System.Windows.Forms.Button btn_regClientes;
+        private System.Windows.Forms.DateTimePicker dt_fechaSalida;
+        private System.Windows.Forms.Label label2;
     }
 }
