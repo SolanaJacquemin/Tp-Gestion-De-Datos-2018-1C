@@ -712,7 +712,8 @@ create procedure four_sizons.AltaHotel
 @recarga_estrella numeric(5),
 @ciudad nvarchar(50),
 @pais nvarchar(50),
-@fechaCreacion datetime
+@fechaCreacion datetime,
+@usuario nvarchar(15)
 
 as begin try
 begin tran
@@ -722,6 +723,10 @@ if (not exists (select Hotel_Codigo from FOUR_SIZONS.Hotel where Hotel_Nombre= @
 		insert into FOUR_SIZONS.Hotel(Hotel_Nombre,Hotel_Mail,Hotel_Telefono,Hotel_Calle,Hotel_Nro_Calle,
 					Hotel_CantEstrella,Hotel_Recarga_Estrella, Hotel_Ciudad,Hotel_Pais,Hotel_FechaCreacion,Hotel_Estado)
 					values (@nombre,@mail,@telefono,@calle,@numCalle,@cantEstrellas,@recarga_estrella,@ciudad,@pais, convert(datetime,@fechaCreacion,121),1)
+
+		set @codigo = (select top 1 Hotel_Codigo from four_sizons.Hotel order by Hotel_Codigo desc)
+
+		insert into FOUR_SIZONS.UsuarioXHotel(Hotel_Codigo,Usuario_ID,UsuarioXHotel_Estado) values (@codigo,@usuario,1)
 
 		declare @tipohab numeric = 1001
 		while(@tipohab<1006)
@@ -740,9 +745,6 @@ if (not exists (select Hotel_Codigo from FOUR_SIZONS.Hotel where Hotel_Nombre= @
 					end
 				set @tipohab = @tipohab+1
 			end
-
-		set @codigo = (select top 1 Hotel_Codigo from four_sizons.Hotel order by Hotel_Codigo desc)
-
 	end
 else raiserror ('Ya existe un hotel con ese nombre en el sistema, por favor ingrese otro.',16,1)
 
