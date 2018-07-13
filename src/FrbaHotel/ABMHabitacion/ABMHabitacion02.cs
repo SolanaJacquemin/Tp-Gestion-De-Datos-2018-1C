@@ -205,10 +205,12 @@ namespace FrbaHotel.ABMHabitacion
                         con.command.Parameters.Add("@descripcion", SqlDbType.NVarChar).Value = txt_descripcion.Text;
 
                     }else{
+                        string newS = "EXEC " + nombreStored + " " + txt_nro_hab.Text + "," + hotel.ToString() + "," + txt_piso.Text + "," + cb_tipoFrente.Text + "," + cb_tipohab.Text + "," + txt_descripcion.Text + " 1";
                         con.command.Parameters.Add("@numero", SqlDbType.Decimal).Value = txt_nro_hab.Text;
                         con.command.Parameters.Add("@HotId", SqlDbType.Decimal).Value = hotel;
                         con.command.Parameters.Add("@piso", SqlDbType.Decimal).Value = txt_piso.Text;
                         con.command.Parameters.Add("@ubicacion", SqlDbType.NVarChar).Value = cb_tipoFrente.Text;
+                        con.command.Parameters.Add("@TipoHab", SqlDbType.NVarChar).Value = cb_tipohab.Text;
                         con.command.Parameters.Add("@descripcion", SqlDbType.NVarChar).Value = txt_descripcion.Text;
                         if (modoABM == "UPD")
                         {

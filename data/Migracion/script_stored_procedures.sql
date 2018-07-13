@@ -1114,34 +1114,41 @@ begin catch
 end catch
 go
 
-create procedure four_sizons.modificarHabitacion
+alter procedure four_sizons.modificarHabitacion
 @numero numeric(18),
 @hotId numeric(18),
 @piso numeric(18),
-@ubicacion nvarchar(50), 
+@ubicacion nvarchar(50),
+@TipoHab nvarchar(255),
 @descripcion nvarchar(255),
 @estado bit
 as 
 begin tran 
 begin try
 
-
-
+declare @TipoHabID numeric(18)
+set @TipoHabID = (select Habitacion_Tipo_Codigo from FOUR_SIZONS.Habitacion_Tipo where @TipoHab = Habitacion_Tipo_Descripcion)
 
 update FOUR_SIZONS.Habitacion
-
 set Habitacion_Piso= @piso,Habitacion_Frente=@ubicacion,Habitacion_Estado=@estado,Habitacion_Descripcion=@descripcion
-	
-
 where Habitacion_Numero=@numero and Hotel_Codigo= @hotId
 
+declare @aux datetime = convert(datetime, '01-01-2018' ,121)			
+declare @fin datetime= convert(datetime, '01-01-2021' ,121)
 
-
-
-
-
-
-
+if(@estado = 1)
+begin
+	update FOUR_SIZONS.Disponibilidad
+	set Disp_HabDisponibles= Disp_HabDisponibles+1
+	where @TipoHabID=Habitacion_Tipo_Codigo and (Disp_Fecha between @aux and @fin) and Hotel_Codigo =@hotId
+end
+else
+begin
+	update FOUR_SIZONS.Disponibilidad
+	set Disp_HabDisponibles= Disp_HabDisponibles-1
+	where @TipoHabID=Habitacion_Tipo_Codigo and (Disp_Fecha between @aux and @fin) and Hotel_Codigo =@hotId
+end
+							
 commit tran 
 end try
 begin catch
@@ -1190,7 +1197,7 @@ as begin
 
 	if(@regId=0)
 	begin
-		select Regimen_Descripcion,Regimen_Precio*@porcentual+@recarga,@cantidadNoches * @cantHab*(Regimen_Precio*@porcentual+@recarga)
+		select r.Regimen_Codigo, Regimen_Descripcion,Regimen_Precio*@porcentual+@recarga,@cantidadNoches * @cantHab*(Regimen_Precio*@porcentual+@recarga)
 		from FOUR_SIZONS.Regimen r, RegXHotel rh 
 		where r.Regimen_Codigo = rh.Regimen_Codigo and rh.Hotel_Codigo=@hotid
 		order by r.Regimen_Codigo

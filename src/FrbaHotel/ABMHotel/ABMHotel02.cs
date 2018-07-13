@@ -180,6 +180,9 @@ namespace FrbaHotel.ABMHotel
                     con.execute();
                     con.command.CommandType = CommandType.StoredProcedure;
 
+                    string newS = "EXEC " + nombreStored + " " + "@codigo" + "," + txt_nombre_hotel.Text + "," + txt_mail.Text + "," + txt_telefono.Text + "," + txt_calle.Text + ","
+                        + txt_nroCalle.Text + "," + cb_estrellas.Text + "," + txt_recargaEstrella.Text + "," + txt_ciudad.Text + "," + txt_pais.Text + "," + "'01-01-2018', 'SYSADM'";
+
                     if (modoABM == "INS")
                     {
                         con.command.Parameters.Add("@codigo", SqlDbType.Decimal).Direction = ParameterDirection.Output;

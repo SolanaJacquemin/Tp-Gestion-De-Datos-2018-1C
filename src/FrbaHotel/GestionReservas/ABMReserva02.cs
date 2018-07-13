@@ -196,7 +196,9 @@ namespace FrbaHotel.GestionReservas
                         con.strQuery = nombreStored;
                         con.execute();
                         con.command.CommandType = CommandType.StoredProcedure;
-
+                        string newS = "EXEC " + nombreStored + " " + dt_fechaHasta.Value.ToString() + "," + dt_fechaHasta.Value.ToString() + "," + usuario + "," +
+                            hotelID.ToString() + "," + clienteID.ToString() + "," + regimenID.ToString() + "," + txt_cantHab.Text + "," +
+                             cb_tipoHabitacion.Text + "," + txt_costoTotal.Text + "," + readConfig.Config.fechaSystem().ToString();
                         con.command.Parameters.Add("@fechaInicio", SqlDbType.DateTime).Value = dt_fechaDesde.Value.ToString();
                         con.command.Parameters.Add("@fechaFin", SqlDbType.DateTime).Value = dt_fechaHasta.Value.ToString();
                         con.command.Parameters.Add("@userId", SqlDbType.NVarChar).Value = usuario;
@@ -410,7 +412,7 @@ namespace FrbaHotel.GestionReservas
 
         private void verificarCampos1()
         {
-            if (cb_tipoHabitacion.Text == "" || txt_cantHab.Text == ""||txt_hotel.Text==""||txt_regimen.Text=="")
+            if (cb_tipoHabitacion.Text == "" || txt_cantHab.Text == ""||txt_hotel.Text=="")
             {
                 error = 1;
                 MessageBox.Show("Por favor, complete todos los campos.", "FOUR SIZONS - FRBA Hoteles", MessageBoxButtons.OK, MessageBoxIcon.Information);
@@ -426,7 +428,7 @@ namespace FrbaHotel.GestionReservas
         private void btn_disponibilidad_Click(object sender, EventArgs e)
         {
             error = 0;
-            //verificarCampos1();
+            verificarCampos1();
             if(error == 0)
             {
                 try
@@ -459,8 +461,9 @@ namespace FrbaHotel.GestionReservas
                         using (PromptElegirRegimenXReserva promptRXR = new PromptElegirRegimenXReserva(dataset))
                         {
                             promptRXR.ShowDialog();
-                            txt_regimen.Text = promptRXR.TextBox1.Text;
-                            txt_costoTotal.Text = promptRXR.TextBox2.Text;
+                            regimenID = Convert.ToDecimal(promptRXR.TextBox1.Text);
+                            txt_regimen.Text = promptRXR.TextBox2.Text;
+                            txt_costoTotal.Text = promptRXR.TextBox3.Text;
                             if (txt_costoTotal.Text != "")
                                 MessageBox.Show("El precio total de su estadía es de: U$S " + txt_costoTotal.Text, "FOUR SIZONS - FRBA Hoteles", MessageBoxButtons.OK, MessageBoxIcon.Information);
                         }

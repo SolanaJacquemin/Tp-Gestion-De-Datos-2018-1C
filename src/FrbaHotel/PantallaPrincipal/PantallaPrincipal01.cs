@@ -202,8 +202,8 @@ namespace FrbaHotel.PantallaPrincipal
                             " JOIN FOUR_SIZONS.Rol R ON R.Rol_Codigo = UR.Rol_Codigo" +
                             " JOIN FOUR_SIZONS.RolXFunc RF ON RF.Rol_Codigo = UR.Rol_Codigo" +
                             " JOIN FOUR_SIZONS.Funcionalidad F ON F.Func_Codigo = RF.Func_Codigo" +
-                            " WHERE UR.UsuarioXRol_Estado = 1 AND" +
-                            " F.Func_Estado = 1 AND UR.Usuario_ID = '" + usuario + "' AND UR.Rol_Codigo = " + rol;
+                            " WHERE UR.UsuarioXRol_Estado = 1 AND RF.RolXFunc_Estado = 1" +
+                            " AND F.Func_Estado = 1 AND UR.Usuario_ID = '" + usuario + "' AND UR.Rol_Codigo = " + rol;
 
             con.executeQuery();
            /* if (!con.reader())

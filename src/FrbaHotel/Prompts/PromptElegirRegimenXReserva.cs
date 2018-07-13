@@ -28,7 +28,8 @@ namespace FrbaHotel.Prompts
             {
                 dgvRegimenPrompt.Rows.Add(new Object[] { (dataset.Tables[0].Rows[i][0]).ToString(), 
                                                          (dataset.Tables[0].Rows[i][1]).ToString(),
-                                                         (dataset.Tables[0].Rows[i][2]).ToString()});
+                                                         (dataset.Tables[0].Rows[i][2]).ToString(),
+                                                         (dataset.Tables[0].Rows[i][3]).ToString()});
             }
         }
 
@@ -36,7 +37,7 @@ namespace FrbaHotel.Prompts
         {
             get
             {
-                return txt_aux_regimennombre;
+                return txt_aux_regimenid;
             }
         }
 
@@ -44,6 +45,15 @@ namespace FrbaHotel.Prompts
         {
             get
             {
+                return txt_aux_regimennombre;
+            }
+        }
+
+        public TextBox TextBox3
+        {
+            get
+            {
+
                 return txt_aux_regimenpreciototal;
             }
         }
@@ -54,9 +64,11 @@ namespace FrbaHotel.Prompts
             if (index >= 0)
             {
                 DataGridViewRow selectedRow = dgvRegimenPrompt.Rows[index];
-                string dgv_regimen_nombre = selectedRow.Cells[0].Value.ToString();
-                decimal dgv_regimen_preciototal = Convert.ToDecimal(selectedRow.Cells[2].Value.ToString());
+                string dgv_regimen_ID = selectedRow.Cells[0].Value.ToString();
+                string dgv_regimen_nombre = selectedRow.Cells[1].Value.ToString();
+                decimal dgv_regimen_preciototal = Convert.ToDecimal(selectedRow.Cells[3].Value.ToString());
 
+                txt_aux_regimenid.Text = dgv_regimen_ID;
                 txt_aux_regimennombre.Text = dgv_regimen_nombre;
                 txt_aux_regimenpreciototal.Text = dgv_regimen_preciototal.ToString();
             }
