@@ -17,6 +17,7 @@ namespace FrbaHotel.RegistrarEstadia
         public decimal error;
         public decimal estadia;
         public string nombreSP;
+        public bool valido;
 
         public ABMConsumible(string modo, decimal estadiaID, decimal consumibleID)
         {
@@ -30,6 +31,7 @@ namespace FrbaHotel.RegistrarEstadia
 
             switch (modoABM)
             {
+
                 case "INS":
                     labelTitulo.Text = "Agregar Consumible";
                     break;
@@ -44,7 +46,6 @@ namespace FrbaHotel.RegistrarEstadia
             Conexion con = new Conexion();
             con.strQuery = "SELECT Consumible_Descripcion FROM FOUR_SIZONS.Consumible";
             con.executeQuery();
-            cb_consumibles.Items.Add("");
             while (con.reader())
             {
                 cb_consumibles.Items.Add(con.lector.GetString(0));
@@ -58,8 +59,12 @@ namespace FrbaHotel.RegistrarEstadia
             this.Close();
         }
 
-        private void verificarCampos()
+        private bool verificarCampos()
         {
+            if (txt_cantidad.Text == "") valido = false;
+            if (cb_consumibles.Text == "") valido = false;
+
+            return valido;
         }
 
         private void boton_aceptar_Click(object sender, EventArgs e)

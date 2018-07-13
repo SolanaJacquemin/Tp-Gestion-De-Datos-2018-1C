@@ -214,7 +214,7 @@ namespace FrbaHotel.ABMUsuario
                                 "FROM FOUR_SIZONS.Usuario " +
                                 " WHERE 1=1";
                 if (txt_Id.Text != "")
-                    con.strQuery = con.strQuery + "AND Usuario_ID like '%" + txt_Id.Text + "%' ";
+                    con.strQuery = con.strQuery + "AND Usuario_ID = '" + txt_Id.Text + "' ";
                 if (txt_nombre.Text != "")
                     con.strQuery = con.strQuery + "AND Usuario_Nombre like '%" + txt_nombre.Text + "%' ";
                 if (txt_apellido.Text != "")

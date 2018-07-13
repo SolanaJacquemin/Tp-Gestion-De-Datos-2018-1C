@@ -74,6 +74,8 @@ namespace FrbaHotel.GestionReservas
             tieneDisponibilidad = false;
             check_doc.Enabled = false;
             check_mail.Enabled = false;
+            txt_hotel.Enabled = false;
+            txt_regimen.Enabled = false;
 
             if (hotel != 0)
             {

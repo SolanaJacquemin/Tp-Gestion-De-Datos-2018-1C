@@ -67,6 +67,7 @@ namespace FrbaHotel.ABMUsuario
                     txt_hotel.Visible = false;
                     btn_promptHotel.Visible = false;
                     lbl_obligacion.Visible = false;
+                    
                     break;
                 case "UPD":
                     labelTitulo.Text = "Modificación de Usuario";
@@ -367,12 +368,13 @@ namespace FrbaHotel.ABMUsuario
         public void boton_aceptar_Click(object sender, EventArgs e)
         {
             error = 0;
-            verificarCampos();
+            
             if (error == 0)
             {
                 switch (modoABM)
                 {
                     case "INS":
+                        verificarCampos();
                         nombreSP = "FOUR_SIZONS.AltaUsuario";
                         break;
 
@@ -385,9 +387,10 @@ namespace FrbaHotel.ABMUsuario
                         nombreSP = "FOUR_SIZONS.ModificacionUsuario";
                         break;
                 }
-                ejecutarABMUsuario(nombreSP);
+                
                 if (error == 0)
                 {
+                    ejecutarABMUsuario(nombreSP);
                     this.Close();
                 }
             }
@@ -439,8 +442,8 @@ namespace FrbaHotel.ABMUsuario
             if (txt_usuario.Text == "") abm_valido = false;
             if (txt_telefono.Text == "") abm_valido = false;
             if (txt_direccion.Text == "") abm_valido = false;
-            if (dt_fecha_nac.Text == "") abm_valido = false;
             if (txt_mail.Text == "") abm_valido = false;
+            if (txt_hotel.Text == "") abm_valido = false;
             if (cb_rol.Text == "") abm_valido = false;
             if (txt_password.Text == "") abm_valido = false;
 
