@@ -920,27 +920,19 @@ create procedure FOUR_SIZONS.ModificacionRol
 		begin
 			if (not exists (select Rol_Codigo from FOUR_SIZONS.Rol where Rol_Codigo!=@codigo and Rol_Nombre=@rolname))
 				begin
-					IF(@estado!=0)
 					begin
 						update FOUR_SIZONS.Rol
 						set Rol_Nombre= @rolname,Rol_Estado= @estado
 						where Rol_Codigo=@codigo
 
-						if (exists(select Rol_Codigo from FOUR_SIZONS.UsuarioXRol where Rol_Codigo!=@codigo))
-						begin
 							update FOUR_SIZONS.UsuarioXRol
 							set UsuarioXRol_Estado= @estado
 							where Rol_Codigo=@codigo
-						end
-					end
-					else
-					begin
-						update FOUR_SIZONS.Rol
-						set Rol_Nombre= @rolname,Rol_Estado= @estado
-						where Rol_Codigo=@codigo
-						update FOUR_SIZONS.UsuarioXRol
-						set UsuarioXRol_Estado=0
-						where Rol_Codigo=@codigo
+
+							update FOUR_SIZONS.RolXFunc
+							set RolXFunc_Estado=@estado
+							where Rol_Codigo=@codigo
+
 					end
 				end
 			else raiserror('Ya existe un rol con este nombre, por favor ingrese otro.',16,1)
