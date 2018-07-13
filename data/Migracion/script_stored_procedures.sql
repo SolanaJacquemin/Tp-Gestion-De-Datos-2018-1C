@@ -1183,14 +1183,15 @@ as begin
 
 	if(@regId=0)
 	begin
-	select Regimen_Precio*@porcentual+@recarga,@cantidadNoches * @cantHab*(Regimen_Precio*@porcentual+@recarga)
+	select Regimen_Descripcion,Regimen_Precio*@porcentual+@recarga,@cantidadNoches * @cantHab*(Regimen_Precio*@porcentual+@recarga)
 	from FOUR_SIZONS.Regimen r, RegXHotel rh 
 	where r.Regimen_Codigo = rh.Regimen_Codigo and rh.Hotel_Codigo=@hotid
 	order by r.Regimen_Codigo
 	end
 	else
 	begin
-	select @regId*@porcentual+@recarga,@cantidadNoches * @cantHab*(@regId*@porcentual+@recarga)
+	declare @regdesc nvarchar(255) = (select Regimen_Descripcion from FOUR_SIZONS.Regimen where Regimen_Codigo=@regId)
+	select  @regdesc, @regId*@porcentual+@recarga,@cantidadNoches * @cantHab*(@regId*@porcentual+@recarga)
 	end
 
 	end
@@ -1908,16 +1909,16 @@ begin
 		begin
 			insert into FOUR_SIZONS.Item_Factura(Factura_Nro,item_descripcion,Item_Factura_Cant,Item_Factura_Monto)
 
-				values(@fact,'Estadia',(@cantDias-1), @monto)
+				values(@fact,'Estadia',(@cantDias), @monto)
 				----- EN CANTIDAD DE ESTADIA PONGO LA CANTIDAD DE NOCHES QUE SE QUEDA
 				---- EL -1 SE DEBE A QUE EL DIA EN EL QUE SE RETIRAN NO SE COBRA SUPONGO, YA QUE NO PASAN LA NOCHE EN EL HOTEL
 		end
 	else 
 		begin
 			insert into FOUR_SIZONS.Item_Factura(Factura_Nro,item_descripcion,Item_Factura_Cant,Item_Factura_Monto)
-				values(@fact,'Estadia',@cantDias, (@cantDias-1)*@precioXNoche)
+				values(@fact,'Estadia',@cantDias, (@cantDias)*@precioXNoche)
 			insert into FOUR_SIZONS.Item_Factura(Factura_Nro,item_descripcion,Item_Factura_Cant,Item_Factura_Monto)
-				values(@fact,'Recargo de estadia',(@difDates-1),( @difDates-1)*@precioXNoche)
+				values(@fact,'Recargo de estadia',(@difDates),( @difDates)*@precioXNoche)
 		end
 		declare @habi numeric(18),
 				@hotel numeric(18),
@@ -1972,10 +1973,11 @@ as begin tran
 		begin
 			insert into FOUR_SIZONS.EstadiaXConsumible(Estadia_Codigo,estXcons_cantidad,Consumible_Codigo)
 										values(@estadia,@cant,@consumibleId)
-	
-			insert into FOUR_SIZONS.Item_Factura(Factura_Nro , item_descripcion , Item_Factura_Cant , Item_Factura_Monto)
-								values(@factura,@consumible,@cant,@monto*@cant)
-
+			set identity_insert FOUR_SIZONS.Item_Factura on
+			declare @nItem numeric(18)= (select top 1 isnull(Item_Factura_NroItem,0)from FOUR_SIZONS.Item_Factura where Factura_Nro=@factura order by Item_Factura_NroItem desc)+1
+			insert into FOUR_SIZONS.Item_Factura(Factura_Nro , item_descripcion , Item_Factura_Cant , Item_Factura_Monto , Item_Factura_NroItem)
+								values(@factura,@consumible,@cant,@monto*@cant , @nItem)
+			set identity_insert FOUR_SIZONS.Item_Factura off
 		end 
 	else 
 		begin
@@ -2093,12 +2095,12 @@ if(not exists (select *  from four_sizons.Reserva r join FOUR_SIZONS.ReservaMod 
 		raiserror('No hay datos reservas canceladas',13,1)
 	end
 	begin
-		select top 5 h.Hotel_Codigo, COUNT(r.Reserva_Codigo)cant_Reservas_cans
+		select top 5 h.Hotel_Codigo, h.Hotel_Nombre  ,COUNT(r.Reserva_Codigo)cant_Reservas_cans
 		from four_sizons.Hotel h,four_sizons.Reserva r, four_sizons.ReservaMod m  
 		where h.Hotel_Codigo=r.Hotel_Codigo and
 			( (r.Reserva_Estado = 3 or r.Reserva_Estado = 4 or r.Reserva_Estado = 5)
 			and m.Reserva_Codigo=r.Reserva_Codigo  and m.ResMod_Fecha between @inicio and @fin)
-		group by h.Hotel_Codigo
+		group by h.Hotel_Codigo,h.Hotel_Nombre  
 		order by count(r.Reserva_Codigo)
 	end
 end 
@@ -2121,13 +2123,13 @@ if(not exists (select * from four_sizons.Factura where  (Factura_Fecha between @
 	end
 else 
 
-select top 5 h.Hotel_Codigo
+select top 5 h.Hotel_Codigo , h.Hotel_Nombre, sum(FOUR_SIZONS.calcConsumible(e.Estadia_Codigo,0))
 
 
 from FOUR_SIZONS.Hotel h, FOUR_SIZONS.Estadia e, FOUR_SIZONS.Factura f
 where h.Hotel_Codigo=e.Hotel_Codigo and f.Estadia_Codigo=e.Estadia_Codigo and f.Factura_Estado=1 and f.Factura_Fecha between @inicio and @fin
-group by h.Hotel_Codigo
-order by sum(FOUR_SIZONS.calcConsumible(e.Estadia_Codigo,0))
+group by h.Hotel_Codigo,h.Hotel_Nombre
+order by sum(FOUR_SIZONS.calcConsumible(e.Estadia_Codigo,0)) 
 end 
 go
 
@@ -2150,10 +2152,10 @@ if(not exists (select * from four_sizons.Hotel_Cerrado where  (Cerrado_FechaI be
 	end
 	else 
 	begin
-		select top 5 h.Hotel_Codigo
+		select top 5 h.Hotel_Codigo , h.Hotel_Nombre,count(c.Cerrado_codigo) as vecesCerrado
 		from FOUR_SIZONS.Hotel h , FOUR_SIZONS.Hotel_Cerrado c
 		where c.Hotel_Codigo = h.Hotel_Codigo and ((c.Cerrado_FechaI between @inicio and @fin) or (c.Cerrado_FechaF between @inicio and @fin))
-		group by h.Hotel_Codigo
+		group by h.Hotel_Codigo, h.Hotel_Nombre
 		order by count(c.Cerrado_codigo)
 	end
 end 
@@ -2177,7 +2179,7 @@ if(not exists (select * from four_sizons.Estadia e where (e.Estadia_FechaInicio 
 	end
 else
 
-select top 5 h.Habitacion_Numero, h.Hotel_Codigo 
+select top 5 h.Habitacion_Numero, h.Hotel_Codigo , sum(e.Estadia_CantNoches)
 from FOUR_SIZONS.Estadia e ,FOUR_SIZONS.Habitacion h,FOUR_SIZONS.EstadiaXHabitacion ExH
 where exh.Hotel_Codigo = h.Hotel_Codigo and ExH.Estadia_Codigo=e.Estadia_Codigo and ExH.Habitacion_numero = h.Habitacion_Numero and ((e.Estadia_FechaInicio between @inicio and @fin) or (e.Estadia_FechaFin between @inicio and @fin))
 group by h.Habitacion_Numero, h.Hotel_Codigo
