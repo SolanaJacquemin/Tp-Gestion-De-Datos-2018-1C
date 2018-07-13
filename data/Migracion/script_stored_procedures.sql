@@ -1276,31 +1276,32 @@ CREATE procedure four_sizons.ModificarReserva
 	as begin tran
 	begin try 
 	set @fechaCambio = convert(datetime,@fechaCambio,121)
-	declare @fechaAc datetime =convert(datetime,(select Reserva_Fecha_Inicio from four_sizons.Reserva where Reserva_Codigo=@codigoReserva),121)
-	declare @estadoActual numeric(1)=(select Reserva_Estado from four_sizons.Reserva where Reserva_Codigo=@codigoReserva)
-	declare @tipo numeric(18)=(select habitacion_tipo_codigo from four_sizons.Reserva where Reserva_Codigo=@codigoReserva)
-	declare @hotel numeric(18)=(select Hotel_Codigo from four_sizons.Reserva where Reserva_Codigo=@codigoReserva)
-	declare @CANTIDAD numeric(18)=(select Reserva_cant_hab from four_sizons.Reserva where Reserva_Codigo=@codigoReserva)
-	declare @ClieA numeric(18)=(select Cliente_Codigo from four_sizons.Reserva where Reserva_Codigo=@codigoReserva)
-	declare @fechaAcF datetime =convert(datetime,(select Reserva_Fecha_Fin from four_sizons.Reserva where Reserva_Codigo=@codigoReserva),121)
+	declare @fI datetime , @fF datetime , @canth numeric(18) , @tHab numeric (18), @hotel numeric(18),@ClieA numeric(18),@estadoActual numeric(1)
+
+	select @fi = @fechaInicio , @ff = Reserva_Fecha_Fin,@canth=Reserva_cant_hab , @tHab=habitacion_tipo_codigo,
+	@hotel= Hotel_Codigo ,@ClieA=Cliente_Codigo,@estadoActual=Reserva_Estado
+	from FOUR_SIZONS.Reserva
+	where Reserva_Codigo=@codigoReserva
+
+	declare @mod_numero decimal(18)
+	select @mod_numero = isnull(count(*),0)+1 from FOUR_SIZONS.ReservaMod where Reserva_Codigo = @codigoReserva
 if(@ClieA=@clie)
 begin
 if(@estadoActual !=6)
 	begin
 		if(@estadoActual=1 or @estadoActual=2)
 			begin
-				IF((select datediff(day,@fechaAc,@fechaCambio))>0)-- verifica que que la fecha de inicio de la reserva no alla pasado ya
+				IF((select datediff(day,@fi,@fechaCambio))>0)-- verifica que que la fecha de inicio de la reserva no alla pasado ya
 				begin
-					update FOUR_SIZONS.Reserva set Reserva_Estado=5 where Reserva_Codigo = @codigoReserva--SE CANCELA LA RESERVA POR NO-SHOW CUANDO ES TARDE
-					declare @aux3 datetime=@fechaAc,
-							@aux4 datetime
-					while(DATEDIFF(day,@aux3,@fechaAcF)>=0)
-						begin
-							set @aux4=@aux3
-							update FOUR_SIZONS.Disponibilidad set Disp_HabDisponibles= Disp_HabDisponibles+@CANTIDAD
-							where Habitacion_Tipo_Codigo=@tipo and Hotel_Codigo=@hotel 
-							set @aux3=dateadd(day,1,@aux4)
-						end
+					update FOUR_SIZONS.Reserva set Reserva_Estado=5 
+					where Reserva_Codigo = @codigoReserva--SE CANCELA LA RESERVA POR NO-SHOW CUANDO ES TARDE
+					update FOUR_SIZONS.Disponibilidad
+						set Disp_HabDisponibles = Disp_HabDisponibles + @canth
+						where Disp_Fecha between @fi and @ff and Hotel_Codigo = @hotel and Habitacion_Tipo_Codigo = @tHab
+
+					insert into FOUR_SIZONS.ReservaMod (ResMod_Codigo,Reserva_Codigo,Usuario_ID, ResMod_Detalle,ResMod_Fecha)
+									   values (@mod_numero,@codigoReserva,@userId,@detalle,convert(datetime,@fechaCambio,121))
+
 					commit tran 
 					begin tran
 					raiserror('La reserva fue cancelada por NO-SHOW',16,1)
@@ -1313,6 +1314,8 @@ if(@estadoActual !=6)
 				end
 				else
 				begin
+				
+				
 				IF(@estado=1 or @estado=2)
 					begin
 						declare @cantidadNoches numeric(2)
@@ -1327,13 +1330,12 @@ if(@estadoActual !=6)
 						set @cantidadNoches = DATEDIFF(day, @fechaInicio, @fechaFin)
 						set @precio = @cantidadNoches * @cantHab*(@preReg*@porcentual+@recarga)
 						
-						declare @mod_numero decimal(18)
-
-						select @mod_numero = count(*) from FOUR_SIZONS.ReservaMod where Reserva_Codigo = @codigoReserva
-						if(@canthab != (select reserva_cant_hab from four_sizons.reserva where reserva_codigo = @codigoReserva) or @tipohab != (select habitacion_tipo_codigo from four_sizons.reserva where reserva_codigo = @codigoReserva ))
+						
+						if(@canthab != @canth or @tipohab != @thab or @hotid!=@hotel)
 							begin
 								if(1= four_sizons.verificarDisp(@fechaInicio, @fechaFin,@hotId, @tipoHab,@cantHab))
 									begin
+										
 										update FOUR_SIZONS.Reserva
 										set Reserva_Fecha_Inicio= @fechaInicio,
 											Reserva_Fecha_Fin = @fechaFin,
@@ -1348,20 +1350,18 @@ if(@estadoActual !=6)
 										where Reserva_Codigo = @codigoReserva
 
 											--aca baja la disponibilidad
-										declare @aux datetime = convert(datetime,@fechaInicio,121 )
-										declare @aux1 datetime,
-												@aux2 datetime
-										set @aux2= DATEADD(day, 1, @fechaFin)
-										set @aux2 = convert(datetime,@aux1, 121)
-										while(datediff(day,@aux,@aux2)!=0)
-											begin
-												set @aux1= @aux
+										
 
 												update FOUR_SIZONS.Disponibilidad
 												set Disp_HabDisponibles = Disp_HabDisponibles - @cantHab
-												where datediff(day, Disp_Fecha, @aux) = 0 and Hotel_Codigo = @hotId and Habitacion_Tipo_Codigo = @tipohab
-												set @aux = DATEADD(day, 1, @aux1)
-											end
+												where Disp_Fecha between @fechaInicio and @fechaFin and Hotel_Codigo = @hotId and Habitacion_Tipo_Codigo = @tipohab
+
+											update FOUR_SIZONS.Disponibilidad
+												set Disp_HabDisponibles = Disp_HabDisponibles + @canth
+												where Disp_Fecha between @fi and @ff and Hotel_Codigo = @hotel and Habitacion_Tipo_Codigo = @tHab
+
+												insert into FOUR_SIZONS.ReservaMod (ResMod_Codigo,Reserva_Codigo,Usuario_ID, ResMod_Detalle,ResMod_Fecha)
+																				values (@mod_numero,@codigoReserva,@userId,@detalle,convert(datetime,@fechaCambio,121))
 									end
 
 								else RAISERROR('No hay lugar en este hotel para estas fechas, intente nuevamente.',16,1)
@@ -1393,20 +1393,13 @@ if(@estadoActual !=6)
 							set Reserva_Estado = @estado	
 							where Reserva_Codigo = @codigoReserva
 						--aca aumenta la disponibilidad
-						declare @a datetime = convert(datetime,@fechaInicio,121 )
-						declare @a2 datetime,
-								@a3 datetime
-						set @a3= DATEADD(day, 1, @fechaFin)
-						set @a3=convert(datetime,@a3, 121)
-						while(datediff(day,@a,@a3)!=0)
-							begin
-								set @a2= @a
+						update FOUR_SIZONS.Disponibilidad
+						set Disp_HabDisponibles = Disp_HabDisponibles + @canth
+						where Disp_Fecha between @fi and @ff and Hotel_Codigo = @hotel and Habitacion_Tipo_Codigo = @tHab
 
-								update FOUR_SIZONS.Disponibilidad
-								set Disp_HabDisponibles = Disp_HabDisponibles + @cantHab
-								where datediff(day, Disp_Fecha, @a) = 0 and Hotel_Codigo = @hotId and Habitacion_Tipo_Codigo = @tipohab
-								set @a = DATEADD(day, 1, @a2)
-							end
+						
+					insert into FOUR_SIZONS.ReservaMod (ResMod_Codigo,Reserva_Codigo,Usuario_ID, ResMod_Detalle,ResMod_Fecha)
+												values (@mod_numero,@codigoReserva,@userId,@detalle,convert(datetime,@fechaCambio,121))
 						
 					end
 				end
