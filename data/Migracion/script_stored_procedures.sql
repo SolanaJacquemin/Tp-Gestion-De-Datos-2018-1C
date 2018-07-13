@@ -1114,7 +1114,7 @@ begin catch
 end catch
 go
 
-alter procedure four_sizons.modificarHabitacion
+create procedure four_sizons.modificarHabitacion
 @numero numeric(18),
 @hotId numeric(18),
 @piso numeric(18),

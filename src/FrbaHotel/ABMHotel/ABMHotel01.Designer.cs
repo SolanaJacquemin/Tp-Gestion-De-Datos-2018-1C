@@ -32,7 +32,6 @@
             this.label8 = new System.Windows.Forms.Label();
             this.label9 = new System.Windows.Forms.Label();
             this.boton_modificacion = new System.Windows.Forms.Button();
-            this.boton_baja = new System.Windows.Forms.Button();
             this.boton_alta = new System.Windows.Forms.Button();
             this.groupBox1 = new System.Windows.Forms.GroupBox();
             this.btn_promptHotel = new System.Windows.Forms.Button();
@@ -106,23 +105,13 @@
             // 
             // boton_modificacion
             // 
-            this.boton_modificacion.Location = new System.Drawing.Point(569, 268);
+            this.boton_modificacion.Location = new System.Drawing.Point(569, 239);
             this.boton_modificacion.Name = "boton_modificacion";
             this.boton_modificacion.Size = new System.Drawing.Size(89, 23);
             this.boton_modificacion.TabIndex = 12;
             this.boton_modificacion.Text = "Modificación";
             this.boton_modificacion.UseVisualStyleBackColor = true;
             this.boton_modificacion.Click += new System.EventHandler(this.boton_modificacion_Click);
-            // 
-            // boton_baja
-            // 
-            this.boton_baja.Location = new System.Drawing.Point(569, 239);
-            this.boton_baja.Name = "boton_baja";
-            this.boton_baja.Size = new System.Drawing.Size(89, 23);
-            this.boton_baja.TabIndex = 11;
-            this.boton_baja.Text = "Baja";
-            this.boton_baja.UseVisualStyleBackColor = true;
-            this.boton_baja.Click += new System.EventHandler(this.boton_baja_Click);
             // 
             // boton_alta
             // 
@@ -442,7 +431,7 @@
             // 
             // btn_cerrar
             // 
-            this.btn_cerrar.Location = new System.Drawing.Point(569, 335);
+            this.btn_cerrar.Location = new System.Drawing.Point(569, 268);
             this.btn_cerrar.Name = "btn_cerrar";
             this.btn_cerrar.Size = new System.Drawing.Size(89, 23);
             this.btn_cerrar.TabIndex = 17;
@@ -471,7 +460,6 @@
             this.Controls.Add(this.label8);
             this.Controls.Add(this.label9);
             this.Controls.Add(this.boton_modificacion);
-            this.Controls.Add(this.boton_baja);
             this.Controls.Add(this.boton_alta);
             this.Controls.Add(this.groupBox1);
             this.Controls.Add(this.label1);
@@ -493,7 +481,6 @@
         private System.Windows.Forms.Label label8;
         private System.Windows.Forms.Label label9;
         private System.Windows.Forms.Button boton_modificacion;
-        private System.Windows.Forms.Button boton_baja;
         private System.Windows.Forms.Button boton_alta;
         private System.Windows.Forms.GroupBox groupBox1;
         private System.Windows.Forms.Button btn_promptHotel;

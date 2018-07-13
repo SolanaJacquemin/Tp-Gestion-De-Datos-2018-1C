@@ -24,7 +24,7 @@ namespace FrbaHotel.Prompts
 
             Conexion con = new Conexion();
             con.strQuery = "SELECT Hotel_Codigo, Hotel_Nombre " +
-                           "FROM FOUR_SIZONS.Hotel WHERE Hotel_Estado = 1 ORDER BY Hotel_Codigo";
+                           "FROM FOUR_SIZONS.Hotel ORDER BY Hotel_Codigo";
             con.executeQuery();
             if (!con.reader())
             {
