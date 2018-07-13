@@ -1203,7 +1203,7 @@ as begin
 
 	if(@regId=0)
 	begin
-		select r.Regimen_Descripcion,r.Regimen_Precio*@porcentual+@recarga,@cantidadNoches * @cantHab*(r.Regimen_Precio*@porcentual+@recarga)
+		select r.Regimen_Codigo,r.Regimen_Descripcion,r.Regimen_Precio*@porcentual+@recarga,@cantidadNoches * @cantHab*(r.Regimen_Precio*@porcentual+@recarga)
 		from FOUR_SIZONS.Regimen r, RegXHotel rh 
 		where r.Regimen_Codigo = rh.Regimen_Codigo and rh.Hotel_Codigo=@hotid
 		order by r.Regimen_Codigo
