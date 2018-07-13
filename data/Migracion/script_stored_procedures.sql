@@ -724,27 +724,11 @@ if (not exists (select Hotel_Codigo from FOUR_SIZONS.Hotel where Hotel_Nombre= @
 					Hotel_CantEstrella,Hotel_Recarga_Estrella, Hotel_Ciudad,Hotel_Pais,Hotel_FechaCreacion,Hotel_Estado)
 					values (@nombre,@mail,@telefono,@calle,@numCalle,@cantEstrellas,@recarga_estrella,@ciudad,@pais, convert(datetime,@fechaCreacion,121),1)
 
-		set @codigo = (select top 1 Hotel_Codigo from four_sizons.Hotel order by Hotel_Codigo desc)
+		
 
+		set @codigo = (select top 1 Hotel_Codigo from four_sizons.Hotel order by Hotel_Codigo desc)
 		insert into FOUR_SIZONS.UsuarioXHotel(Hotel_Codigo,Usuario_ID,UsuarioXHotel_Estado) values (@codigo,@usuario,1)
 
-		declare @tipohab numeric = 1001
-		while(@tipohab<1006)
-			begin 
-				declare @aux datetime = convert(datetime, '01-01-2017' ,121)
-
-				declare @aux2 datetime
-				declare @fin datetime= convert(datetime, '01-01-2021' ,121)
-				declare @hotel numeric(18)=(select top 1 Hotel_Codigo from Hotel order by Hotel_Codigo desc)
-				while (datediff(day,@aux,@fin)!=0)
-					begin
-						set @aux2= @aux 
-						insert into FOUR_SIZONS.Disponibilidad(Disp_Fecha,Disp_HabDisponibles,Habitacion_Tipo_Codigo,Hotel_Codigo)
-								values(@aux,0 ,@tipohab,@hotel)
-						set @aux = DATEADD(day, 1, @aux2)
-					end
-				set @tipohab = @tipohab+1
-			end
 	end
 else raiserror ('Ya existe un hotel con ese nombre en el sistema, por favor ingrese otro.',16,1)
 
@@ -757,7 +741,6 @@ begin catch
 	rollback tran 
 end catch
 go
-
 
 create procedure four_sizons.altaRegXHotel
 @regimen nvarchar(50),
@@ -1099,27 +1082,23 @@ if(1=(select Hotel_Estado from FOUR_SIZONS.Hotel where Hotel_Codigo=@HotelId))
 						Habitacion_Descripcion,Habitacion_Estado)
 						values (@numero,@HotelId,@piso,@frente,@TipoHabID,@descripcion,1)
 		
-				declare @aux datetime = convert(datetime, '01-01-2017' ,121)
-				declare @aux2 datetime
+				declare @aux datetime = convert(datetime, '01-01-2018' ,121)
+				
 				declare @fin datetime= convert(datetime, '01-01-2021' ,121)
 				if(exists (select * from FOUR_SIZONS.Disponibilidad where Hotel_Codigo=@HotelId and Habitacion_Tipo_Codigo=@TipoHabID))
 					begin
-						while (datediff(day,@fin,@aux)!=0)
-							begin
-								set @aux2= @aux 
+								 
 								update FOUR_SIZONS.Disponibilidad
 								set Disp_HabDisponibles= Disp_HabDisponibles+1
-								where @TipoHabID=Habitacion_Tipo_Codigo and datediff(day,Disp_Fecha,@aux)=0 and Hotel_Codigo =@HotelId
-								set @aux = DATEADD(day, 1, @aux2)
-							end
+								where @TipoHabID=Habitacion_Tipo_Codigo and (Disp_Fecha between @aux and @fin) and Hotel_Codigo =@HotelId
+							
 					end
 				else 
 					begin
-						while (datediff(day,@fin,@aux)!=0)
+						while (datediff(day,@aux,@fin)!=0)
 							begin
-								set @aux2= @aux 
 								insert into FOUR_SIZONS.Disponibilidad	(Disp_HabDisponibles,Habitacion_Tipo_Codigo,Disp_Fecha,Hotel_Codigo) values(1,@TipoHabID,@aux,@HotelId)
-								set @aux = DATEADD(day, 1, @aux2)
+								set @aux = DATEADD(day, 1, @aux)
 							end
 					end
 			end
