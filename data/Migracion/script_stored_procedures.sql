@@ -1280,7 +1280,7 @@ CREATE procedure four_sizons.ModificarReserva
 
 	select @fi = @fechaInicio , @ff = Reserva_Fecha_Fin,@canth=Reserva_cant_hab , @tHab=habitacion_tipo_codigo,
 	@hotel= Hotel_Codigo ,@ClieA=Cliente_Codigo,@estadoActual=Reserva_Estado
-	from FOUR_SIZONS.Reserva
+	from FOUR_SIZONS.Reserva 
 	where Reserva_Codigo=@codigoReserva
 
 	declare @mod_numero decimal(18)
