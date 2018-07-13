@@ -35,7 +35,6 @@
             this.boton_volver = new System.Windows.Forms.Button();
             this.label4 = new System.Windows.Forms.Label();
             this.label10 = new System.Windows.Forms.Label();
-            this.label9 = new System.Windows.Forms.Label();
             this.groupBox1 = new System.Windows.Forms.GroupBox();
             this.label8 = new System.Windows.Forms.Label();
             this.label14 = new System.Windows.Forms.Label();
@@ -63,7 +62,6 @@
             this.txt_regimen = new System.Windows.Forms.TextBox();
             this.label16 = new System.Windows.Forms.Label();
             this.txt_costoTotal = new System.Windows.Forms.TextBox();
-            this.txt_fechaCreacion = new System.Windows.Forms.TextBox();
             this.label18 = new System.Windows.Forms.Label();
             this.txt_hotel = new System.Windows.Forms.TextBox();
             this.btn_hotel = new System.Windows.Forms.Button();
@@ -82,6 +80,8 @@
             this.check_mail = new System.Windows.Forms.CheckBox();
             this.check_doc = new System.Windows.Forms.CheckBox();
             this.label23 = new System.Windows.Forms.Label();
+            this.label9 = new System.Windows.Forms.Label();
+            this.txt_fechaCreacion = new System.Windows.Forms.TextBox();
             this.groupBox1.SuspendLayout();
             this.groupBox2.SuspendLayout();
             this.SuspendLayout();
@@ -151,15 +151,6 @@
             this.label10.Size = new System.Drawing.Size(71, 13);
             this.label10.TabIndex = 18;
             this.label10.Text = "Fecha Desde";
-            // 
-            // label9
-            // 
-            this.label9.AutoSize = true;
-            this.label9.Location = new System.Drawing.Point(55, 58);
-            this.label9.Name = "label9";
-            this.label9.Size = new System.Drawing.Size(80, 13);
-            this.label9.TabIndex = 17;
-            this.label9.Text = "Fecha Reserva";
             // 
             // groupBox1
             // 
@@ -398,13 +389,6 @@
             this.txt_costoTotal.Size = new System.Drawing.Size(94, 20);
             this.txt_costoTotal.TabIndex = 5;
             // 
-            // txt_fechaCreacion
-            // 
-            this.txt_fechaCreacion.Location = new System.Drawing.Point(142, 55);
-            this.txt_fechaCreacion.Name = "txt_fechaCreacion";
-            this.txt_fechaCreacion.Size = new System.Drawing.Size(120, 20);
-            this.txt_fechaCreacion.TabIndex = 0;
-            // 
             // label18
             // 
             this.label18.AutoSize = true;
@@ -576,11 +560,27 @@
             this.label23.TabIndex = 28;
             this.label23.Text = "Elija un tipo de búsqueda";
             // 
+            // label9
+            // 
+            this.label9.AutoSize = true;
+            this.label9.Location = new System.Drawing.Point(55, 58);
+            this.label9.Name = "label9";
+            this.label9.Size = new System.Drawing.Size(80, 13);
+            this.label9.TabIndex = 17;
+            this.label9.Text = "Fecha Reserva";
+            // 
+            // txt_fechaCreacion
+            // 
+            this.txt_fechaCreacion.Location = new System.Drawing.Point(142, 55);
+            this.txt_fechaCreacion.Name = "txt_fechaCreacion";
+            this.txt_fechaCreacion.Size = new System.Drawing.Size(120, 20);
+            this.txt_fechaCreacion.TabIndex = 0;
+            // 
             // ABMReserva02
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(530, 689);
+            this.ClientSize = new System.Drawing.Size(530, 637);
             this.Controls.Add(this.groupBox2);
             this.Controls.Add(this.btn_disponibilidad);
             this.Controls.Add(this.btn_regimen);
@@ -627,7 +627,6 @@
         private System.Windows.Forms.Button boton_volver;
         private System.Windows.Forms.Label label4;
         private System.Windows.Forms.Label label10;
-        private System.Windows.Forms.Label label9;
         private System.Windows.Forms.GroupBox groupBox1;
         private System.Windows.Forms.Label labelTitulo;
         private System.Windows.Forms.DateTimePicker dt_fechaDesde;
@@ -637,7 +636,6 @@
         private System.Windows.Forms.TextBox txt_regimen;
         private System.Windows.Forms.Label label16;
         private System.Windows.Forms.TextBox txt_costoTotal;
-        private System.Windows.Forms.TextBox txt_fechaCreacion;
         private System.Windows.Forms.Label label18;
         private System.Windows.Forms.TextBox txt_hotel;
         private System.Windows.Forms.Button btn_hotel;
@@ -674,5 +672,7 @@
         private System.Windows.Forms.Label label23;
         private System.Windows.Forms.CheckBox check_mail;
         private System.Windows.Forms.CheckBox check_doc;
+        private System.Windows.Forms.Label label9;
+        private System.Windows.Forms.TextBox txt_fechaCreacion;
     }
 }

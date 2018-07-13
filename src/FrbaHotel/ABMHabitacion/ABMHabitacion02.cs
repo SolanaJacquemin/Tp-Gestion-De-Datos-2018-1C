@@ -55,11 +55,11 @@ namespace FrbaHotel.ABMHabitacion
                     labelTitulo.Text = "Modificación de Habitación";
                     txt_hotel.Text = hotel.ToString();
                     txt_nro_hab.Text = habitacion.ToString();
-                    txt_hotel.ReadOnly = true;
-                    txt_estado.ReadOnly = true;
-                    txt_nro_hab.ReadOnly = true;
-                    txt_piso.ReadOnly = true;
-                    cb_tipoFrente.Enabled = false;
+                    txt_hotel.Enabled = true;
+                    txt_estado.Enabled = true;
+                    txt_nro_hab.Enabled = true;
+                    txt_piso.Enabled = true;
+                    cb_tipoFrente.Enabled = true;
                     cb_tipohab.Enabled = false;
                     break;
             }
@@ -175,14 +175,14 @@ namespace FrbaHotel.ABMHabitacion
                     nombreSP = "FOUR_SIZONS.ModificarHabitacion";
                     break;
             }
-            ejecutarABMUsuario(nombreSP);
+            ejecutarABMHabitacion(nombreSP);
             if (error == 0)
             {
                 this.Close();
             }
         }
 
-        public void ejecutarABMUsuario(string nombreStored)
+        public void ejecutarABMHabitacion(string nombreStored)
         {
             if (MessageBox.Show("Está seguro que desea continuar con la operación?", "FOUR SIZONS - FRBA Hoteles", MessageBoxButtons.YesNo, MessageBoxIcon.Question) == DialogResult.Yes)
             {

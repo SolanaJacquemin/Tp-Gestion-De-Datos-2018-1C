@@ -85,9 +85,10 @@ namespace FrbaHotel.ABMCliente
                     break;
 
                 case "UPD":
+                    labelTitulo.Text = "Modificación de Cliente";
                     txt_estado.Visible = false;
                     lbl_estado.Visible = false;
-                    labelTitulo.Text = "Modificación de Cliente";
+                    txt_puntos.Enabled = false;
                     btn_aceptar_nuevo.Visible = false;
                     lbl_obligacion.Visible = false;
                     sacarAsteriscos();
@@ -225,12 +226,16 @@ namespace FrbaHotel.ABMCliente
                 if (modoABM != "INSCHECKIN")
                 {
                     ejecutarABMCliente(nombre_sp);
-                    this.Close();
                 }
                 else 
                 {
                     ejecutarABMClienteCheckIn();
                 }
+            }
+
+            if (error == 0)
+            {
+                this.Close();
             }
         }
 
@@ -278,8 +283,7 @@ namespace FrbaHotel.ABMCliente
                 con.command.ExecuteNonQuery();
                 con.closeConection();
 
-                MessageBox.Show("Operación exitosa", "FOUR SIZONS - FRBA Hoteles", MessageBoxButtons.OK, MessageBoxIcon.Information);
-                this.Close();
+                MessageBox.Show("Operación exitosa", "FOUR SIZONS - FRBA Hoteles", MessageBoxButtons.OK, MessageBoxIcon.Information);             
             }
             catch (Exception ex)
             {

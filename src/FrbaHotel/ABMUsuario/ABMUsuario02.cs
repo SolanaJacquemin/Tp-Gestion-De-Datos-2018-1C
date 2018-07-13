@@ -44,6 +44,7 @@ namespace FrbaHotel.ABMUsuario
                     txt_estado.Visible = false;
                     l_log.Visible = false;
                     txt_intentoslog.Visible = false;
+                    txt_hotel.Enabled = false;
                     cb_tipo_documento.DropDownStyle = ComboBoxStyle.DropDownList;
                     cb_rol.DropDownStyle = ComboBoxStyle.DropDownList;
                     break;
@@ -313,7 +314,10 @@ namespace FrbaHotel.ABMUsuario
                         cb_rol.Items.Add(con.lector.GetString(0));
                     }
                 }else{
-                    cb_rol.Items.Add(con.lector.GetString(0));
+                    if (con.lector.GetString(0) != "Guest")
+                    {
+                        cb_rol.Items.Add(con.lector.GetString(0));
+                    }
                 }
             }
             con.closeConection();

@@ -51,6 +51,7 @@ namespace FrbaHotel.ABMUsuario
             con.strQuery = "FOUR_SIZONS.altaUserXHot";
             con.execute();
             con.command.CommandType = CommandType.StoredProcedure;
+            string newS = "EXEC " + "four_sizons.altaUserXHot" + " " + hotel.ToString() + usuario;
             con.command.Parameters.Add("@hotId", SqlDbType.Decimal).Value = hotel;
             con.command.Parameters.Add("@usuario", SqlDbType.NVarChar).Value = usuario;
             if (modoABM == "DLT")
@@ -93,11 +94,11 @@ namespace FrbaHotel.ABMUsuario
                 btn_promptHotel.Enabled = false;
                 con.strQuery = "SELECT H.Hotel_Nombre FROM FOUR_SIZONS.Hotel H WHERE H.Hotel_Codigo = " + hotel;
                 con.executeQuery();
-                con.closeConection();
                 if (con.reader())
                 {
                     txt_hotel.Text = con.lector.GetString(0);
                 }
+                con.closeConection();
             }
 
             if (modoABM == "DLT")
@@ -108,11 +109,11 @@ namespace FrbaHotel.ABMUsuario
                                "JOIN FOUR_SIZONS.Hotel H ON H.Hotel_Codigo = UH.Hotel_Codigo " +
                                "WHERE UH.Usuario_ID = '" + usuario + "' AND H.Hotel_Codigo = " + hotel;
                 con.executeQuery();
-                con.closeConection();
                 if (con.reader())
                 {
                     txt_hotel.Text = con.lector.GetString(0);
                 }
+                con.closeConection();
             }
 
         }

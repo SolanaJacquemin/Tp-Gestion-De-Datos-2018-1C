@@ -77,7 +77,8 @@ namespace FrbaHotel.ABMHabitacion
                             " WHERE 1=1";
             if ((hotel != 0) && (!esAdminGral))
             {
-                con.strQuery = con.strQuery + " AND HO.Hotel_Codigo = " + txt_hotel.Text;
+                con.strQuery = con.strQuery + " AND HO.Hotel_Codigo = " + hotel;
+                btn_promptHotel.Enabled = false;
             }
             con.strQuery = con.strQuery + " ORDER BY Ho.Hotel_Codigo, Ha.Habitacion_Numero";
             con.executeQuery();

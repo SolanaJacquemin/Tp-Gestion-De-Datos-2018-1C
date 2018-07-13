@@ -51,7 +51,7 @@ namespace FrbaHotel.GestionReservas
             dt_fechaHasta.Format = DateTimePickerFormat.Custom;
             dt_fechaHasta.CustomFormat = "dd/MM/yyyy";
 
-            txt_fechaCreacion.Text = (DateTime.Today).ToShortDateString();
+            txt_fechaCreacion.Text = readConfig.Config.fechaSystem().ToString();
             txt_fechaCreacion.Enabled = false;
 
             txt_nombre.Enabled = false;
@@ -137,6 +137,16 @@ namespace FrbaHotel.GestionReservas
                 else
                 {
                     error = 0;
+                    if (txt_regimen.Text == "")
+                    {
+                        error = 1;
+                        MessageBox.Show("Por favor, elija un tipo de régimen de la grilla", "FOUR SIZONS - FRBA Hoteles", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                        abrirTipoRegimen();
+                        if (txt_regimen.Text != "") 
+                        {
+                            error = 0;
+                        }
+                    }
                     if (!esCliente)
                     {
                         if (verificarObligatorios() == false)
@@ -161,6 +171,7 @@ namespace FrbaHotel.GestionReservas
                             MessageBox.Show("Por favor, el número de calle debe ser un dato numérico", "FOUR SIZONS - FRBA Hoteles", MessageBoxButtons.OK, MessageBoxIcon.Information);
                         };
                     }
+
                     switch (modoABM)
                     {
                         case "INS":
@@ -379,11 +390,11 @@ namespace FrbaHotel.GestionReservas
             this.Show();
         }
 
-        private void btn_regimen_Click(object sender, EventArgs e)
+        private void abrirTipoRegimen() 
         {
             if (txt_hotel.Text != "")
             {
-                if (hotel == 0) 
+                if (hotel == 0)
                 {
                     hotel = hotelID;
                 }
@@ -400,7 +411,11 @@ namespace FrbaHotel.GestionReservas
                 this.Show();
             }
             else MessageBox.Show("Debe seleccionar un hotel primero para poder ofrecerle los regímenes", "FOUR SIZONS - FRBA Hoteles", MessageBoxButtons.OK, MessageBoxIcon.Information);
+        }
 
+        private void btn_regimen_Click(object sender, EventArgs e)
+        {
+            abrirTipoRegimen();
         }
 
         private void btn_aceptar_nuevo_Click(object sender, EventArgs e)

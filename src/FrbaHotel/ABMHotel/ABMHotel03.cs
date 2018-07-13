@@ -37,7 +37,7 @@ namespace FrbaHotel.ABMHotel
                 con.strQuery = "four_sizons.cerrarHotel";
                 con.execute();
                 con.command.CommandType = CommandType.StoredProcedure;
-
+                string newS = "EXEC " + "four_sizons.cerrarHotel" + " " + dt_fechaDesdeC.Value.ToString() + "," + dt_fechaHastaC.Value.ToString() + "," + txt_detalle.Text + "," + hotel.ToString();
                 con.command.Parameters.Add("@Cerrado_FechaI", SqlDbType.DateTime).Value = dt_fechaDesdeC.Value.ToString();
                 con.command.Parameters.Add("@Cerrado_FechaF", SqlDbType.DateTime).Value = dt_fechaHastaC.Value.ToString();
                 con.command.Parameters.Add("@Cerrado_Detalle", SqlDbType.NVarChar).Value = txt_detalle.Text;

@@ -25,8 +25,9 @@ namespace FrbaHotel.ABMHotel
         public bool regimenCreado=false;
         public bool hotelSinRegimenCreado=false;
         public bool crearRegimen;
+        public string usuario;
 
-        public ABMHotel02(string modo, decimal hotelId)
+        public ABMHotel02(string modo, decimal hotelId, string usuarioID)
         {
             InitializeComponent();
             this.StartPosition = FormStartPosition.CenterScreen;
@@ -37,6 +38,7 @@ namespace FrbaHotel.ABMHotel
             regimenCreado = false;
             hotel = hotelId;
             modoABM = modo;
+            usuario = usuarioID;
 
             cb_estrellas.DropDownStyle = ComboBoxStyle.DropDownList;
 
@@ -134,6 +136,7 @@ namespace FrbaHotel.ABMHotel
 
                 con.closeConection();
             }
+            txt_nombre_hotel.Clear();
         }
 
         private void txt_estado_TextChanged(object sender, EventArgs e)
@@ -196,6 +199,10 @@ namespace FrbaHotel.ABMHotel
                     con.command.Parameters.Add("@ciudad", SqlDbType.NVarChar).Value = txt_ciudad.Text;
                     con.command.Parameters.Add("@pais", SqlDbType.NVarChar).Value = txt_pais.Text;
                     con.command.Parameters.Add("@fechaCreacion", SqlDbType.DateTime).Value = readConfig.Config.fechaSystem().ToString();
+                    if (modoABM == "INS")
+                    {
+                        con.command.Parameters.Add("@usuario", SqlDbType.NVarChar).Value = usuario;
+                    }
                     if (modoABM == "DLT")
                     {
                         con.command.Parameters.Add("@estado", SqlDbType.Bit).Value = 0;

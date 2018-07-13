@@ -51,10 +51,10 @@ namespace FrbaHotel.ABMUsuario
             con.strQuery = "SELECT H.Hotel_Codigo, H.Hotel_Nombre FROM FOUR_SIZONS.UsuarioXHotel AS UH " +
                            "JOIN FOUR_SIZONS.Hotel AS H ON H.Hotel_Codigo = UH.Hotel_Codigo " +
                            "WHERE UH.UsuarioXHotel_Estado = 1 AND UH.Usuario_ID = '" + usuario + "'";
-                            if (hotel_id != 0)
+                            /*if (hotel_id != 0)
                             {
                                 con.strQuery = con.strQuery + " AND H.Hotel_Codigo = " + hotel_id;
-                            }
+                            }*/
             con.executeQuery();
             if (!con.reader())
             {

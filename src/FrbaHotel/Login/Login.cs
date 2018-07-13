@@ -98,7 +98,8 @@ namespace FrbaHotel
                     pantallaPrincipal.ShowDialog();
                     this.Show();
                     txt_usuario.Clear();
-                    txt_password.Clear();  
+                    txt_password.Clear();
+                    this.StartPosition = FormStartPosition.CenterScreen;
                 }
                 catch (Exception ex)
                 {

@@ -215,7 +215,7 @@ namespace FrbaHotel.ABMHotel
         {
             string modo = "INS";
             this.Hide();
-            ABMHotel02 formABMUsuario02 = new ABMHotel02(modo, hotel);
+            ABMHotel02 formABMUsuario02 = new ABMHotel02(modo, hotel, usuario);
             formABMUsuario02.ShowDialog();
             this.Show();
             this.buscar();
@@ -233,7 +233,7 @@ namespace FrbaHotel.ABMHotel
                 {
                 string modo = "DLT";
                 this.Hide();
-                ABMHotel02 formABMUsuario02 = new ABMHotel02(modo, Convert.ToDecimal(dgv_hotel_codigo));
+                ABMHotel02 formABMUsuario02 = new ABMHotel02(modo, Convert.ToDecimal(dgv_hotel_codigo), usuario);
                 formABMUsuario02.ShowDialog();
                 this.Show();
                 this.buscar();
@@ -256,7 +256,7 @@ namespace FrbaHotel.ABMHotel
                     {
                         string modo = "UPD";
                         this.Hide();
-                        ABMHotel02 formABMUsuario02 = new ABMHotel02(modo, Convert.ToDecimal(dgv_hotel_codigo));
+                        ABMHotel02 formABMUsuario02 = new ABMHotel02(modo, Convert.ToDecimal(dgv_hotel_codigo), usuario);
                         formABMUsuario02.ShowDialog();
                         this.Show();
                         this.buscar();
@@ -266,7 +266,7 @@ namespace FrbaHotel.ABMHotel
                 {
                     string modo = "UPD";
                     this.Hide();
-                    ABMHotel02 formABMUsuario02 = new ABMHotel02(modo, Convert.ToDecimal(dgv_hotel_codigo));
+                    ABMHotel02 formABMUsuario02 = new ABMHotel02(modo, Convert.ToDecimal(dgv_hotel_codigo), usuario);
                     formABMUsuario02.ShowDialog();
                     this.Show();
                     this.buscar();
