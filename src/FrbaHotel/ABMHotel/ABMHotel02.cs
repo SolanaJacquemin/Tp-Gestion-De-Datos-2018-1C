@@ -75,6 +75,7 @@ namespace FrbaHotel.ABMHotel
                     cb_estrellas.Enabled = true;
                     txt_estado.Visible = false;
                     l_estado.Visible = false;
+                    btn_regimen.Visible = false;
                     break;
             }
 

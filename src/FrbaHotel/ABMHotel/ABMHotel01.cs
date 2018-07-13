@@ -30,7 +30,7 @@ namespace FrbaHotel.ABMHotel
             esAdminGral = false;
 
             Conexion con = new Conexion();
-            con.strQuery = "select Rol_Codigo from FOUR_SIZONS.UsuarioXRol Where Usuario_ID = '" + usuario + "'";
+            con.strQuery = "select Rol_Codigo from FOUR_SIZONS.UsuarioXRol Where Rol_Codigo = 1 AND Usuario_ID = '" + usuario + "'";
             con.executeQuery();
             if (con.reader())
             {
@@ -50,6 +50,9 @@ namespace FrbaHotel.ABMHotel
             cb_estrellas.Items.Add("4");
             cb_estrellas.Items.Add("5");
             txt_codigo.Enabled = false;
+
+            iniciarGrilla();
+
         }
 
         public void iniciarGrilla()
@@ -70,6 +73,14 @@ namespace FrbaHotel.ABMHotel
                 return;
             }
 
+            if (!esAdminGral)
+            {
+                txt_codigo.Text = con.lector.GetString(1);
+                txt_codigo.Enabled = false;
+                btn_promptHotel.Enabled = false;
+                txt_codigo.Enabled = false;
+                dgv_Hoteles.ClearSelection();
+            }
             dgv_Hoteles.Rows.Add(new Object[] { con.lector.GetDecimal(0), con.lector.GetString(1),
             con.lector.GetString(2), con.lector.GetString(3), con.lector.GetString(4), con.lector.GetDecimal(5),
             con.lector.GetDecimal(6), con.lector.GetDecimal(7), con.lector.GetString(8), con.lector.GetString(9),
@@ -163,22 +174,41 @@ namespace FrbaHotel.ABMHotel
 
         private void ABMHotel_Load(object sender, EventArgs e)
         {
-            if (hotel != 0)
+            /*if (hotel != 0)
             {
                 Conexion con = new Conexion();
-                con.strQuery = "SELECT H.Hotel_Nombre FROM FOUR_SIZONS.Hotel H WHERE H.Hotel_Codigo = " + hotel;
+                con.strQuery = "SELECT * FROM FOUR_SIZONS.Hotel H WHERE H.Hotel_Codigo = " + hotel;
                 con.executeQuery();
 
                 if (con.reader())
                 {
-                    txt_codigo.Text = con.lector.GetString(0);
+                    txt_codigo.Text = con.lector.GetString(1);
+                    dgv_Hoteles.Rows.Add(new Object[] { con.lector.GetDecimal(0), con.lector.GetString(1),
+                    con.lector.GetString(2), con.lector.GetString(3), con.lector.GetString(4), con.lector.GetDecimal(5),
+                    con.lector.GetDecimal(6), con.lector.GetDecimal(7), con.lector.GetString(8), con.lector.GetString(9),
+                    con.lector.GetDateTime(10), con.lector.GetBoolean(11)});
                 }
-                txt_codigo.Enabled = false;
-                btn_promptHotel.Enabled = false;
-                txt_codigo.Enabled = false;
+                con.closeConection();
+
             }
-            dgv_Hoteles.ClearSelection();
-            limpiar();
+            else
+            {
+                Conexion con = new Conexion();
+                con.strQuery = "SELECT * FROM FOUR_SIZONS.Hotel H";
+                con.executeQuery();
+
+                if (con.reader())
+                {
+                    txt_codigo.Text = con.lector.GetString(1);
+                    dgv_Hoteles.Rows.Add(new Object[] { con.lector.GetDecimal(0), con.lector.GetString(1),
+                    con.lector.GetString(2), con.lector.GetString(3), con.lector.GetString(4), con.lector.GetDecimal(5),
+                    con.lector.GetDecimal(6), con.lector.GetDecimal(7), con.lector.GetString(8), con.lector.GetString(9),
+                    con.lector.GetDateTime(10), con.lector.GetBoolean(11)});
+                }
+                con.closeConection();
+            }*/
+
+            //limpiar();
         }
 
         private void btn_buscar_Click(object sender, EventArgs e)
