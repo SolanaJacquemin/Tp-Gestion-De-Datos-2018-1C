@@ -784,7 +784,7 @@ begin try
 	declare @regID numeric(18)	
 	
 	set @regID = (select Regimen_Codigo from FOUR_SIZONS.regimen where Regimen_Descripcion = @reg)
-	set @fechaMod = convert(datetime,@fechaMod,121)
+	set @fechaMod = convert(datetime,@fechaMod,103)
 	
 	
 	if exists(select * from FOUR_SIZONS.RegXHotel where Hotel_Codigo=@hotel and Regimen_Codigo=@regID)
@@ -800,7 +800,7 @@ begin try
 					if(exists(select Reserva_Codigo from Reserva 
 								where Hotel_Codigo=@hotel and Regimen_Codigo=@regID and @fechaMod between Reserva_Fecha_Inicio and Reserva_Fecha_Fin)--Que no hayan estadias
 								or exists(select Reserva_Codigo from Reserva 
-								where Hotel_Codigo=@hotel and Regimen_Codigo=@regID and Reserva_Estado=1 or Reserva_Estado=1))--que no hayan reservas activas
+								where Hotel_Codigo=@hotel and Regimen_Codigo=@regID and (Reserva_Estado=1 or Reserva_Estado=2)))--que no hayan reservas activas
 						begin
 							raiserror ('No se puede realizar la mod ya que hay reservas con este regimen',16,1)
 						end
@@ -1893,7 +1893,7 @@ declare @cantDias numeric(18),
 		@monto numeric(18,2),
 		@estadoActual bit,
 		@regimen numeric(18)
-		set @fecha = CONVERT(datetime,@fecha,121) 
+		set @fecha = CONVERT(datetime,@fecha,103) 
 
 	set @cantDias = DATEDIFF(day,( select Estadia_FechaInicio from FOUR_SIZONS.Estadia where Estadia_Codigo = @Estadia ),@fecha);
 	set @Reserva = (select Reserva_Codigo from FOUR_SIZONS.Estadia where Estadia_Codigo = @Estadia);
@@ -1901,17 +1901,23 @@ declare @cantDias numeric(18),
 	set @finR = CONVERT(datetime,(select Reserva_Fecha_Fin from FOUR_SIZONS.Reserva where Reserva_Codigo = @Reserva),121) 
 	set @difDates = DATEDIFF(day,@fecha,@finR);
 	set @precioXNoche = (select Estadia_PreXNoche from FOUR_SIZONS.Estadia where Estadia_Codigo = @Estadia);
+	
+	declare @inicio datetime = (select Reserva_Fecha_Inicio from FOUR_SIZONS.Reserva where Reserva_Codigo = @Reserva)
+
+
+
 if(@estadoActual!=0)
 begin
-
-	UPDATE FOUR_SIZONS.Estadia
-	set 
-		Usuario_OUT = @usuario,
-		Estadia_FechaFin = @fecha,
-		Estadia_DiasRest = @difDates,
-		Estadia_CantNoches =  @cantDias,
-		Estadia_Estado=0
-		where Estadia_Codigo = @Estadia;
+	if (@fecha between @inicio and @finR)
+	begin
+		UPDATE FOUR_SIZONS.Estadia
+		set 
+				Usuario_OUT = @usuario,
+				Estadia_FechaFin = @fecha,
+				Estadia_DiasRest = @difDates,
+				Estadia_CantNoches =  @cantDias,
+				Estadia_Estado=0
+				where Estadia_Codigo = @Estadia;
 
 	set @monto = (select Reserva_Precio from FOUR_SIZONS.Reserva where Reserva_Codigo =@Reserva)
 	set @fact = (select Factura_Nro from FOUR_SIZONS.Factura where Estadia_Codigo = @Estadia)
@@ -1950,7 +1956,13 @@ begin
 			set @habi=@habi-1
 		end
 end
+
+else raiserror('la fecha de egreso es posterior a la fecha fin de la estadia',16,1)
+
+end
 else raiserror('ya se ha realizado el checkout de esta estadia anteriormente',16,1)
+
+
 
 commit tran 
 end try
