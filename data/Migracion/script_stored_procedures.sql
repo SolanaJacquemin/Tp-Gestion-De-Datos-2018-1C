@@ -1100,12 +1100,9 @@ if(1=(select Hotel_Estado from FOUR_SIZONS.Hotel where Hotel_Codigo=@HotelId))
 				declare @aux datetime = convert(datetime, '01-01-2017' ,121)
 				declare @aux2 datetime
 				declare @fin datetime= convert(datetime, '01-01-2021' ,121)
-				select @aux , @fin
-
-
 				if(exists (select * from FOUR_SIZONS.Disponibilidad where Hotel_Codigo=@HotelId and Habitacion_Tipo_Codigo=@TipoHabID))
 					begin
-						while (datediff(day,@fin,@aux)=0)
+						while (datediff(day,@fin,@aux)!=0)
 							begin
 								set @aux2= @aux 
 								update FOUR_SIZONS.Disponibilidad
@@ -1116,7 +1113,7 @@ if(1=(select Hotel_Estado from FOUR_SIZONS.Hotel where Hotel_Codigo=@HotelId))
 					end
 				else 
 					begin
-						while (datediff(day,@fin,@aux)=0)
+						while (datediff(day,@fin,@aux)!=0)
 							begin
 								set @aux2= @aux 
 								insert into FOUR_SIZONS.Disponibilidad	(Disp_HabDisponibles,Habitacion_Tipo_Codigo,Disp_Fecha,Hotel_Codigo) values(1,@TipoHabID,@aux,@HotelId)
@@ -1126,10 +1123,10 @@ if(1=(select Hotel_Estado from FOUR_SIZONS.Hotel where Hotel_Codigo=@HotelId))
 			end
 		else 
 			begin
-				RAISERROR('El número de habitacion ya figura en ese hotel, ingrese otro por favor.',16,1)
+				RAISERROR('el numero de habitacion ya figura en ese hotel, ingrese otro por favor',16,1)
 			end
 	end
-else RAISERROR('No se puede agregar una habitación a un hotel cerrado.',16,1)
+else RAISERROR('No se puede agregar una habitacion a un hotel cerrado',16,1)
 commit tran 
 end try
 begin catch
@@ -1266,10 +1263,10 @@ if(not exists(select Cerrado_codigo from FOUR_SIZONS.Hotel_Cerrado where Hotel_C
 					end
 			end
 
-		else raiserror ('el cliente esta deshabilitado, no puede hospedarse en los hoteles',16,1)
+		else raiserror ('El cliente esta deshabilitado, no puede hospedarse en los hoteles',16,1)
 		
 	end
-else raiserror ('el hotel se encuentra cerrado para esas fechas',16,1)
+else raiserror ('El hotel se encuentra cerrado para esas fechas',16,1)
 
 commit tran 
 end try
@@ -1723,9 +1720,22 @@ as
 begin
 begin tran ta
 begin try
+
 if(not exists (select Estadia_Codigo from FOUR_SIZONS.EstadiaXCliente where Estadia_Codigo=@estadia and Cliente_Codigo=@cliente))
-	insert into FOUR_SIZONS.EstadiaXCliente(Cliente_Codigo,Estadia_Codigo) values(@cliente,@estadia)
-else raiserror('Ya se encuentra registrado este cliente para esta estadía.',16,1)
+begin
+	if((select Cliente_Estado from FOUR_SIZONS.Cliente where Cliente_Codigo=@cliente) = 0)
+	begin
+		raiserror ('El cliente está deshabilitado. No puede hospedarse en los hoteles',16,1)
+	end
+	else
+	begin
+		insert into FOUR_SIZONS.EstadiaXCliente(Cliente_Codigo,Estadia_Codigo) values(@cliente,@estadia)
+	end
+end
+else 
+begin
+	raiserror('Ya se encuentra registrado este cliente para esta estadía.',16,1)
+end
 commit tran
 end try
 begin catch
