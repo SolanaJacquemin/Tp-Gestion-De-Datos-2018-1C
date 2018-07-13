@@ -910,6 +910,13 @@ create procedure FOUR_SIZONS.ModificacionRol
 						update FOUR_SIZONS.Rol
 						set Rol_Nombre= @rolname,Rol_Estado= @estado
 						where Rol_Codigo=@codigo
+
+						if (exists(select Rol_Codigo from FOUR_SIZONS.UsuarioXRol where Rol_Codigo!=@codigo))
+						begin
+							update FOUR_SIZONS.UsuarioXRol
+							set UsuarioXRol_Estado= @estado
+							where Rol_Codigo=@codigo
+						end
 					end
 					else
 					begin
@@ -1183,15 +1190,15 @@ as begin
 
 	if(@regId=0)
 	begin
-	select Regimen_Descripcion,Regimen_Precio*@porcentual+@recarga,@cantidadNoches * @cantHab*(Regimen_Precio*@porcentual+@recarga)
-	from FOUR_SIZONS.Regimen r, RegXHotel rh 
-	where r.Regimen_Codigo = rh.Regimen_Codigo and rh.Hotel_Codigo=@hotid
-	order by r.Regimen_Codigo
+		select Regimen_Descripcion,Regimen_Precio*@porcentual+@recarga,@cantidadNoches * @cantHab*(Regimen_Precio*@porcentual+@recarga)
+		from FOUR_SIZONS.Regimen r, RegXHotel rh 
+		where r.Regimen_Codigo = rh.Regimen_Codigo and rh.Hotel_Codigo=@hotid
+		order by r.Regimen_Codigo
 	end
 	else
 	begin
-	declare @regdesc nvarchar(255) = (select Regimen_Descripcion from FOUR_SIZONS.Regimen where Regimen_Codigo=@regId)
-	select  @regdesc, @regId*@porcentual+@recarga,@cantidadNoches * @cantHab*(@regId*@porcentual+@recarga)
+		declare @regdesc nvarchar(255) = (select Regimen_Descripcion from FOUR_SIZONS.Regimen where Regimen_Codigo=@regId)
+		select  @regdesc, @regId*@porcentual+@recarga,@cantidadNoches * @cantHab*(@regId*@porcentual+@recarga)
 	end
 
 	end
