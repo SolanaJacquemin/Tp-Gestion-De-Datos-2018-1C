@@ -30,6 +30,7 @@ namespace FrbaHotel.GestionReservas
         public string busqueda;
         public decimal hotel;
         public bool abm_valido;
+        public string mensaje;
 
         public ABMReserva02(string modo, string user, decimal hotelID)
         {
@@ -441,7 +442,7 @@ namespace FrbaHotel.GestionReservas
         private void btn_disponibilidad_Click(object sender, EventArgs e)
         {
             error = 0;
-            verificarCampos1();
+            //verificarCampos1();
             if(error == 0)
             {
                 try
@@ -462,6 +463,21 @@ namespace FrbaHotel.GestionReservas
                     con.openConection();
                     con.command.ExecuteNonQuery();
                     con.closeConection();
+
+                    /*con.openConection();
+                    DataSet dataset = new DataSet();
+                    SqlDataAdapter da = new SqlDataAdapter(con.command);
+
+                    da.Fill(dataset);
+
+                    for (int i = 0; i < dataset.Tables[0].Rows.Count; i++)
+                    {
+                        mensaje = mensaje + (dataset.Tables[0].Rows[i][0]).ToString() + " ";
+                    }
+
+                    txt_costoTotal.Text = con.command.Parameters["@precio"].Value.ToString();
+
+                    con.closeConection();*/
 
                     txt_costoTotal.Text = con.command.Parameters["@precio"].Value.ToString();
                     MessageBox.Show("Existe disponbilidad y el precio es de: U$S " + txt_costoTotal.Text, "FOUR SIZONS - FRBA Hoteles", MessageBoxButtons.OK, MessageBoxIcon.Information);

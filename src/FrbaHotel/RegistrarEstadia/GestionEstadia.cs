@@ -16,7 +16,7 @@ namespace FrbaHotel.RegistrarEstadia
         public decimal dgv_CodReserva;
         public int index;
         public decimal reserva;
-        public string user;
+        public string usuario;
         public decimal hotel;
 
         public GestionEstadias(decimal hotelID, string userID)
@@ -26,7 +26,7 @@ namespace FrbaHotel.RegistrarEstadia
 
             dgv_Reserva.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
             dgv_Reserva.Rows.Clear();
-            user = userID;
+            usuario = userID;
 
             levantarDatos();
             refrescarGrid();
@@ -61,9 +61,10 @@ namespace FrbaHotel.RegistrarEstadia
             dgv_Reserva.Rows.Clear();
 
             Conexion con = new Conexion();
-            con.strQuery = "SELECT TOP 100 Reserva_Codigo, Reserva_FechaCreacion, Reserva_Fecha_Inicio, Reserva_Fecha_Fin, Reserva_Cant_Noches," +
-                "Reserva_Precio, Usuario_ID, Hotel_Codigo, Cliente_Codigo, Regimen_Codigo, Reserva_Estado FROM FOUR_SIZONS.Reserva " +
-                            " WHERE 1=1";
+            con.strQuery = "SELECT TOP 100 R.Reserva_Codigo, R.Reserva_FechaCreacion, R.Reserva_Fecha_Inicio, R.Reserva_Fecha_Fin, R.Reserva_Cant_Noches," +
+                           " R.Reserva_Precio, R.Usuario_ID, R.Hotel_Codigo, R.Cliente_Codigo, R.Regimen_Codigo, R.Reserva_Estado" +
+                           " FROM FOUR_SIZONS.Reserva R JOIN FOUR_SIZONS.UsuarioXHotel UH ON UH.Hotel_Codigo = R.Hotel_Codigo" +
+                           " WHERE UH.Usuario_ID = '" + usuario + "'";
 
             if (txt_CodReserva.Text != "")
                 con.strQuery = con.strQuery + " AND Reserva_Codigo = " + txt_CodReserva.Text;
@@ -111,9 +112,10 @@ namespace FrbaHotel.RegistrarEstadia
             txt_CodReserva.Text = "";
 
             Conexion con = new Conexion();
-            con.strQuery = "SELECT TOP 100 Reserva_Codigo, Reserva_FechaCreacion, Reserva_Fecha_Inicio, Reserva_Fecha_Fin, Reserva_Cant_Noches," +
-                "Reserva_Precio, Usuario_ID, Hotel_Codigo, Cliente_Codigo, Regimen_Codigo, Reserva_Estado FROM FOUR_SIZONS.Reserva " +
-                            " WHERE 1=1";
+            con.strQuery = "SELECT TOP 100 R.Reserva_Codigo, R.Reserva_FechaCreacion, R.Reserva_Fecha_Inicio, R.Reserva_Fecha_Fin, R.Reserva_Cant_Noches," +
+                           " R.Reserva_Precio, R.Usuario_ID, R.Hotel_Codigo, R.Cliente_Codigo, R.Regimen_Codigo, R.Reserva_Estado" +
+                           " FROM FOUR_SIZONS.Reserva R JOIN FOUR_SIZONS.UsuarioXHotel UH ON UH.Hotel_Codigo = R.Hotel_Codigo" +
+                           " WHERE UH.Usuario_ID = '" + usuario + "'";
 
             con.executeQuery();
 
@@ -159,7 +161,7 @@ namespace FrbaHotel.RegistrarEstadia
             {
                 string modo = "IN";
                 this.Hide();
-                RegistrarEstadia formRegistrarEstadia = new RegistrarEstadia(modo, dgv_CodReserva, user);
+                RegistrarEstadia formRegistrarEstadia = new RegistrarEstadia(modo, dgv_CodReserva, usuario);
                 formRegistrarEstadia.ShowDialog();
                 this.Show();
                 //  this.buscar();
@@ -176,7 +178,7 @@ namespace FrbaHotel.RegistrarEstadia
             {
                 string modo = "OUT";
                 this.Hide();
-                RegistrarEstadia formRegistrarEstadia = new RegistrarEstadia(modo, dgv_CodReserva, user);
+                RegistrarEstadia formRegistrarEstadia = new RegistrarEstadia(modo, dgv_CodReserva, usuario);
                 formRegistrarEstadia.ShowDialog();
                 this.Show();
                 // this.buscar();
