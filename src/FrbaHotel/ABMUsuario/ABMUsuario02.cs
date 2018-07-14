@@ -67,6 +67,7 @@ namespace FrbaHotel.ABMUsuario
                     txt_hotel.Visible = false;
                     btn_promptHotel.Visible = false;
                     lbl_obligacion.Visible = false;
+                    txt_estado.Enabled = false;
                     
                     break;
                 case "UPD":

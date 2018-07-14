@@ -430,6 +430,10 @@ namespace FrbaHotel.GestionReservas
         private void btn_disponibilidad_Click(object sender, EventArgs e)
         {
             error = 0;
+            if (hotel == 0)
+            {
+                hotel = hotelID;
+            }
             verificarCampos1();
             if(error == 0)
             {

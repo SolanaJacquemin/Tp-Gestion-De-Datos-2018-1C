@@ -135,7 +135,7 @@ namespace FrbaHotel.AbmCliente
                 con.lector.GetBoolean(14)});
             }
 
-            dgv_Clientes.ClearSelection();
+          /*  dgv_Clientes.ClearSelection();
             foreach (DataGridViewRow row in dgv_Clientes.Rows)
                 if (Convert.ToBoolean(row.Cells[13].Value) == false)
                 {
@@ -143,7 +143,7 @@ namespace FrbaHotel.AbmCliente
                 }
             con.closeConection();
             //dgv_Clientes.Rows.Clear();
-            //refrescarGrid();
+            //refrescarGrid();*/
         } 
           
         private void btn_volver_Click(object sender, EventArgs e)
@@ -206,7 +206,7 @@ namespace FrbaHotel.AbmCliente
         {
             if (dgv_Clientes.SelectedRows.Count > 0)
             {
-                if (estado == false)
+                if (!estado)
                 {
                     if (MessageBox.Show("El cliente se encuentra inhabilitado, desea darle de alta?", "FOUR SIZONS - FRBA Hoteles", MessageBoxButtons.YesNo, MessageBoxIcon.Question) == DialogResult.Yes)
                     {

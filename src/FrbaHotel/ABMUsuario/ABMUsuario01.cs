@@ -35,6 +35,7 @@ namespace FrbaHotel.ABMUsuario
             dgv_Usuarios.Rows.Clear();
 
             iniciarGrilla();
+            refrescarGrid();
 
             Conexion con = new Conexion();
 
@@ -117,7 +118,7 @@ namespace FrbaHotel.ABMUsuario
             ABMUsuario02 formABMUsuario02 = new ABMUsuario02(modo, usuario, hotel_id);
             formABMUsuario02.ShowDialog();
             this.Show();
-            this.buscar();
+            limpiar();
             this.refrescarGrid();
         }
 
@@ -135,7 +136,7 @@ namespace FrbaHotel.ABMUsuario
                     ABMUsuario03 formABMUsuario03 = new ABMUsuario03(dgv_usuario_ID, hotel_id);
                     formABMUsuario03.ShowDialog();
                     this.Show();
-                    this.buscar();
+                    limpiar();
                     this.refrescarGrid();
                 }
                 else
@@ -160,7 +161,7 @@ namespace FrbaHotel.ABMUsuario
                     ABMUsuario02 formABMUsuario02 = new ABMUsuario02(modo, dgv_usuario_ID, hotel_id);
                     formABMUsuario02.ShowDialog();
                     this.Show();
-                    this.buscar();
+                    limpiar();
                     this.refrescarGrid();
                 }
                 else
@@ -174,13 +175,31 @@ namespace FrbaHotel.ABMUsuario
         {
             if (dgv_Usuarios.SelectedRows.Count > 0)
             {
-                string modo = "UPD";
-                this.Hide();
-                ABMUsuario02 formABMUsuario02 = new ABMUsuario02(modo, dgv_usuario_ID, hotel_id);
-                formABMUsuario02.ShowDialog();
-                this.Show();
-                this.buscar();
-                this.refrescarGrid();
+                if (dgv_usuario_Estado=="False")
+                {
+                    if (MessageBox.Show("El usuario se encuentra inhabilitado, desea darle de alta?", "FOUR SIZONS - FRBA Hoteles", MessageBoxButtons.YesNo, MessageBoxIcon.Question) == DialogResult.Yes)
+                    {
+                        string modo = "UPD";
+                        this.Hide();
+                        ABMUsuario02 formABMUsuario02 = new ABMUsuario02(modo, dgv_usuario_ID, hotel_id);
+                        formABMUsuario02.ShowDialog();
+                        this.Show();
+                        limpiar();
+                        iniciarGrilla();
+                        this.refrescarGrid();
+                    }
+                }
+                else
+                {
+                    string modo = "UPD";
+                    this.Hide();
+                    ABMUsuario02 formABMUsuario02 = new ABMUsuario02(modo, dgv_usuario_ID, hotel_id);
+                    formABMUsuario02.ShowDialog();
+                    this.Show();
+                    limpiar();
+                    iniciarGrilla();
+                    this.refrescarGrid();
+                }
             }
             else
             {
@@ -190,15 +209,7 @@ namespace FrbaHotel.ABMUsuario
 
         private void btn_limpiar_Click(object sender, EventArgs e)
         {
-            txt_Id.Text = "";
-            txt_nombre.Text = "";
-            txt_apellido.Text = "";
-            cb_tipodoc.Text = "";
-            txt_nrodoc.Text = "";
-            txt_mail.Text = "";
-            dgv_Usuarios.Rows.Clear();
-            dgv_Usuarios.ClearSelection();
-            iniciarGrilla();
+            limpiar();
         }
 
         private void buscar()
@@ -317,11 +328,13 @@ namespace FrbaHotel.ABMUsuario
             cb_tipodoc.Text = "";
             txt_nrodoc.Text = "";
             txt_mail.Text = "";
+            dgv_Usuarios.Rows.Clear();
+            iniciarGrilla();
+            refrescarGrid();
         }
 
         private void ABMUsuario01_Load(object sender, EventArgs e)
         {
-            limpiar();
             refrescarGrid();
         }
 

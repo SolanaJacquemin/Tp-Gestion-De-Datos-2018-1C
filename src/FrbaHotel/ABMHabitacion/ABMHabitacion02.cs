@@ -34,7 +34,7 @@ namespace FrbaHotel.ABMHabitacion
             cb_tipoFrente.DropDownStyle = ComboBoxStyle.DropDownList;
 
             levantarCombos();
-
+            txt_hotel.Enabled = false;
             switch (modoABM)
             {
                 case "INS":
@@ -48,13 +48,14 @@ namespace FrbaHotel.ABMHabitacion
                     labelTitulo.Text = "Baja de Habitación";
                     txt_hotel.Text = hotel.ToString();
                     txt_nro_hab.Text = habitacion.ToString();
-                    txt_hotel.ReadOnly = true;
-                    txt_estado.ReadOnly = true;
-                    txt_nro_hab.ReadOnly = true;
-                    txt_piso.ReadOnly = true;
+                    txt_hotel.Enabled = false;
+                    txt_estado.Enabled = false;
+                    txt_nro_hab.Enabled = false;
+                    txt_piso.Enabled = false;
                     cb_tipoFrente.Enabled = false;
                     cb_tipohab.Enabled = false;
-                    txt_descripcion.ReadOnly = true;
+                    txt_descripcion.Enabled= true;
+                    lbl_obligacion.Visible = false;
                     break;
                 case "UPD":
                     labelTitulo.Text = "Modificación de Habitación";
@@ -154,6 +155,21 @@ namespace FrbaHotel.ABMHabitacion
 
         }
 
+
+        bool IsNumber(string s)
+        {
+            if (s != "")
+            {
+                foreach (char c in s)
+                {
+                    if (!Char.IsDigit(c))
+                        return false;
+                }
+                return true;
+            }
+            else return false;
+        }
+
         private void boton_aceptar_Click(object sender, EventArgs e)
         {
             error = 0;
@@ -162,10 +178,18 @@ namespace FrbaHotel.ABMHabitacion
             {
                 case "INS":
                     verificarObligatorios();
+                    if ((!IsNumber(txt_nro_hab.Text) && txt_nro_hab.Text != "")||(!IsNumber(txt_piso.Text)&&txt_piso.Text!=""))
+                    {
+                        MessageBox.Show("Por favor, tanto el piso como el número de habitación deben ser un datos numéricos.", "FOUR SIZONS - FRBA Hoteles", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                    }
                     nombreSP = "FOUR_SIZONS.AltaHabitacion";
                     break;
 
                 case "UPD":
+                    if ((!IsNumber(txt_nro_hab.Text) && txt_nro_hab.Text != "") || (!IsNumber(txt_piso.Text) && txt_piso.Text != ""))
+                    {
+                        MessageBox.Show("Por favor, tanto el piso como el número de habitación deben ser un datos numéricos.", "FOUR SIZONS - FRBA Hoteles", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                    }
                     nombreSP = "FOUR_SIZONS.ModificarHabitacion";
                     break;
 
@@ -185,7 +209,12 @@ namespace FrbaHotel.ABMHabitacion
 
         public bool verificarObligatorios()
         {
-
+            if (txt_hotel.Text == "") valido = false;
+            if (cb_tipohab.Text == "") valido = false;
+            if (txt_nro_hab.Text == "") valido = false;
+            if (txt_piso.Text == "") valido = false;
+            if (cb_tipoFrente.Text == "") valido = false;
+            if (txt_descripcion.Text == "") valido = false;
 
             return valido;
         }
