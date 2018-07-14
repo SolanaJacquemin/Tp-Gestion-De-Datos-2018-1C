@@ -211,7 +211,7 @@
             // label20
             // 
             this.label20.AutoSize = true;
-            this.label20.Location = new System.Drawing.Point(294, 130);
+            this.label20.Location = new System.Drawing.Point(163, 97);
             this.label20.Name = "label20";
             this.label20.Size = new System.Drawing.Size(53, 13);
             this.label20.TabIndex = 26;
@@ -280,7 +280,7 @@
             // 
             this.txt_depto.Location = new System.Drawing.Point(196, 161);
             this.txt_depto.Name = "txt_depto";
-            this.txt_depto.Size = new System.Drawing.Size(71, 20);
+            this.txt_depto.Size = new System.Drawing.Size(94, 20);
             this.txt_depto.TabIndex = 20;
             // 
             // txt_piso
@@ -292,9 +292,9 @@
             // 
             // txt_nroCalle
             // 
-            this.txt_nroCalle.Location = new System.Drawing.Point(371, 127);
+            this.txt_nroCalle.Location = new System.Drawing.Point(217, 94);
             this.txt_nroCalle.Name = "txt_nroCalle";
-            this.txt_nroCalle.Size = new System.Drawing.Size(50, 20);
+            this.txt_nroCalle.Size = new System.Drawing.Size(73, 20);
             this.txt_nroCalle.TabIndex = 18;
             // 
             // txt_calle

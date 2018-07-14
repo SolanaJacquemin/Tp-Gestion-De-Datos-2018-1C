@@ -329,6 +329,7 @@ namespace FrbaHotel.RegistrarEstadia
             {
                 if (modoCheck == "IN")
                 {
+                    if (facturaGenerada == true && generarFactura == true) MessageBox.Show("La factura ya se encuentra generada.", "FOUR SIZONS - FRBA Hoteles", MessageBoxButtons.OK, MessageBoxIcon.Information);
                     if (facturaGenerada == false && generarFactura == true)
                     {
                         try
@@ -400,7 +401,7 @@ namespace FrbaHotel.RegistrarEstadia
             {
                 if (MessageBox.Show("Cliente de la reserva registrado. Desea registrar más clientes?", "FOUR SIZONS - FRBA Hoteles", MessageBoxButtons.YesNo, MessageBoxIcon.Question) == DialogResult.Yes)
                 {
-                    RegistroClientes formRegisClie = new RegistroClientes(codigoEstadia);
+                    RegistrarCliente formRegisClie = new RegistrarCliente(codigoEstadia);
                     formRegisClie.ShowDialog();
                 }
             }
@@ -427,7 +428,7 @@ namespace FrbaHotel.RegistrarEstadia
                     if (MessageBox.Show("Cliente de la reserva registrado. Desea registrar más clientes?", "FOUR SIZONS - FRBA Hoteles", MessageBoxButtons.YesNo, MessageBoxIcon.Question) == DialogResult.Yes)
                     {
                         this.Hide();
-                        RegistroClientes formRegisClie = new RegistroClientes(codigoEstadia);
+                        RegistrarCliente formRegisClie = new RegistrarCliente(codigoEstadia);
                         formRegisClie.ShowDialog();
                         clieResRegistrado = true;
                         this.Show();
