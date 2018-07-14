@@ -202,6 +202,10 @@ namespace FrbaHotel.GestionReservas
                         con.command.Parameters.Add("@fechaInicio", SqlDbType.DateTime).Value = dt_fechaDesde.Value.ToShortDateString();
                         con.command.Parameters.Add("@fechaFin", SqlDbType.DateTime).Value = dt_fechaHasta.Value.ToShortDateString();
                         con.command.Parameters.Add("@userId", SqlDbType.NVarChar).Value = usuario;
+                        if (hotelID == 0)
+                        {
+                            hotelID = hotel;
+                        }
                         con.command.Parameters.Add("@hotId", SqlDbType.Decimal).Value = hotelID;
                         con.command.Parameters.Add("@cliId", SqlDbType.Decimal).Value = clienteID;
                         con.command.Parameters.Add("@regId", SqlDbType.Decimal).Value = regimenID;
