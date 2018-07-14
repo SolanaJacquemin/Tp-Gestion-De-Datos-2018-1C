@@ -163,8 +163,8 @@ namespace FrbaHotel.ListadoEstadistico
                         if (error == 0)
                         {
                             dgv_Listado.ColumnCount = 3;
-                            dgv_Listado.Columns[0].Name = "Código Hotel";
-                            dgv_Listado.Columns[1].Name = "Hotel Nombre";
+                            dgv_Listado.Columns[0].Name = "Número de Habitación";
+                            dgv_Listado.Columns[1].Name = "Código Hotel";
                             dgv_Listado.Columns[2].Name = "Cantidad";
 
                             for (int i = 0; i < dataset.Tables[0].Rows.Count; i++)
