@@ -43,7 +43,6 @@
             this.label17 = new System.Windows.Forms.Label();
             this.label13 = new System.Windows.Forms.Label();
             this.gb_datos = new System.Windows.Forms.GroupBox();
-            this.btn_vovler = new System.Windows.Forms.Button();
             this.btn_aceptar = new System.Windows.Forms.Button();
             this.txt_depto = new System.Windows.Forms.TextBox();
             this.txt_nroCalle = new System.Windows.Forms.TextBox();
@@ -63,6 +62,7 @@
             this.label4 = new System.Windows.Forms.Label();
             this.label3 = new System.Windows.Forms.Label();
             this.label2 = new System.Windows.Forms.Label();
+            this.btn_vovler = new System.Windows.Forms.Button();
             this.gb_busqueda.SuspendLayout();
             this.gb_datos.SuspendLayout();
             this.SuspendLayout();
@@ -208,7 +208,6 @@
             // 
             // gb_datos
             // 
-            this.gb_datos.Controls.Add(this.btn_aceptar);
             this.gb_datos.Controls.Add(this.txt_depto);
             this.gb_datos.Controls.Add(this.txt_nroCalle);
             this.gb_datos.Controls.Add(this.txt_pais);
@@ -234,19 +233,9 @@
             this.gb_datos.TabStop = false;
             this.gb_datos.Text = "Datos del cliente";
             // 
-            // btn_vovler
-            // 
-            this.btn_vovler.Location = new System.Drawing.Point(448, 451);
-            this.btn_vovler.Name = "btn_vovler";
-            this.btn_vovler.Size = new System.Drawing.Size(75, 23);
-            this.btn_vovler.TabIndex = 2;
-            this.btn_vovler.Text = "Volver";
-            this.btn_vovler.UseVisualStyleBackColor = true;
-            this.btn_vovler.Click += new System.EventHandler(this.btn_vovler_Click);
-            // 
             // btn_aceptar
             // 
-            this.btn_aceptar.Location = new System.Drawing.Point(436, 211);
+            this.btn_aceptar.Location = new System.Drawing.Point(12, 451);
             this.btn_aceptar.Name = "btn_aceptar";
             this.btn_aceptar.Size = new System.Drawing.Size(75, 23);
             this.btn_aceptar.TabIndex = 2;
@@ -398,11 +387,22 @@
             this.label2.TabIndex = 0;
             this.label2.Text = "Nombre";
             // 
+            // btn_vovler
+            // 
+            this.btn_vovler.Location = new System.Drawing.Point(448, 451);
+            this.btn_vovler.Name = "btn_vovler";
+            this.btn_vovler.Size = new System.Drawing.Size(75, 23);
+            this.btn_vovler.TabIndex = 2;
+            this.btn_vovler.Text = "Volver";
+            this.btn_vovler.UseVisualStyleBackColor = true;
+            this.btn_vovler.Click += new System.EventHandler(this.btn_vovler_Click);
+            // 
             // RegistrarCliente
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(576, 481);
+            this.ClientSize = new System.Drawing.Size(539, 481);
+            this.Controls.Add(this.btn_aceptar);
             this.Controls.Add(this.btn_vovler);
             this.Controls.Add(this.gb_datos);
             this.Controls.Add(this.gb_busqueda);

@@ -237,6 +237,20 @@ namespace FrbaHotel.RegistrarEstadia
 
                 clienteID = Convert.ToDecimal(con2.command.Parameters["@codigo"].Value);
                 con2.closeConection();
+
+                con2.strQuery = "four_sizons.RegistrarEstadiaXCliente";
+                con2.execute();
+                con2.command.CommandType = CommandType.StoredProcedure;
+
+                con2.command.Parameters.Add("@cliente", SqlDbType.Decimal).Value = clienteID;
+                con2.command.Parameters.Add("@estadia", SqlDbType.Decimal).Value = estadia;
+
+                con2.openConection();
+                con2.command.ExecuteNonQuery();
+                con2.closeConection();
+
+                MessageBox.Show("Operación exitosa", "FOUR SIZONS - FRBA Hoteles", MessageBoxButtons.OK, MessageBoxIcon.Information);             
+            
             }
             catch (Exception ex)
             {
@@ -265,6 +279,7 @@ namespace FrbaHotel.RegistrarEstadia
 
         private void btn_aceptar_Click(object sender, EventArgs e)
         {
+            error = 0;
             if (!buscoCliente)
             {
                 MessageBox.Show("Por favor, haga click en buscar antes de continuar.", "FOUR SIZONS - FRBA Hoteles", MessageBoxButtons.OK, MessageBoxIcon.Information);
@@ -334,6 +349,30 @@ namespace FrbaHotel.RegistrarEstadia
                             this.Close();
                         }
                     }
+                }
+            }
+
+            if (error == 0) 
+            {
+                if (MessageBox.Show("Desea registrar otro cliente?", "FOUR SIZONS - FRBA Hoteles", MessageBoxButtons.YesNo, MessageBoxIcon.Question) == DialogResult.Yes)
+                {
+                    txt_apellido.Clear();
+                    txt_calle.Clear();
+                    txt_ciudad.Clear();
+                    txt_depto.Clear();
+                    txt_mail.Clear();
+                    txt_nombre.Clear();
+                    txt_nroCalle.Clear();
+                    txt_numDoc.Clear();
+                    txt_pais.Clear();
+                    txt_telefono.Clear();
+                    cb_tipoDoc.Text = "";
+                    check_mail.Checked = false;
+                    check_doc.Checked = false;
+                }
+                else 
+                {
+                    this.Close();
                 }
             }
         }

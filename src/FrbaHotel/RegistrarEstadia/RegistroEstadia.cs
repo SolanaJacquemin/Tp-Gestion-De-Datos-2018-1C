@@ -280,12 +280,12 @@ namespace FrbaHotel.RegistrarEstadia
 
         private void btn_Volver_Click(object sender, System.EventArgs e)
         {
-            if (generarFactura == true && facturaGenerada==true || generarFactura==false && facturaGenerada==false || error == 1)
-            {
+            //if (generarFactura == true && facturaGenerada==true || generarFactura==false && facturaGenerada==false || error == 1)
+            //{
                 this.Close();
-            }
+            //}
 
-            else MessageBox.Show("Por favor, genere la factura", "FOUR SIZONS - FRBA Hoteles", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            //else MessageBox.Show("Por favor, genere la factura", "FOUR SIZONS - FRBA Hoteles", MessageBoxButtons.OK, MessageBoxIcon.Information);
         }
 
         private void btn_factura_Click(object sender, EventArgs e)
@@ -321,8 +321,8 @@ namespace FrbaHotel.RegistrarEstadia
                             con.command.ExecuteNonQuery();
                             con.closeConection();
                             facturaGenerada = true;
-                            MessageBox.Show("Por favor, genere la factura.", "FOUR SIZONS - FRBA Hoteles", MessageBoxButtons.OK, MessageBoxIcon.Information);
-                            //MessageBox.Show("Operación exitosa", "FOUR SIZONS - FRBA Hoteles", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                            //MessageBox.Show("Por favor, genere la factura.", "FOUR SIZONS - FRBA Hoteles", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                            MessageBox.Show("Operación exitosa", "FOUR SIZONS - FRBA Hoteles", MessageBoxButtons.OK, MessageBoxIcon.Information);
                         }
                         catch (Exception ex)
                         {

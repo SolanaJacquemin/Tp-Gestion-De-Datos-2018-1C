@@ -23,8 +23,13 @@ namespace FrbaHotel.Prompts
             dgvHotelesPrompt.Rows.Clear();
 
             Conexion con = new Conexion();
-            con.strQuery = "SELECT Hotel_Codigo, Hotel_Nombre " +
-                           "FROM FOUR_SIZONS.Hotel ORDER BY Hotel_Codigo";
+            //con.strQuery = "SELECT Hotel_Codigo, Hotel_Nombre " +
+            //               "FROM FOUR_SIZONS.Hotel ORDER BY Hotel_Codigo";
+
+            con.strQuery = "select h.Hotel_Codigo, h.Hotel_Nombre from FOUR_SIZONS.Hotel h where h.Hotel_Codigo not in (select uh.Hotel_Codigo from FOUR_SIZONS.UsuarioXHotel uh where 'r' = uh.Usuario_ID" + 
+                           " and uh.UsuarioXHotel_Estado=1) and h.Hotel_Estado=1 ORDER BY Hotel_Codigo";
+
+
             con.executeQuery();
             if (!con.reader())
             {
