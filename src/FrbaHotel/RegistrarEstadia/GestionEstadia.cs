@@ -226,7 +226,7 @@ namespace FrbaHotel.RegistrarEstadia
                 con.command.CommandType = CommandType.StoredProcedure;
                 string newS = "EXEC FOUR_SIZONS.verificarEstadoReserva " + dgv_CodReserva.ToString() + ", " + DateTime.Today.ToString("dd/MM/yyyy");
                 con.command.Parameters.Add("@reserva", SqlDbType.Decimal).Value = dgv_CodReserva;
-                con.command.Parameters.Add("@fechaOperacion", SqlDbType.NVarChar).Value = DateTime.Today.ToString("dd/MM/yyyy");
+                con.command.Parameters.Add("@fechaOperacion", SqlDbType.DateTime).Value = DateTime.Today.ToString("dd/MM/yyyy");
 
                 con.openConection();
                 con.command.ExecuteNonQuery();
