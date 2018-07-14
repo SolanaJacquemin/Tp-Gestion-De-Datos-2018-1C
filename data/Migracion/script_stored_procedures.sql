@@ -1644,7 +1644,7 @@ if(not exists(select Factura_Nro from Factura where Estadia_Codigo=@estadia))
 		
 		set @reserva = ( select Reserva_Codigo from FOUR_SIZONS.Estadia where Estadia_Codigo = @estadia)
 		set @cliente = ( select Cliente_Codigo from FOUR_SIZONS.Reserva where Reserva_Codigo = @reserva)
-		set @user = ( select Usuario_OUT from FOUR_SIZONS.Estadia where Estadia_Codigo = @estadia)
+		set @user = ( select Usuario_ID from FOUR_SIZONS.Estadia where Estadia_Codigo = @estadia)
 		set @total = FOUR_SIZONS.calcEstadia(@estadia) + FOUR_SIZONS.calcConsumible(@estadia,0)
 			--Es necesario tener al usuario en factura?
 		if (@total is Null) set @total=0
@@ -2341,7 +2341,11 @@ begin
 
 		if(@estado=6)
 		begin
-			RAISERROR('Reserva ya efectivizada',16,1)
+			declare @estadoEstadia bit = (select Estadia_Estado from FOUR_SIZONS.Estadia where Reserva_Codigo=@reserva)
+			if (@estadoEstadia!=1)
+			begin
+			raiserror('no es posible registrar consumibles, ya se hizo el check-out',16,1)
+			end
 		end
 
 	end	else raiserror('No se puede realizar el check-in porque el cliente esta deshabilitado',16,1) 
