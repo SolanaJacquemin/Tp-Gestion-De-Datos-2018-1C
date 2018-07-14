@@ -824,11 +824,26 @@ end
 
 	
 
-
+-- se hace un update de la disponibilidad, descontando x cada reserva que haya cargada en el sistema
 update FOUR_SIZONS.Disponibilidad 
 						set Disp_HabDisponibles = Disp_HabDisponibles - 1
 						from FOUR_SIZONS.Reserva r , FOUR_SIZONS.Disponibilidad d
 						where (Disp_Fecha between Reserva_Fecha_Inicio and Reserva_Fecha_Fin) and r.Hotel_Codigo = d.Hotel_Codigo and d.Habitacion_Tipo_Codigo = r.habitacion_tipo_codigo
+
+
+-- se hace un update de las estadias que son anteriores a 2018 y se las marca como inactivas
+update FOUR_SIZONS.Estadia
+set Estadia_Estado = 0
+where Estadia_FechaFin < convert(datetime,'01/01/2018',103)
+-- se actualizan todas las reservas que ya fueron efectivizadas o que fueron canceladas x no-show 
+update FOUR_SIZONS.Reserva
+set Reserva_Estado=6
+from FOUR_SIZONS.Estadia e , FOUR_SIZONS.Reserva r
+where e.Reserva_Codigo= r.Reserva_Codigo
+
+update FOUR_SIZONS.Reserva
+set Reserva_Estado=5
+where Reserva_Fecha_inicio<convert(datetime,'01/01/2018',103) and reserva_codigo not in (select r.Reserva_Codigo from FOUR_SIZONS.Estadia e , FOUR_SIZONS.Reserva r where r.Reserva_Codigo=e.reserva_Codigo)
 
 
 END

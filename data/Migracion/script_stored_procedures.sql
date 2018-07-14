@@ -1251,18 +1251,14 @@ begin try
 								values((NEXT VALUE FOR sec_cod_reserva),@fechaInicio,@fechaFin,@cantidadNoches,
 								@precio,@userId,@hotId,@cliId,@regId,1,@tipohab,@canthab,convert(datetime,@fechaCreacion,121))
 				--aca baja la disponibilidad
-				declare @aux datetime = convert(datetime,@fechaInicio,121 )
-				declare @aux2 datetime,
-						@aux3 datetime 
-				set @aux3=DATEADD(day, 1, @fechaFin)
-				while(datediff(day,@aux,@aux3)!=0 )
+				
 					begin
-						set @aux2= @aux
+						
 						update FOUR_SIZONS.Disponibilidad
 						set Disp_HabDisponibles = Disp_HabDisponibles - @cantHab
-						--where Disp_Fecha= @aux and Hotel_Codigo = @hotId and Habitacion_Tipo_Codigo = @tipohab
-						where datediff(day,Disp_Fecha,@aux)=0 and Hotel_Codigo = @hotId and Habitacion_Tipo_Codigo = @tipohab
-						set @aux = DATEADD(day, 1, @aux2)
+						
+						where Disp_Fecha between @fechaInicio and @fechaFin  and Hotel_Codigo = @hotId and Habitacion_Tipo_Codigo = @tipohab
+						
 					end
 			end
 
@@ -1625,12 +1621,14 @@ create procedure four_sizons.generarFactura
 @estadia numeric(18),
 @formaPago nvarchar(50),
 @fechaI datetime
+
 as begin
 
 
 declare @reserva numeric(18),
 		@total numeric(18,2),
-		@cliente numeric(18)
+		@cliente numeric(18),
+		@user nvarchar(15)
 		 --la fecha del sistema
 
 begin tran ta
@@ -1638,15 +1636,14 @@ begin try
 if(not exists(select Factura_Nro from Factura where Estadia_Codigo=@estadia))	
 	begin
 		
-		set @reserva = ( select Reserva_Codigo from FOUR_SIZONS.Estadia where Estadia_Codigo = @estadia);
-		set @cliente = ( select Cliente_Codigo from FOUR_SIZONS.Reserva where Reserva_Codigo = @reserva);
-
-
-		set @total = FOUR_SIZONS.calcEstadia(@estadia) + FOUR_SIZONS.calcConsumible(@estadia,0);
+		set @reserva = ( select Reserva_Codigo from FOUR_SIZONS.Estadia where Estadia_Codigo = @estadia)
+		set @cliente = ( select Cliente_Codigo from FOUR_SIZONS.Reserva where Reserva_Codigo = @reserva)
+		set @user = ( select Usuario_OUT from FOUR_SIZONS.Estadia where Estadia_Codigo = @estadia)
+		set @total = FOUR_SIZONS.calcEstadia(@estadia) + FOUR_SIZONS.calcConsumible(@estadia,0)
 			--Es necesario tener al usuario en factura?
 		if (@total is Null) set @total=0
-		insert into FOUR_SIZONS.Factura(Estadia_Codigo,Factura_FormaPago,Cliente_Codigo,Factura_Fecha,Factura_Total,Factura_Estado,Factura_Consistencia)
-								 values (@estadia,@formaPago,@cliente,convert(datetime,@fechaI,121),@total,0,1);
+		insert into FOUR_SIZONS.Factura(Estadia_Codigo,Factura_FormaPago,Cliente_Codigo,Factura_Fecha,Factura_Total,Factura_Estado,Factura_Consistencia,Usuario_ID)
+								 values (@estadia,@formaPago,@cliente,convert(datetime,@fechaI,121),@total,0,1,@user)
 	end
 else raiserror('Ya existe una factura para esa estadia.',16,1)
 
@@ -1675,21 +1672,22 @@ begin
 declare @reserva numeric(18),
 		@estadoA bit,
 		@total numeric(18,2),
-		@fact_Nro numeric(18)
-
+		@fact_Nro numeric(18),
+		@user nvarchar(15)
 
 begin tran ta
 begin try
-		set @reserva = ( select Reserva_Codigo from FOUR_SIZONS.Estadia where Estadia_Codigo = @estadia);
-		set @fact_Nro = (select Factura_Nro from FOUR_SIZONS.Factura where Estadia_Codigo = @estadia);
+		set @reserva = ( select Reserva_Codigo from FOUR_SIZONS.Estadia where Estadia_Codigo = @estadia)
+		set @fact_Nro = (select Factura_Nro from FOUR_SIZONS.Factura where Estadia_Codigo = @estadia)
 		set @estadoA = (select Factura_Estado from FOUR_SIZONS.Factura where Factura_Nro=@fact_Nro)
+		set @user = ( select Usuario_OUT from FOUR_SIZONS.Estadia where Estadia_Codigo = @estadia)
 		if ( @estadoA != 1)
 
 		begin
 			set @total = FOUR_SIZONS.calcEstadia(@estadia) + FOUR_SIZONS.calcConsumible(@estadia,0);
 			if (@total is Null) set @total=0
 			update FOUR_SIZONS.Factura
-			set Factura_FormaPago =@formaPago , Factura_Fecha = convert(datetime,@fechaI,121) , Factura_Total = @total, Factura_Estado=@estado
+			set Factura_FormaPago =@formaPago , Factura_Fecha = convert(datetime,@fechaI,121) , Factura_Total = @total, Factura_Estado=@estado, Usuario_ID=@user
 			where Factura_Nro = @fact_Nro
 		end
 		else 
@@ -1706,6 +1704,9 @@ rollback tran
 end catch
 end
 GO
+
+--------------------------------------------------------------
+
 ------------------------------------------------------------------------------------------------
 create procedure FOUR_SIZONS.RegistrarEstadiaXCliente
 @cliente numeric(18),
@@ -1782,15 +1783,12 @@ declare @fechaInicio datetime = (select convert(datetime,Reserva_Fecha_Inicio,12
 	begin
 			update FOUR_SIZONS.Reserva set Reserva_Estado=5 where Reserva_Codigo = @reserva--SE CANCELA LA RESERVA POR NO-SHOW CUANDO ES TARDE
 			set @estado = 5
-			declare @aux3 datetime=@fechaInicio,
-					@aux4 datetime
-			while(DATEDIFF(day,@aux3,@fechaFin)>=0)
-				begin
-				set @aux4=@aux3
-				update FOUR_SIZONS.Disponibilidad set Disp_HabDisponibles= Disp_HabDisponibles+@cant
-				where Habitacion_Tipo_Codigo=@tipo and Hotel_Codigo=@hotel 
-				set @aux3=dateadd(day,1,@aux4)
-				end
+			
+				update FOUR_SIZONS.Disponibilidad 
+				set Disp_HabDisponibles= Disp_HabDisponibles+@cant
+				where Habitacion_Tipo_Codigo=@tipo and Hotel_Codigo=@hotel and Disp_Fecha between @fechaInicio and @fechaFin
+				
+				
 		end
 
 		commit tran 
@@ -1940,7 +1938,6 @@ begin
 
 				values(@fact,'Estadia',(@cantDias), @monto,@nitem2)
 				----- EN CANTIDAD DE ESTADIA PONGO LA CANTIDAD DE NOCHES QUE SE QUEDA
-				---- EL -1 SE DEBE A QUE EL DIA EN EL QUE SE RETIRAN NO SE COBRA SUPONGO, YA QUE NO PASAN LA NOCHE EN EL HOTEL
 		end
 	else 
 		begin
