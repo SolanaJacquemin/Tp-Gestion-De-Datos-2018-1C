@@ -53,7 +53,7 @@ namespace FrbaHotel.ABMHotel
 
         private void boton_aceptar_Click(object sender, EventArgs e)
         {
-
+            // Se determina el stored procedure a utilizar
             switch (modoABM)
             {
                 case "INS":
@@ -98,9 +98,10 @@ namespace FrbaHotel.ABMHotel
         {
             if (MessageBox.Show("Está seguro que desea continuar con la operación?", "FOUR SIZONS - FRBA Hoteles", MessageBoxButtons.YesNo, MessageBoxIcon.Question) == DialogResult.Yes)
             {
-
+                // se agrega el código en un try / catch para poder capturar los errores
                 try
                 {
+                    // se crea un nuevo conector, se asigna el nombre del stored y con execute se crea el nuevo comando sql
                     Conexion con = new Conexion();
                     con.strQuery = nombreStored;
                     con.execute();
@@ -108,15 +109,15 @@ namespace FrbaHotel.ABMHotel
 
                     if (modoABM == "INS")
                     {
-
+                        // Se generan llamadas sucesivas para ingresar todos los regimenes
                         for (int i = 0; i < lb_regimen_usralta.Items.Count; i++)
                         {
                             con.execute();
                             con.command.CommandType = CommandType.StoredProcedure;
-
+                            // se agregan los parámetros al stored procedure
                             con.command.Parameters.Add("@regimen", SqlDbType.NVarChar).Value = lb_regimen.Items[i].ToString();
                             con.command.Parameters.Add("@hotID", SqlDbType.NVarChar).Value = hotel;
-
+                            // se abre la conexión con la base de datos, se ejecuta y se cierra
                             con.openConection();
                             con.command.ExecuteNonQuery();
                             con.closeConection();
@@ -124,6 +125,7 @@ namespace FrbaHotel.ABMHotel
                     }
                     else
                     {
+                        // en caso de modificar se cambia el nombre del sp y se itera los llamados por cada uno de los elementos del listbox
                         con.strQuery = "FOUR_SIZONS.modificarRegXhot";
                         for (int i = 0; i < lb_regimen_usralta.Items.Count; i++)
                         {
@@ -133,14 +135,14 @@ namespace FrbaHotel.ABMHotel
                             con.command.Parameters.Add("@hotel", SqlDbType.Decimal).Value = hotel;
                             con.command.Parameters.Add("@reg", SqlDbType.NVarChar).Value = lb_regimen_usralta.Items[i].ToString();
                             con.command.Parameters.Add("@fechaMod", SqlDbType.DateTime).Value = hoy;
-                            
-                            string msg = lb_regimen_usralta.Items[i].ToString();
-
                             con.command.Parameters.Add("@estado", SqlDbType.Bit).Value = 1;
+
+                            // se abre la conexión con la base de datos, se ejecuta y se cierra
                             con.openConection();
                             con.command.ExecuteNonQuery();
                             con.closeConection();
                         }
+                        // se itera los llamados por cada uno de los elementos del listbox para dar de baja
                         for (int i = 0; i < lb_regimen_usrbaja.Items.Count; i++)
                         {
                             con.execute();
@@ -264,13 +266,11 @@ namespace FrbaHotel.ABMHotel
 
                 con.strQuery = "SELECT R.Regimen_Descripcion" + 
                                " FROM FOUR_SIZONS.RegXHotel RH JOIN FOUR_SIZONS.Regimen R ON R.Regimen_Codigo = RH.Regimen_Codigo" +
-                               " WHERE RH.Hotel_Codigo = " + hotel;
+                               " WHERE RegXHotel_Estado = 1 AND RH.Hotel_Codigo = " + hotel;
                 con.executeQuery();
 
                 while (con.reader())
                 {
-                    //regimen_codigo = con.lector.GetDecimal(1);
-
                     lb_regimen_usralta.Items.Add(con.lector.GetString(0));
                 }
                 con.closeConection();

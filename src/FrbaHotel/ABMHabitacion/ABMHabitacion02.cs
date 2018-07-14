@@ -223,14 +223,15 @@ namespace FrbaHotel.ABMHabitacion
         {
             if (MessageBox.Show("Está seguro que desea continuar con la operación?", "FOUR SIZONS - FRBA Hoteles", MessageBoxButtons.YesNo, MessageBoxIcon.Question) == DialogResult.Yes)
             {
-
+                // se agrega el código en un try / catch para poder capturar los errores
                 try
                 {
+                    // se crea un nuevo conector, se asigna el nombre del stored y con execute se crea el nuevo comando sql
                     Conexion con = new Conexion();
                     con.strQuery = nombreStored;
                     con.execute();
                     con.command.CommandType = CommandType.StoredProcedure;
-
+                    // se agregan los parámetros al stored procedure
                     if (modoABM == "INS")
                     {
                         string newS = "EXEC " + nombreStored + " " + txt_nro_hab.Text + "," + txt_piso.Text + "," + cb_tipoFrente.Text + "," + hotel.ToString() + "," + cb_tipohab.Text + "," + txt_descripcion.Text;
@@ -256,7 +257,7 @@ namespace FrbaHotel.ABMHabitacion
                             con.command.Parameters.Add("@estado", SqlDbType.Bit).Value = 0;
                         }
                     }
-
+                    // se abre la conexión con la base de datos y se ejecuta
                     con.openConection();
                     con.command.ExecuteNonQuery();
 

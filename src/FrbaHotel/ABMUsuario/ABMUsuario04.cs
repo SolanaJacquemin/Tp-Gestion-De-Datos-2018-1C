@@ -47,27 +47,37 @@ namespace FrbaHotel.ABMUsuario
 
         private void btn_aceptar_Click(object sender, EventArgs e)
         {
-            Conexion con = new Conexion();
-            con.strQuery = "FOUR_SIZONS.altaUserXHot";
-            con.execute();
-            con.command.CommandType = CommandType.StoredProcedure;
-            string newS = "EXEC " + "four_sizons.altaUserXHot" + " " + hotel.ToString() + usuario;
-            con.command.Parameters.Add("@hotId", SqlDbType.Decimal).Value = hotel;
-            con.command.Parameters.Add("@usuario", SqlDbType.NVarChar).Value = usuario;
-            if (modoABM == "DLT")
+            // se agrega el código en un try / catch para poder capturar los errores
+            try
             {
-                con.command.Parameters.Add("@estado", SqlDbType.Bit).Value = 0;
-            }
-            else if (modoABM == "INS")
-            {
-                con.command.Parameters.Add("@estado", SqlDbType.Bit).Value = 1;
-            }
-            con.openConection();
-            con.command.ExecuteNonQuery();
-            con.closeConection();
+                // se crea un nuevo conector, se asigna el nombre del stored y con execute se crea el nuevo comando sql
+                Conexion con = new Conexion();
+                con.strQuery = "FOUR_SIZONS.altaUserXHot";
+                con.execute();
+                con.command.CommandType = CommandType.StoredProcedure;
+                // se agregan los parámetros al stored procedure
+                con.command.Parameters.Add("@hotId", SqlDbType.Decimal).Value = hotel;
+                con.command.Parameters.Add("@usuario", SqlDbType.NVarChar).Value = usuario;
+                if (modoABM == "DLT")
+                {
+                    con.command.Parameters.Add("@estado", SqlDbType.Bit).Value = 0;
+                }
+                else if (modoABM == "INS")
+                {
+                    con.command.Parameters.Add("@estado", SqlDbType.Bit).Value = 1;
+                }
+                // se abre la conexión con la base de datos, se ejecuta y se cierra
+                con.openConection();
+                con.command.ExecuteNonQuery();
+                con.closeConection();
 
-            MessageBox.Show("Operación exitosa", "FOUR SIZONS - FRBA Hoteles", MessageBoxButtons.OK, MessageBoxIcon.Information);
-            this.Close();
+                MessageBox.Show("Operación exitosa", "FOUR SIZONS - FRBA Hoteles", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                this.Close();
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("Error al completar la operación. " + ex.Message, "FOUR SIZONS - FRBA Hoteles", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
         }
 
         private void btn_promptHotel_Click(object sender, EventArgs e)

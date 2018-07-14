@@ -89,22 +89,24 @@ namespace FrbaHotel.RegistrarEstadia
         {
             if (MessageBox.Show("Está seguro que desea continuar con la operación?", "FOUR SIZONS - FRBA Hoteles", MessageBoxButtons.YesNo, MessageBoxIcon.Question) == DialogResult.Yes)
             {
+                // se agrega el código en un try / catch para poder capturar los errores
                 try
                 {
                     if(modoCheck == "IN")
                     {
+                        // se crea un nuevo conector, se asigna el nombre del stored y con execute se crea el nuevo comando sql
                         Conexion con = new Conexion();
                         con.strQuery = nombreStored;
                         con.execute();
                         con.command.CommandType = CommandType.StoredProcedure;
-
+                        // se agregan los parámetros al stored procedure
                         con.command.Parameters.Add("@reserva", SqlDbType.Decimal).Value = Convert.ToDecimal(txt_CodReserva.Text);
                         con.command.Parameters.Add("@usuario", SqlDbType.NVarChar).Value = usuario;
                         con.command.Parameters.Add("@fecha", SqlDbType.DateTime).Value = DateTime.Now.ToString("dd/MM/yyyy");
                         con.command.Parameters.Add("@codigo", SqlDbType.Decimal).Direction = ParameterDirection.Output;
 
                         con.openConection();
-
+                        // se carga el contenido en el dataset y luego se muestra en un mensaje por pantalla los número de habitaciones que corresponde
                         DataSet dataset = new DataSet();
                         SqlDataAdapter da = new SqlDataAdapter(con.command);
 
@@ -115,7 +117,7 @@ namespace FrbaHotel.RegistrarEstadia
                             mensajeHab = mensajeHab + (dataset.Tables[0].Rows[i][0]).ToString() + " ";
                         }
 
-                        codigoEstadia = Convert.ToDecimal(con.command.Parameters["@codigo"].Value);
+                        codigoEstadia = Convert.ToDecimal(con.command.Parameters["@codigo"].Value); // se obtiene el código de estadía del sp
                         txt_estadia.Text = codigoEstadia.ToString();
 
                         MessageBox.Show("Los siguientes son los números de habitación que fueron asignados: " + mensajeHab, "FOUR SIZONS - FRBA Hoteles", MessageBoxButtons.OK, MessageBoxIcon.Information);
@@ -125,18 +127,18 @@ namespace FrbaHotel.RegistrarEstadia
                         MessageBox.Show("Por favor registre a los clientes", "FOUR SIZONS - FRBA Hoteles", MessageBoxButtons.OK, MessageBoxIcon.Information);
 
                     }else{
+                        // se crea un nuevo conector, se asigna el nombre del stored y con execute se crea el nuevo comando sql
                         Conexion con = new Conexion();
                         con.strQuery = nombreStored;
                         con.execute();
                         con.command.CommandType = CommandType.StoredProcedure;
-
+                        // se agregan los parámetros al stored procedure
                         con.command.Parameters.Add("@estadia", SqlDbType.Decimal).Value = codigoEstadia;
                         con.command.Parameters.Add("@usuario", SqlDbType.NVarChar).Value = usuario;
                         con.command.Parameters.Add("@fecha", SqlDbType.DateTime).Value = dt_fechaSalida.Value.ToString();
-
+                        // se abre la conexión con la base de datos, se ejecuta y se cierra
                         con.openConection();
                         con.command.ExecuteNonQuery();
-
                         con.closeConection();
 
                         MessageBox.Show("Operación exitosa", "FOUR SIZONS - FRBA Hoteles", MessageBoxButtons.OK, MessageBoxIcon.Information);
@@ -306,22 +308,24 @@ namespace FrbaHotel.RegistrarEstadia
                     //if (facturaGenerada == true && generarFactura == true) MessageBox.Show("La factura ya se encuentra generada.", "FOUR SIZONS - FRBA Hoteles", MessageBoxButtons.OK, MessageBoxIcon.Information);
                     //if (facturaGenerada == false && generarFactura == true)
                     {
+                        // se agrega el código en un try / catch para poder capturar los errores
                         try
                         {
+                            // se crea un nuevo conector, se asigna el nombre del stored y con execute se crea el nuevo comando sql
                             Conexion con = new Conexion();
                             con.strQuery = "four_sizons.generarFactura ";
                             con.execute();
                             con.command.CommandType = CommandType.StoredProcedure;
-
+                            // se agregan los parámetros al stored procedure
                             con.command.Parameters.Add("@estadia", SqlDbType.Decimal).Value = codigoEstadia;
                             con.command.Parameters.Add("@formaPago", SqlDbType.NVarChar).Value = formaPago;
                             con.command.Parameters.Add("@fechaI", SqlDbType.DateTime).Value = readConfig.Config.fechaSystem().ToString();
-
+                            // se abre la conexión con la base de datos, se ejecuta y se cierra
                             con.openConection();
                             con.command.ExecuteNonQuery();
                             con.closeConection();
                             facturaGenerada = true;
-                            //MessageBox.Show("Por favor, genere la factura.", "FOUR SIZONS - FRBA Hoteles", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                            
                             MessageBox.Show("Operación exitosa", "FOUR SIZONS - FRBA Hoteles", MessageBoxButtons.OK, MessageBoxIcon.Information);
                         }
                         catch (Exception ex)
@@ -329,25 +333,23 @@ namespace FrbaHotel.RegistrarEstadia
                             MessageBox.Show("Error al completar la operación. " + ex.Message, "FOUR SIZONS - FRBA Hoteles", MessageBoxButtons.OK, MessageBoxIcon.Error);
                         }
                     }
-                    //else
-                    //{
-                    //    MessageBox.Show("Por favor, primero realice el check in", "FOUR SIZONS - FRBA Hoteles", MessageBoxButtons.OK, MessageBoxIcon.Information);
-                    //}
                 }
                 else
                 {
+                    // se agrega el código en un try / catch para poder capturar los errores
                     try
                     {
+                        // se crea un nuevo conector, se asigna el nombre del stored y con execute se crea el nuevo comando sql
                         Conexion con = new Conexion();
                         con.strQuery = "four_sizons.modificarFactura";
                         con.execute();
                         con.command.CommandType = CommandType.StoredProcedure;
-
+                        // se agregan los parámetros al stored procedure
                         con.command.Parameters.Add("@estadia", SqlDbType.Decimal).Value = codigoEstadia;
                         con.command.Parameters.Add("@formaPago", SqlDbType.NVarChar).Value = formaPago;
                         con.command.Parameters.Add("@fechaI", SqlDbType.DateTime).Value = DateTime.Now.ToString("dd/MM/yyyy");
                         con.command.Parameters.Add("@estado", SqlDbType.Decimal).Value = 1;
-
+                        // se abre la conexión con la base de datos, se ejecuta y se cierra
                         con.openConection();
                         con.command.ExecuteNonQuery();
                         con.closeConection();
@@ -372,6 +374,7 @@ namespace FrbaHotel.RegistrarEstadia
 
         private void btn_regClientes_Click(object sender, EventArgs e)
         {
+            // Se registra el cliente de la reserva y da la opción de elegir registrar más clientes
             btn_factura.Enabled = true;
             l_medioPago.Visible = true;
             cb_medioPago.Visible = true;
@@ -383,22 +386,20 @@ namespace FrbaHotel.RegistrarEstadia
                     formRegisClie.ShowDialog();
                 }
             }
-            //if (((generarFactura == true) && (facturaGenerada == false) && error == 0) || (generarFactura == false) && (facturaGenerada == false))
-            //{
-            //    MessageBox.Show("Por favor, realice el check in y genere la factura primero.", "FOUR SIZONS - FRBA Hoteles", MessageBoxButtons.OK, MessageBoxIcon.Information);
-            //}
-            //else
-            //{
+                // se agrega el código en un try / catch para poder capturar los errores
                 try
                 {
+                    // se crea un nuevo conector, se asigna el nombre del stored y con execute se crea el nuevo comando sql
                     Conexion con = new Conexion();
                     con.strQuery = "four_sizons.RegistrarEstadiaXCliente";
                     con.execute();
                     con.command.CommandType = CommandType.StoredProcedure;
 
+                    // se agregan los parámetros al stored procedure
                     con.command.Parameters.Add("@cliente", SqlDbType.Decimal).Value = cliente;
                     con.command.Parameters.Add("@estadia", SqlDbType.Decimal).Value = codigoEstadia;
 
+                    // se abre la conexión con la base de datos, se ejecuta y se cierra
                     con.openConection();
                     con.command.ExecuteNonQuery();
                     con.closeConection();

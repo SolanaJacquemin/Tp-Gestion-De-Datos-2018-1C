@@ -7,7 +7,6 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
-//using FrbaHotel.RegistrarConsumible;
 
 namespace FrbaHotel.RegistrarEstadia
 {
@@ -218,19 +217,20 @@ namespace FrbaHotel.RegistrarEstadia
 
         private void verificarReserva()
         {
+            // se agrega el código en un try / catch para poder capturar los errores
             try
             {
+                // se crea un nuevo conector, se asigna el nombre del stored y con execute se crea el nuevo comando sql
                 Conexion con = new Conexion();
                 con.strQuery = "FOUR_SIZONS.verificarEstadoReserva";
                 con.execute();
                 con.command.CommandType = CommandType.StoredProcedure;
-                string newS = "EXEC FOUR_SIZONS.verificarEstadoReserva " + dgv_CodReserva.ToString() + ", " + DateTime.Today.ToString("dd/MM/yyyy");
+                // se agregan los parámetros al stored procedure
                 con.command.Parameters.Add("@reserva", SqlDbType.Decimal).Value = dgv_CodReserva;
                 con.command.Parameters.Add("@fechaOperacion", SqlDbType.DateTime).Value = DateTime.Today.ToString("dd/MM/yyyy");
-
+                // se abre la conexión con la base de datos, se ejecuta y se cierra
                 con.openConection();
                 con.command.ExecuteNonQuery();
-
                 con.closeConection();
             }
             catch (Exception ex)

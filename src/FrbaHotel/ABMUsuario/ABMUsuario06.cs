@@ -61,27 +61,38 @@ namespace FrbaHotel.ABMUsuario
 
         private void btn_aceptar_Click(object sender, EventArgs e)
         {
-            Conexion con = new Conexion();
-            if (modoABM == "INS")
+            // se agrega el código en un try / catch para poder capturar los errores
+            try 
             {
-                con.strQuery = "FOUR_SIZONS.altaUserxRol";
+                // se crea un nuevo conector, se asigna el nombre del stored y con execute se crea el nuevo comando sql
+                Conexion con = new Conexion();
+                // se determina el sp a utilizar
+                if (modoABM == "INS")
+                {
+                    con.strQuery = "FOUR_SIZONS.altaUserxRol";
+                }
+                else if (modoABM == "DLT")
+                {
+                    con.strQuery = "FOUR_SIZONS.bajaUserxRol";
+                }
+                con.execute();
+                // se agregan los parámetros al stored procedure
+                con.command.CommandType = CommandType.StoredProcedure;
+                con.command.Parameters.Add("@userID", SqlDbType.NVarChar).Value = usuario;
+                con.command.Parameters.Add("@rolId", SqlDbType.Decimal).Value = rol;
+                // se abre la conexión con la base de datos, se ejecuta y se cierra
+                con.openConection();
+                con.command.ExecuteNonQuery();
+                con.closeConection();
+
+                MessageBox.Show("Operación exitosa", "FOUR SIZONS - FRBA Hoteles", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                this.Close();
             }
-            else if (modoABM == "DLT")
+            catch (Exception ex)
             {
-                con.strQuery = "FOUR_SIZONS.bajaUserxRol";
+                MessageBox.Show("Error al completar la operación. " + ex.Message, "FOUR SIZONS - FRBA Hoteles", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
 
-            con.execute();
-            con.command.CommandType = CommandType.StoredProcedure;
-            con.command.Parameters.Add("@userID", SqlDbType.NVarChar).Value = usuario;
-            con.command.Parameters.Add("@rolId", SqlDbType.Decimal).Value = rol;
-
-            con.openConection();
-            con.command.ExecuteNonQuery();
-            con.closeConection();
-
-            MessageBox.Show("Operación exitosa", "FOUR SIZONS - FRBA Hoteles", MessageBoxButtons.OK, MessageBoxIcon.Information);
-            this.Close();
         }
 
         private void ABMUsuario06_Load(object sender, EventArgs e)

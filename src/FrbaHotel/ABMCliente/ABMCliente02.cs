@@ -175,7 +175,7 @@ namespace FrbaHotel.ABMCliente
 
         private void btn_Aceptar_Click(object sender, EventArgs e)
         {
-
+            // Se validan los datos ingresados
             if (modoABM != "DLT")
             {
                 error = 0;
@@ -201,7 +201,7 @@ namespace FrbaHotel.ABMCliente
                     MessageBox.Show("Por favor, el número de calle debe ser un dato numérico", "FOUR SIZONS - FRBA Hoteles", MessageBoxButtons.OK, MessageBoxIcon.Information);
                 };
             }
-
+            // Se determina el stored procedure a utilizar
             switch (modoABM)
             {
                 case "INS":
@@ -221,7 +221,7 @@ namespace FrbaHotel.ABMCliente
 
             if (error == 0)
             {
-                if (modoABM != "INSCHECKIN")
+                if (modoABM != "INSCHECKIN") // no se usa
                 {
                     ejecutarABMCliente(nombre_sp);
                 }
@@ -237,16 +237,18 @@ namespace FrbaHotel.ABMCliente
             }
         }
 
-        private void ejecutarABMClienteCheckIn()
+        private void ejecutarABMClienteCheckIn() // no se utiliza
         {
+            // se agrega el código en un try / catch para poder capturar los errores
             try
             {
+                // se crea un nuevo conector, se asigna el nombre del stored y con execute se crea el nuevo comando sql
                 Conexion con = new Conexion();
                 con.strQuery = "FOUR_SIZONS.AltaCliente";
                 con.execute();
                 con.command.CommandType = CommandType.StoredProcedure;
-
-                con.command.Parameters.Add("@codigo", SqlDbType.Decimal).Direction = ParameterDirection.Output;
+                // se agregan los parámetros al stored procedure
+                con.command.Parameters.Add("@codigo", SqlDbType.Decimal).Direction = ParameterDirection.Output; // se setea el parámetro output para que devuelva el código de cliente
                 con.command.Parameters.Add("@nombre", SqlDbType.NVarChar).Value = txt_nombre.Text;
                 con.command.Parameters.Add("@apellido", SqlDbType.NVarChar).Value = txt_apellido.Text;
                 con.command.Parameters.Add("@numDoc", SqlDbType.Decimal).Value = Convert.ToDecimal(txt_nro_doc.Text);
@@ -262,14 +264,15 @@ namespace FrbaHotel.ABMCliente
                 con.command.Parameters.Add("@localidad", SqlDbType.NVarChar).Value = txt_localidad.Text;
                 con.command.Parameters.Add("@nacionalidad", SqlDbType.NVarChar).Value = txt_nacionalidad.Text;
                 con.command.Parameters.Add("@fechaNac", SqlDbType.DateTime).Value = dt_fecha_nac.Value.ToShortDateString();
-
+                // se abre la conexión con la base de datos, se ejecuta y se cierra
                 con.openConection();
                 con.command.ExecuteNonQuery();
 
-                cliente = Convert.ToDecimal(con.command.Parameters["@codigo"].Value);
+                cliente = Convert.ToDecimal(con.command.Parameters["@codigo"].Value); // se obtiene el dato de output
 
                 con.closeConection();
 
+                // Se crea el registro en la talba EstadiaXCliente
                 con.strQuery = "four_sizons.RegistrarEstadiaXCliente";
                 con.execute();
                 con.command.CommandType = CommandType.StoredProcedure;
@@ -407,56 +410,58 @@ namespace FrbaHotel.ABMCliente
          {
             if (MessageBox.Show("Está seguro que desea continuar con la operación?", "FOUR SIZONS - FRBA Hoteles", MessageBoxButtons.YesNo, MessageBoxIcon.Question) == DialogResult.Yes)
             {
-                        try
-                        {
-                            Conexion con = new Conexion();
-                            con.strQuery = nombreStored;
-                            con.execute();
-                            con.command.CommandType = CommandType.StoredProcedure;
+                // se agrega el código en un try / catch para poder capturar los errores
+                try
+                {
+                    // se crea un nuevo conector, se asigna el nombre del stored y con execute se crea el nuevo comando sql
+                    Conexion con = new Conexion();
+                    con.strQuery = nombreStored;
+                    con.execute();
+                    con.command.CommandType = CommandType.StoredProcedure;
+                    // se agregan los parámetros al stored procedure
+                    if (modoABM == "INS")
+                    {
+                        con.command.Parameters.Add("@codigo", SqlDbType.Decimal).Direction = ParameterDirection.Output;
+                    }
+                    else
+                    {
+                        con.command.Parameters.Add("@codigo", SqlDbType.NVarChar).Value = cliente;
+                    }
+                    con.command.Parameters.Add("@nombre", SqlDbType.NVarChar).Value = txt_nombre.Text;
+                    con.command.Parameters.Add("@apellido", SqlDbType.NVarChar).Value = txt_apellido.Text;
+                    con.command.Parameters.Add("@numDoc", SqlDbType.Decimal).Value = Convert.ToDecimal(txt_nro_doc.Text);
+                    con.command.Parameters.Add("@tipoDoc", SqlDbType.NVarChar).Value = cb_tipo_doc.Text;
+                    con.command.Parameters.Add("@mail", SqlDbType.NVarChar).Value = txt_mail.Text;
+                    con.command.Parameters.Add("@telefono", SqlDbType.NVarChar).Value = txt_telefono.Text;
+                    con.command.Parameters.Add("@pais", SqlDbType.NVarChar).Value = txt_pais.Text;
+                    con.command.Parameters.Add("@ciudad", SqlDbType.NVarChar).Value = txt_ciudad.Text;
+                    con.command.Parameters.Add("@calle", SqlDbType.NVarChar).Value = txt_direccion.Text;
+                    con.command.Parameters.Add("@numCalle", SqlDbType.Decimal).Value = Convert.ToDecimal(txt_nro_calle.Text);
+                    con.command.Parameters.Add("@piso", SqlDbType.Decimal).Value = Convert.ToDecimal(txt_piso.Text);
+                    con.command.Parameters.Add("@depto", SqlDbType.NVarChar).Value = txt_departamento.Text;
+                    con.command.Parameters.Add("@localidad", SqlDbType.NVarChar).Value = txt_localidad.Text;
+                    con.command.Parameters.Add("@nacionalidad", SqlDbType.NVarChar).Value = txt_nacionalidad.Text;
+                    con.command.Parameters.Add("@fechaNac", SqlDbType.DateTime).Value = dt_fecha_nac.Value.ToShortDateString();
+                    if (modoABM == "DLT")
+                    {
+                        con.command.Parameters.Add("@estado", SqlDbType.Bit).Value = 0;
+                    }
+                    else if (modoABM == "UPD")
+                    {
+                        con.command.Parameters.Add("@estado", SqlDbType.Bit).Value = 1;
+                    }
+                    // se abre la conexión con la base de datos, se ejecuta y se cierra       
+                    con.openConection();
+                    con.command.ExecuteNonQuery();
+                    con.closeConection();
 
-                            if (modoABM == "INS")
-                            {
-                                con.command.Parameters.Add("@codigo", SqlDbType.Decimal).Direction = ParameterDirection.Output;
-                            }
-                            else
-                            {
-                                con.command.Parameters.Add("@codigo", SqlDbType.NVarChar).Value = cliente;
-                            }
-                            con.command.Parameters.Add("@nombre", SqlDbType.NVarChar).Value = txt_nombre.Text;
-                            con.command.Parameters.Add("@apellido", SqlDbType.NVarChar).Value = txt_apellido.Text;
-                            con.command.Parameters.Add("@numDoc", SqlDbType.Decimal).Value = Convert.ToDecimal(txt_nro_doc.Text);
-                            con.command.Parameters.Add("@tipoDoc", SqlDbType.NVarChar).Value = cb_tipo_doc.Text;
-                            con.command.Parameters.Add("@mail", SqlDbType.NVarChar).Value = txt_mail.Text;
-                            con.command.Parameters.Add("@telefono", SqlDbType.NVarChar).Value = txt_telefono.Text;
-                            con.command.Parameters.Add("@pais", SqlDbType.NVarChar).Value = txt_pais.Text;
-                            con.command.Parameters.Add("@ciudad", SqlDbType.NVarChar).Value = txt_ciudad.Text;
-                            con.command.Parameters.Add("@calle", SqlDbType.NVarChar).Value = txt_direccion.Text;
-                            con.command.Parameters.Add("@numCalle", SqlDbType.Decimal).Value = Convert.ToDecimal(txt_nro_calle.Text);
-                            con.command.Parameters.Add("@piso", SqlDbType.Decimal).Value = Convert.ToDecimal(txt_piso.Text);
-                            con.command.Parameters.Add("@depto", SqlDbType.NVarChar).Value = txt_departamento.Text;
-                            con.command.Parameters.Add("@localidad", SqlDbType.NVarChar).Value = txt_localidad.Text;
-                            con.command.Parameters.Add("@nacionalidad", SqlDbType.NVarChar).Value = txt_nacionalidad.Text;
-                            con.command.Parameters.Add("@fechaNac", SqlDbType.DateTime).Value = dt_fecha_nac.Value.ToShortDateString();
-                            if (modoABM == "DLT")
-                            {
-                                con.command.Parameters.Add("@estado", SqlDbType.Bit).Value = 0;
-                            }
-                            else if (modoABM == "UPD")
-                            {
-                                con.command.Parameters.Add("@estado", SqlDbType.Bit).Value = 1;
-                            }
-                            
-                            con.openConection();
-                            con.command.ExecuteNonQuery();
-                            con.closeConection();
-
-                            MessageBox.Show("Operación exitosa", "FOUR SIZONS - FRBA Hoteles", MessageBoxButtons.OK, MessageBoxIcon.Information);
-                        }
-                        catch (Exception ex)
-                        {
-                            error = 1;
-                            MessageBox.Show("Error al completar la operación. " + ex.Message, "FOUR SIZONS - FRBA Hoteles", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                        }
+                    MessageBox.Show("Operación exitosa", "FOUR SIZONS - FRBA Hoteles", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                }
+                catch (Exception ex)
+                {
+                    error = 1;
+                    MessageBox.Show("Error al completar la operación. " + ex.Message, "FOUR SIZONS - FRBA Hoteles", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                }
             } 
              
         }

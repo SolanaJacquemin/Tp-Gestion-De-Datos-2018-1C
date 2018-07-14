@@ -73,40 +73,6 @@ namespace FrbaHotel.RegistrarEstadia
 
         public void limpiar()
         {
-
-            /*txt_CodReserva.Text = "";
-            txt_Estadia.Text = "";
-
-            dgv_Estadia.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
-            dgv_Estadia.Rows.Clear();
-
-
-            Conexion con = new Conexion();
-            con.strQuery = "SELECT top 100 * FROM FOUR_SIZONS.Estadia" +
-                            " WHERE 1=1";
-            con.executeQuery();
-
-            if (!con.reader())
-            {
-                MessageBox.Show("No se han encontrado estadías. Revise los criterios de búsqueda", "FOUR SIZONS - FRBA Hoteles", MessageBoxButtons.OK, MessageBoxIcon.Information);
-                con.strQuery = "";
-                con.closeConection();
-                return;
-            }
-
-            dgv_Estadia.Rows.Add(new Object[] { con.lector.GetDecimal(0), con.lector.GetDecimal(1),
-            con.lector.GetDateTime(2), con.lector.GetDateTime(3), con.lector.GetDecimal(4), con.lector.GetDecimal(5),
-            con.lector.GetDecimal(6), con.lector.GetString(7), con.lector.GetString(8), con.lector.GetDecimal(9),
-            con.lector.GetDecimal(10), con.lector.GetBoolean(11)});
-
-            while (con.reader())
-            {
-                dgv_Estadia.Rows.Add(new Object[] { con.lector.GetDecimal(0), con.lector.GetDecimal(1),
-            con.lector.GetDateTime(2), con.lector.GetDateTime(3), con.lector.GetDecimal(4), con.lector.GetDecimal(5),
-            con.lector.GetDecimal(6), con.lector.GetString(7), con.lector.GetString(8), con.lector.GetDecimal(9),
-            con.lector.GetDecimal(10), con.lector.GetBoolean(11)});
-            }
-            con.closeConection();*/
         }
 
         private void buscar()
@@ -154,47 +120,6 @@ namespace FrbaHotel.RegistrarEstadia
             }
         }
 
-        public void ejecutarConsumible()
-        {
-
-
-            /*if (MessageBox.Show("Está seguro que desea continuar con la operación?", "FOUR SIZONS - FRBA Hoteles", MessageBoxButtons.YesNo, MessageBoxIcon.Question) == DialogResult.Yes)
-            {
-
-                try
-                {
-                    estadia = Convert.ToDecimal(txt_Estadia.Text);
-
-                    Conexion con = new Conexion();
-                    con.strQuery = "FOUR_SIZONS.RegistrarConsXest";
-                    con.execute();
-                    con.command.CommandType = CommandType.StoredProcedure;
-
-                    con.command.Parameters.Add("@estadia", SqlDbType.Decimal).Value = estadia;
-                    con.command.Parameters.Add("@consumible", SqlDbType.NVarChar).Value = cb_consumibles.SelectedItem;
-                    con.command.Parameters.Add("@cant", SqlDbType.Decimal).Value = Convert.ToDecimal(cb_cantidad.SelectedItem);
-
-                    con.openConection();
-                    con.command.ExecuteNonQuery();
-                    con.closeConection();
-
-
-                    MessageBox.Show("Operación exitosa", "FOUR SIZONS - FRBA Hoteles", MessageBoxButtons.OK, MessageBoxIcon.Information);
-                }
-                catch (Exception ex)
-                {
-                    error = 1;
-                    MessageBox.Show("Error al completar la operación. " + ex.Message, "FOUR SIZONS - FRBA Hoteles", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                }
-            }
-
-            else
-            {
-                error = 1;
-                MessageBox.Show("No se ha completado la operación", "FOUR SIZONS - FRBA Hoteles", MessageBoxButtons.OK, MessageBoxIcon.Information);
-            }*/
-        }
-
         private void btn_Buscar_Click(object sender, EventArgs e)
         {
             buscar();
@@ -212,11 +137,6 @@ namespace FrbaHotel.RegistrarEstadia
 
         private void boton_aceptar_Click(object sender, EventArgs e)
         {
-            if (error == 0)
-            {
-                ejecutarConsumible();
-                this.Close();
-            }
         }
 
         private void dgv_consumibles_CellClick(object sender, DataGridViewCellEventArgs e)

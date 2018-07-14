@@ -84,8 +84,8 @@ namespace FrbaHotel.GestionReservas
 
         private void ABMReserva03_Load(object sender, EventArgs e)
         {
+            // se verifica que el usuario sea GUEST. Esto es para determinar el estado de la reserva una vez cancelada
             Conexion con = new Conexion();
-
             con.strQuery = "SELECT Rol_Codigo FROM FOUR_SIZONS.UsuarioXRol WHERE Usuario_ID = 'GUEST'";
             con.executeQuery();
             while (con.reader())
@@ -94,6 +94,7 @@ namespace FrbaHotel.GestionReservas
             }
             con.closeConection();
 
+            // se levantan los datos
             con.strQuery = "SELECT Habitacion_Tipo_Codigo, Habitacion_Tipo_Descripcion FROM FOUR_SIZONS.Habitacion_Tipo ORDER BY Habitacion_Tipo_Codigo";
             con.executeQuery();
             while (con.reader())
@@ -105,8 +106,6 @@ namespace FrbaHotel.GestionReservas
             con.strQuery = "SELECT HT.Habitacion_Tipo_Descripcion, R.Reserva_Fecha_Inicio, R.Reserva_Fecha_Fin, H.Hotel_Codigo," +
                            " H.Hotel_Nombre, R.Regimen_Codigo, REG.Regimen_Descripcion, R.Reserva_Cant_Hab, R.Reserva_Precio, R.Cliente_Codigo" +
                            " FROM FOUR_SIZONS.Reserva R" +
-                           //" JOIN FOUR_SIZONS.Habitacion_TipoXReser HTR ON HTR.Reserva_Codigo = R.Reserva_Codigo" +
-                           //" JOIN FOUR_SIZONS.Habitacion_Tipo HT ON HT.Habitacion_Tipo_Codigo = HTR.Habitacion_Tipo_Codigo" +
                            " JOIN FOUR_SIZONS.Habitacion_Tipo HT ON HT.Habitacion_Tipo_Codigo = R.Habitacion_Tipo_Codigo" +
                            " JOIN FOUR_SIZONS.Hotel H ON H.Hotel_Codigo = R.Hotel_Codigo" +
                            " JOIN FOUR_SIZONS.Regimen REG ON REG.Regimen_Codigo = R.Regimen_Codigo" +
@@ -176,12 +175,15 @@ namespace FrbaHotel.GestionReservas
 
         private void boton_aceptar_Click(object sender, EventArgs e)
         {
+            // se agrega el código en un try / catch para poder capturar los errores
             try
             {
+                // se crea un nuevo conector, se asigna el nombre del stored y con execute se crea el nuevo comando sql
                 Conexion con = new Conexion();
                 con.strQuery = "four_sizons.ModificarReserva";
                 con.execute();
                 con.command.CommandType = CommandType.StoredProcedure;
+                // se agregan los parámetros al stored procedure
                 con.command.Parameters.Add("@codigoReserva", SqlDbType.Decimal).Value = Convert.ToDecimal(txt_reservaID.Text);
                 con.command.Parameters.Add("@fechaInicio", SqlDbType.DateTime).Value = dt_fechaDesde.Value.ToShortDateString();
                 con.command.Parameters.Add("@fechaFin", SqlDbType.DateTime).Value = dt_fechaHasta.Value.ToShortDateString();
@@ -207,12 +209,10 @@ namespace FrbaHotel.GestionReservas
                 {
                     con.command.Parameters.Add("@estado", SqlDbType.Decimal).Value = 1;
                 }
-
                 con.command.Parameters.Add("@canthab", SqlDbType.Decimal).Value = Convert.ToDecimal(txt_cantHab.Text);
-                //con.command.Parameters.Add("@fechaCambio", SqlDbType.DateTime).Value = readConfig.Config.fechaSystem().ToString();
                 con.command.Parameters.Add("@fechaCambio", SqlDbType.DateTime).Value = DateTime.Today.ToShortDateString();
-                //con.command.Parameters.Add("@clie", SqlDbType.Decimal).Value = cliente;
 
+                // se abre la conexión con la base de datos, se ejecuta y se cierra
                 con.openConection();
                 con.command.ExecuteNonQuery();
                 con.closeConection();
@@ -230,16 +230,17 @@ namespace FrbaHotel.GestionReservas
         private void btn_disponibilidad_Click(object sender, EventArgs e)
         {
             error = 0;
-            //verificarCampos();
             if (error == 0)
             {
+                // se agrega el código en un try / catch para poder capturar los errores
                 try
                 {
+                    // se crea un nuevo conector, se asigna el nombre del stored y con execute se crea el nuevo comando sql
                     Conexion con = new Conexion();
                     con.strQuery = "four_sizons.DisponibilidadyPrecio";
                     con.execute();
                     con.command.CommandType = CommandType.StoredProcedure;
-
+                    // se agregan los parámetros al stored procedure
                     con.command.Parameters.Add("@fechaInicio", SqlDbType.DateTime).Value = dt_fechaDesde.Value.ToShortDateString();
                     con.command.Parameters.Add("@fechaFin", SqlDbType.DateTime).Value = dt_fechaHasta.Value.ToShortDateString();
                     con.command.Parameters.Add("@hotId", SqlDbType.Decimal).Value = hotelID;
@@ -250,18 +251,15 @@ namespace FrbaHotel.GestionReservas
                     con.command.Parameters.Add("@regId", SqlDbType.Decimal).Value = regimenID;
                     con.command.Parameters.Add("@canthab", SqlDbType.Decimal).Value = txt_cantHab.Text;
                     con.command.Parameters.Add("@tipoHabDesc", SqlDbType.NVarChar).Value = cb_tipoHabitacion.Text;
-                    //con.command.Parameters.Add("@precio", SqlDbType.Decimal).Direction = ParameterDirection.Output;
 
-                    /*con.openConection();
-                    con.command.ExecuteNonQuery();
-                    con.closeConection();*/
-
+                    // se abre la conexión y se llena el contenido del select del sp en un dataset
                     con.openConection();
                     DataSet dataset = new DataSet();
                     SqlDataAdapter da = new SqlDataAdapter(con.command);
 
                     da.Fill(dataset);
 
+                    // se muestra el contenido en un prompt
                     if (txt_regimen.Text == "")
                     {
                         using (PromptElegirRegimenXReserva promptRXR = new PromptElegirRegimenXReserva(dataset))

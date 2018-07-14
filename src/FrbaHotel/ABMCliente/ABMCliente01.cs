@@ -134,16 +134,6 @@ namespace FrbaHotel.AbmCliente
                 con.lector.GetString(10), con.lector.GetDateTime(11), con.lector.GetDecimal(12), con.lector.GetBoolean(13), 
                 con.lector.GetBoolean(14)});
             }
-
-          /*  dgv_Clientes.ClearSelection();
-            foreach (DataGridViewRow row in dgv_Clientes.Rows)
-                if (Convert.ToBoolean(row.Cells[13].Value) == false)
-                {
-                    row.DefaultCellStyle.BackColor = Color.Red;
-                }
-            con.closeConection();
-            //dgv_Clientes.Rows.Clear();
-            //refrescarGrid();*/
         } 
           
         private void btn_volver_Click(object sender, EventArgs e)
@@ -163,6 +153,7 @@ namespace FrbaHotel.AbmCliente
 
         private void btn_alta_Click(object sender, EventArgs e)
         {         
+            // Se crea una nueva instacia de la pantalla de ABM genérica y se envía el modo con sus parámetros
             string modo = "INS";
             this.Hide();
             ABMCliente02 formABMCliente02 = new ABMCliente02(modo, dgv_cliente_ID, 0, "", 0, "");
@@ -175,6 +166,7 @@ namespace FrbaHotel.AbmCliente
         
         private void btn_baja_Click(object sender, EventArgs e)
         {
+            // Se crea una nueva instacia de la pantalla de ABM genérica y se envía el modo con sus parámetros
             if (dgv_Clientes.SelectedRows.Count > 0)
             {
                 if (!estado)
@@ -204,6 +196,7 @@ namespace FrbaHotel.AbmCliente
 
         private void btn_Modificacion_Click(object sender, EventArgs e)
         {
+            // Se crea una nueva instacia de la pantalla de ABM genérica y se envía el modo con sus parámetros
             if (dgv_Clientes.SelectedRows.Count > 0)
             {
                 if (!estado)

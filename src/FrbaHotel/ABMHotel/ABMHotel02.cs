@@ -173,17 +173,15 @@ namespace FrbaHotel.ABMHotel
         {
             if (MessageBox.Show("Está seguro que desea continuar con la operación?", "FOUR SIZONS - FRBA Hoteles", MessageBoxButtons.YesNo, MessageBoxIcon.Question) == DialogResult.Yes)
             {
-
+                // se agrega el código en un try / catch para poder capturar los errores
                 try
                 {
+                    // se crea un nuevo conector, se asigna el nombre del stored y con execute se crea el nuevo comando sql
                     Conexion con = new Conexion();
                     con.strQuery = nombreStored;
                     con.execute();
                     con.command.CommandType = CommandType.StoredProcedure;
-
-                    string newS = "EXEC " + nombreStored + " " + "@codigo" + "," + txt_nombre_hotel.Text + "," + txt_mail.Text + "," + txt_telefono.Text + "," + txt_calle.Text + ","
-                        + txt_nroCalle.Text + "," + cb_estrellas.Text + "," + txt_recargaEstrella.Text + "," + txt_ciudad.Text + "," + txt_pais.Text + "," + "'01-01-2018', 'SYSADM'";
-
+                    // se agregan los parámetros al stored procedure
                     if (modoABM == "INS")
                     {
                         con.command.Parameters.Add("@codigo", SqlDbType.Decimal).Direction = ParameterDirection.Output;
@@ -192,7 +190,6 @@ namespace FrbaHotel.ABMHotel
                     {
                         con.command.Parameters.Add("@codigo", SqlDbType.NVarChar).Value = hotel;
                     }
-
                     con.command.Parameters.Add("@nombre", SqlDbType.NVarChar).Value = txt_nombre_hotel.Text;
                     con.command.Parameters.Add("@mail", SqlDbType.NVarChar).Value = txt_mail.Text;
                     con.command.Parameters.Add("@telefono", SqlDbType.NVarChar).Value = txt_telefono.Text;
@@ -215,7 +212,7 @@ namespace FrbaHotel.ABMHotel
                     {
                         con.command.Parameters.Add("@estado", SqlDbType.Bit).Value = 1;
                     }
-
+                    // se abre la conexión con la base de datos y se ejecuta
                     con.openConection();
                     con.command.ExecuteNonQuery();
 
@@ -277,7 +274,7 @@ namespace FrbaHotel.ABMHotel
         private void boton_aceptar_Click(object sender, EventArgs e)
         {
             error = 0;
-
+                // Se determina el stored procedure a utilizar
                 switch (modoABM)
                 {
                     case "INS":

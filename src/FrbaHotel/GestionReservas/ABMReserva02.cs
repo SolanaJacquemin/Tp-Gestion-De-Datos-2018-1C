@@ -186,19 +186,22 @@ namespace FrbaHotel.GestionReservas
             if (MessageBox.Show("Está seguro que desea continuar con la operación?", "FOUR SIZONS - FRBA Hoteles", MessageBoxButtons.YesNo, MessageBoxIcon.Question) == DialogResult.Yes)
             {
 
-                if (modoABM == "INS")
+                if (modoABM == "INS") // siempre pasa por acá en esta pantalla
                 {
                     if (esCliente == false)
                     {    
+                        // si no es cliente se ejecuta el sp para darlo de alta
                         ejecutarABMCliente();
                     }
-
+                    // se agrega el código en un try / catch para poder capturar los errores
                     try
-                    {
+                    {   // si es cliente se da de alta la reserva
+                        // se crea un nuevo conector, se asigna el nombre del stored y con execute se crea el nuevo comando sql
                         Conexion con = new Conexion();
                         con.strQuery = nombreStored;
                         con.execute();
                         con.command.CommandType = CommandType.StoredProcedure;
+                        // se agregan los parámetros al stored procedure
                         con.command.Parameters.Add("@fechaInicio", SqlDbType.DateTime).Value = dt_fechaDesde.Value.ToShortDateString();
                         con.command.Parameters.Add("@fechaFin", SqlDbType.DateTime).Value = dt_fechaHasta.Value.ToShortDateString();
                         con.command.Parameters.Add("@userId", SqlDbType.NVarChar).Value = usuario;
@@ -213,13 +216,12 @@ namespace FrbaHotel.GestionReservas
                         con.command.Parameters.Add("@tipoHabDesc", SqlDbType.NVarChar).Value = cb_tipoHabitacion.Text;
                         con.command.Parameters.Add("@precio", SqlDbType.Decimal).Value = Convert.ToDecimal(txt_costoTotal.Text);
                         con.command.Parameters.Add("@fechaCreacion", SqlDbType.DateTime).Value = readConfig.Config.fechaSystem().ToString();
-
+                        // se abre la conexión con la base de datos, se ejecuta y se cierra
                         con.openConection();
                         con.command.ExecuteNonQuery();
                         con.closeConection();
 
-                        //ejecutarAltaTipoHab();
-
+                        // se obtiene el código de reserva - se ha optimizado en otros sp
                         con.strQuery = "SELECT TOP 1 Reserva_Codigo FROM FOUR_SIZONS.Reserva WHERE Cliente_Codigo = " + clienteID + " ORDER BY Reserva_Codigo DESC";
                         con.executeQuery();
 
@@ -237,44 +239,22 @@ namespace FrbaHotel.GestionReservas
                         error = 1;
                         MessageBox.Show("Error al completar la operación. " + ex.Message, "FOUR SIZONS - FRBA Hoteles", MessageBoxButtons.OK, MessageBoxIcon.Error);
                     }
-                }else{
-                    try
-                    {
-                        Conexion con = new Conexion();
-                        con.strQuery = nombreStored;
-                        con.execute();
-                        con.command.CommandType = CommandType.StoredProcedure;
-
-                        con.command.Parameters.Add("@codigoReserva", SqlDbType.Decimal).Value = dt_fechaDesde.Value.ToString();
-                        con.command.Parameters.Add("@fechaInicio", SqlDbType.DateTime).Value = dt_fechaDesde.Value.ToShortDateString();
-                        con.command.Parameters.Add("@fechaFin", SqlDbType.DateTime).Value = dt_fechaHasta.Value.ToShortDateString();
-                        con.command.Parameters.Add("@userId", SqlDbType.NVarChar).Value = usuario;
-                        con.command.Parameters.Add("@hotId", SqlDbType.Decimal).Value = hotelID;
-                        con.command.Parameters.Add("@cliId", SqlDbType.Decimal).Value = clienteID;
-                        con.command.Parameters.Add("@regId", SqlDbType.Decimal).Value = regimenID;
-                        con.command.Parameters.Add("@detalle", SqlDbType.NVarChar).Value = usuario;
-
-                    }
-                    catch (Exception ex)
-                    {
-                        error = 1;
-                        MessageBox.Show("Error al completar la operación. " + ex.Message, "FOUR SIZONS - FRBA Hoteles", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                    }
                 }
-
-
             }
         }
 
         public void ejecutarABMCliente()
         {
-
+            // se da de alta al cliente
+            // se agrega el código en un try / catch para poder capturar los errores
             try
             {
+                // se crea un nuevo conector, se asigna el nombre del stored y con execute se crea el nuevo comando sql
                 Conexion con2 = new Conexion();
                 con2.strQuery = "four_sizons.AltaCliente";
                 con2.execute();
                 con2.command.CommandType = CommandType.StoredProcedure;
+                // se agregan los parámetros al stored procedure
                 con2.command.Parameters.Add("@codigo", SqlDbType.Decimal).Direction = ParameterDirection.Output;
                 con2.command.Parameters.Add("@nombre", SqlDbType.NVarChar).Value = txt_nombre.Text;
                 con2.command.Parameters.Add("@apellido", SqlDbType.NVarChar).Value = txt_apellido.Text;
@@ -291,49 +271,13 @@ namespace FrbaHotel.GestionReservas
                 con2.command.Parameters.Add("@localidad", SqlDbType.NVarChar).Value = " ";
                 con2.command.Parameters.Add("@nacionalidad", SqlDbType.NVarChar).Value = " ";
                 con2.command.Parameters.Add("@fechaNac", SqlDbType.DateTime).Value = "01-01-1990";
+
+                // se abre la conexión con la base de datos, se ejecuta y se cierra
                 con2.openConection();
                 con2.command.ExecuteNonQuery();
 
-                clienteID = Convert.ToDecimal(con2.command.Parameters["@codigo"].Value);
+                clienteID = Convert.ToDecimal(con2.command.Parameters["@codigo"].Value); // se devuelve el código de cliente
                 con2.closeConection();
-            }
-            catch (Exception ex)
-            {
-                error = 1;
-                MessageBox.Show("Error al completar la operación. " + ex.Message, "FOUR SIZONS - FRBA Hoteles", MessageBoxButtons.OK, MessageBoxIcon.Error);
-            }
-        }
-
-        public void ejecutarAltaTipoHab()
-        {
-
-            Conexion con4 = new Conexion();
-
-            con4.strQuery = "SELECT Reserva_Codigo FROM FOUR_SIZONS.Reserva WHERE Cliente_Codigo = " + clienteID;
-            con4.executeQuery();
-
-            if (con4.reader())
-            {
-                reservaID = Convert.ToDecimal(con4.lector.GetDecimal(0).ToString());
-            }
-
-            con4.closeConection();
-
-            try
-            {
-                Conexion con = new Conexion();
-                con.strQuery = "four_sizons.altaTipoHabXRes";
-                con.execute();
-                con.command.CommandType = CommandType.StoredProcedure;
-
-                //MessageBox.Show((Convert.ToDecimal(txt_cantHab.Text)).ToString());
-                con.command.Parameters.Add("@tipoHab", SqlDbType.NVarChar).Value = cb_tipoHabitacion.Text;
-                con.command.Parameters.Add("@cantHab", SqlDbType.Decimal).Value = Convert.ToDecimal(txt_cantHab.Text);
-                con.command.Parameters.Add("@reservaCodigo", SqlDbType.Decimal).Value = reservaID;
-                con.openConection();
-                con.command.ExecuteNonQuery();
-                con.closeConection();
-
             }
             catch (Exception ex)
             {
@@ -394,6 +338,7 @@ namespace FrbaHotel.GestionReservas
                 {
                     hotel = hotelID;
                 }
+                // se abre un prompt para que se elija el régimen
                 using (PromptRegimenes formPromptRegimen01 = new PromptRegimenes(hotel))
                 {
                     formPromptRegimen01.ShowDialog();
@@ -439,27 +384,30 @@ namespace FrbaHotel.GestionReservas
             verificarCampos1();
             if(error == 0)
             {
+                // se agrega el código en un try / catch para poder capturar los errores
                 try
                 {
+                    // se crea un nuevo conector, se asigna el nombre del stored y con execute se crea el nuevo comando sql
                     Conexion con = new Conexion();
                     con.strQuery = "four_sizons.DisponibilidadyPrecio";
                     con.execute();
                     con.command.CommandType = CommandType.StoredProcedure;
-                    //string newS = "EXEC " + "four_sizons.DisponibilidadyPrecio" + " " + dt_fechaDesde.Value.ToString() + "," + dt_fechaHasta.Value.ToString() + "," + hotelID.ToString() + ","
-                    //    + regimenID.ToString() +"," + txt_cantHab.Text + "," + cb_tipoHabitacion.Text;
-                    //MessageBox.Show(dt_fechaDesde.Value.ToShortDateString());
+                    // se agregan los parámetros al stored procedure
                     con.command.Parameters.Add("@fechaInicio", SqlDbType.DateTime).Value = dt_fechaDesde.Value.ToShortDateString();
                     con.command.Parameters.Add("@fechaFin", SqlDbType.DateTime).Value = dt_fechaHasta.Value.ToShortDateString();
                     con.command.Parameters.Add("@hotId", SqlDbType.Decimal).Value = hotel;
                     con.command.Parameters.Add("@regId", SqlDbType.Decimal).Value = regimenID;
                     con.command.Parameters.Add("@canthab", SqlDbType.Decimal).Value = txt_cantHab.Text;
                     con.command.Parameters.Add("@tipoHabDesc", SqlDbType.NVarChar).Value = cb_tipoHabitacion.Text;
+                    // se abre la conexión
                     con.openConection();
+
+                    // se carga un dataset para almacenar los resultados del select del sp
                     DataSet dataset = new DataSet();
                     SqlDataAdapter da = new SqlDataAdapter(con.command);
-
+                    
                     da.Fill(dataset);
-
+                    // en caso que no se haya informado el régimen se abre un prompt con una grilla para que el cliente seleccione
                     if (txt_regimen.Text == "")
                     {
                         using (PromptElegirRegimenXReserva promptRXR = new PromptElegirRegimenXReserva(dataset))
@@ -476,6 +424,7 @@ namespace FrbaHotel.GestionReservas
                             }
                         }
                     }
+                    // en caso contrario se informa el costo total
                     else
                     {                        
                         txt_regimen.Text = (dataset.Tables[0].Rows[0][0]).ToString();
@@ -483,7 +432,7 @@ namespace FrbaHotel.GestionReservas
                         tieneDisponibilidad = true;
                         MessageBox.Show("Existe disponbilidad y el precio total de su estadía es de: U$S " + txt_costoTotal.Text, "FOUR SIZONS - FRBA Hoteles", MessageBoxButtons.OK, MessageBoxIcon.Information);
                     }
-
+                    // se cierra la conexión
                     con.closeConection();
 
                     if (tieneDisponibilidad)

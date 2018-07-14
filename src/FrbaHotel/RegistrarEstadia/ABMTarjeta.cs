@@ -77,6 +77,7 @@ namespace FrbaHotel.RegistrarEstadia
 
         private void boton_confirmar_Click(object sender, EventArgs e)
         {
+            // se determina el sp a utilizar
             if (modoABM == "INS")
             {
                 tarjeta = Convert.ToDecimal(txt_numero.Text);
@@ -88,13 +89,15 @@ namespace FrbaHotel.RegistrarEstadia
             }
             if (verificarObligatorios() == true)
             {
+                // se agrega el código en un try / catch para poder capturar los errores
                 try
                 {
+                    // se crea un nuevo conector, se asigna el nombre del stored y con execute se crea el nuevo comando sql
                     Conexion con = new Conexion();
                     con.strQuery = nombreStored;
                     con.execute();
                     con.command.CommandType = CommandType.StoredProcedure;
-
+                    // se agregan los parámetros al stored procedure
                     con.command.Parameters.Add("@Tarjeta_Numero", SqlDbType.Decimal).Value = tarjeta;
                     if (modoABM == "INS")
                     {
@@ -104,7 +107,7 @@ namespace FrbaHotel.RegistrarEstadia
                         con.command.Parameters.Add("@Tarjeta_Marca", SqlDbType.NVarChar).Value = cb_marcaTarj.Text;
                         con.command.Parameters.Add("@Cliente_Codigo", SqlDbType.Decimal).Value = Convert.ToDecimal(cliente); 
                     }
-
+                    // se abre la conexión con la base de datos, se ejecuta y se cierra
                     con.openConection();
                     con.command.ExecuteNonQuery();
                     con.closeConection();
@@ -134,16 +137,6 @@ namespace FrbaHotel.RegistrarEstadia
 
         private void ABMTarjeta_Load(object sender, EventArgs e)
         {
-            /*Conexion con = new Conexion();
-            con.strQuery = "select Cliente_Codigo from FOUR_SIZONS.EstadiaXCliente where Estadia_Codigo = " + estadia;
-            con.executeQuery();
-            if (con.reader())
-            {
-                cliente = con.lector.GetDecimal(0);
-            }
-            con.closeConection();
-
-            txt_codigoCli.Text = cliente.ToString();*/
         }    
     }
 }

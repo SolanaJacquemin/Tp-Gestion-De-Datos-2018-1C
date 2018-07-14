@@ -98,7 +98,9 @@ namespace FrbaHotel.ListadoEstadistico
             verificarCampos();
             if (error == 0)
             {
+                // se crea un dataset para contener todos los datos
                 DataSet dataset = new DataSet();
+                // dependiendo la opción elegida se ejecuta el sp y se cargan los resultados en una grilla personalizada
                 switch (cb_TipoListado.Text)
                 {
                     case "Hotel con mayor cantidad de reservas canceladas":
@@ -106,12 +108,16 @@ namespace FrbaHotel.ListadoEstadistico
                         ejecutarListado(nombreStored, dataset);
                         if (error == 0)
                         {
-                            dgv_Listado.ColumnCount = 1;
+                            dgv_Listado.ColumnCount = 3;
                             dgv_Listado.Columns[0].Name = "Código Hotel";
+                            dgv_Listado.Columns[1].Name = "Hotel Nombre";
+                            dgv_Listado.Columns[2].Name = "Cantidad";
 
                             for (int i = 0; i < dataset.Tables[0].Rows.Count; i++)
                             {
-                                dgv_Listado.Rows.Add(new Object[] { (dataset.Tables[0].Rows[i][0]).ToString() });
+                                dgv_Listado.Rows.Add(new Object[] { (dataset.Tables[0].Rows[i][0]).ToString(),
+                                                                    (dataset.Tables[0].Rows[i][1]).ToString(),
+                                                                    (dataset.Tables[0].Rows[i][2]).ToString()});
                             }
                         }
                         break;
@@ -120,25 +126,34 @@ namespace FrbaHotel.ListadoEstadistico
                         ejecutarListado(nombreStored, dataset);
                         if (error == 0)
                         {
-                            dgv_Listado.ColumnCount = 1;
+                            dgv_Listado.ColumnCount = 3;
                             dgv_Listado.Columns[0].Name = "Código Hotel";
+                            dgv_Listado.Columns[1].Name = "Hotel Nombre";
+                            dgv_Listado.Columns[2].Name = "Cantidad";
 
                             for (int i = 0; i < dataset.Tables[0].Rows.Count; i++)
                             {
-                                dgv_Listado.Rows.Add(new Object[] { (dataset.Tables[0].Rows[i][0]).ToString() });
+                                dgv_Listado.Rows.Add(new Object[] { (dataset.Tables[0].Rows[i][0]).ToString(),
+                                                                    (dataset.Tables[0].Rows[i][1]).ToString(),
+                                                                    (dataset.Tables[0].Rows[i][2]).ToString()});
+
                             }
                         }
                         break;
                     case "Hoteles con mayor cantidad de días fuera de servicio":
                         nombreStored = "FOUR_SIZONS.hotelMasCerrado";
                         ejecutarListado(nombreStored, dataset);
-                        dgv_Listado.ColumnCount = 1;
+                        dgv_Listado.ColumnCount = 3;
                         dgv_Listado.Columns[0].Name = "Código Hotel";
+                        dgv_Listado.Columns[1].Name = "Hotel Nombre";
+                        dgv_Listado.Columns[2].Name = "Cantidad";
                         if (error == 0)
                         {
                             for (int i = 0; i < dataset.Tables[0].Rows.Count; i++)
                             {
-                                dgv_Listado.Rows.Add(new Object[] { (dataset.Tables[0].Rows[i][0]).ToString() });
+                                dgv_Listado.Rows.Add(new Object[] { (dataset.Tables[0].Rows[i][0]).ToString(),
+                                                                    (dataset.Tables[0].Rows[i][1]).ToString(),
+                                                                    (dataset.Tables[0].Rows[i][2]).ToString()});
                             }
                         }
                         break;
@@ -147,14 +162,16 @@ namespace FrbaHotel.ListadoEstadistico
                         ejecutarListado(nombreStored, dataset);
                         if (error == 0)
                         {
-                            dgv_Listado.ColumnCount = 2;
-                            dgv_Listado.Columns[0].Name = "Número Habitación";
-                            dgv_Listado.Columns[1].Name = "Código Hotel";
+                            dgv_Listado.ColumnCount = 3;
+                            dgv_Listado.Columns[0].Name = "Código Hotel";
+                            dgv_Listado.Columns[1].Name = "Hotel Nombre";
+                            dgv_Listado.Columns[2].Name = "Cantidad";
 
                             for (int i = 0; i < dataset.Tables[0].Rows.Count; i++)
                             {
-                                dgv_Listado.Rows.Add(new Object[] { (dataset.Tables[0].Rows[i][0]).ToString(), 
-                                                                    (dataset.Tables[0].Rows[i][1]).ToString()});
+                                dgv_Listado.Rows.Add(new Object[] { (dataset.Tables[0].Rows[i][0]).ToString(),
+                                                                    (dataset.Tables[0].Rows[i][1]).ToString(),
+                                                                    (dataset.Tables[0].Rows[i][2]).ToString()});
                             }
                         }
                         break;
@@ -163,13 +180,20 @@ namespace FrbaHotel.ListadoEstadistico
                         ejecutarListado(nombreStored, dataset);
                         if (error == 0)
                         {
-                            dgv_Listado.ColumnCount = 2;
+                            dgv_Listado.ColumnCount = 5;
                             dgv_Listado.Columns[0].Name = "Código Cliente";
+                            dgv_Listado.Columns[1].Name = "Nro. Doc";
+                            dgv_Listado.Columns[2].Name = "Nombre";
+                            dgv_Listado.Columns[3].Name = "Apellido";
+                            dgv_Listado.Columns[4].Name = "Puntos";
 
                             for (int i = 0; i < dataset.Tables[0].Rows.Count; i++)
                             {
-                                dgv_Listado.Rows.Add(new Object[] { (dataset.Tables[0].Rows[i][0]).ToString(), 
-                                                                    (dataset.Tables[0].Rows[i][1]).ToString()});
+                                dgv_Listado.Rows.Add(new Object[] { (dataset.Tables[0].Rows[i][0]).ToString(),
+                                                                    (dataset.Tables[0].Rows[i][1]).ToString(),
+                                                                    (dataset.Tables[0].Rows[i][2]).ToString(),
+                                                                    (dataset.Tables[0].Rows[i][3]).ToString(), 
+                                                                    (dataset.Tables[0].Rows[i][4]).ToString()});
                             }
                         }
                         break;
@@ -179,18 +203,21 @@ namespace FrbaHotel.ListadoEstadistico
 
         private void ejecutarListado(string nombreStored, DataSet dataset) 
         {
+            // se agrega el código en un try / catch para poder capturar los errores
             try
             {
+                // se abre la conexión y se llena el contenido del select del sp en un dataset
                 Conexion con = new Conexion();
                 con.strQuery = nombreStored;
                 con.execute();
                 con.command.CommandType = CommandType.StoredProcedure;
-
+                // se agregan los parámetros al stored procedure
                 con.command.Parameters.Add("@anio", SqlDbType.Decimal).Value = Convert.ToDecimal(txt_Anio.Text);
                 con.command.Parameters.Add("@tri", SqlDbType.Decimal).Value = Convert.ToDecimal(cb_Trimestre.Text);
 
                 con.openConection();
 
+                // se carga el contenido en el dataset que luego será leído
                 SqlDataAdapter da = new SqlDataAdapter(con.command);
 
                 da.Fill(dataset);

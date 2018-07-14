@@ -640,7 +640,7 @@ BEGIN
 	INSERT INTO FOUR_SIZONS.Hotel (Hotel_Nombre, Hotel_Mail, Hotel_Telefono, Hotel_Calle, Hotel_Nro_Calle, Hotel_CantEstrella, 
 	Hotel_Recarga_Estrella, Hotel_Ciudad, Hotel_Pais, Hotel_FechaCreacion, Hotel_Estado) 
 	SELECT DISTINCT concat(hotel_calle,' ',Hotel_Nro_Calle), '', '', Hotel_Calle, Hotel_Nro_Calle, Hotel_CantEstrella, Hotel_Recarga_Estrella, Hotel_Ciudad, 'Argentina',
-	convert(datetime,'01/01/2017',121), 1
+	convert(datetime,'01/01/2017',103), 1
 	FROM GD1C2018.gd_esquema.Maestra
 
 	-- RegXHotel
@@ -699,11 +699,11 @@ BEGIN
 	-- Usuario
 	-- Inserta usuarios
 	INSERT INTO FOUR_SIZONS.Usuario
-	VALUES ('SYSADM', '3GGQyLOZ4EO537rLsNN/KiZF4z+ZOEkdJLJOApjZzRc=', 'Administrador Desarrollador', '', '', 0, '', '', convert(datetime,'01/01/2017',121), '',1,0)
+	VALUES ('SYSADM', '3GGQyLOZ4EO537rLsNN/KiZF4z+ZOEkdJLJOApjZzRc=', 'Administrador Desarrollador', '', '', 0, '', '', convert(datetime,'01/01/2017',103), '',1,0)
 	INSERT INTO FOUR_SIZONS.Usuario
-	VALUES ('GUEST', '3GGQyLOZ4EO537rLsNN/KiZF4z+ZOEkdJLJOApjZzRc=', 'Guest', '', '', 0, '', '', convert(datetime,'01/01/2017',121), '',1,0)
+	VALUES ('GUEST', '3GGQyLOZ4EO537rLsNN/KiZF4z+ZOEkdJLJOApjZzRc=', 'Guest', '', '', 0, '', '', convert(datetime,'01/01/2017',103), '',1,0)
 	INSERT INTO FOUR_SIZONS.Usuario
-	VALUES ('admin', '5rhwUL/LgUP8uNsBcKTcntANkE3dPipK0bHo3A/cm+c=', 'Administrador General', '', '', 0, '', '', convert(datetime,'01/01/2017',121), '',1,0)
+	VALUES ('admin', '5rhwUL/LgUP8uNsBcKTcntANkE3dPipK0bHo3A/cm+c=', 'Administrador General', '', '', 0, '', '', convert(datetime,'01/01/2017',103), '',1,0)
 
 	--UsuarioXRol
 	INSERT INTO FOUR_SIZONS.UsuarioXRol VALUES ('SYSADM', 1, 1)
@@ -713,9 +713,9 @@ BEGIN
 	-- disponibilidad
 
 begin
-declare @aux datetime = convert(datetime, '01-01-2017' ,121)
+declare @aux datetime = convert(datetime, '01-01-2017' ,103)
 declare @aux2 datetime
-declare @fin datetime= convert(datetime, '01-01-2021' ,121)
+declare @fin datetime= convert(datetime, '01-01-2021' ,103)
 while (@aux != @fin)
 begin
 set @aux2= @aux 
@@ -1084,6 +1084,16 @@ END;
 IF (OBJECT_ID('FOUR_SIZONS.verificarEstadoReserva', 'P') IS NOT NULL)
 BEGIN
     DROP PROCEDURE FOUR_SIZONS.verificarEstadoReserva
+END;
+
+IF (OBJECT_ID('FOUR_SIZONS.verificarEstadoReserva', 'P') IS NOT NULL)
+BEGIN
+    DROP PROCEDURE FOUR_SIZONS.verificarEstadoReserva
+END;
+
+IF (OBJECT_ID('FOUR_SIZONS.DisponibilidadyPrecio', 'P') IS NOT NULL)
+BEGIN
+    DROP proc FOUR_SIZONS.DisponibilidadyPrecio
 END;
 
 
@@ -1639,32 +1649,40 @@ begin try
 	
 	set @regID = (select Regimen_Codigo from FOUR_SIZONS.regimen where Regimen_Descripcion = @reg)
 	set @fechaMod = convert(datetime,@fechaMod,103)
-	
-	
-	if exists(select * from FOUR_SIZONS.RegXHotel where Hotel_Codigo=@hotel and Regimen_Codigo=@regID)
-		begin
-			if(@estado!=0)
-				begin
-					update FOUR_SIZONS.RegXHotel
-					set RegXHotel_Estado = @estado
-					where Regimen_Codigo=@regID and Hotel_Codigo=@hotel
-				end
-			else
-				begin 
-					if(exists(select Reserva_Codigo from Reserva 
-								where Hotel_Codigo=@hotel and Regimen_Codigo=@regID and @fechaMod between Reserva_Fecha_Inicio and Reserva_Fecha_Fin)--Que no hayan estadias
-								or exists(select Reserva_Codigo from Reserva 
-								where Hotel_Codigo=@hotel and Regimen_Codigo=@regID and (Reserva_Estado=1 or Reserva_Estado=2)))--que no hayan reservas activas
-						begin
-							raiserror ('No se puede realizar la mod ya que hay reservas con este regimen',16,1)
-						end
-					else
-						begin
-							update FOUR_SIZONS.RegXHotel
+
+if exists(select * from FOUR_SIZONS.RegXHotel where Hotel_Codigo=@hotel and Regimen_Codigo=@regID)
+	begin
+		if(@estado!=0)
+			begin
+				update FOUR_SIZONS.RegXHotel
+				set RegXHotel_Estado = @estado
+				where Regimen_Codigo=@regID and Hotel_Codigo=@hotel
+			end
+		else
+			begin 
+				if(exists (select Reserva_Codigo  from Reserva where Hotel_Codigo=@hotel and Regimen_Codigo=@regID))
+					begin
+						if(exists(select Reserva_Codigo from Reserva 
+							where Hotel_Codigo=@hotel and Regimen_Codigo=@regID and @fechaMod between Reserva_Fecha_Inicio and Reserva_Fecha_Fin)--Que no hayan estadias
+							or exists(select Reserva_Codigo from Reserva 
+							where Hotel_Codigo=@hotel and Regimen_Codigo=@regID and (Reserva_Estado=1 or Reserva_Estado=2)))--que no hayan reservas activas
+							begin
+								raiserror ('No se puede realizar la mod ya que hay reservas con este regimen',16,1)
+							end
+						else
+							begin
+								update FOUR_SIZONS.RegXHotel
+								set RegXHotel_Estado = @estado
+								where Regimen_Codigo=@regID and Hotel_Codigo=@hotel
+							end
+					end
+				else 
+					begin
+						update FOUR_SIZONS.RegXHotel
 							set RegXHotel_Estado = @estado
 							where Regimen_Codigo=@regID and Hotel_Codigo=@hotel
-						end
-				end
+					end
+			end
 		end
 	else
 	begin
@@ -1681,6 +1699,7 @@ begin try
 	rollback tran  
 	end catch 
 go
+
 
 create procedure four_sizons.modificarHotel
 @codigo nvarchar(50),
@@ -2028,11 +2047,6 @@ go
 
 
 --------------------------------------------------DICE QUE NO HAY QUE DESARROLLARLO----------------------------------
-
-IF (OBJECT_ID('FOUR_SIZONS.DisponibilidadyPrecio', 'P') IS NOT NULL)
-BEGIN
-    DROP proc FOUR_SIZONS.DisponibilidadyPrecio
-END;
 go
 create proc four_sizons.DisponibilidadyPrecio
 @fechaInicio datetime,
@@ -2747,20 +2761,23 @@ declare @cantDias numeric(18),
 		@fact numeric(18),
 		@monto numeric(18,2),
 		@estadoActual bit,
-		@regimen numeric(18)
+		@regimen numeric(18),
+		@reservaEst numeric(1)
 		set @fecha = CONVERT(datetime,@fecha,103) 
 
 	set @cantDias = DATEDIFF(day,( select Estadia_FechaInicio from FOUR_SIZONS.Estadia where Estadia_Codigo = @Estadia ),@fecha);
 	set @Reserva = (select Reserva_Codigo from FOUR_SIZONS.Estadia where Estadia_Codigo = @Estadia);
 	set @estadoActual = (select Estadia_Estado from FOUR_SIZONS.Estadia where Estadia_Codigo = @Estadia);
-	set @finR = (select Reserva_Fecha_Fin from FOUR_SIZONS.Reserva where Reserva_Codigo = @Reserva)
+	set @finR = CONVERT(datetime,(select Reserva_Fecha_Fin from FOUR_SIZONS.Reserva where Reserva_Codigo = @Reserva),121) 
 	set @difDates = DATEDIFF(day,@fecha,@finR);
 	set @precioXNoche = (select Estadia_PreXNoche from FOUR_SIZONS.Estadia where Estadia_Codigo = @Estadia);
+	set @reservaEst = (select Reserva_estado from FOUR_SIZONS.Reserva where Reserva_Codigo = @Reserva) 
 	
 	declare @inicio datetime = (select Reserva_Fecha_Inicio from FOUR_SIZONS.Reserva where Reserva_Codigo = @Reserva)
 	set identity_insert four_sizons.item_factura on
 
-
+if(@reservaEst=6)
+begin
 if(@estadoActual!=0)
 begin
 	if (@fecha between @inicio and @finR)
@@ -2820,7 +2837,8 @@ else raiserror('la fecha de egreso es posterior a la fecha fin de la estadia',16
 
 end
 else raiserror('ya se ha realizado el checkout de esta estadia anteriormente',16,1)
-
+end
+else raiserror('No se realizo el check in de esta reserva todavia.',16,1)
 
 set identity_insert four_sizons.item_factura off
 commit tran 
@@ -2989,7 +3007,7 @@ if(not exists (select *  from four_sizons.Reserva r join FOUR_SIZONS.ReservaMod 
 		raiserror('No hay datos reservas canceladas',13,1)
 	end
 	begin
-		select top 5 h.Hotel_Codigo, h.Hotel_Nombre  ,COUNT(r.Reserva_Codigo)cant_Reservas_cans
+		select top 5 h.Hotel_Codigo, h.Hotel_Nombre  ,COUNT(r.Reserva_Codigo) cant_Reservas_cans
 		from four_sizons.Hotel h,four_sizons.Reserva r, four_sizons.ReservaMod m  
 		where h.Hotel_Codigo=r.Hotel_Codigo and
 			( (r.Reserva_Estado = 3 or r.Reserva_Estado = 4 or r.Reserva_Estado = 5)

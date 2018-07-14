@@ -62,8 +62,6 @@ namespace FrbaHotel.ABMRol
 
         private void ABMRol02_Load(object sender, EventArgs e)
         {
-            
-
             Conexion con = new Conexion();
             con.strQuery = "SELECT * FROM FOUR_SIZONS.Funcionalidad ORDER BY Func_Codigo";
             con.executeQuery();
@@ -326,16 +324,18 @@ namespace FrbaHotel.ABMRol
         {
             if (MessageBox.Show("Está seguro que desea continuar con la operación?", "FOUR SIZONS - FRBA Hoteles", MessageBoxButtons.YesNo, MessageBoxIcon.Question) == DialogResult.Yes)
             {
-
+                // se agrega el código en un try / catch para poder capturar los errores
                 try
                 {
+                    // se crea un nuevo conector, se asigna el nombre del stored y con execute se crea el nuevo comando sql
                     Conexion con = new Conexion();
                     con.strQuery = nombreStored;
                     con.execute();
                     con.command.CommandType = CommandType.StoredProcedure;
-
+                    // se agregan los parámetros para agregar el rol
                     if (modoABM == "INS")
                     {
+                        // se agregan los parámetros al stored procedure
                         con.command.Parameters.Add("@rolname", SqlDbType.NVarChar).Value = txt_nombreRol.Text;
                         con.command.Parameters.Add("@estado", SqlDbType.Bit).Value = 1;
 
@@ -344,56 +344,57 @@ namespace FrbaHotel.ABMRol
                         con.closeConection();
 
                         con.strQuery = "FOUR_SIZONS.altaRolxFunc";
-
+                        // Se generan llamadas sucesivas para ingresar las funcionalidades del rol
                         for (int i = 0; i < lb_func_usralta.Items.Count; i++)
                         {
                             con.execute();
                             con.command.CommandType = CommandType.StoredProcedure;
-
+                            // se agregan los parámetros al stored procedure
                             con.command.Parameters.Add("@rolname", SqlDbType.NVarChar).Value = txt_nombreRol.Text;
                             con.command.Parameters.Add("@func", SqlDbType.NVarChar).Value = lb_func_usralta.Items[i].ToString();
-
+                            // se abre la conexión con la base de datos, se ejecuta y se cierra
                             con.openConection();
                             con.command.ExecuteNonQuery();
                             con.closeConection();
                         }
                     }else{
+                        // en caso de modificar el nombre se llama al sp correspondiente
                         con.command.Parameters.Add("@rolname", SqlDbType.NVarChar).Value = txt_nombreRol.Text;
                         con.command.Parameters.Add("@codigo", SqlDbType.NVarChar).Value = rol;
-                        
+                        // luego dependiendo del modo se agregan o se quitan funcionalidades del rol
                         if (modoABM == "UPD")
                         {
                             con.command.Parameters.Add("@estado", SqlDbType.Bit).Value = 1;
-
+                            // se abre la conexión con la base de datos, se ejecuta y se cierra
                             con.openConection();
                             con.command.ExecuteNonQuery();
                             con.closeConection();
 
                             con.strQuery = "FOUR_SIZONS.modificacionRolxFunc";
-
+                            // Se generan llamadas sucesivas para modificar las funcionalidades del rol
                             for (int i = 0; i < lb_func_usralta.Items.Count; i++)
                             {
                                 con.execute();
                                 con.command.CommandType = CommandType.StoredProcedure;
-
+                                // se agregan los parámetros al stored procedure
                                 con.command.Parameters.Add("@rolname", SqlDbType.NVarChar).Value = txt_nombreRol.Text;
                                 con.command.Parameters.Add("@func", SqlDbType.NVarChar).Value = lb_func_usralta.Items[i].ToString();
                                 con.command.Parameters.Add("@estado", SqlDbType.Bit).Value = 1;
-
+                                // se abre la conexión con la base de datos, se ejecuta y se cierra
                                 con.openConection();
                                 con.command.ExecuteNonQuery();
                                 con.closeConection();
                             }
-
+                            // Se generan llamadas sucesivas para dar de baja las funcionalidades del rol
                             for (int i = 0; i < lb_func_usrbaja.Items.Count; i++)
                             {
                                 con.execute();
                                 con.command.CommandType = CommandType.StoredProcedure;
-
+                                // se agregan los parámetros al stored procedure
                                 con.command.Parameters.Add("@rolname", SqlDbType.NVarChar).Value = txt_nombreRol.Text;
                                 con.command.Parameters.Add("@func", SqlDbType.NVarChar).Value = lb_func_usrbaja.Items[i].ToString();
                                 con.command.Parameters.Add("@estado", SqlDbType.Bit).Value = 0;
-
+                                // se abre la conexión con la base de datos, se ejecuta y se cierra
                                 con.openConection();
                                 con.command.ExecuteNonQuery();
                                 con.closeConection();
@@ -402,7 +403,7 @@ namespace FrbaHotel.ABMRol
                         }else{
                             con.command.Parameters.Add("@estado", SqlDbType.Bit).Value = 0;
                         }
-
+                        // se abre la conexión con la base de datos, se ejecuta y se cierra
                         con.openConection();
                         con.command.ExecuteNonQuery();
                         con.closeConection();

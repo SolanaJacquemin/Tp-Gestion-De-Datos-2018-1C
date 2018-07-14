@@ -143,12 +143,6 @@
     <Compile Include="Conexion.cs" />
     <Compile Include="Config.cs" />
     <Compile Include="Encriptor.cs" />
-    <Compile Include="FacturarEstadia\FacturarEstadia01.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="FacturarEstadia\FacturarEstadia01.Designer.cs">
-      <DependentUpon>FacturarEstadia01.cs</DependentUpon>
-    </Compile>
     <Compile Include="GestionReservas\ABMReserva01.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -318,9 +312,6 @@
     </EmbeddedResource>
     <EmbeddedResource Include="ABMUsuario\ABMUsuario06.resx">
       <DependentUpon>ABMUsuario06.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="FacturarEstadia\FacturarEstadia01.resx">
-      <DependentUpon>FacturarEstadia01.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="GestionReservas\ABMReserva01.resx">
       <DependentUpon>ABMReserva01.cs</DependentUpon>

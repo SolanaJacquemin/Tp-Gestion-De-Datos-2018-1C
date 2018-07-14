@@ -15,7 +15,6 @@ using FrbaHotel.GestionReservas;
 using FrbaHotel.AbmCliente;
 using FrbaHotel.ListadoEstadistico;
 using FrbaHotel.Prompts;
-using FrbaHotel.FacturarEstadia;
 using FrbaHotel.RegistrarEstadia;
 
 namespace FrbaHotel.PantallaPrincipal

@@ -84,10 +84,7 @@ namespace FrbaHotel.ABMUsuario
                     break;
             }
             dt_fecha_nac.Format = DateTimePickerFormat.Custom;
-            dt_fecha_nac.CustomFormat = "dd/MM/yyyy";
-
-            //levantarCombos();
-            
+            dt_fecha_nac.CustomFormat = "dd/MM/yyyy";            
         }
 
         private void label1_Click(object sender, EventArgs e)
@@ -190,15 +187,16 @@ namespace FrbaHotel.ABMUsuario
         {
             if (MessageBox.Show("Está seguro que desea continuar con la operación?", "FOUR SIZONS - FRBA Hoteles", MessageBoxButtons.YesNo, MessageBoxIcon.Question) == DialogResult.Yes)
                     {
-
+                        // se agrega el código en un try / catch para poder capturar los errores
                         try
                         {
+                            // se crea un nuevo conector, se asigna el nombre del stored y con execute se crea el nuevo comando sql
                             Conexion con = new Conexion();
                             Encriptor encriptor = new Encriptor();
                             con.strQuery = nombreStored;
                             con.execute();
                             con.command.CommandType = CommandType.StoredProcedure;
-
+                            // se agregan los parámetros al stored procedure
                             con.command.Parameters.Add("@username", SqlDbType.NVarChar).Value = txt_usuario.Text;
                             string msg = encriptor.Encrypt(txt_password.Text);
                             con.command.Parameters.Add("@password", SqlDbType.NVarChar).Value = encriptor.Encrypt(txt_password.Text);
@@ -220,7 +218,7 @@ namespace FrbaHotel.ABMUsuario
                             {
                                 con.command.Parameters.Add("@estado", SqlDbType.Bit).Value = 1;
                             }
-
+                            // se abre la conexión con la base de datos, se ejecuta y se cierra
                             con.openConection();
                             con.command.ExecuteNonQuery();
                             con.closeConection();
@@ -234,6 +232,7 @@ namespace FrbaHotel.ABMUsuario
                                 {
                                     hotel = hotelppal;
                                 }
+                                // se agregan los parámetros al stored procedure
                                 con.command.Parameters.Add("@hotId", SqlDbType.Decimal).Value = hotel;
                                 con.command.Parameters.Add("@usuario", SqlDbType.NVarChar).Value = txt_usuario.Text;
                                 if (modoABM == "DLT")
@@ -244,6 +243,7 @@ namespace FrbaHotel.ABMUsuario
                                 {
                                     con.command.Parameters.Add("@estado", SqlDbType.Bit).Value = 1;
                                 }
+                                // se abre la conexión con la base de datos, se ejecuta y se cierra
                                 con.openConection();
                                 con.command.ExecuteNonQuery();
                                 con.closeConection();
@@ -404,16 +404,7 @@ namespace FrbaHotel.ABMUsuario
 
         private void btn_promptUsu_Click(object sender, EventArgs e)
         {
-            /*using (PromptHoteles prompt = new PromptHoteles())
-            {
-                prompt.ShowDialog();
 
-                hotel_id = Convert.ToDecimal(prompt.TextBox1.Text);
-                txt_hotel.Text = prompt.TextBox2.Text;
-                
-                prompt.Close();
-            }
-            this.Show();*/
         }
 
         private void btn_promptHotel_Click(object sender, EventArgs e)

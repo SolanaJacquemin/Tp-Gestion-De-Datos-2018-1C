@@ -20,7 +20,6 @@ namespace FrbaHotel
         {
             InitializeComponent();
             this.StartPosition = FormStartPosition.CenterScreen;
-            //txt_usuario.CharacterCasing = CharacterCasing.Upper;
 
             txt_password.PasswordChar = '●';
         }
@@ -52,47 +51,27 @@ namespace FrbaHotel
 
             if (errLogin == 0)
             {
+                // se agrega el código en un try / catch para poder capturar los errores
                 try 
                 {
+                    // se crea un nuevo conector, se asigna el nombre del stored y con execute se crea el nuevo comando sql
                     Conexion con = new Conexion();
                     Encriptor encriptor = new Encriptor();
                     con.strQuery = "FOUR_SIZONS.ValidarUsuario";
                     con.execute();
                     con.command.CommandType = CommandType.StoredProcedure;
 
+                    // se agregan los parámetros al stored procedure
                     con.command.Parameters.Add("@usuario", SqlDbType.NVarChar).Value = txt_usuario.Text;
                     string msg = encriptor.Encrypt(txt_password.Text);
-                    con.command.Parameters.Add("@password", SqlDbType.NVarChar).Value = encriptor.Encrypt(txt_password.Text);
+                    con.command.Parameters.Add("@password", SqlDbType.NVarChar).Value = encriptor.Encrypt(txt_password.Text); // se encripta la contraseña
 
+                    // se abre la conexión con la base de datos, se ejecuta y se cierra
                     con.openConection();
                     con.command.ExecuteNonQuery();
                     con.closeConection();
-                    //con.command.Parameters.Add("@loginok", SqlDbType.Decimal).Direction = ParameterDirection.Output;
 
-                    /*var errMsg = new SqlParameter();
-
-                    errMsg.ParameterName = "@errorMsg";
-                    errMsg.SqlDbType = System.Data.SqlDbType.NVarChar;
-                    errMsg.Direction = ParameterDirection.Output;
-                    errMsg.Size = 100;
-                    con.command.Parameters.Add(errMsg);
-
-                    con.openConection();
-                    con.command.ExecuteNonQuery();
-                    con.closeConection();
-                    if ((Convert.ToDecimal(con.command.Parameters["@loginok"].Value) == 0))
-                    {
-                        MessageBox.Show(Convert.ToString(con.command.Parameters["@errorMsg"].Value), "FOUR SIZONS - FRBA Hoteles", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                    }
-                    else
-                    {
-                        this.Hide();
-                        FrbaHotel.PantallaPrincipal.PantallaPrincipal01 pantallaPrincipal = new PantallaPrincipal01(txt_usuario.Text);
-                        pantallaPrincipal.ShowDialog();
-                        this.Show();
-                        txt_usuario.Clear();
-                        txt_password.Clear();                    
-                    }*/
+                    // si no hay excepciones es porque el usuario puede ingresar al sistema, de lo contrario se captura el error
                     this.Hide();
                     FrbaHotel.PantallaPrincipal.PantallaPrincipal01 pantallaPrincipal = new PantallaPrincipal01(txt_usuario.Text);
                     pantallaPrincipal.ShowDialog();

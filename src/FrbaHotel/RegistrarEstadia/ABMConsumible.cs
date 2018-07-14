@@ -97,17 +97,19 @@ namespace FrbaHotel.RegistrarEstadia
 
         public void ejecutarABMConsumible(string nombreStored)
         {
+            // se agrega el código en un try / catch para poder capturar los errores
             try
             {
+                // se crea un nuevo conector, se asigna el nombre del stored y con execute se crea el nuevo comando sql
                 Conexion con = new Conexion();
                 con.strQuery = nombreSP;
                 con.execute();
                 con.command.CommandType = CommandType.StoredProcedure;
-
+                // se agregan los parámetros al stored procedure
                 con.command.Parameters.Add("@estadia", SqlDbType.Decimal).Value = estadia;
                 con.command.Parameters.Add("@consumible", SqlDbType.NVarChar).Value = cb_consumibles.Text;
                 con.command.Parameters.Add("@cant", SqlDbType.Decimal).Value = Convert.ToDecimal(txt_cantidad.Text);
-
+                // se abre la conexión con la base de datos, se ejecuta y se cierra
                 con.openConection();
                 con.command.ExecuteNonQuery();
                 con.closeConection();
