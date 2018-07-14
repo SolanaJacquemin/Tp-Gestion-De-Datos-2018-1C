@@ -231,6 +231,12 @@ BEGIN
     DROP PROCEDURE FOUR_SIZONS.bajaModifConsXestadia
 END;
 
+IF (OBJECT_ID('FOUR_SIZONS.verificarEstadoReserva', 'P') IS NOT NULL)
+BEGIN
+    DROP PROCEDURE FOUR_SIZONS.verificarEstadoReserva
+END;
+
+
 GO
 
 --------------------------------------------------------ABM USUARIO------------------------------
@@ -2289,3 +2295,54 @@ else
 
 end
 go
+
+create procedure FOUR_SIZONS.verificarEstadoReserva
+@reserva numeric(18),
+@fechaOperacion datetime
+as
+begin
+	declare @estado numeric(1)
+	declare @estadoC bit
+	declare @fechaInicio datetime
+	declare @fechaFin datetime
+
+	set @fechaOperacion = convert(datetime,@fechaOperacion,123)
+
+	select @estado = R.Reserva_Estado, @estadoC = C.Cliente_Estado, @fechaInicio = R.Reserva_Fecha_Inicio, @fechaFin = Reserva_Fecha_Fin
+	from FOUR_SIZONS.Reserva R join FOUR_SIZONS.Cliente C ON C.Cliente_Codigo = R.Cliente_Codigo where R.Reserva_Codigo = @reserva
+
+	if(@estadoC = 1)
+	begin
+
+		if((select datediff(day,@fechaInicio, @fechaOperacion))<0 and (@estado = 1 or @estado = 2 ))
+		begin
+			RAISERROR('Todavia no es la fecha de ingreso de la reserva',16,1)
+		end
+
+		if((select datediff(day,@fechaFin, @fechaOperacion))>0)
+		begin
+			RAISERROR('La fecha de la reserva ya ha pasado',16,1)
+		end
+
+		if(@Estado= 3)
+		begin
+			RAISERROR('La reserva fue cancelada por recepcionista',16,1)
+		end
+	
+		if(@Estado= 4)
+		begin
+			RAISERROR('La reserva fue cancelada por cliente',16,1)
+		end
+
+		if(@Estado= 5)
+		begin
+			RAISERROR('Reserva cancelada por No-Show',16,1)
+		end
+
+		if(@estado=6)
+		begin
+			RAISERROR('Reserva ya efectivizada',16,1)
+		end
+
+	end	else raiserror('No se puede realizar el check-in porque el cliente esta deshabilitado',16,1) 
+end

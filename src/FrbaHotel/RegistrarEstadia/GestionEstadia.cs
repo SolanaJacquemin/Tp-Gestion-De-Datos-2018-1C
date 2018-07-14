@@ -19,6 +19,7 @@ namespace FrbaHotel.RegistrarEstadia
         public string usuario;
         public decimal hotel;
         public bool esAdminGral;
+        public decimal error;
 
         public GestionEstadias(decimal hotelID, string userID)
         {
@@ -42,7 +43,7 @@ namespace FrbaHotel.RegistrarEstadia
             {
                 esAdminGral = true;
             }
-
+            con.closeConection();
 
             levantarDatos();
 
@@ -215,15 +216,43 @@ namespace FrbaHotel.RegistrarEstadia
             }
         }
 
+        private void verificarReserva()
+        {
+            try
+            {
+                Conexion con = new Conexion();
+                con.strQuery = "FOUR_SIZONS.verificarEstadoReserva";
+                con.execute();
+                con.command.CommandType = CommandType.StoredProcedure;
+                string newS = "EXEC FOUR_SIZONS.verificarEstadoReserva " + dgv_CodReserva.ToString() + ", " + DateTime.Today.ToString("dd/MM/yyyy");
+                con.command.Parameters.Add("@reserva", SqlDbType.Decimal).Value = dgv_CodReserva;
+                con.command.Parameters.Add("@fechaOperacion", SqlDbType.NVarChar).Value = DateTime.Today.ToString("dd/MM/yyyy");
+
+                con.openConection();
+                con.command.ExecuteNonQuery();
+
+                con.closeConection();
+            }
+            catch (Exception ex)
+            {
+                error = 1; 
+                MessageBox.Show(ex.Message, "FOUR SIZONS - FRBA Hoteles", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+        }
 
         private void btn_consumibles_Click(object sender, EventArgs e)
         {
             if (dgv_Reserva.SelectedRows.Count == 1)
             {
-                this.Hide();
-                RegistrarConsumible formConsumibles = new RegistrarConsumible(dgv_CodReserva);
-                formConsumibles.ShowDialog();
-                this.Show();
+                error = 0;
+                verificarReserva();
+                if (error == 0)
+                {
+                    this.Hide();
+                    RegistrarConsumible formConsumibles = new RegistrarConsumible(dgv_CodReserva);
+                    formConsumibles.ShowDialog();
+                    this.Show();
+                }
             }
             else
             {
