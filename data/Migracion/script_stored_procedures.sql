@@ -245,10 +245,10 @@ create function four_sizons.verificarDisp (@inicio datetime , @fin datetime , @h
 returns bit
 as begin 
 declare @respuesta bit = 1
-declare @aux datetime = convert(datetime,@inicio,121 )
+declare @aux datetime = convert(datetime,@inicio,103 )
 declare @aux2 datetime
 
-while (datediff(day,@aux,convert(datetime,@fin, 121))!=0)
+while (datediff(day,@aux,convert(datetime,@fin, 103))!=0)
 begin
 set @aux2=@aux
 declare @habDisp numeric(18) = isnull((select Disp_HabDisponibles from FOUR_SIZONS.Disponibilidad where Hotel_Codigo=@hotel and Habitacion_Tipo_Codigo=@tipohab and datediff(day,Disp_Fecha,@aux)=0),0)
@@ -728,7 +728,7 @@ if (not exists (select Hotel_Codigo from FOUR_SIZONS.Hotel where Hotel_Nombre= @
 	begin
 		insert into FOUR_SIZONS.Hotel(Hotel_Nombre,Hotel_Mail,Hotel_Telefono,Hotel_Calle,Hotel_Nro_Calle,
 					Hotel_CantEstrella,Hotel_Recarga_Estrella, Hotel_Ciudad,Hotel_Pais,Hotel_FechaCreacion,Hotel_Estado)
-					values (@nombre,@mail,@telefono,@calle,@numCalle,@cantEstrellas,@recarga_estrella,@ciudad,@pais, convert(datetime,@fechaCreacion,121),1)
+					values (@nombre,@mail,@telefono,@calle,@numCalle,@cantEstrellas,@recarga_estrella,@ciudad,@pais, convert(datetime,@fechaCreacion,103),1)
 
 		
 
@@ -1089,9 +1089,9 @@ set @TipoHabID = (select Habitacion_Tipo_Codigo from FOUR_SIZONS.Habitacion_Tipo
 						Habitacion_Descripcion,Habitacion_Estado)
 						values (@numero,@HotelId,@piso,@frente,@TipoHabID,@descripcion,1)
 		
-				declare @aux datetime = convert(datetime, '01-01-2018' ,121)
+				declare @aux datetime = convert(datetime, '01-01-2018' ,103)
 				
-				declare @fin datetime= convert(datetime, '01-01-2021' ,121)
+				declare @fin datetime= convert(datetime, '01-01-2021' ,103)
 				if(exists (select * from FOUR_SIZONS.Disponibilidad where Hotel_Codigo=@HotelId and Habitacion_Tipo_Codigo=@TipoHabID))
 					begin
 								 
@@ -1143,8 +1143,8 @@ update FOUR_SIZONS.Habitacion
 set Habitacion_Piso= @piso,Habitacion_Frente=@ubicacion,Habitacion_Estado=@estado,Habitacion_Descripcion=@descripcion
 where Habitacion_Numero=@numero and Hotel_Codigo= @hotId
 
-declare @aux datetime = convert(datetime, '01-01-2018' ,121)			
-declare @fin datetime= convert(datetime, '01-01-2021' ,121)
+declare @aux datetime = convert(datetime, '01-01-2018' ,103)			
+declare @fin datetime= convert(datetime, '01-01-2021' ,103)
 
 if(@estado = 1)
 begin
@@ -1255,7 +1255,7 @@ begin try
 				insert into FOUR_SIZONS.Reserva(Reserva_Codigo,Reserva_Fecha_Inicio,Reserva_Fecha_Fin,Reserva_Cant_Noches,
 								Reserva_Precio,Usuario_ID,Hotel_Codigo,Cliente_Codigo,Regimen_Codigo,Reserva_Estado,habitacion_tipo_codigo,reserva_cant_hab,Reserva_FechaCreacion)
 								values((NEXT VALUE FOR sec_cod_reserva),@fechaInicio,@fechaFin,@cantidadNoches,
-								@precio,@userId,@hotId,@cliId,@regId,1,@tipohab,@canthab,convert(datetime,@fechaCreacion,121))
+								@precio,@userId,@hotId,@cliId,@regId,1,@tipohab,@canthab,convert(datetime,@fechaCreacion,103))
 				--aca baja la disponibilidad
 				
 					begin
@@ -1299,7 +1299,7 @@ CREATE procedure four_sizons.ModificarReserva
 	--@clie numeric(18)
 	as begin tran
 	begin try 
-	set @fechaCambio = convert(datetime,@fechaCambio,121)
+	set @fechaCambio = convert(datetime,@fechaCambio,103)
 	declare @fI datetime , @fF datetime , @canth numeric(18) , @tHab numeric (18), @hotel numeric(18),@ClieA numeric(18),@estadoActual numeric(1)
 
 	select @fi = @fechaInicio , @ff = Reserva_Fecha_Fin,@canth=Reserva_cant_hab , @tHab=habitacion_tipo_codigo,
@@ -1324,7 +1324,7 @@ if(@estadoActual !=6)
 						where Disp_Fecha between @fi and @ff and Hotel_Codigo = @hotel and Habitacion_Tipo_Codigo = @tHab
 
 					insert into FOUR_SIZONS.ReservaMod (ResMod_Codigo,Reserva_Codigo,Usuario_ID, ResMod_Detalle,ResMod_Fecha)
-									   values (@mod_numero,@codigoReserva,@userId,@detalle,convert(datetime,@fechaCambio,121))
+									   values (@mod_numero,@codigoReserva,@userId,@detalle,convert(datetime,@fechaCambio,103))
 
 					commit tran 
 					begin tran
@@ -1384,7 +1384,7 @@ if(@estadoActual !=6)
 												where Disp_Fecha between @fi and @ff and Hotel_Codigo = @hotel and Habitacion_Tipo_Codigo = @tHab
 
 												insert into FOUR_SIZONS.ReservaMod (ResMod_Codigo,Reserva_Codigo,Usuario_ID, ResMod_Detalle,ResMod_Fecha)
-																				values (@mod_numero,@codigoReserva,@userId,@detalle,convert(datetime,@fechaCambio,121))
+																				values (@mod_numero,@codigoReserva,@userId,@detalle,convert(datetime,@fechaCambio,103))
 									
 
 	
@@ -1405,7 +1405,7 @@ if(@estadoActual !=6)
 
 								where Reserva_Codigo = @codigoReserva
 								insert into FOUR_SIZONS.ReservaMod (ResMod_Codigo,Reserva_Codigo,Usuario_ID, ResMod_Detalle,ResMod_Fecha)
-									   values (@mod_numero,@codigoReserva,@userId,@detalle,convert(datetime,@fechaCambio,121))
+									   values (@mod_numero,@codigoReserva,@userId,@detalle,convert(datetime,@fechaCambio,103))
 							end	
 					end
 
@@ -1421,7 +1421,7 @@ if(@estadoActual !=6)
 
 						
 					insert into FOUR_SIZONS.ReservaMod (ResMod_Codigo,Reserva_Codigo,Usuario_ID, ResMod_Detalle,ResMod_Fecha)
-												values (@mod_numero,@codigoReserva,@userId,@detalle,convert(datetime,@fechaCambio,121))
+												values (@mod_numero,@codigoReserva,@userId,@detalle,convert(datetime,@fechaCambio,103))
 						
 					end
 				end
@@ -1649,7 +1649,7 @@ if(not exists(select Factura_Nro from Factura where Estadia_Codigo=@estadia))
 			--Es necesario tener al usuario en factura?
 		if (@total is Null) set @total=0
 		insert into FOUR_SIZONS.Factura(Estadia_Codigo,Factura_FormaPago,Cliente_Codigo,Factura_Fecha,Factura_Total,Factura_Estado,Factura_Consistencia,Usuario_ID)
-								 values (@estadia,@formaPago,@cliente,convert(datetime,@fechaI,121),@total,0,1,@user)
+								 values (@estadia,@formaPago,@cliente,convert(datetime,@fechaI,103),@total,0,1,@user)
 	end
 else raiserror('Ya existe una factura para esa estadia.',16,1)
 
@@ -1693,7 +1693,7 @@ begin try
 			set @total = FOUR_SIZONS.calcEstadia(@estadia) + FOUR_SIZONS.calcConsumible(@estadia,0);
 			if (@total is Null) set @total=0
 			update FOUR_SIZONS.Factura
-			set Factura_FormaPago =@formaPago , Factura_Fecha = convert(datetime,@fechaI,121) , Factura_Total = @total, Factura_Estado=@estado, Usuario_ID=@user
+			set Factura_FormaPago =@formaPago , Factura_Fecha = convert(datetime,@fechaI,103) , Factura_Total = @total, Factura_Estado=@estado, Usuario_ID=@user
 			where Factura_Nro = @fact_Nro
 		end
 		else 
@@ -1773,9 +1773,9 @@ else
 
 
 begin
-declare @fechaInicio datetime = (select convert(datetime,Reserva_Fecha_Inicio,121) from FOUR_SIZONS.Reserva where Reserva_Codigo= @reserva )
+declare @fechaInicio datetime = (select Reserva_Fecha_Inicio from FOUR_SIZONS.Reserva where Reserva_Codigo= @reserva )
 	
-	declare @fechaFin datetime = (select convert(datetime,Reserva_Fecha_Fin,121) from FOUR_SIZONS.Reserva where Reserva_Codigo= @reserva )
+	declare @fechaFin datetime = (select Reserva_Fecha_Fin from FOUR_SIZONS.Reserva where Reserva_Codigo= @reserva )
 	declare @precioXNoche numeric(18),
 		@cantNoches numeric(18)
 		set @estado =(select Reserva_Estado from Reserva where Reserva_Codigo=@reserva)
@@ -1905,7 +1905,7 @@ declare @cantDias numeric(18),
 	set @cantDias = DATEDIFF(day,( select Estadia_FechaInicio from FOUR_SIZONS.Estadia where Estadia_Codigo = @Estadia ),@fecha);
 	set @Reserva = (select Reserva_Codigo from FOUR_SIZONS.Estadia where Estadia_Codigo = @Estadia);
 	set @estadoActual = (select Estadia_Estado from FOUR_SIZONS.Estadia where Estadia_Codigo = @Estadia);
-	set @finR = CONVERT(datetime,(select Reserva_Fecha_Fin from FOUR_SIZONS.Reserva where Reserva_Codigo = @Reserva),121) 
+	set @finR = (select Reserva_Fecha_Fin from FOUR_SIZONS.Reserva where Reserva_Codigo = @Reserva)
 	set @difDates = DATEDIFF(day,@fecha,@finR);
 	set @precioXNoche = (select Estadia_PreXNoche from FOUR_SIZONS.Estadia where Estadia_Codigo = @Estadia);
 	
@@ -2160,8 +2160,8 @@ as begin
 declare @fin datetime
 declare @inicio datetime
 
-set @inicio = CONVERT(datetime, FOUR_SIZONS.InicioTRi(@tri,@anio),121)
-set @fin = CONVERT(datetime,FOUR_SIZONS.finTri(@tri,@anio),121)
+set @inicio = CONVERT(datetime, FOUR_SIZONS.InicioTRi(@tri,@anio),103)
+set @fin = CONVERT(datetime,FOUR_SIZONS.finTri(@tri,@anio),103)
 
 if(not exists (select * from four_sizons.Factura where  (Factura_Fecha between @inicio and @fin) ))
 	begin
@@ -2189,8 +2189,8 @@ as begin
 declare @fin datetime
 declare @inicio datetime
 
-set @inicio =CONVERT(datetime, FOUR_SIZONS.InicioTRi(@tri,@anio),121)
-set @fin = CONVERT(datetime,FOUR_SIZONS.finTri(@tri,@anio),121)
+set @inicio =CONVERT(datetime, FOUR_SIZONS.InicioTRi(@tri,@anio),103)
+set @fin = CONVERT(datetime,FOUR_SIZONS.finTri(@tri,@anio),103)
 if(not exists (select * from four_sizons.Hotel_Cerrado where  (Cerrado_FechaI between @inicio and @fin) or (Cerrado_FechaF between @inicio and @fin)))
 	begin
 		raiserror('No hay datos de hoteles que cerraron',13,1)
@@ -2216,8 +2216,8 @@ as begin
 declare @fin datetime
 declare @inicio datetime
 
-set @inicio = CONVERT(datetime,FOUR_SIZONS.InicioTRi(@tri,@anio),121)
-set @fin =CONVERT(datetime, FOUR_SIZONS.finTri(@tri,@anio),121)
+set @inicio = CONVERT(datetime,FOUR_SIZONS.InicioTRi(@tri,@anio),103)
+set @fin =CONVERT(datetime, FOUR_SIZONS.finTri(@tri,@anio),103)
 
 if(not exists (select * from four_sizons.Estadia e where (e.Estadia_FechaInicio between @inicio and @fin) or (e.Estadia_FechaFin between @inicio and @fin)))
 	begin
@@ -2275,8 +2275,8 @@ as begin
 	declare @fin datetime
 	declare @inicio datetime
 
-	set @inicio = convert(datetime,FOUR_SIZONS.InicioTRi(@tri,@anio),121)
-	set @fin = convert(datetime,FOUR_SIZONS.finTri(@tri,@anio),121)
+	set @inicio = convert(datetime,FOUR_SIZONS.InicioTRi(@tri,@anio),103)
+	set @fin = convert(datetime,FOUR_SIZONS.finTri(@tri,@anio),103)
 
 
 if(not exists (select * from four_sizons.Factura where  (Factura_Fecha between @inicio and @fin) and Factura_Estado=1 ))
