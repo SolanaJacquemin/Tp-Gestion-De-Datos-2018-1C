@@ -23,6 +23,7 @@ namespace FrbaHotel.GestionReservas
         public decimal regimenID;
         public int error;
         public decimal cliente;
+        public decimal rol;
 
         public ABMReserva03(string modo, string user, decimal reservaID)
         {
@@ -84,6 +85,14 @@ namespace FrbaHotel.GestionReservas
         private void ABMReserva03_Load(object sender, EventArgs e)
         {
             Conexion con = new Conexion();
+
+            con.strQuery = "SELECT Rol_Codigo FROM FOUR_SIZONS.UsuarioXRol WHERE Usuario_ID = 'GUEST'";
+            con.executeQuery();
+            while (con.reader())
+            {
+                rol = con.lector.GetDecimal(0);
+            }
+            con.closeConection();
 
             con.strQuery = "SELECT Habitacion_Tipo_Codigo, Habitacion_Tipo_Descripcion FROM FOUR_SIZONS.Habitacion_Tipo ORDER BY Habitacion_Tipo_Codigo";
             con.executeQuery();
@@ -174,8 +183,8 @@ namespace FrbaHotel.GestionReservas
                 con.execute();
                 con.command.CommandType = CommandType.StoredProcedure;
                 con.command.Parameters.Add("@codigoReserva", SqlDbType.Decimal).Value = Convert.ToDecimal(txt_reservaID.Text);
-                con.command.Parameters.Add("@fechaInicio", SqlDbType.DateTime).Value = dt_fechaDesde.Value.ToString();
-                con.command.Parameters.Add("@fechaFin", SqlDbType.DateTime).Value = dt_fechaHasta.Value.ToString();
+                con.command.Parameters.Add("@fechaInicio", SqlDbType.DateTime).Value = dt_fechaDesde.Value.ToShortDateString();
+                con.command.Parameters.Add("@fechaFin", SqlDbType.DateTime).Value = dt_fechaHasta.Value.ToShortDateString();
                 con.command.Parameters.Add("@userId", SqlDbType.NVarChar).Value = usuario;
                 con.command.Parameters.Add("@hotid", SqlDbType.Decimal).Value = hotelID;
                 con.command.Parameters.Add("@tipoHabDesc", SqlDbType.NVarChar).Value = cb_tipoHabitacion.Text;
@@ -184,7 +193,15 @@ namespace FrbaHotel.GestionReservas
                 
                 if (modoABM == "DLT")
                 {
-                    con.command.Parameters.Add("@estado", SqlDbType.Decimal).Value = 0;
+                    if (rol == 3) // si es el cliente el que cancela
+                    {
+                        con.command.Parameters.Add("@estado", SqlDbType.Decimal).Value = 4;
+                    }
+                    else // si es un recepcionista el que cancela
+                    {
+                        con.command.Parameters.Add("@estado", SqlDbType.Decimal).Value = 3;
+                    }
+                    
                 }
                 else if (modoABM == "UPD")
                 {
@@ -193,7 +210,7 @@ namespace FrbaHotel.GestionReservas
 
                 con.command.Parameters.Add("@canthab", SqlDbType.Decimal).Value = Convert.ToDecimal(txt_cantHab.Text);
                 //con.command.Parameters.Add("@fechaCambio", SqlDbType.DateTime).Value = readConfig.Config.fechaSystem().ToString();
-                con.command.Parameters.Add("@fechaCambio", SqlDbType.DateTime).Value = DateTime.Today.ToString();
+                con.command.Parameters.Add("@fechaCambio", SqlDbType.DateTime).Value = DateTime.Today.ToShortDateString();
                 //con.command.Parameters.Add("@clie", SqlDbType.Decimal).Value = cliente;
 
                 con.openConection();
@@ -223,8 +240,8 @@ namespace FrbaHotel.GestionReservas
                     con.execute();
                     con.command.CommandType = CommandType.StoredProcedure;
 
-                    con.command.Parameters.Add("@fechaInicio", SqlDbType.DateTime).Value = dt_fechaDesde.Value.ToString();
-                    con.command.Parameters.Add("@fechaFin", SqlDbType.DateTime).Value = dt_fechaHasta.Value.ToString();
+                    con.command.Parameters.Add("@fechaInicio", SqlDbType.DateTime).Value = dt_fechaDesde.Value.ToShortDateString();
+                    con.command.Parameters.Add("@fechaFin", SqlDbType.DateTime).Value = dt_fechaHasta.Value.ToShortDateString();
                     con.command.Parameters.Add("@hotId", SqlDbType.Decimal).Value = hotelID;
                     if (txt_regimen.Text == "")
                     {

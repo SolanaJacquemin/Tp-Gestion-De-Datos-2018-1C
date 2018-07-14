@@ -210,7 +210,7 @@ namespace FrbaHotel.ABMUsuario
                             con.command.Parameters.Add("@mail", SqlDbType.NVarChar).Value = txt_mail.Text;
                             con.command.Parameters.Add("@telefono", SqlDbType.NVarChar).Value = txt_telefono.Text;
                             con.command.Parameters.Add("@direccion", SqlDbType.NVarChar).Value = txt_direccion.Text;
-                            con.command.Parameters.Add("@fechanac", SqlDbType.DateTime).Value = dt_fecha_nac.Value.ToString();
+                            con.command.Parameters.Add("@fechanac", SqlDbType.DateTime).Value = dt_fecha_nac.Value.ToShortDateString();
 
                             if (modoABM == "DLT")
                             {

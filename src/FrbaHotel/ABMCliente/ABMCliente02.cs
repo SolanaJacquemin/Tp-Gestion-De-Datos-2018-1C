@@ -263,7 +263,7 @@ namespace FrbaHotel.ABMCliente
                 con.command.Parameters.Add("@depto", SqlDbType.NVarChar).Value = txt_departamento.Text;
                 con.command.Parameters.Add("@localidad", SqlDbType.NVarChar).Value = txt_localidad.Text;
                 con.command.Parameters.Add("@nacionalidad", SqlDbType.NVarChar).Value = txt_nacionalidad.Text;
-                con.command.Parameters.Add("@fechaNac", SqlDbType.DateTime).Value = dt_fecha_nac.Value.ToString();
+                con.command.Parameters.Add("@fechaNac", SqlDbType.DateTime).Value = dt_fecha_nac.Value.ToShortDateString();
 
                 con.openConection();
                 con.command.ExecuteNonQuery();
@@ -438,7 +438,7 @@ namespace FrbaHotel.ABMCliente
                             con.command.Parameters.Add("@depto", SqlDbType.NVarChar).Value = txt_departamento.Text;
                             con.command.Parameters.Add("@localidad", SqlDbType.NVarChar).Value = txt_localidad.Text;
                             con.command.Parameters.Add("@nacionalidad", SqlDbType.NVarChar).Value = txt_nacionalidad.Text;
-                            con.command.Parameters.Add("@fechaNac", SqlDbType.DateTime).Value = dt_fecha_nac.Value.ToString();
+                            con.command.Parameters.Add("@fechaNac", SqlDbType.DateTime).Value = dt_fecha_nac.Value.ToShortDateString();
                             if (modoABM == "DLT")
                             {
                                 con.command.Parameters.Add("@estado", SqlDbType.Bit).Value = 0;

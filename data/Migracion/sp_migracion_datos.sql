@@ -844,6 +844,4 @@ where e.Reserva_Codigo= r.Reserva_Codigo
 update FOUR_SIZONS.Reserva
 set Reserva_Estado=5
 where Reserva_Fecha_inicio<convert(datetime,'01/01/2018',103) and reserva_codigo not in (select r.Reserva_Codigo from FOUR_SIZONS.Estadia e , FOUR_SIZONS.Reserva r where r.Reserva_Codigo=e.reserva_Codigo)
-
-
 END
