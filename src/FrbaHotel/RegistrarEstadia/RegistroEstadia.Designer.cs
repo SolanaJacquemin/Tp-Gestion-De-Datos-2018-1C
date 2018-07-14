@@ -30,12 +30,14 @@
         {
             this.btn_Aceptar = new System.Windows.Forms.Button();
             this.gb_Titulo = new System.Windows.Forms.GroupBox();
+            this.dt_fechaSalida = new System.Windows.Forms.DateTimePicker();
             this.cb_medioPago = new System.Windows.Forms.ComboBox();
             this.txt_hotel = new System.Windows.Forms.TextBox();
             this.txt_estadia = new System.Windows.Forms.TextBox();
             this.txt_CodReserva = new System.Windows.Forms.TextBox();
-            this.label1 = new System.Windows.Forms.Label();
+            this.l_medioPago = new System.Windows.Forms.Label();
             this.label3 = new System.Windows.Forms.Label();
+            this.label2 = new System.Windows.Forms.Label();
             this.lbl_estadia = new System.Windows.Forms.Label();
             this.lbl_CodReserva = new System.Windows.Forms.Label();
             this.label8 = new System.Windows.Forms.Label();
@@ -45,8 +47,6 @@
             this.btn_tarjeta = new System.Windows.Forms.Button();
             this.labelTitulo = new System.Windows.Forms.Label();
             this.btn_regClientes = new System.Windows.Forms.Button();
-            this.dt_fechaSalida = new System.Windows.Forms.DateTimePicker();
-            this.label2 = new System.Windows.Forms.Label();
             this.gb_Titulo.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -67,7 +67,7 @@
             this.gb_Titulo.Controls.Add(this.txt_hotel);
             this.gb_Titulo.Controls.Add(this.txt_estadia);
             this.gb_Titulo.Controls.Add(this.txt_CodReserva);
-            this.gb_Titulo.Controls.Add(this.label1);
+            this.gb_Titulo.Controls.Add(this.l_medioPago);
             this.gb_Titulo.Controls.Add(this.label3);
             this.gb_Titulo.Controls.Add(this.label2);
             this.gb_Titulo.Controls.Add(this.lbl_estadia);
@@ -77,6 +77,13 @@
             this.gb_Titulo.Size = new System.Drawing.Size(494, 127);
             this.gb_Titulo.TabIndex = 1;
             this.gb_Titulo.TabStop = false;
+            // 
+            // dt_fechaSalida
+            // 
+            this.dt_fechaSalida.Location = new System.Drawing.Point(346, 49);
+            this.dt_fechaSalida.Name = "dt_fechaSalida";
+            this.dt_fechaSalida.Size = new System.Drawing.Size(121, 20);
+            this.dt_fechaSalida.TabIndex = 31;
             // 
             // cb_medioPago
             // 
@@ -108,14 +115,14 @@
             this.txt_CodReserva.Size = new System.Drawing.Size(121, 20);
             this.txt_CodReserva.TabIndex = 3;
             // 
-            // label1
+            // l_medioPago
             // 
-            this.label1.AutoSize = true;
-            this.label1.Location = new System.Drawing.Point(27, 93);
-            this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(78, 13);
-            this.label1.TabIndex = 2;
-            this.label1.Text = "Medio de pago";
+            this.l_medioPago.AutoSize = true;
+            this.l_medioPago.Location = new System.Drawing.Point(27, 93);
+            this.l_medioPago.Name = "l_medioPago";
+            this.l_medioPago.Size = new System.Drawing.Size(78, 13);
+            this.l_medioPago.TabIndex = 2;
+            this.l_medioPago.Text = "Medio de pago";
             // 
             // label3
             // 
@@ -125,6 +132,15 @@
             this.label3.Size = new System.Drawing.Size(32, 13);
             this.label3.TabIndex = 2;
             this.label3.Text = "Hotel";
+            // 
+            // label2
+            // 
+            this.label2.AutoSize = true;
+            this.label2.Location = new System.Drawing.Point(258, 52);
+            this.label2.Name = "label2";
+            this.label2.Size = new System.Drawing.Size(84, 13);
+            this.label2.TabIndex = 2;
+            this.label2.Text = "Fecha de Salida";
             // 
             // lbl_estadia
             // 
@@ -213,22 +229,6 @@
             this.btn_regClientes.UseVisualStyleBackColor = true;
             this.btn_regClientes.Click += new System.EventHandler(this.btn_regClientes_Click);
             // 
-            // dt_fechaSalida
-            // 
-            this.dt_fechaSalida.Location = new System.Drawing.Point(346, 49);
-            this.dt_fechaSalida.Name = "dt_fechaSalida";
-            this.dt_fechaSalida.Size = new System.Drawing.Size(121, 20);
-            this.dt_fechaSalida.TabIndex = 31;
-            // 
-            // label2
-            // 
-            this.label2.AutoSize = true;
-            this.label2.Location = new System.Drawing.Point(258, 52);
-            this.label2.Name = "label2";
-            this.label2.Size = new System.Drawing.Size(84, 13);
-            this.label2.TabIndex = 2;
-            this.label2.Text = "Fecha de Salida";
-            // 
             // RegistrarEstadia
             // 
             this.ClientSize = new System.Drawing.Size(530, 244);
@@ -258,7 +258,7 @@
         private System.Windows.Forms.Label lbl_CodReserva;
         private System.Windows.Forms.Label label8;
         private System.Windows.Forms.Label label9;
-        private System.Windows.Forms.Label label1;
+        private System.Windows.Forms.Label l_medioPago;
         private System.Windows.Forms.Label lbl_camposObligatorios;
         private System.Windows.Forms.Button btn_factura;
         private System.Windows.Forms.Button btn_tarjeta;

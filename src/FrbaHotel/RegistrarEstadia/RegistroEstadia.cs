@@ -33,7 +33,6 @@ namespace FrbaHotel.RegistrarEstadia
         public decimal codigoEstadia;
         public decimal cliente;
 
-
         public RegistrarEstadia(string modo, decimal res, string user)
         {
             InitializeComponent();
@@ -66,7 +65,10 @@ namespace FrbaHotel.RegistrarEstadia
                     cb_medioPago.DropDownStyle = ComboBoxStyle.DropDownList;
                     dt_fechaSalida.Visible = false;
                     label2.Visible = false;
-                    btn_factura.Text = "Generar Factura";
+                    btn_factura.Enabled = false;
+                    btn_regClientes.Enabled = false;
+                    cb_medioPago.Visible = false;
+                    l_medioPago.Visible = false;
                     break;
 
                 case "OUT":
@@ -116,40 +118,12 @@ namespace FrbaHotel.RegistrarEstadia
                         codigoEstadia = Convert.ToDecimal(con.command.Parameters["@codigo"].Value);
                         txt_estadia.Text = codigoEstadia.ToString();
 
-                        MessageBox.Show("Las habitaciones que corresponden: " + mensajeHab, "FOUR SIZONS - FRBA Hoteles", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                        MessageBox.Show("Los siguientes son los números de habitación que fueron asignados: " + mensajeHab, "FOUR SIZONS - FRBA Hoteles", MessageBoxButtons.OK, MessageBoxIcon.Information);
                         con.closeConection();
 
+                        btn_regClientes.Enabled = true;
+                        MessageBox.Show("Por favor registre a los clientes", "FOUR SIZONS - FRBA Hoteles", MessageBoxButtons.OK, MessageBoxIcon.Information);
 
-                        MessageBox.Show("Operación exitosa", "FOUR SIZONS - FRBA Hoteles", MessageBoxButtons.OK, MessageBoxIcon.Information);
-
-                        /*try
-                        {
-                            con.strQuery = "four_sizons.asignarHab";
-                            con.execute();
-                            con.command.CommandType = CommandType.StoredProcedure;
-
-                            con.command.Parameters.Add("@estadia", SqlDbType.Decimal).Value = codigoEstadia;
-                            con.command.Parameters.Add("@reserva", SqlDbType.Decimal).Value = reserva;
-
-                            con.openConection();
-                            DataSet dataset = new DataSet();
-                            SqlDataAdapter da = new SqlDataAdapter(con.command);
-                            con.closeConection();
-                            da.Fill(dataset);
-
-
-                            for (int i = 0; i < dataset.Tables[0].Rows.Count; i++)
-                            {
-                                mensajeHab = mensajeHab + (dataset.Tables[0].Rows[i][0]).ToString() + " ";
-                            }
-                            MessageBox.Show("Las habitaciones que corresponden: " + mensajeHab, "FOUR SIZONS - FRBA Hoteles", MessageBoxButtons.OK, MessageBoxIcon.Information);
-                           
-                        }
-                        catch (Exception ex)
-                        {
-                            error = 1;
-                            MessageBox.Show("Error al completar la operación. " + ex.Message, "FOUR SIZONS - FRBA Hoteles", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                        }*/
                     }else{
                         Conexion con = new Conexion();
                         con.strQuery = nombreStored;
@@ -293,10 +267,10 @@ namespace FrbaHotel.RegistrarEstadia
 
             }
 
-            if ((generarFactura == true) && (facturaGenerada == false))
+            /*if ((generarFactura == true) && (facturaGenerada == false))
             {
                 MessageBox.Show("Por favor, genere la factura.", "FOUR SIZONS - FRBA Hoteles", MessageBoxButtons.OK, MessageBoxIcon.Information);
-            }
+            }*/
 
             if ((generarFactura) && (facturaGenerada))
             {
@@ -329,8 +303,8 @@ namespace FrbaHotel.RegistrarEstadia
             {
                 if (modoCheck == "IN")
                 {
-                    if (facturaGenerada == true && generarFactura == true) MessageBox.Show("La factura ya se encuentra generada.", "FOUR SIZONS - FRBA Hoteles", MessageBoxButtons.OK, MessageBoxIcon.Information);
-                    if (facturaGenerada == false && generarFactura == true)
+                    //if (facturaGenerada == true && generarFactura == true) MessageBox.Show("La factura ya se encuentra generada.", "FOUR SIZONS - FRBA Hoteles", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                    //if (facturaGenerada == false && generarFactura == true)
                     {
                         try
                         {
@@ -347,17 +321,18 @@ namespace FrbaHotel.RegistrarEstadia
                             con.command.ExecuteNonQuery();
                             con.closeConection();
                             facturaGenerada = true;
-                            MessageBox.Show("Operación exitosa", "FOUR SIZONS - FRBA Hoteles", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                            MessageBox.Show("Por favor, genere la factura.", "FOUR SIZONS - FRBA Hoteles", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                            //MessageBox.Show("Operación exitosa", "FOUR SIZONS - FRBA Hoteles", MessageBoxButtons.OK, MessageBoxIcon.Information);
                         }
                         catch (Exception ex)
                         {
                             MessageBox.Show("Error al completar la operación. " + ex.Message, "FOUR SIZONS - FRBA Hoteles", MessageBoxButtons.OK, MessageBoxIcon.Error);
                         }
                     }
-                    else
-                    {
-                        MessageBox.Show("Por favor, primero realice el check in", "FOUR SIZONS - FRBA Hoteles", MessageBoxButtons.OK, MessageBoxIcon.Information);
-                    }
+                    //else
+                    //{
+                    //    MessageBox.Show("Por favor, primero realice el check in", "FOUR SIZONS - FRBA Hoteles", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                    //}
                 }
                 else
                 {
@@ -396,7 +371,10 @@ namespace FrbaHotel.RegistrarEstadia
         }
 
         private void btn_regClientes_Click(object sender, EventArgs e)
-        {            
+        {
+            btn_factura.Enabled = true;
+            l_medioPago.Visible = true;
+            cb_medioPago.Visible = true;
             if (clieResRegistrado == true)
             {
                 if (MessageBox.Show("Cliente de la reserva registrado. Desea registrar más clientes?", "FOUR SIZONS - FRBA Hoteles", MessageBoxButtons.YesNo, MessageBoxIcon.Question) == DialogResult.Yes)
@@ -405,12 +383,12 @@ namespace FrbaHotel.RegistrarEstadia
                     formRegisClie.ShowDialog();
                 }
             }
-            if (((generarFactura == true) && (facturaGenerada == false) && error == 0) || (generarFactura == false) && (facturaGenerada == false))
-            {
-                MessageBox.Show("Por favor, realice el check in y genere la factura primero.", "FOUR SIZONS - FRBA Hoteles", MessageBoxButtons.OK, MessageBoxIcon.Information);
-            }
-            else
-            {
+            //if (((generarFactura == true) && (facturaGenerada == false) && error == 0) || (generarFactura == false) && (facturaGenerada == false))
+            //{
+            //    MessageBox.Show("Por favor, realice el check in y genere la factura primero.", "FOUR SIZONS - FRBA Hoteles", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            //}
+            //else
+            //{
                 try
                 {
                     Conexion con = new Conexion();
@@ -438,7 +416,7 @@ namespace FrbaHotel.RegistrarEstadia
                 {
                     MessageBox.Show("Error al completar la operación. " + ex.Message, "FOUR SIZONS - FRBA Hoteles", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 }
-            }
+            
         }
 
         private void cb_medioPago_SelectedIndexChanged(object sender, EventArgs e)

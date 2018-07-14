@@ -129,6 +129,7 @@ namespace FrbaHotel.GestionReservas
 
         private void boton_aceptar_Click(object sender, EventArgs e)
         {
+            error = 0;
             if (!tieneDisponibilidad)
             {
                 MessageBox.Show("Por favor haga click en Verificar Disponibilidad antes de continuar", "FOUR SIZONS - FRBA Hoteles", MessageBoxButtons.OK, MessageBoxIcon.Information);

@@ -14,6 +14,8 @@ namespace FrbaHotel.RegistrarEstadia
     {
         public decimal cliente;
         public decimal estadia;
+        public decimal dgv_tarjeta_ID;
+
         public RegistroTarjeta(decimal clienteID, decimal estadiaID)
         {
             InitializeComponent();
@@ -33,7 +35,7 @@ namespace FrbaHotel.RegistrarEstadia
         private void btn_agregar_Click(object sender, EventArgs e)
         {
             this.Hide();
-            ABMTarjeta formTarjeta = new ABMTarjeta(cliente);
+            ABMTarjeta formTarjeta = new ABMTarjeta("INS", dgv_tarjeta_ID,cliente);
             formTarjeta.ShowDialog();
             this.levantarGrilla();
             this.Show();
@@ -41,7 +43,11 @@ namespace FrbaHotel.RegistrarEstadia
 
         private void btn_eliminar_Click(object sender, EventArgs e)
         {
-
+            this.Hide();
+            ABMTarjeta formTarjeta = new ABMTarjeta("DLT", dgv_tarjeta_ID,cliente);
+            formTarjeta.ShowDialog();
+            this.levantarGrilla();
+            this.Show();
         }
 
         private void levantarGrilla() 
@@ -51,7 +57,7 @@ namespace FrbaHotel.RegistrarEstadia
 
             con.strQuery = "SELECT T.Tarjeta_Numero, T.Tarjeta_Titular, T.Tarjeta_Marca, T.Tarjeta_Venc" +
                 " FROM FOUR_SIZONS.Tarjeta T JOIN FOUR_SIZONS.Cliente C ON C.Cliente_Codigo = T.Cliente_Codigo" +
-                " WHERE C.Cliente_Codigo = " + cliente;
+                " WHERE T.Tarjeta_Estado = 1 AND C.Cliente_Codigo = " + cliente;
 
             con.executeQuery();
 
@@ -91,7 +97,7 @@ namespace FrbaHotel.RegistrarEstadia
 
             con.strQuery = "SELECT T.Tarjeta_Numero, T.Tarjeta_Titular, T.Tarjeta_Marca, T.Tarjeta_Venc" +
                             " FROM FOUR_SIZONS.Tarjeta T JOIN FOUR_SIZONS.Cliente C ON C.Cliente_Codigo = T.Cliente_Codigo" +
-                            " WHERE C.Cliente_Codigo = " + cliente;
+                            " WHERE T.Tarjeta_Estado = 1 AND C.Cliente_Codigo = " + cliente;
 
             con.executeQuery();
 
@@ -104,6 +110,16 @@ namespace FrbaHotel.RegistrarEstadia
                 con.lector.GetString(2), con.lector.GetDateTime(3)});
             }
             con.closeConection();
+        }
+
+        private void dgv_tarjetas_CellClick(object sender, DataGridViewCellEventArgs e)
+        {
+            int index = e.RowIndex;
+            if (index >= 0)
+            {
+                DataGridViewRow selectedRow = dgv_tarjetas.Rows[index];
+                dgv_tarjeta_ID = Convert.ToDecimal(selectedRow.Cells[0].Value.ToString());
+            }
         }
     }
 }

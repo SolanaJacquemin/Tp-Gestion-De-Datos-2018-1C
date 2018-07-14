@@ -33,15 +33,15 @@
             this.lbl_Titulo = new System.Windows.Forms.Label();
             this.btn_eliminar = new System.Windows.Forms.Button();
             this.dgv_tarjetas = new System.Windows.Forms.DataGridView();
+            this.tarjeta_numero = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.Tarjeta_Titular = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.Tarjeta_Marca = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.Tarjeta_Vencimiento = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.btn_agregar = new System.Windows.Forms.Button();
             this.txt_cliente = new System.Windows.Forms.TextBox();
             this.lbl_Estadia = new System.Windows.Forms.Label();
             this.boton_volver = new System.Windows.Forms.Button();
             this.gb_DatosEstadia = new System.Windows.Forms.GroupBox();
-            this.tarjeta_numero = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.Tarjeta_Titular = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.Tarjeta_Marca = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.Tarjeta_Vencimiento = new System.Windows.Forms.DataGridViewTextBoxColumn();
             ((System.ComponentModel.ISupportInitialize)(this.dgv_tarjetas)).BeginInit();
             this.gb_DatosEstadia.SuspendLayout();
             this.SuspendLayout();
@@ -102,6 +102,31 @@
             this.dgv_tarjetas.ReadOnly = true;
             this.dgv_tarjetas.Size = new System.Drawing.Size(454, 184);
             this.dgv_tarjetas.TabIndex = 15;
+            this.dgv_tarjetas.CellClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dgv_tarjetas_CellClick);
+            // 
+            // tarjeta_numero
+            // 
+            this.tarjeta_numero.HeaderText = "Tarjeta Número";
+            this.tarjeta_numero.Name = "tarjeta_numero";
+            this.tarjeta_numero.ReadOnly = true;
+            // 
+            // Tarjeta_Titular
+            // 
+            this.Tarjeta_Titular.HeaderText = "Titular";
+            this.Tarjeta_Titular.Name = "Tarjeta_Titular";
+            this.Tarjeta_Titular.ReadOnly = true;
+            // 
+            // Tarjeta_Marca
+            // 
+            this.Tarjeta_Marca.HeaderText = "Marca";
+            this.Tarjeta_Marca.Name = "Tarjeta_Marca";
+            this.Tarjeta_Marca.ReadOnly = true;
+            // 
+            // Tarjeta_Vencimiento
+            // 
+            this.Tarjeta_Vencimiento.HeaderText = "Vencimiento";
+            this.Tarjeta_Vencimiento.Name = "Tarjeta_Vencimiento";
+            this.Tarjeta_Vencimiento.ReadOnly = true;
             // 
             // btn_agregar
             // 
@@ -151,30 +176,6 @@
             this.gb_DatosEstadia.Size = new System.Drawing.Size(584, 234);
             this.gb_DatosEstadia.TabIndex = 40;
             this.gb_DatosEstadia.TabStop = false;
-            // 
-            // tarjeta_numero
-            // 
-            this.tarjeta_numero.HeaderText = "Tarjeta Número";
-            this.tarjeta_numero.Name = "tarjeta_numero";
-            this.tarjeta_numero.ReadOnly = true;
-            // 
-            // Tarjeta_Titular
-            // 
-            this.Tarjeta_Titular.HeaderText = "Titular";
-            this.Tarjeta_Titular.Name = "Tarjeta_Titular";
-            this.Tarjeta_Titular.ReadOnly = true;
-            // 
-            // Tarjeta_Marca
-            // 
-            this.Tarjeta_Marca.HeaderText = "Marca";
-            this.Tarjeta_Marca.Name = "Tarjeta_Marca";
-            this.Tarjeta_Marca.ReadOnly = true;
-            // 
-            // Tarjeta_Vencimiento
-            // 
-            this.Tarjeta_Vencimiento.HeaderText = "Vencimiento";
-            this.Tarjeta_Vencimiento.Name = "Tarjeta_Vencimiento";
-            this.Tarjeta_Vencimiento.ReadOnly = true;
             // 
             // RegistroTarjeta
             // 
