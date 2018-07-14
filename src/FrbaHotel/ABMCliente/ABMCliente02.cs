@@ -62,7 +62,6 @@ namespace FrbaHotel.ABMCliente
 
                 case "DLT":
                     labelTitulo.Text = "Baja de Cliente";
-                    btn_aceptar_nuevo.Visible = false;
                     txt_nombre.Enabled = false;
                     txt_apellido.Enabled = false;
                     cb_tipo_doc.Enabled = false;
@@ -89,7 +88,6 @@ namespace FrbaHotel.ABMCliente
                     txt_estado.Visible = false;
                     lbl_estado.Visible = false;
                     txt_puntos.Enabled = false;
-                    btn_aceptar_nuevo.Visible = false;
                     lbl_obligacion.Visible = false;
                     sacarAsteriscos();
                     break;

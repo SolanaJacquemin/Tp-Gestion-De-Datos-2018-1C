@@ -699,11 +699,11 @@ BEGIN
 	-- Usuario
 	-- Inserta usuarios
 	INSERT INTO FOUR_SIZONS.Usuario
-	VALUES ('SYSADM', '3GGQyLOZ4EO537rLsNN/KiZF4z+ZOEkdJLJOApjZzRc=', 'Administrador', '', '', 0, '', '', convert(datetime,'01/01/2017',121), '',1,0)
+	VALUES ('SYSADM', '3GGQyLOZ4EO537rLsNN/KiZF4z+ZOEkdJLJOApjZzRc=', 'Administrador Desarrollador', '', '', 0, '', '', convert(datetime,'01/01/2017',121), '',1,0)
 	INSERT INTO FOUR_SIZONS.Usuario
 	VALUES ('GUEST', '3GGQyLOZ4EO537rLsNN/KiZF4z+ZOEkdJLJOApjZzRc=', 'Guest', '', '', 0, '', '', convert(datetime,'01/01/2017',121), '',1,0)
 	INSERT INTO FOUR_SIZONS.Usuario
-	VALUES ('admin', '5rhwUL/LgUP8uNsBcKTcntANkE3dPipK0bHo3A/cm+c=', 'Administrador', '', '', 0, '', '', convert(datetime,'01/01/2017',121), '',1,0)
+	VALUES ('admin', '5rhwUL/LgUP8uNsBcKTcntANkE3dPipK0bHo3A/cm+c=', 'Administrador General', '', '', 0, '', '', convert(datetime,'01/01/2017',121), '',1,0)
 
 	--UsuarioXRol
 	INSERT INTO FOUR_SIZONS.UsuarioXRol VALUES ('SYSADM', 1, 1)

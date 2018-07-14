@@ -32,7 +32,6 @@
             this.label11 = new System.Windows.Forms.Label();
             this.btn_volver = new System.Windows.Forms.Button();
             this.btn_Aceptar = new System.Windows.Forms.Button();
-            this.btn_aceptar_nuevo = new System.Windows.Forms.Button();
             this.labelTitulo = new System.Windows.Forms.Label();
             this.groupBox1 = new System.Windows.Forms.GroupBox();
             this.txt_estado = new System.Windows.Forms.TextBox();
@@ -126,16 +125,6 @@
             this.btn_Aceptar.Text = "Aceptar";
             this.btn_Aceptar.UseVisualStyleBackColor = true;
             this.btn_Aceptar.Click += new System.EventHandler(this.btn_Aceptar_Click);
-            // 
-            // btn_aceptar_nuevo
-            // 
-            this.btn_aceptar_nuevo.Location = new System.Drawing.Point(91, 528);
-            this.btn_aceptar_nuevo.Name = "btn_aceptar_nuevo";
-            this.btn_aceptar_nuevo.Size = new System.Drawing.Size(112, 23);
-            this.btn_aceptar_nuevo.TabIndex = 18;
-            this.btn_aceptar_nuevo.Text = "Aceptar y nuevo";
-            this.btn_aceptar_nuevo.UseVisualStyleBackColor = true;
-            this.btn_aceptar_nuevo.Click += new System.EventHandler(this.btn_aceptar_nuevo_Click);
             // 
             // labelTitulo
             // 
@@ -632,7 +621,6 @@
             this.Controls.Add(this.lbl_obligacion);
             this.Controls.Add(this.groupBox1);
             this.Controls.Add(this.labelTitulo);
-            this.Controls.Add(this.btn_aceptar_nuevo);
             this.Controls.Add(this.btn_Aceptar);
             this.Controls.Add(this.btn_volver);
             this.Controls.Add(this.label1);
@@ -654,7 +642,6 @@
         private System.Windows.Forms.Label label11;
         private System.Windows.Forms.Button btn_volver;
         private System.Windows.Forms.Button btn_Aceptar;
-        private System.Windows.Forms.Button btn_aceptar_nuevo;
         private System.Windows.Forms.Label labelTitulo;
         private System.Windows.Forms.GroupBox groupBox1;
         private System.Windows.Forms.DateTimePicker dt_fecha_nac;
