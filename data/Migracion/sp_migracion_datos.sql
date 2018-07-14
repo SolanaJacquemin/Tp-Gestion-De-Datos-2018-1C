@@ -3162,14 +3162,19 @@ begin
 	if(@estadoC = 1)
 	begin
 
-		if((select datediff(day,@fechaInicio, @fechaOperacion))<0 and (@estado = 1 or @estado = 2 ))
+		if((datediff(day,@fechaInicio, @fechaOperacion))<0 and (@estado = 1 or @estado = 2 ))
 		begin
 			RAISERROR('Todavia no es la fecha de ingreso de la reserva',16,1)
 		end
 
-		if((select datediff(day,@fechaFin, @fechaOperacion))>0)
+		if((datediff(day,@fechaFin, @fechaOperacion))>0)
 		begin
 			RAISERROR('La fecha de la reserva ya ha pasado',16,1)
+		end
+
+		if((datediff(day,@fechaInicio, @fechaOperacion))=0 and (@estado = 1 or @estado = 2 ))
+		begin
+			RAISERROR('No se puede agregar consumible porque no se hizo el check-in',16,1)
 		end
 
 		if(@Estado= 3)
