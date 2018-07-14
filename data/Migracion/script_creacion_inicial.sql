@@ -3001,17 +3001,17 @@ declare @inicio datetime
 set @inicio = FOUR_SIZONS.InicioTRi(@tri,@anio)
 set @fin = FOUR_SIZONS.finTri(@tri,@anio)
 
-if(not exists (select *  from four_sizons.Reserva r join FOUR_SIZONS.ReservaMod m on r.Reserva_Codigo=m.Reserva_Codigo 
-			 where r.Reserva_Codigo!=1 and r.Reserva_Codigo!=2 and r.Reserva_Codigo!=6 and m.ResMod_Fecha between @inicio and @fin))
+if(not exists (select *  from four_sizons.Reserva r  
+			 where r.Reserva_Estado!=1 and r.Reserva_Estado!=2 and r.Reserva_Estado!=6 and ((r.Reserva_Fecha_Inicio between @inicio and @fin) or (r.Reserva_Fecha_Fin between @inicio and @fin))))
 	begin
 		raiserror('No hay datos reservas canceladas',13,1)
 	end
 	begin
-		select top 5 h.Hotel_Codigo, h.Hotel_Nombre  ,COUNT(r.Reserva_Codigo) cant_Reservas_cans
-		from four_sizons.Hotel h,four_sizons.Reserva r, four_sizons.ReservaMod m  
+		select top 5 h.Hotel_Codigo, h.Hotel_Nombre  ,COUNT(r.Reserva_Codigo)cant_Reservas_cans
+		from four_sizons.Hotel h,four_sizons.Reserva r  
 		where h.Hotel_Codigo=r.Hotel_Codigo and
 			( (r.Reserva_Estado = 3 or r.Reserva_Estado = 4 or r.Reserva_Estado = 5)
-			and m.Reserva_Codigo=r.Reserva_Codigo  and m.ResMod_Fecha between @inicio and @fin)
+			and  ((r.Reserva_Fecha_Inicio between @inicio and @fin) or (r.Reserva_Fecha_Fin between @inicio and @fin)))
 		group by h.Hotel_Codigo,h.Hotel_Nombre  
 		order by count(r.Reserva_Codigo)
 	end

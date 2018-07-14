@@ -16,13 +16,13 @@ namespace FrbaHotel
         public SqlConnection conector;
         public SqlDataReader lector;
 
-        public Conexion() // Levanta la conexión
+        public Conexion() // Lee el archivo de configuración y genera la conexión
         {
             this.strConection = readConfig.Config.strConection();
             this.conector = new SqlConnection(this.strConection);
         }
 
-        public void execute() // Ejecuta la consulta
+        public void execute() // crea la nueva consulta a ejecutar
         {
             command = new SqlCommand(strQuery, conector);
         }
@@ -36,7 +36,7 @@ namespace FrbaHotel
             conector.Close();
         }
         
-        public void executeNoReturnQuery() // Ejecuta consulta que no devuelve datos (INS/UPD/DEL)
+        public void executeNoReturnQuery() // Ejecuta consulta de stored procedures
         {
             this.openConection();
             execute();
@@ -51,7 +51,7 @@ namespace FrbaHotel
             lector = command.ExecuteReader();
         }
 
-        public bool reader() // Lee los datos devueltos
+        public bool reader() // Lee los datos del lector
         {
             return lector.Read();
         }

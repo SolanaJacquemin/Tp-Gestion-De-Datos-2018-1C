@@ -12,6 +12,7 @@ namespace readConfig
     {
         static public string fechaSystem()
         {
+            // obtiene la fecha del sistema (para creación de registros como default)
             StreamReader config = new StreamReader("../../../config.txt");
             string linea = "";
             string buffer = config.ReadLine();
@@ -63,6 +64,7 @@ namespace readConfig
                 buffer = config.ReadLine();
             }
             config.Close();
+            // devuelve la cadena de conexión
             return "Data Source=" + dtSrc + ";Initial Catalog=" + iniCtlg + ";User ID=" + user + ";Password=" + pass;
         }
     }
