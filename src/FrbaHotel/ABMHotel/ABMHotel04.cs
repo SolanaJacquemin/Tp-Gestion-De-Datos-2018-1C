@@ -142,7 +142,7 @@ namespace FrbaHotel.ABMHotel
                             con.command.Parameters.Add("@reg", SqlDbType.NVarChar).Value = lb_regimen_usrbaja.Items[i].ToString();
                             con.command.Parameters.Add("@fechaMod", SqlDbType.DateTime).Value = hoy;
 
-                            string msg = lb_regimen_usralta.Items[i].ToString();
+                            string msg = lb_regimen_usrbaja.Items[i].ToString();
 
                             con.command.Parameters.Add("@estado", SqlDbType.Bit).Value = 0;
                             con.openConection();
@@ -150,22 +150,23 @@ namespace FrbaHotel.ABMHotel
                             con.closeConection();
                         }
 
-                        
-                        con.strQuery = "FOUR_SIZONS.modificarRegXhot";
+                        Conexion con2 = new Conexion();
+                        con2.strQuery = "FOUR_SIZONS.modificarRegXhot";
                         for (int i = 0; i < lb_regimen_usralta.Items.Count; i++)
                         {
-                            con.execute();
-                            con.command.CommandType = CommandType.StoredProcedure;
+                            con2.execute();
+                            con2.command.CommandType = CommandType.StoredProcedure;
 
-                            con.command.Parameters.Add("@hotel", SqlDbType.Decimal).Value = hotel;
-                            con.command.Parameters.Add("@reg", SqlDbType.NVarChar).Value = lb_regimen_usralta.Items[i].ToString();
-                            con.command.Parameters.Add("@fechaMod", SqlDbType.DateTime).Value = hoy;
-                            con.command.Parameters.Add("@estado", SqlDbType.Bit).Value = 1;
+                            con2.command.Parameters.Add("@hotel", SqlDbType.Decimal).Value = hotel;
+                            string msg = lb_regimen_usralta.Items[i].ToString();
+                            con2.command.Parameters.Add("@reg", SqlDbType.NVarChar).Value = lb_regimen_usralta.Items[i].ToString();
+                            con2.command.Parameters.Add("@fechaMod", SqlDbType.DateTime).Value = hoy;
+                            con2.command.Parameters.Add("@estado", SqlDbType.Bit).Value = 1;
 
                             // se abre la conexión con la base de datos, se ejecuta y se cierra
-                            con.openConection();
-                            con.command.ExecuteNonQuery();
-                            con.closeConection();
+                            con2.openConection();
+                            con2.command.ExecuteNonQuery();
+                            con2.closeConection();
                         }
                     }
                     MessageBox.Show("Operación exitosa", "FOUR SIZONS - FRBA Hoteles", MessageBoxButtons.OK, MessageBoxIcon.Information);
