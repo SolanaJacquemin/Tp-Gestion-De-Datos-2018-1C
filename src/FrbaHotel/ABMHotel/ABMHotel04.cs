@@ -97,6 +97,9 @@ namespace FrbaHotel.ABMHotel
             }
         }
 
+        
+
+
         public void ejecutarABMRegimen(string nombreStored)
         {
             if (MessageBox.Show("Está seguro que desea continuar con la operación?", "FOUR SIZONS - FRBA Hoteles", MessageBoxButtons.YesNo, MessageBoxIcon.Question) == DialogResult.Yes)
@@ -129,22 +132,6 @@ namespace FrbaHotel.ABMHotel
                     else
                     {
                         // en caso de modificar se cambia el nombre del sp y se itera los llamados por cada uno de los elementos del listbox
-                        con.strQuery = "FOUR_SIZONS.modificarRegXhot";
-                        for (int i = 0; i < lb_regimen_usralta.Items.Count; i++)
-                        {
-                            con.execute();
-                            con.command.CommandType = CommandType.StoredProcedure;
-
-                            con.command.Parameters.Add("@hotel", SqlDbType.Decimal).Value = hotel;
-                            con.command.Parameters.Add("@reg", SqlDbType.NVarChar).Value = lb_regimen_usralta.Items[i].ToString();
-                            con.command.Parameters.Add("@fechaMod", SqlDbType.DateTime).Value = hoy;
-                            con.command.Parameters.Add("@estado", SqlDbType.Bit).Value = 1;
-
-                            // se abre la conexión con la base de datos, se ejecuta y se cierra
-                            con.openConection();
-                            con.command.ExecuteNonQuery();
-                            con.closeConection();
-                        }
                         // se itera los llamados por cada uno de los elementos del listbox para dar de baja
                         for (int i = 0; i < lb_regimen_usrbaja.Items.Count; i++)
                         {
@@ -163,6 +150,23 @@ namespace FrbaHotel.ABMHotel
                             con.closeConection();
                         }
 
+                        
+                        con.strQuery = "FOUR_SIZONS.modificarRegXhot";
+                        for (int i = 0; i < lb_regimen_usralta.Items.Count; i++)
+                        {
+                            con.execute();
+                            con.command.CommandType = CommandType.StoredProcedure;
+
+                            con.command.Parameters.Add("@hotel", SqlDbType.Decimal).Value = hotel;
+                            con.command.Parameters.Add("@reg", SqlDbType.NVarChar).Value = lb_regimen_usralta.Items[i].ToString();
+                            con.command.Parameters.Add("@fechaMod", SqlDbType.DateTime).Value = hoy;
+                            con.command.Parameters.Add("@estado", SqlDbType.Bit).Value = 1;
+
+                            // se abre la conexión con la base de datos, se ejecuta y se cierra
+                            con.openConection();
+                            con.command.ExecuteNonQuery();
+                            con.closeConection();
+                        }
                     }
                     MessageBox.Show("Operación exitosa", "FOUR SIZONS - FRBA Hoteles", MessageBoxButtons.OK, MessageBoxIcon.Information);
                 }
@@ -188,6 +192,36 @@ namespace FrbaHotel.ABMHotel
 
         private void btn_agregar_Click(object sender, EventArgs e)
         {
+            
+             if (lb_regimen.SelectedItem != null)
+            {
+                error = 0;
+                string reg1 = lb_regimen.SelectedItem.ToString();
+                string reg2;
+                for (int i = 0; i < lb_regimen_usralta.Items.Count; i++)
+                {
+                    reg2 = lb_regimen_usralta.Items[i].ToString();
+                    if (reg1 == reg2)
+                    {
+                        error = 1;
+                    }
+                        
+                }
+                if (error == 0) 
+                {
+                    lb_regimen_usralta.Items.Add(lb_regimen.SelectedItem);
+                }
+                else
+                {
+                    MessageBox.Show("El régimen " + reg1 + " ya ha sido agregado en la lista", "FOUR SIZONS - FRBA Hoteles", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                }
+            }
+            else
+            {
+                MessageBox.Show("No hay ítem seleccionado", "FOUR SIZONS - FRBA Hoteles", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            }
+             /*
+
             if (lb_regimen.SelectedItem != null)
             {
                 lb_regimen_usralta.Items.Add(lb_regimen.SelectedItem);
@@ -195,7 +229,7 @@ namespace FrbaHotel.ABMHotel
             else
             {
                 MessageBox.Show("No hay ítem seleccionado");
-            }
+            }*/
         }
 
 
@@ -215,10 +249,44 @@ namespace FrbaHotel.ABMHotel
 
         private void btn_agregarTodo_Click(object sender, EventArgs e)
         {
-            for (int i = 0; i < lb_regimen.Items.Count; i++)
+          /*  for (int i = 0; i < lb_regimen.Items.Count; i++)
             {
                 lb_regimen_usralta.Items.Add(lb_regimen.Items[i].ToString());
+            }*/
+             
+             for (int i = 0; i < lb_regimen.Items.Count; i++)
+            {
+                //lb_regimen_usralta.Items.Add(lb_regimen.Items[i].ToString());
+            
+                error = 0;
+                string reg1 = lb_regimen.Items[i].ToString();
+                string reg2;
+                for (int j = 0; j < lb_regimen_usralta.Items.Count; j++)
+                {
+                    if (error != 1)
+                    {
+                        reg2 = lb_regimen_usralta.Items[j].ToString();
+                        if (reg1 == reg2)
+                        {
+                            error = 1;
+                        }
+                    }
+                    else 
+                    {
+                        break;
+                    }  
+                }
+                if (error == 0) 
+                {
+                    lb_regimen_usralta.Items.Add(reg1);
+                }
+                else
+                {
+                    MessageBox.Show("El régimen " + reg1 + " ya ha sido agregado en la lista", "FOUR SIZONS - FRBA Hoteles", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                }
+                
             }
+             
         }
 
         private void btn_eliminarTodo_Click(object sender, EventArgs e)

@@ -1,23 +1,16 @@
 USE GD1C2018
 GO
+-- Creación de esquema
+IF NOT EXISTS (SELECT * FROM SYS.schemas
+				WHERE name = 'FOUR_SIZONS'	)
+	begin
+	EXEC('CREATE SCHEMA FOUR_SIZONS AUTHORIZATION gdHotel2018')
+	end
 
-IF (OBJECT_ID('dbo.migracion_datos', 'P') IS NOT NULL)
-BEGIN
-    DROP PROCEDURE dbo.migracion_datos
-END;
-GO
-
-CREATE PROCEDURE migracion_datos
-AS
-BEGIN
 
 	DECLARE @cmd varchar(1000)
-	-- Creación de esquema
-	IF NOT EXISTS (SELECT * FROM sys.schemas WHERE name = 'FOUR_SIZONS')
-	BEGIN
-		SET @cmd = 'CREATE SCHEMA FOUR_SIZONS'
-		EXEC (@cmd)
-	END
+	
+	
 
 	--Eliminar tablas anteriormente creadas
 	IF (OBJECT_ID('FOUR_SIZONS.Parametros', 'U') IS NOT NULL)
@@ -844,12 +837,9 @@ where e.Reserva_Codigo= r.Reserva_Codigo
 update FOUR_SIZONS.Reserva
 set Reserva_Estado=5
 where Reserva_Fecha_inicio<convert(datetime,'01/01/2018',103) and reserva_codigo not in (select r.Reserva_Codigo from FOUR_SIZONS.Estadia e , FOUR_SIZONS.Reserva r where r.Reserva_Codigo=e.reserva_Codigo)
-END
-
-
-
--------------------------------------------------------Comienzo de procedures--------------------------------------------------------------
 go
+-------------------------------------------------------Comienzo de procedures--------------------------------------------------------------
+
 -- Borrado de procedures en la base 
 IF (OBJECT_ID('FOUR_SIZONS.ValidarUsuario', 'P') IS NOT NULL)
 BEGIN
@@ -2005,7 +1995,7 @@ begin try
 
 declare @TipoHabID numeric(18)
 set @TipoHabID = (select Habitacion_Tipo_Codigo from FOUR_SIZONS.Habitacion_Tipo where @TipoHab = Habitacion_Tipo_Descripcion)
-
+declare @estadoAnt bit =(select Habitacion_Estado from FOUR_SIZONS.Habitacion where Habitacion_Numero = @numero and Hotel_Codigo=@hotId)
 update FOUR_SIZONS.Habitacion
 set Habitacion_Piso= @piso,Habitacion_Frente=@ubicacion,Habitacion_Estado=@estado,Habitacion_Descripcion=@descripcion
 where Habitacion_Numero=@numero and Hotel_Codigo= @hotId
@@ -2013,13 +2003,13 @@ where Habitacion_Numero=@numero and Hotel_Codigo= @hotId
 declare @aux datetime = convert(datetime, '01-01-2018' ,103)			
 declare @fin datetime= convert(datetime, '01-01-2021' ,103)
 
-if(@estado = 1)
+if(@estado = 1 and @estadoAnt = 0)
 begin
 	update FOUR_SIZONS.Disponibilidad
 	set Disp_HabDisponibles= Disp_HabDisponibles+1
 	where @TipoHabID=Habitacion_Tipo_Codigo and (Disp_Fecha between @aux and @fin) and Hotel_Codigo =@hotId
 end
-else
+if(@estado = 0 and @estadoAnt = 1)
 begin
 	update FOUR_SIZONS.Disponibilidad
 	set Disp_HabDisponibles= Disp_HabDisponibles-1
@@ -2065,6 +2055,7 @@ as begin
 	declare @porcentual decimal(12) = (select Habitacion_Tipo_Porcentual from FOUR_SIZONS.Habitacion_Tipo where Habitacion_Tipo_Codigo =@tipoHab)
 	if(not exists(select * from FOUR_SIZONS.Hotel_Cerrado where Hotel_Codigo=@hotid and ((@fechaInicio between Cerrado_FechaI and Cerrado_FechaF)or (@fechaFin between Cerrado_FechaI and Cerrado_FechaF))))
 	begin
+	-- verifica que haya disponibilidad
 	if(1= four_sizons.verificarDisp(@fechaInicio, @fechaFin,@hotId, @tipoHab,@cantHab))
 	begin
 	set @cantidadNoches = DATEDIFF(day, @fechaInicio, @fechaFin)
@@ -2158,7 +2149,7 @@ CREATE procedure four_sizons.ModificarReserva
 	@estado numeric(1),
 	@canthab numeric(18),
 	@fechaCambio datetime
-	--@clie numeric(18)
+
 	as begin tran
 	begin try 
 	set @fechaCambio = convert(datetime,@fechaCambio,103)
@@ -2171,7 +2162,7 @@ CREATE procedure four_sizons.ModificarReserva
 
 	declare @mod_numero decimal(18)
 	select @mod_numero = isnull(count(*),0)+1 from FOUR_SIZONS.ReservaMod where Reserva_Codigo = @codigoReserva
---if(@ClieA=@clie)
+
 begin
 if(@estadoActual !=6)
 	begin
@@ -2271,7 +2262,7 @@ if(@estadoActual !=6)
 							end	
 					end
 
-				else --SUPONGO QUE ESTE ELSE ES DE CUANDO EL ESTADO ES 3/4 O 5
+				else -- ESTE ELSE ES DE CUANDO EL ESTADO ES 3/4 O 5
 					begin
 						update FOUR_SIZONS.Reserva
 							set Reserva_Estado = @estado	
@@ -2296,7 +2287,6 @@ else
 		raiserror ('La reserva ya fue efectivizada, no puede ser modificada.',13,1)
 	end
 end
---else raiserror ('No es la reserva de ese cliente.',13,1)
 commit tran
 end try
 begin catch
@@ -2306,7 +2296,6 @@ RAISERROR(@mensaje_de_error,11,1)
 rollback tran 
 end catch
 go
--- este no va mas xq no es bueno ejecutar un proc dentro de otro proc
 
 
 
