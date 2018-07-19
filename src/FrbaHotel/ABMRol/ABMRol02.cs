@@ -365,11 +365,11 @@ namespace FrbaHotel.ABMRol
                         // luego dependiendo del modo se agregan o se quitan funcionalidades del rol
                         if (modoABM == "UPD")
                         {
-                            con.command.Parameters.Add("@estado", SqlDbType.Bit).Value = 1;
+                            //con.command.Parameters.Add("@estado", SqlDbType.Bit).Value = 1;
                             // se abre la conexión con la base de datos, se ejecuta y se cierra
-                            con.openConection();
-                            con.command.ExecuteNonQuery();
-                            con.closeConection();
+                            //con.openConection();
+                            //con.command.ExecuteNonQuery();
+                            //con.closeConection();
 
                             Conexion con4 = new Conexion();
                             con4.strQuery = "FOUR_SIZONS.modificacionRolxFunc";
@@ -397,6 +397,7 @@ namespace FrbaHotel.ABMRol
                                 con3.command.CommandType = CommandType.StoredProcedure;
                                 // se agregan los parámetros al stored procedure
                                 con3.command.Parameters.Add("@rolname", SqlDbType.NVarChar).Value = txt_nombreRol.Text;
+                                string msg = lb_func_usralta.Items[i].ToString();
                                 con3.command.Parameters.Add("@func", SqlDbType.NVarChar).Value = lb_func_usralta.Items[i].ToString();
                                 con3.command.Parameters.Add("@estado", SqlDbType.Bit).Value = 1;
                                 // se abre la conexión con la base de datos, se ejecuta y se cierra
