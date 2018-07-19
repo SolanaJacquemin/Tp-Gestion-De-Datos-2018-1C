@@ -285,6 +285,7 @@ namespace FrbaHotel.ABMHabitacion
                 {
                     txt_hotel.Text = con.lector.GetString(0);
                 }
+                con.closeConection();
                 txt_hotel.Enabled = false;
             }
 
