@@ -111,11 +111,11 @@ namespace FrbaHotel.ABMHabitacion
                 txt_hotel.Enabled = false;
                 btn_promptHotel.Enabled = false;
 
-            }
+            //}
 
-            else
-            {
-                Conexion con = new Conexion();
+            //else
+            //{
+             //   Conexion con = new Conexion();
                 con.strQuery = "SELECT HO.Hotel_Nombre, HT.Habitacion_Tipo_Descripcion, HA.Habitacion_Frente, " +
                                "HA.Habitacion_Piso, HA.Habitacion_Descripcion, HA.Habitacion_Estado " +
                                "FROM FOUR_SIZONS.Habitacion HA JOIN FOUR_SIZONS.Habitacion_Tipo HT on " +

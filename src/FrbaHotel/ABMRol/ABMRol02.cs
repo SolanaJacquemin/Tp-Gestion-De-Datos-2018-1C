@@ -343,19 +343,20 @@ namespace FrbaHotel.ABMRol
                         con.command.ExecuteNonQuery();
                         con.closeConection();
 
-                        con.strQuery = "FOUR_SIZONS.altaRolxFunc";
+                        Conexion con2 = new Conexion();
+                        con2.strQuery = "FOUR_SIZONS.altaRolxFunc";
                         // Se generan llamadas sucesivas para ingresar las funcionalidades del rol
                         for (int i = 0; i < lb_func_usralta.Items.Count; i++)
                         {
-                            con.execute();
-                            con.command.CommandType = CommandType.StoredProcedure;
+                            con2.execute();
+                            con2.command.CommandType = CommandType.StoredProcedure;
                             // se agregan los parámetros al stored procedure
-                            con.command.Parameters.Add("@rolname", SqlDbType.NVarChar).Value = txt_nombreRol.Text;
-                            con.command.Parameters.Add("@func", SqlDbType.NVarChar).Value = lb_func_usralta.Items[i].ToString();
+                            con2.command.Parameters.Add("@rolname", SqlDbType.NVarChar).Value = txt_nombreRol.Text;
+                            con2.command.Parameters.Add("@func", SqlDbType.NVarChar).Value = lb_func_usralta.Items[i].ToString();
                             // se abre la conexión con la base de datos, se ejecuta y se cierra
-                            con.openConection();
-                            con.command.ExecuteNonQuery();
-                            con.closeConection();
+                            con2.openConection();
+                            con2.command.ExecuteNonQuery();
+                            con2.closeConection();
                         }
                     }else{
                         // en caso de modificar el nombre se llama al sp correspondiente
@@ -370,43 +371,48 @@ namespace FrbaHotel.ABMRol
                             con.command.ExecuteNonQuery();
                             con.closeConection();
 
-                            con.strQuery = "FOUR_SIZONS.modificacionRolxFunc";
-                            // Se generan llamadas sucesivas para modificar las funcionalidades del rol
-                            for (int i = 0; i < lb_func_usralta.Items.Count; i++)
-                            {
-                                con.execute();
-                                con.command.CommandType = CommandType.StoredProcedure;
-                                // se agregan los parámetros al stored procedure
-                                con.command.Parameters.Add("@rolname", SqlDbType.NVarChar).Value = txt_nombreRol.Text;
-                                con.command.Parameters.Add("@func", SqlDbType.NVarChar).Value = lb_func_usralta.Items[i].ToString();
-                                con.command.Parameters.Add("@estado", SqlDbType.Bit).Value = 1;
-                                // se abre la conexión con la base de datos, se ejecuta y se cierra
-                                con.openConection();
-                                con.command.ExecuteNonQuery();
-                                con.closeConection();
-                            }
+                            Conexion con4 = new Conexion();
+                            con4.strQuery = "FOUR_SIZONS.modificacionRolxFunc";
                             // Se generan llamadas sucesivas para dar de baja las funcionalidades del rol
                             for (int i = 0; i < lb_func_usrbaja.Items.Count; i++)
                             {
-                                con.execute();
-                                con.command.CommandType = CommandType.StoredProcedure;
+                                con4.execute();
+                                con4.command.CommandType = CommandType.StoredProcedure;
                                 // se agregan los parámetros al stored procedure
-                                con.command.Parameters.Add("@rolname", SqlDbType.NVarChar).Value = txt_nombreRol.Text;
-                                con.command.Parameters.Add("@func", SqlDbType.NVarChar).Value = lb_func_usrbaja.Items[i].ToString();
-                                con.command.Parameters.Add("@estado", SqlDbType.Bit).Value = 0;
+                                con4.command.Parameters.Add("@rolname", SqlDbType.NVarChar).Value = txt_nombreRol.Text;
+                                con4.command.Parameters.Add("@func", SqlDbType.NVarChar).Value = lb_func_usrbaja.Items[i].ToString();
+                                con4.command.Parameters.Add("@estado", SqlDbType.Bit).Value = 0;
                                 // se abre la conexión con la base de datos, se ejecuta y se cierra
-                                con.openConection();
-                                con.command.ExecuteNonQuery();
-                                con.closeConection();
+                                con4.openConection();
+                                con4.command.ExecuteNonQuery();
+                                con4.closeConection();
                             }
+
+                            Conexion con3 = new Conexion();
+                            con3.strQuery = "FOUR_SIZONS.modificacionRolxFunc";
+                            // Se generan llamadas sucesivas para modificar las funcionalidades del rol
+                            for (int i = 0; i < lb_func_usralta.Items.Count; i++)
+                            {
+                                con3.execute();
+                                con3.command.CommandType = CommandType.StoredProcedure;
+                                // se agregan los parámetros al stored procedure
+                                con3.command.Parameters.Add("@rolname", SqlDbType.NVarChar).Value = txt_nombreRol.Text;
+                                con3.command.Parameters.Add("@func", SqlDbType.NVarChar).Value = lb_func_usralta.Items[i].ToString();
+                                con3.command.Parameters.Add("@estado", SqlDbType.Bit).Value = 1;
+                                // se abre la conexión con la base de datos, se ejecuta y se cierra
+                                con3.openConection();
+                                con3.command.ExecuteNonQuery();
+                                con3.closeConection();
+                            }
+
 
                         }else{
                             con.command.Parameters.Add("@estado", SqlDbType.Bit).Value = 0;
                         }
                         // se abre la conexión con la base de datos, se ejecuta y se cierra
-                        con.openConection();
-                        con.command.ExecuteNonQuery();
-                        con.closeConection();
+                        //con.openConection();
+                        //con.command.ExecuteNonQuery();
+                        //con.closeConection();
                     }
 
 
