@@ -111,10 +111,6 @@ namespace FrbaHotel.ABMHabitacion
                 btn_promptHotel.Enabled = false;
             }
 
-            if (modoABM == "INS")
-            {
-                levantarCombos();
-            }
             else
             {
                 Conexion con = new Conexion();
