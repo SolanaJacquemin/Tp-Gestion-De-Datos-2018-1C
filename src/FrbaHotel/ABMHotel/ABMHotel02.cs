@@ -207,10 +207,12 @@ namespace FrbaHotel.ABMHotel
                     if (modoABM == "DLT")
                     {
                         con.command.Parameters.Add("@estado", SqlDbType.Bit).Value = 0;
+                        con.command.Parameters.Add("@fechaCambio", SqlDbType.DateTime).Value = DateTime.Now.ToShortDateString();
                     }
                     else if (modoABM == "UPD")
                     {
                         con.command.Parameters.Add("@estado", SqlDbType.Bit).Value = 1;
+                        con.command.Parameters.Add("@fechaCambio", SqlDbType.DateTime).Value = DateTime.Now.ToShortDateString();
                     }
                     // se abre la conexión con la base de datos y se ejecuta
                     con.openConection();
@@ -286,22 +288,17 @@ namespace FrbaHotel.ABMHotel
                             MessageBox.Show("Por favor, complete los campos obligatorios", "FOUR SIZONS - FRBA Hoteles", MessageBoxButtons.OK, MessageBoxIcon.Information);
                         }
     
-                        if (IsNumber(cb_estrellas.Text) == false)
+                        if (!IsNumber(cb_estrellas.Text) && cb_estrellas.Text!="")
                         {
                             error = 1;
                             MessageBox.Show("Por favor, el número de documento debe ser un dato numérico", "FOUR SIZONS - FRBA Hoteles", MessageBoxButtons.OK, MessageBoxIcon.Information);
                         }
-                        if (IsNumber(txt_recargaEstrella.Text) == false)
+                        if (!IsNumber(txt_recargaEstrella.Text) && txt_recargaEstrella.Text!="")
                         {
                             error = 1;
                             MessageBox.Show("Por favor, la recarga de estrella debe ser un dato numérico", "FOUR SIZONS - FRBA Hoteles", MessageBoxButtons.OK, MessageBoxIcon.Information);
                         }
-                        if (IsNumber(txt_telefono.Text) == false)
-                        {
-                            error = 1;
-                            MessageBox.Show("Por favor, el teléfono debe ser un dato numérico", "FOUR SIZONS - FRBA Hoteles", MessageBoxButtons.OK, MessageBoxIcon.Information);
-                        }
-                        if (IsNumber(txt_nroCalle.Text) == false)
+                        if (!IsNumber(txt_nroCalle.Text)&&txt_nroCalle.Text!="")
                         {
                             error = 1;
                             MessageBox.Show("Por favor, el número de calle debe ser un dato numérico", "FOUR SIZONS - FRBA Hoteles", MessageBoxButtons.OK, MessageBoxIcon.Information);

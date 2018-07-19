@@ -174,41 +174,7 @@ namespace FrbaHotel.ABMHotel
 
         private void ABMHotel_Load(object sender, EventArgs e)
         {
-            /*if (hotel != 0)
-            {
-                Conexion con = new Conexion();
-                con.strQuery = "SELECT * FROM FOUR_SIZONS.Hotel H WHERE H.Hotel_Codigo = " + hotel;
-                con.executeQuery();
 
-                if (con.reader())
-                {
-                    txt_codigo.Text = con.lector.GetString(1);
-                    dgv_Hoteles.Rows.Add(new Object[] { con.lector.GetDecimal(0), con.lector.GetString(1),
-                    con.lector.GetString(2), con.lector.GetString(3), con.lector.GetString(4), con.lector.GetDecimal(5),
-                    con.lector.GetDecimal(6), con.lector.GetDecimal(7), con.lector.GetString(8), con.lector.GetString(9),
-                    con.lector.GetDateTime(10), con.lector.GetBoolean(11)});
-                }
-                con.closeConection();
-
-            }
-            else
-            {
-                Conexion con = new Conexion();
-                con.strQuery = "SELECT * FROM FOUR_SIZONS.Hotel H";
-                con.executeQuery();
-
-                if (con.reader())
-                {
-                    txt_codigo.Text = con.lector.GetString(1);
-                    dgv_Hoteles.Rows.Add(new Object[] { con.lector.GetDecimal(0), con.lector.GetString(1),
-                    con.lector.GetString(2), con.lector.GetString(3), con.lector.GetString(4), con.lector.GetDecimal(5),
-                    con.lector.GetDecimal(6), con.lector.GetDecimal(7), con.lector.GetString(8), con.lector.GetString(9),
-                    con.lector.GetDateTime(10), con.lector.GetBoolean(11)});
-                }
-                con.closeConection();
-            }*/
-
-            //limpiar();
         }
 
         private void btn_buscar_Click(object sender, EventArgs e)
@@ -280,27 +246,14 @@ namespace FrbaHotel.ABMHotel
         {
             if (dgv_Hoteles.SelectedRows.Count > 0)
             {
-                if (estado == false)
-                {
-                    if (MessageBox.Show("El rol se encuentra inhabilitado, desea darle de alta?", "FOUR SIZONS - FRBA Hoteles", MessageBoxButtons.YesNo, MessageBoxIcon.Question) == DialogResult.Yes)
-                    {
-                        string modo = "UPD";
-                        this.Hide();
-                        ABMHotel02 formABMUsuario02 = new ABMHotel02(modo, Convert.ToDecimal(dgv_hotel_codigo), usuario);
-                        formABMUsuario02.ShowDialog();
-                        this.Show();
-                        this.buscar();
-                    }
-                }
-                else
-                {
+
                     string modo = "UPD";
                     this.Hide();
                     ABMHotel02 formABMUsuario02 = new ABMHotel02(modo, Convert.ToDecimal(dgv_hotel_codigo), usuario);
                     formABMUsuario02.ShowDialog();
                     this.Show();
                     this.buscar();
-                }
+
             }
             else
             {

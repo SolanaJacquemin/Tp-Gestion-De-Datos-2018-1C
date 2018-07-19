@@ -188,7 +188,7 @@
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(468, 354);
+            this.ClientSize = new System.Drawing.Size(704, 354);
             this.Controls.Add(this.label7);
             this.Controls.Add(this.txt_nombre);
             this.Controls.Add(this.lbl_obligacion);

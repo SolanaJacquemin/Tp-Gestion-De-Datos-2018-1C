@@ -35,6 +35,7 @@ namespace FrbaHotel.ABMHotel
             {
                 case "INS":
                     labelTitulo.Text = "Alta de Régimen";
+                    boton_volver.Visible = false;
                     break;
                 case "DLT":
                     labelTitulo.Text = "Baja de Régimen";
@@ -53,48 +54,50 @@ namespace FrbaHotel.ABMHotel
 
         private void boton_aceptar_Click(object sender, EventArgs e)
         {
+            error=0;
             // Se determina el stored procedure a utilizar
             switch (modoABM)
             {
+                    
                 case "INS":
-                    if (lb_regimen_usralta.Items.Count != 0)
-                    {
-                        nombreSP = "FOUR_SIZONS.altaRegXHotel";
-                    }
-                    else
+                    if (lb_regimen_usralta.Items.Count == 0)
                     {
                         error = 1;
                         MessageBox.Show("El hotel no puede no tener regímenes.", "FOUR SIZONS - FRBA Hoteles", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                    }
+                    else
+                    {
+                        nombreSP = "FOUR_SIZONS.altaRegXHotel";
                     }
                     break;
 
                 case "UPD":
-                    if (lb_regimen_usralta.Items.Count != 0)
-                    {
-                        nombreSP = "FOUR_SIZONS.modificarRegXhot";
-                    }
-                    else
+                    if (lb_regimen_usralta.Items.Count == 0)
                     {
                         error = 1;
                         MessageBox.Show("El hotel no puede no tener regímenes.", "FOUR SIZONS - FRBA Hoteles", MessageBoxButtons.OK, MessageBoxIcon.Information);
                     }
+                    else
+                    {
+                        nombreSP = "FOUR_SIZONS.modificarRegXhot";
+                    }
                     
                     break;
 
-                case "DLT":
+              /*  case "DLT":
                     // Baja lógica - Se pone estado en 0
                     nombreSP = "FOUR_SIZONS.ModificacionRol";
-                    break;
+                    break;*/
             }
 
             if (error == 0)
             {
-                ejecutarABMRol(nombreSP);
+                ejecutarABMRegimen(nombreSP);
                 this.Close();
             }
         }
 
-        public void ejecutarABMRol(string nombreStored)
+        public void ejecutarABMRegimen(string nombreStored)
         {
             if (MessageBox.Show("Está seguro que desea continuar con la operación?", "FOUR SIZONS - FRBA Hoteles", MessageBoxButtons.YesNo, MessageBoxIcon.Question) == DialogResult.Yes)
             {
@@ -115,7 +118,7 @@ namespace FrbaHotel.ABMHotel
                             con.execute();
                             con.command.CommandType = CommandType.StoredProcedure;
                             // se agregan los parámetros al stored procedure
-                            con.command.Parameters.Add("@regimen", SqlDbType.NVarChar).Value = lb_regimen.Items[i].ToString();
+                            con.command.Parameters.Add("@regimen", SqlDbType.NVarChar).Value = lb_regimen_usralta.Items[i].ToString();
                             con.command.Parameters.Add("@hotID", SqlDbType.NVarChar).Value = hotel;
                             // se abre la conexión con la base de datos, se ejecuta y se cierra
                             con.openConection();
@@ -149,7 +152,7 @@ namespace FrbaHotel.ABMHotel
                             con.command.CommandType = CommandType.StoredProcedure;
 
                             con.command.Parameters.Add("@hotel", SqlDbType.Decimal).Value = hotel;
-                            con.command.Parameters.Add("@reg", SqlDbType.NVarChar).Value = lb_regimen_usralta.Items[i].ToString();
+                            con.command.Parameters.Add("@reg", SqlDbType.NVarChar).Value = lb_regimen_usrbaja.Items[i].ToString();
                             con.command.Parameters.Add("@fechaMod", SqlDbType.DateTime).Value = hoy;
 
                             string msg = lb_regimen_usralta.Items[i].ToString();

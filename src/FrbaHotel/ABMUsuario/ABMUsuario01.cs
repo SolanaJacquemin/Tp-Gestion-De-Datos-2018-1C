@@ -185,7 +185,6 @@ namespace FrbaHotel.ABMUsuario
                         formABMUsuario02.ShowDialog();
                         this.Show();
                         limpiar();
-                        iniciarGrilla();
                         this.refrescarGrid();
                     }
                 }
@@ -197,7 +196,6 @@ namespace FrbaHotel.ABMUsuario
                     formABMUsuario02.ShowDialog();
                     this.Show();
                     limpiar();
-                    iniciarGrilla();
                     this.refrescarGrid();
                 }
             }

@@ -36,7 +36,6 @@
             this.l_estado = new System.Windows.Forms.Label();
             this.txt_estado = new System.Windows.Forms.TextBox();
             this.groupBox1 = new System.Windows.Forms.GroupBox();
-            this.btn_regimen = new System.Windows.Forms.Button();
             this.txt_nombre_hotel = new System.Windows.Forms.TextBox();
             this.cb_estrellas = new System.Windows.Forms.ComboBox();
             this.label5 = new System.Windows.Forms.Label();
@@ -55,6 +54,7 @@
             this.txt_ciudad = new System.Windows.Forms.TextBox();
             this.txt_telefono = new System.Windows.Forms.TextBox();
             this.txt_recargaEstrella = new System.Windows.Forms.TextBox();
+            this.btn_regimen = new System.Windows.Forms.Button();
             this.lbl_obligacion = new System.Windows.Forms.Label();
             this.groupBox1.SuspendLayout();
             this.SuspendLayout();
@@ -94,7 +94,7 @@
             this.boton_volver.Location = new System.Drawing.Point(526, 284);
             this.boton_volver.Name = "boton_volver";
             this.boton_volver.Size = new System.Drawing.Size(75, 23);
-            this.boton_volver.TabIndex = 15;
+            this.boton_volver.TabIndex = 12;
             this.boton_volver.Text = "Volver";
             this.boton_volver.UseVisualStyleBackColor = true;
             this.boton_volver.Click += new System.EventHandler(this.boton_volver_Click);
@@ -104,7 +104,7 @@
             this.boton_aceptar.Location = new System.Drawing.Point(26, 284);
             this.boton_aceptar.Name = "boton_aceptar";
             this.boton_aceptar.Size = new System.Drawing.Size(75, 23);
-            this.boton_aceptar.TabIndex = 13;
+            this.boton_aceptar.TabIndex = 10;
             this.boton_aceptar.Text = "Aceptar";
             this.boton_aceptar.UseVisualStyleBackColor = true;
             this.boton_aceptar.Click += new System.EventHandler(this.boton_aceptar_Click);
@@ -155,22 +155,12 @@
             this.groupBox1.TabIndex = 32;
             this.groupBox1.TabStop = false;
             // 
-            // btn_regimen
-            // 
-            this.btn_regimen.Location = new System.Drawing.Point(431, 284);
-            this.btn_regimen.Name = "btn_regimen";
-            this.btn_regimen.Size = new System.Drawing.Size(89, 23);
-            this.btn_regimen.TabIndex = 47;
-            this.btn_regimen.Text = "Regímenes";
-            this.btn_regimen.UseVisualStyleBackColor = true;
-            this.btn_regimen.Click += new System.EventHandler(this.btn_regimen_Click);
-            // 
             // txt_nombre_hotel
             // 
             this.txt_nombre_hotel.Location = new System.Drawing.Point(63, 46);
             this.txt_nombre_hotel.Name = "txt_nombre_hotel";
             this.txt_nombre_hotel.Size = new System.Drawing.Size(191, 20);
-            this.txt_nombre_hotel.TabIndex = 44;
+            this.txt_nombre_hotel.TabIndex = 1;
             // 
             // cb_estrellas
             // 
@@ -178,7 +168,7 @@
             this.cb_estrellas.Location = new System.Drawing.Point(376, 46);
             this.cb_estrellas.Name = "cb_estrellas";
             this.cb_estrellas.Size = new System.Drawing.Size(78, 21);
-            this.cb_estrellas.TabIndex = 4;
+            this.cb_estrellas.TabIndex = 6;
             // 
             // label5
             // 
@@ -266,28 +256,28 @@
             this.txt_nroCalle.Location = new System.Drawing.Point(63, 151);
             this.txt_nroCalle.Name = "txt_nroCalle";
             this.txt_nroCalle.Size = new System.Drawing.Size(48, 20);
-            this.txt_nroCalle.TabIndex = 11;
+            this.txt_nroCalle.TabIndex = 5;
             // 
             // txt_calle
             // 
             this.txt_calle.Location = new System.Drawing.Point(63, 125);
             this.txt_calle.Name = "txt_calle";
             this.txt_calle.Size = new System.Drawing.Size(139, 20);
-            this.txt_calle.TabIndex = 9;
+            this.txt_calle.TabIndex = 4;
             // 
             // txt_mail
             // 
             this.txt_mail.Location = new System.Drawing.Point(63, 73);
             this.txt_mail.Name = "txt_mail";
             this.txt_mail.Size = new System.Drawing.Size(191, 20);
-            this.txt_mail.TabIndex = 5;
+            this.txt_mail.TabIndex = 2;
             // 
             // txt_pais
             // 
             this.txt_pais.Location = new System.Drawing.Point(376, 126);
             this.txt_pais.Name = "txt_pais";
             this.txt_pais.Size = new System.Drawing.Size(191, 20);
-            this.txt_pais.TabIndex = 10;
+            this.txt_pais.TabIndex = 9;
             // 
             // txt_ciudad
             // 
@@ -301,14 +291,24 @@
             this.txt_telefono.Location = new System.Drawing.Point(63, 99);
             this.txt_telefono.Name = "txt_telefono";
             this.txt_telefono.Size = new System.Drawing.Size(191, 20);
-            this.txt_telefono.TabIndex = 7;
+            this.txt_telefono.TabIndex = 3;
             // 
             // txt_recargaEstrella
             // 
             this.txt_recargaEstrella.Location = new System.Drawing.Point(376, 73);
             this.txt_recargaEstrella.Name = "txt_recargaEstrella";
             this.txt_recargaEstrella.Size = new System.Drawing.Size(139, 20);
-            this.txt_recargaEstrella.TabIndex = 6;
+            this.txt_recargaEstrella.TabIndex = 7;
+            // 
+            // btn_regimen
+            // 
+            this.btn_regimen.Location = new System.Drawing.Point(431, 284);
+            this.btn_regimen.Name = "btn_regimen";
+            this.btn_regimen.Size = new System.Drawing.Size(89, 23);
+            this.btn_regimen.TabIndex = 11;
+            this.btn_regimen.Text = "Regímenes";
+            this.btn_regimen.UseVisualStyleBackColor = true;
+            this.btn_regimen.Click += new System.EventHandler(this.btn_regimen_Click);
             // 
             // lbl_obligacion
             // 

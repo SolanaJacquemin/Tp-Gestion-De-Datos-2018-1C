@@ -81,6 +81,7 @@ namespace FrbaHotel.ABMUsuario
                     btn_promptHotel.Visible = false;
                     cb_tipo_documento.DropDownStyle = ComboBoxStyle.DropDownList;
                     cb_rol.DropDownStyle = ComboBoxStyle.DropDownList;
+                    lbl_obligacion.Visible = false;
                     break;
             }
             dt_fecha_nac.Format = DateTimePickerFormat.Custom;
