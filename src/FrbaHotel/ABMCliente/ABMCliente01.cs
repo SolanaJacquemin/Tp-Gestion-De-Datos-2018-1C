@@ -134,6 +134,7 @@ namespace FrbaHotel.AbmCliente
                 con.lector.GetString(10), con.lector.GetDateTime(11), con.lector.GetDecimal(12), con.lector.GetBoolean(13), 
                 con.lector.GetBoolean(14)});
             }
+            con.closeConection();
         } 
           
         private void btn_volver_Click(object sender, EventArgs e)

@@ -84,9 +84,11 @@ namespace FrbaHotel.GestionReservas
                 while (con.reader())
                 {
                     dgv_Reservas.Rows.Add(new Object[] { con.lector.GetDecimal(0), con.lector.GetDateTime(1),
-                con.lector.GetDateTime(2), con.lector.GetDecimal(3), con.lector.GetString(4),
-                con.lector.GetString(5), con.lector.GetDecimal(6)});
+                    con.lector.GetDateTime(2), con.lector.GetDecimal(3), con.lector.GetString(4),
+                    con.lector.GetString(5), con.lector.GetDecimal(6)});
                 }
+
+                con.closeConection();
 
                 dgv_Reservas.ClearSelection();
                 decimal estado;

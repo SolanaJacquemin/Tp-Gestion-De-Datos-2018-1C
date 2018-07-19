@@ -99,6 +99,7 @@ namespace FrbaHotel.ABMHotel
                 {
                     txt_nombre_hotel.Text = con.lector.GetString(0);
                 }
+                con.closeConection();
             }
 
             if (modoABM != "INS")
@@ -217,6 +218,7 @@ namespace FrbaHotel.ABMHotel
                     // se abre la conexión con la base de datos y se ejecuta
                     con.openConection();
                     con.command.ExecuteNonQuery();
+                    con.closeConection();
 
                     if (modoABM == "INS") 
                     {

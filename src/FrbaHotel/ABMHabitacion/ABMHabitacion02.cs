@@ -107,8 +107,10 @@ namespace FrbaHotel.ABMHabitacion
                 {
                     txt_hotel.Text = con.lector.GetString(0);
                 }
+                con.closeConection();
                 txt_hotel.Enabled = false;
                 btn_promptHotel.Enabled = false;
+
             }
 
             else
@@ -143,9 +145,7 @@ namespace FrbaHotel.ABMHabitacion
                         txt_estado.ForeColor = Color.Red;
                     }
                 }
-
                 con.closeConection();
-
             }
 
 
@@ -256,6 +256,7 @@ namespace FrbaHotel.ABMHabitacion
                     // se abre la conexión con la base de datos y se ejecuta
                     con.openConection();
                     con.command.ExecuteNonQuery();
+                    con.closeConection();
 
                     MessageBox.Show("Operación exitosa", "FOUR SIZONS - FRBA Hoteles", MessageBoxButtons.OK, MessageBoxIcon.Information);
                 }

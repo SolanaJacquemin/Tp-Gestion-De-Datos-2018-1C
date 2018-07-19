@@ -44,6 +44,7 @@ namespace FrbaHotel.RegistrarEstadia
             {
                 MessageBox.Show("No se ha encontrado la estadía. Por favor, realice una nueva búsqueda", "FOUR SIZONS - FRBA Hoteles", MessageBoxButtons.OK, MessageBoxIcon.Information);
             }
+            con.closeConection();
 
             //limpiar();
 
@@ -118,6 +119,7 @@ namespace FrbaHotel.RegistrarEstadia
                 con.closeConection();
                 return;
             }
+            //con.closeConection();
         }
 
         private void btn_Buscar_Click(object sender, EventArgs e)

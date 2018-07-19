@@ -196,8 +196,8 @@ namespace FrbaHotel.RegistrarEstadia
                     hotel = con.lector.GetDecimal(1);
                     txt_hotel.Text = con.lector.GetString(2);
                     txt_estadia.Text = codigoEstadia.ToString();
-                    con.closeConection();
                 }
+                con.closeConection();
             }
         }
 

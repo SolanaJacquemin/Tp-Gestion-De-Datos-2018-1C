@@ -179,8 +179,8 @@ namespace FrbaHotel.ABMHabitacion
                 }
 
                 dgv_Habitaciones.Rows.Add(new Object[] { con.lector.GetString(0), con.lector.GetDecimal(1),
-            con.lector.GetDecimal(2), con.lector.GetDecimal(3), con.lector.GetString(4), con.lector.GetString(5),
-            con.lector.GetBoolean(6)});
+                con.lector.GetDecimal(2), con.lector.GetDecimal(3), con.lector.GetString(4), con.lector.GetString(5),
+                con.lector.GetBoolean(6)});
 
                 while (con.reader())
                 {
@@ -323,6 +323,8 @@ namespace FrbaHotel.ABMHabitacion
                 con.lector.GetDecimal(2), con.lector.GetDecimal(3), con.lector.GetString(4), con.lector.GetString(5),
                 con.lector.GetBoolean(6)});
             }
+
+            con.closeConection();
 
             dgv_Habitaciones.ClearSelection();
             foreach (DataGridViewRow row in dgv_Habitaciones.Rows)

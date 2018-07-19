@@ -58,6 +58,8 @@ namespace FrbaHotel.RegistrarEstadia
                 cb_marcaTarj.Text = con.lector.GetString(4);
             }
 
+            con.closeConection();
+
             dt_fecha_venc.Format = DateTimePickerFormat.Custom;
             dt_fecha_venc.CustomFormat = "dd/MM/yyyy";
 
