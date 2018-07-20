@@ -69,6 +69,7 @@ namespace FrbaHotel.RegistrarEstadia
                     btn_regClientes.Enabled = false;
                     cb_medioPago.Visible = false;
                     l_medioPago.Visible = false;
+                    btn_factura.Text = "Generar Factura";
                     break;
 
                 case "OUT":
@@ -79,6 +80,7 @@ namespace FrbaHotel.RegistrarEstadia
                     cb_medioPago.DropDownStyle = ComboBoxStyle.DropDownList;
                     dt_fechaSalida.Format = DateTimePickerFormat.Custom;
                     dt_fechaSalida.CustomFormat = "dd/MM/yyyy";
+                    btn_factura.Text = "Facturar";
                     break;
 
             }
@@ -140,7 +142,7 @@ namespace FrbaHotel.RegistrarEstadia
                         con.openConection();
                         con.command.ExecuteNonQuery();
                         con.closeConection();
-
+                        facturaGenerada = true;
                         MessageBox.Show("Operación exitosa", "FOUR SIZONS - FRBA Hoteles", MessageBoxButtons.OK, MessageBoxIcon.Information);
                     }
 
@@ -274,7 +276,7 @@ namespace FrbaHotel.RegistrarEstadia
                 MessageBox.Show("Por favor, genere la factura.", "FOUR SIZONS - FRBA Hoteles", MessageBoxButtons.OK, MessageBoxIcon.Information);
             }*/
 
-            if ((generarFactura) && (facturaGenerada))
+            if (((generarFactura) && (facturaGenerada)) || error == 1)
             {
                 this.Close();
             }
