@@ -142,7 +142,10 @@ namespace FrbaHotel.RegistrarEstadia
                         con.openConection();
                         con.command.ExecuteNonQuery();
                         con.closeConection();
-                        facturaGenerada = true;
+                        if(modoCheck == "IN")
+                        {
+                            facturaGenerada = true;
+                        }
                         MessageBox.Show("Operación exitosa", "FOUR SIZONS - FRBA Hoteles", MessageBoxButtons.OK, MessageBoxIcon.Information);
                     }
 
