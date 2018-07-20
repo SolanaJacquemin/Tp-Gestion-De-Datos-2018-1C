@@ -409,6 +409,9 @@ namespace FrbaHotel.ABMRol
 
                         }else{
                             con.command.Parameters.Add("@estado", SqlDbType.Bit).Value = 0;
+                            con.openConection();
+                            con.command.ExecuteNonQuery();
+                            con.closeConection();
                         }
                         // se abre la conexión con la base de datos, se ejecuta y se cierra
                         //con.openConection();

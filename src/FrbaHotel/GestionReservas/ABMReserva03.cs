@@ -86,7 +86,7 @@ namespace FrbaHotel.GestionReservas
         {
             // se verifica que el usuario sea GUEST. Esto es para determinar el estado de la reserva una vez cancelada
             Conexion con = new Conexion();
-            con.strQuery = "SELECT Rol_Codigo FROM FOUR_SIZONS.UsuarioXRol WHERE Usuario_ID = 'GUEST'";
+            con.strQuery = "SELECT Rol_Codigo FROM FOUR_SIZONS.UsuarioXRol WHERE Usuario_ID = '" + usuario + "'";
             con.executeQuery();
             while (con.reader())
             {
